@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet Map - Davao City Gyms</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../../dist/tailwind.css">
+  
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearest Gym Locator</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.js"></script>
+    <style>
+      #map {
+        height: 600px;
+        flex: 3;
+        border-radius: 8px;
+      } 
+    </style>
+  </head>
+
+<body class="flex items-center justify-center min-h-screen m-0 bg-black">
+  <div class="flex flex-col w-[100rem] items-center bg-gray-900 p-5 rounded-lg shadow-md m-5">
+    <h1 class="text-2xl mb-5 text-white">Nearest gym locator</h1>
+
+    <div class="flex gap-5 w-full">
+      <div class="gyms-container bg-gray-500 p-5 rounded-lg shadow-lg max-h-[600px] overflow-y-auto">
+        <h2 class="text-2xl mb-5 text-white">3 nearby gyms</h2>
+        <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
+      </div>
+
+      <div id="map"></div>
+
+      <div class="bg-gray-500 p-5 rounded-lg shadow-lg max-h-[600px] overflow-y-auto">
+        <h2 class="text-2xl mb-5 text-white">Gyms around the city</h2>
+        <ul class="list-none p-0 m-0" id="all-gyms"></ul>
+      </div>
+
+      
+    </div>
+    <button id="showLoc" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300">
+      Hiding directions
+    </button>
+  </div>
+</body>
+
+</html>
+<script>
+  
+  var userLat = 0;
+  var userLong = 0;
+  var show = false;
+  var control = null; // Variable to hold the reference to the routing control
+  var dist = 0;
+
+  var map = L.map("map").setView([7.110959021754781, 125.61266071845108], 13);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  var gyms = [];
+  var markers = [];
+  var userLoc = [];
+  var nearby = [];
+
+
+  //REQUEST DATA FROM DATABASE TO USE IT HERE 
+  async function fetchGyms() {
+    try {
+      const response = await axios.get('http://localhost:3000/gyms');
+      const Gyms = response.data;
+      Gyms.forEach(G => {
+
+        gyms.push({
+          id: G.gym_id,
+          name: G.gym_name,
+          dailyRates: G.daily_rate,
+          monthlyRates: G.monthly_rate,
+          coords: [G.latitude, G.longtitude],
+          img: G.img,
+          avg: G.Average
+        });
+
+      });
+      gyms.forEach(function (gym) {
+        var marker = L.marker(gym.coords).addTo(map);
+        marker.bindPopup(function () {
+          // Create your popup content dynamically
+          const popupContent = `
+        <div>
+            <img src="${gym.img}" alt="Gym Image" style="max-width: 100%; height: auto;">
+            <h3>${gym.name}</h3>
+            <p><strong>Daily rates:</strong> ${gym.dailyRates}</p>
+            <p><strong>Monthly rates:</strong> ${gym.monthlyRates}</p>
+            <p><strong>Ratings:</strong> ${gym.avg}</p>
+            <div class="rating-stars" data-rating="${gym.avg}">
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+            </div>
+        </div>
+    `;
+
+          // Return the content as a string
+          return popupContent;
+
+        });
+
+        markers.push(marker);
+        marker.on('popupopen', function () {
+
+          setStarRatings()
+
+        });
+
+
+      });
+      populateAllGymsList()
+
+    } catch (error) {
+      console.error('Error fetching gyms data:', error);
+    }
+  }
+  fetchGyms(); //EXECUTE THE FUNCTION
+
+
+
+  //THIS FUNCTION POPULATES THE 3 NEAREST GYMS AND SHOW IT TO THE USER
+  function populateGymsList(userCoords) {
+    console.log(nearby)
+    var gymsList = document.getElementById("nearestGymsList");
+    var userlat = userCoords[0];
+    var userlong = userCoords[1];
+    var userMarker = null;
+    // Clear existing list items
+    gymsList.innerHTML = "";
+
+    // Add new list items
+    nearby.slice(0, 3).forEach(function (nearbyGym, index) {
+      var listItem = document.createElement("div");
+      listItem.classList.add(
+        "gym-item", // for reference
+        "cursor-pointer",
+        "p-4",
+        "mb-2.5",
+        "border",
+        "border-gray-300",
+        "rounded-lg",
+        "bg-gray-100",
+        "transition",
+        "duration-300",
+        "ease-in-out",
+        "flex",
+        "flex-col",
+        "items-start",
+        "hover:bg-gray-200"
+      );
+      var content = `
+          <div class="al-gym-name text-lg font-bold mb-2.5">${nearbyGym.gym.name}</div>
+          <div class="all-gym-details flex gap-2.5">
+            <img src="${nearbyGym.gym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
+            <div class="rates flex flex-col">
+              <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate</strong> ${nearbyGym.gym.dailyRates}</div>
+              <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${nearbyGym.gym.monthlyRates}</div><br>
+              <div class="rates flex flex-col">
+                <div class="rating text-sm mt-1.5"><strong>Ratings</strong>: ${nearbyGym.gym.avg}</div><br>
+                    <div class="rating-stars" data-rating="${nearbyGym.gym.avg}">
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                    </div>
+              </div>
+          </div>`;
+      listItem.innerHTML = content;
+      listItem.addEventListener("click", function (e) {
+        removeLastMarker();
+        var gymDistanceLat = 0;
+        var gymDistanceLong = 0;
+        console.log(`Clicked on ${nearbyGym.gym.name}`);
+        console.log(
+          `coords:  ${nearbyGym.gym.coords[0]}, ${nearbyGym.gym.coords[1]}`
+        );
+        gymDistanceLat = nearbyGym.gym.coords[0];
+        gymDistanceLong = nearbyGym.gym.coords[1];
+
+
+        // Create a new marker for user location
+        userMarker = L.marker([userlat, userlong]).addTo(map);
+        userLoc.push(userMarker);
+        // Create a new marker for gym location
+        var gymMarker = L.marker([gymDistanceLat, gymDistanceLong]).addTo(map);
+        gymMarker.bindPopup(`
+        <div>
+          <img src="${nearbyGym.gym.img}" alt="Gym Image" style="max-width: 100%; height: auto;">
+          <h3>${nearbyGym.gym.name}</h3>
+          <p><strong>Daily rates:</strong> ${nearbyGym.gym.dailyRates}</p>
+          <p><strong>Monthly rates:</strong> ${nearbyGym.gym.monthlyRates}</p>
+        </div>
+      `).openPopup();
+        // Define the waypoints (user location and gym location) || CREATE A ROUTE BASED ON THE CLICKED GYM
+        var waypoints = [
+          L.latLng(userlat, userlong),
+          L.latLng(gymDistanceLat, gymDistanceLong),
+        ];
+
+        // Clear previous route if exists
+        if (control) {
+          map.removeControl(control);
+        }
+
+        // Create routing control
+        control = L.Routing.control({
+          waypoints: waypoints,
+          routeWhileDragging: true,
+          show: !true,
+          lineOptions: {
+            styles: [{ color: "red", opacity: 1, weight: 5 }],
+          },
+          createMarker: function () {
+            return null; // Do not create default markers
+          },
+        }).addTo(map);
+
+        // Fit the map to show the route
+        var bounds = L.latLngBounds([userlat, userlong], [gymDistanceLat, gymDistanceLong]);
+        map.fitBounds(bounds);
+      });
+      gymsList.appendChild(listItem);
+    });
+  }
+
+
+
+  //THIS FUNCTION RESETS THE MARKER WHENEVER THE USER CLICKS AGAIN ON THE MAP
+  function removeLastMarker() {
+    if (userLoc.length > 0) {
+      console.log(userLoc.length);
+      var lastMarker = userLoc.pop();
+      map.removeLayer(lastMarker);
+    }
+  }
+
+
+  //THIS FUNCTION WILL JUST CALCULATE THE DISTANCE AND TAKE THE NEAREST DISTANCE
+  function getDistance(coords1, coords2) {
+    var R = 6371; // Radius of the Earth in km
+    var dLat = ((coords2[0] - coords1[0]) * Math.PI) / 180;
+    var dLon = ((coords2[1] - coords1[1]) * Math.PI) / 180;
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((coords1[0] * Math.PI) / 180) *
+      Math.cos((coords2[0] * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+
+
+  // Function to find the nearest gym to the user's location
+  function findNearestGyms(userCoords) {
+    //var distances = [];
+    nearby = [];
+    gyms.forEach(function (gym, index) {
+      var gymCoords = gym.coords;
+      var distance = getDistance(userCoords, gymCoords);
+
+
+      // Log the distance for debugging FOR DEBUGGING ONLEEEEEEEE
+      console.log(
+        `Distance to ${gym.name} at (${gymCoords[0]}, ${gymCoords[1]
+        }): ${distance.toFixed(2)} km`
+      );
+
+      // Push the distance and gym to the distances array to use it later for displaying the top 3 nearest gyms
+      nearby.push({
+        gym: gym,
+        distance: distance,
+      });
+    });
+
+    // Sort the array by distance
+    nearby.sort(function (a, b) {
+      return a.distance - b.distance;
+    });
+
+    // Log the top 3 nearest gyms
+    console.log("Top 3 nearest gymszxzxczxc:");
+    for (let i = 0; i < 3 && i < nearby.length; i++) {
+      const nearest = nearby[i];
+      console.log(
+        `${nearest.gym.name} at (${nearest.gym.coords[0]}, ${nearest.gym.coords[1]
+        }) with a distance of ${nearest.distance.toFixed(2)} km`
+      );
+    }
+
+    // Return the nearest gym
+    return nearby.length > 0 ? nearby[0].gym : null;
+  }
+
+
+
+  document.getElementById("showLoc").addEventListener("click", function () {
+    var label = document.getElementById("showLoc");
+    show = !show;
+    label.innerText = show ? "SHOWING DIRECTIONS" : "HIDING WAYS";
+    control.options.show = show;
+  });
+
+
+
+
+  //a function that lets the user click on the map and add a marker
+  function onMapClick(e) {
+    var newMarker = L.marker(e.latlng).addTo(map);
+    console.table(gyms);
+    removeLastMarker();
+    userLoc.push(newMarker);
+    // Example popup content
+    newMarker.bindPopup("COORDS: " + e.latlng);
+    userLat = e.latlng.lat;
+    userLong = e.latlng.lng;
+    makeRoute(userLat, userLong);
+    setStarRatings();
+  }
+  // Listen for click events on the map
+  map.on("click", onMapClick);
+
+
+
+
+  //a function that makes route or track to the nearest gym based on the users plotted locationnnnzzxxcc
+  function makeRoute(latitude, longtitude) {
+    var userCoords = [latitude, longtitude];
+    // Find the nearest gym
+    var nearestMarker = findNearestGyms(userCoords);
+    console.log("LATITUDE: " + latitude + " Longtitude: " + longtitude);
+
+    if (nearestMarker) {
+      if (control !== null) {
+        map.removeControl(control);
+      }
+      // Create a routing control
+      control = L.Routing.control({
+        waypoints: [
+          L.latLng(userCoords[0], userCoords[1]),
+          L.latLng(nearestMarker.coords[0], nearestMarker.coords[1]),
+        ],
+        routeWhileDragging: true,
+        show: show,
+        lineOptions: {
+          styles: [{ color: "red", opacity: 1, weight: 5 }],
+        },
+        createMarker: function () {
+          return null;
+        }, // Hide default markers
+      }).addTo(map);
+
+      populateGymsList(userCoords);
+      // Zoom to the nearest marker
+      var nearestMarkerCoords = L.latLng(
+        nearestMarker.coords[0],
+        nearestMarker.coords[1]
+      );
+    } else {
+      alert("No nearby gyms found.");
+    }
+  }
+
+  function setStarRatings() {
+    const ratingContainers = document.querySelectorAll('.rating-stars');
+    ratingContainers.forEach(container => {
+      const rating = parseFloat(container.getAttribute('data-rating'));
+      const fullStars = Math.floor(rating);
+      const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+
+      const stars = container.querySelectorAll('.rating-star');
+
+      stars.forEach((star, index) => {
+        if (index < fullStars) {
+          star.classList.remove('text-gray-400'); // Remove gray color
+          star.classList.add('text-yellow-500');
+        } else if (index === fullStars && halfStar) {
+          star.classList.remove('text-gray-400'); // Remove gray color
+          star.classList.add('text-yellow-500');
+          star.classList.remove('fa-star');
+          star.classList.add('fa-star-half-alt');
+        }
+      });
+    });
+  }
+
+
+    function populateAllGymsList() {
+      var gymsList = document.getElementById("all-gyms");
+      var userMarker = null;
+      // Clear existing list items
+      gymsList.innerHTML = "";
+      // Add new list items
+      gyms.forEach(function (g) {
+    var listItem = document.createElement("div");
+    listItem.classList.add(
+               "gym-item",
+               "cursor-pointer",
+               "p-4", "mb-2",
+               "border",
+               "border-gray-300",
+               "rounded-lg",
+               "bg-gray-100",
+               "hover:bg-gray-200",
+               "flex", "flex-col",
+               "items-start",
+               "transition-colors",
+               "duration-300");
+
+    var content = `
+      <div class="al-gym-name font-bold mb-2">${g.name}</div>
+      <div class="all-gym-details flex flex-col items-start">
+        <img src="${g.img}" alt="Gym Image" class="w-32 h-32 object-cover rounded-md mb-2">
+        <div class="rates">
+          <div class="Daily-rate font-semibold">Daily rate: ${g.dailyRates}</div>
+          <div class="Monthly-rate font-semibold">Monthly rate: ${g.monthlyRates}</div><br>
+          <div class="rating font-semibold">Ratings: ${g.avg}</div><br>
+          <div class="rating-stars" data-rating="${g.avg}">
+            <i class="rating-star fas fa-star"></i>
+            <i class="rating-star fas fa-star"></i>
+            <i class="rating-star fas fa-star"></i>
+            <i class="rating-star fas fa-star"></i>
+            <i class="rating-star fas fa-star"></i>
+          </div>
+        </div>
+      </div>`;
+
+    listItem.innerHTML = content;
+    document.getElementById("all-gyms").appendChild(listItem);
+  });
+    }
+
+
+</script>
+
+</html>
