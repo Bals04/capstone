@@ -6,6 +6,7 @@ const trainerController = require('../controllers/trainerController');
 
 router.get("/gyms", GymController.GetGyms); 
 router.get("/members", trainerController.getMembers); 
+router.get("/meals", GymController.GetMealInfo); 
 
 module.exports = router;
 

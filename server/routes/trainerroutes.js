@@ -9,5 +9,15 @@ router.get("/exercises", trainerController.getExercises);
 
 router.post("/addCustomWorkout", trainerController.AddCustom); 
 
+router.get("/getStudentCount", trainerController.getCount); 
+
+router.get("/getTrainerCount", trainerController.getTrainerCount); 
+
+router.get("/getMembers", trainerController.getAllMembers);
+
+router.get("/getTemplates", trainerController.getTemplates);
+
+router.post("/addTemplates", trainerController.AddTemplate);
+
 module.exports = router;
 

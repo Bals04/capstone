@@ -1,4 +1,7 @@
-const { getMembers, getExercises, AddCustomWorkout} = require('../models/database');
+const { getMembers, getExercises,
+        AddCustomWorkout, getStudCount,
+        getTrainerCount, getAllMembers,
+        getTemplates, AddTemplate } = require('../models/database');
 
 module.exports = {
     getMembers: async (req, res) => {
@@ -20,14 +23,62 @@ module.exports = {
         }
     },
     AddCustom: async (req, res) => {
-        const { member_id, exercise_id, reps, sets, week_no, day_no, status } = req.body;
+        const { member_id, exercise_id, reps, sets, workout_date, status } = req.body;
         try {
-            await AddCustomWorkout(member_id, exercise_id, reps, sets, week_no, day_no, status);
+            await AddCustomWorkout(member_id, exercise_id, reps, sets, workout_date, status);
             res.status(200).send("Workout added successfully"); // Correct way to send status and a message
 
         } catch (error) {
             console.error("Error adding user:", error);
             res.status(500).send("Internal Server Error");
         }
-    }  
+    },
+    getCount: async (req, res) => {
+        try {
+            const data = await getStudCount();
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching dataaa - ctr:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getTrainerCount: async (req, res) => {
+        try {
+            const data = await getTrainerCount();
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching dataaa - ctr:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getAllMembers: async (req, res) => {
+        try {
+            const data = await getAllMembers();
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching dataaa - ctr:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getTemplates: async (req, res) => {
+        try {
+            const data = await getTemplates();
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    AddTemplate: async (req, res) => {
+        const { trainer_id, name, desc } = req.body;
+        try {
+            await AddTemplate(trainer_id, name, desc);
+            res.status(200).send("Template added successfully"); 
+
+        } catch (error) {
+            console.error("Error adding user:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
 }

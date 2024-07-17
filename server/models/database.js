@@ -12,10 +12,28 @@ const pool = mysql.createPool({
 async function getGymInfo() {
     const [rows] = await pool.query(
         `SELECT g.gym_id, g.gym_name, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img,
-         COALESCE(FORMAT(SUM(r.ratings) / COUNT(r.ratings), 2), "no ratings yet") AS Average 
+         COALESCE(FORMAT(SUM(r.ratings) / COUNT(r.ratings), 2), "no ratings yet") AS Average,
+         g.contact_no, g.street_address
          FROM gyms g LEFT JOIN gym_ratings r 
          ON g.gym_id = r.gym_id
          GROUP BY g.gym_id, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img;`
+    )
+    return rows
+}
+async function getParkInfo() {
+    const [rows] = await pool.query(
+        `SELECT 
+            id,
+            name,
+            latitude,
+            longitude,
+            DATE_FORMAT(opens_at, '%r') AS opens_at,
+            DATE_FORMAT(closes_at, '%r') AS closes_at,
+            img,
+            address
+            FROM 
+            recreational_areas;
+`
     )
     return rows
 }
@@ -38,11 +56,77 @@ async function getMealInfo() {
     return rows
 }
 
-async function AddCustomWorkout(member_id,exercise_id,reps,sets,week_no,day_no,status) {
+async function getStudCount() {
+    const [rows] = await pool.query(`SELECT COUNT(member_id) as empCount FROM members;`)
+    return rows
+}
+async function getTrainerCount() {
+    const [rows] = await pool.query(`SELECT COUNT(trainer_id) as trainerCount FROM trainers`)
+    return rows
+}
+async function getAllMembers() {
+    const [rows] = await pool.query(`
+        SELECT m.member_id, concat(m.lastname,', ',m.firstname) as member_name, mr.start_date, mr.end_date, concat(t.lastname, ',', t.firstname) AS Trainer
+        FROM members m JOIN member_registration mr 
+        ON m.member_id = mr.member_id
+        JOIN trainers t ON m.trainer_id = t.trainer_id`)
+    return rows
+}
+
+async function AddCustomWorkout(member_id, exercise_id, reps, sets, workout_date, status) {
     const result = await pool.query(`
-    INSERT INTO member_workout_details (member_id, exercise_id, repititions, sets, week_no, day_no, status)
-    VALUES (?,?,?,?,?,?,?)
-    `, [member_id,exercise_id,reps,sets,week_no,day_no,status])
+    INSERT INTO member_workout_details (member_id, exercise_id, repititions, sets, workout_date, status)
+    VALUES (?,?,?,?,?,?)
+    `, [member_id, exercise_id, reps, sets, workout_date, status])
+
+    return result
+}
+
+async function getWorkoutOftheWeek(memberId, weekNo) {
+    const [rows] = await pool.query(`
+    WITH CTE_WORKOUT_SCHEDULE AS (
+    SELECT concat(m.lastname, ', ', m.firstname) AS Name, e.exercise, mw.repititions, mw.sets, DATE_FORMAT(mw.workout_date, '%M %e, %Y') AS formatted_workout_date,
+    DATEDIFF(mw.workout_date, mr.start_date) + DAY(mr.start_date) AS Day
+    FROM member_workout_details mw
+    JOIN members m on mw.member_id = m.member_id
+    JOIN exercises e ON mw.exercise_id = e.exercise_id
+    JOIN member_registration mr ON mr.member_id = mw.member_id
+    WHERE mw.member_id = ?
+    ),
+    CTE_WEEK AS (
+        SELECT Name, Exercise,repititions,sets,Day,
+        CASE 
+        WHEN Day >= 1 AND Day < 7 THEN 1
+        WHEN Day >= 7 AND Day < 14 THEN 2
+        WHEN Day >= 14 AND Day < 21 THEN 3
+        WHEN Day >= 21 AND Day < 28 THEN 4
+        END AS Current_week
+        FROM CTE_WORKOUT_SCHEDULE
+    )
+    SELECT * FROM CTE_WEEK WHERE Current_week = ?
+        `, [memberId, weekNo])
+    return rows
+}
+async function getWorkoutoftheDay(memberId, date) {
+    const [rows] = await pool.query(`
+    SELECT m.member_id,concat(m.lastname, ', ', m.firstname) AS member_name, e.exercise, mw.repititions, mw.sets 
+    FROM member_workout_details mw
+    JOIN exercises e ON mw.exercise_id = e.exercise_id
+    JOIN members m ON m.member_id = mw.member_id
+    where mw.member_id = ? AND workout_date = DATE_FORMAT(STR_TO_DATE(?, '%M %d, %Y'), '%Y/%c/%e')
+        `, [memberId, date])
+    return rows
+}
+async function getTemplates() {
+    const [rows] = await pool.query(`SELECT * FROM workout_plan_templates`)
+    return rows
+}
+
+async function AddTemplate(trainer_id, name, desc) {
+    const result = await pool.query(`
+    INSERT INTO workout_plan_templates (trainer_id, template_name, description)
+    VALUES (?,?,?)
+    `, [trainer_id, name, desc])
 
     return result
 }
@@ -53,5 +137,13 @@ module.exports = {
     getMealInfo,
     getMembers,
     getExercises,
-    AddCustomWorkout
+    AddCustomWorkout,
+    getStudCount,
+    getTrainerCount,
+    getAllMembers,
+    getWorkoutOftheWeek,
+    getWorkoutoftheDay,
+    getParkInfo,
+    getTemplates,
+    AddTemplate
 };

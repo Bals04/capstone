@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const gymroutes = require('./routes/gymRoutes');
 const trainerroutes = require('./routes/trainerroutes');
+const memberRoutes = require('./routes/memberRoutes');
+const parkRoutes = require('./routes/parkRoute');
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ app.use(cors());
 //use the routes in the routes folder
 app.use('/', gymroutes);
 app.use('/', trainerroutes);
+app.use('/', memberRoutes);
+app.use('/', parkRoutes );
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

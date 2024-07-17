@@ -51,20 +51,8 @@
                 <h2 class="text-center font-bold text-xl mb-4 text-white">Create Customized Workout Plan</h2>
                 <div class="bg-white p-4 rounded-lg">
                     <div class="mb-4">
-                        <label id="week" class="block font-bold text-lg">Week 1</label>
-                    </div>
-                    <div class="flex justify-between items-center mb-4">
-                        <label class="block font-bold">Day:</label>
-                        <select id="day" class="ml-2 p-2 border rounded-lg">
-                            <option>Day 1</option>
-                            <option>Day 2</option>
-                            <option>Day 3</option>
-                            <option>Day 4</option>
-                            <option>Day 5</option>
-                            <option>Day 6</option>
-                            <option>Day 7</option>
-                            <!-- Add more days as needed -->
-                        </select>
+                        <label class="block font-bold">Workout Date:</label>
+                        <input id="workout-date" type="date" class="w-full p-2 border rounded-lg">
                     </div>
                     <div class="mb-4">
                         <label class="block font-bold">Exercise:</label>
@@ -142,17 +130,13 @@
                 var excerciseID = document.getElementById("exc-select").value;
                 var repss = document.getElementById("reps").value;
                 var sets = document.getElementById("sets").value;
-                var day = document.getElementById("day").value;
-                var dayno = day.match(/\d+/)[0];
-                var week = document.getElementById("week").innerHTML;
-                var weekno = week.match(/\d+/)[0];
+                var date = document.getElementById("workout-date").value;
                 const formData = {
                     member_id: memb_id,
                     exercise_id: excerciseID,
                     reps: repss,
                     sets: sets,
-                    week_no: weekno,
-                    day_no: dayno,
+                    workout_date: date,
                     status: "Pending"
                 };
                 const response = await axios.post('http://localhost:3000/addCustomWorkout', formData);

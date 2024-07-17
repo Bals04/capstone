@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="bg-gray-900 font-sans leading-normal tracking-normal text-white">
+
+    <!-- Dashboard header -->
+    <div class="flex justify-between bg-gray-900 border-gray-200 p-6">
+        <div class="text-3xl font-bold text-white">FleXperience Dashboard</div>
+        <div class="text-white ">Welcome, Admin</div>
+    </div>
+
+    <!-- Dashboard content -->
+    <div class="container mx-auto mt-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Active Trainers -->
+            <div class="bg-gradient-to-br from-red-400 to-red-900 rounded-lg shadow-md p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-dumbbell text-4xl mr-4"></i>
+                        <div class="text-2xl font-semibold">Active Trainers</div>
+                    </div>
+                    <div class="bg-white text-black font-semibold py-1 px-3 rounded-full text-sm" id="TrainerCount">0
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Members -->
+            <div class="bg-gradient-to-br from-green-400 to-green-900 rounded-lg shadow-md p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-users text-4xl mr-4"></i>
+                        <div class="text-2xl font-semibold">Active Members</div>
+                    </div>
+                    <div class="bg-white text-black font-semibold py-1 px-3 rounded-full text-sm" id="MemberCount">0
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Member -->
+            <a href="#"
+                class="bg-gray-300 rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition duration-300 ease-in-out">
+                <i class="fas fa-user-plus text-gray-700 text-4xl mb-4"></i>
+                <span class="text-lg font-semibold text-gray-800">Register new Member</span>
+            </a>
+
+            <!-- Add Trainer -->
+            <a href="#"
+                class="bg-gray-300 rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition duration-300 ease-in-out">
+                <i class="fas fa-dumbbell text-4xl mr-4 text-gray-700"></i>
+                <span class="text-lg font-semibold text-gray-800">Register new trainer</span>
+            </a>
+
+            <!-- Recent Activities -->
+            <div class="bg-gray-300 rounded-lg shadow-md p-6 col-span-2">
+                <div>
+                    <div class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</div>
+                    <ul class="divide-y divide-gray-200">
+                        <li class="py-2">
+                            <div class="flex items-center justify-between">
+                                <div class="text-gray-800">John Doe completed a workout session.</div>
+                                <div class="text-gray-500 text-sm">2 hours ago</div>
+                            </div>
+                        </li>
+                        <li class="py-2">
+                            <div class="flex items-center justify-between">
+                                <div class="text-gray-800">Jane Smith signed up as a new member.</div>
+                                <div class="text-gray-500 text-sm">3 hours ago</div>
+                            </div>
+                        </li>
+                        <li class="py-2">
+                            <div class="flex items-center justify-between">
+                                <div class="text-gray-800">New nutrition plan published by Trainer1.</div>
+                                <div class="text-gray-500 text-sm">4 hours ago</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div id="memberModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden">
+            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-2xl w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-medium text-gray-800">Member Details</h3>
+                    <button id="closeModal" class="text-gray-800 text-xl">&times;</button>
+                </div>
+                <div>
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">ID</th>
+                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Member name</th>
+                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Trainer</th>
+                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Start date</th>
+                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">End date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                            <!-- Member data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            //FIRST RESPONSE WILL SET THE COUNT OF THE STUDENTS/MEMBERS
+            const response = await axios.get('http://localhost:3000/getStudentCount');
+            const data = response.data;
+            var empCount = (data[0].empCount)
+            const memberCount = document.getElementById("MemberCount");
+            memberCount.innerHTML = empCount;
+            //SECOND RESPONSE WILL SET THE COUNT OF THE TRAINERS
+            const response_2 = await axios.get('http://localhost:3000/getTrainerCount');
+            const data_2 = response_2.data;
+            const trainerCount = document.getElementById("TrainerCount")
+            var trainer_Count = (data_2[0].trainerCount)
+            trainerCount.innerHTML = trainer_Count;
+
+            memberCount.addEventListener('click', async () => {
+                const memberModal = document.getElementById('memberModal');
+                const memberTableBody = document.getElementById('memberTableBody');
+
+                //Fetch member details
+                const memberResponse = await axios.get('http://localhost:3000/getMembers');
+                const members = memberResponse.data;
+
+                // Populate table with member details
+                memberTableBody.innerHTML = '';
+                members.forEach(member => {
+                    memberTableBody.innerHTML += `
+                        <tr>
+                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.member_id}</td>
+                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.member_name}</td>
+                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.Trainer}</td>
+                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.start_date}</td>
+                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.end_date}</td>
+                        </tr>
+                `;
+                });
+
+                // Show modal
+                memberModal.classList.remove('hidden');
+            });
+
+            // Add event listener to close button
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('memberModal').classList.add('hidden');
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    });
+
+</script>
+
+</html>

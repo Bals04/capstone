@@ -4,7 +4,8 @@ module.exports = {
     "./views/member/**/*.{html,js}",
     "./views/trainer/**/*.{html,js}",
     "./views/admin/**/*.{html,js}",
-    "./views/maps/**/*.{html,js}"
+    "./views/maps/**/*.{html,js}",
+    "./views/features/**/*.{html,js}",
   ],
   theme: {
     extend: {},

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Leaflet Map - Davao City Gyms</title>
   <meta charset="utf-8" />
@@ -10,53 +11,81 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="../../dist/tailwind.css">
-  
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nearest Gym Locator</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.js"></script>
-    <style>
-      #map {
-        height: 600px;
-        flex: 3;
-        border-radius: 8px;
-      } 
-    </style>
-  </head>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.js"></script>
+
+  <style>
+    #map {
+      height: 600px;
+      flex: 1;
+      border-radius: 8px;
+    }
+
+    .box {
+      background-color: #3b3b3b;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      min-width: 45%;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
 
 <body class="flex items-center justify-center min-h-screen m-0 bg-black">
-  <div class="flex flex-col w-[100rem] items-center bg-gray-900 p-5 rounded-lg shadow-md m-5">
-    <h1 class="text-2xl mb-5 text-white">Nearest gym locator</h1>
+  <div class="w-full items-center bg-gray-800 p-5 shadow-md">
+    <h1 class="text-2xl mb-5 text-white">Nearest Gym Locator</h1>
 
-    <div class="flex gap-5 w-full">
-      <div class="gyms-container bg-gray-500 p-5 rounded-lg shadow-lg max-h-[600px] overflow-y-auto">
-        <h2 class="text-2xl mb-5 text-white">3 nearby gyms</h2>
-        <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
-      </div>
-
-      <div id="map"></div>
-
-      <div class="bg-gray-500 p-5 rounded-lg shadow-lg max-h-[600px] overflow-y-auto">
-        <h2 class="text-2xl mb-5 text-white">Gyms around the city</h2>
-        <ul class="list-none p-0 m-0" id="all-gyms"></ul>
-      </div>
-
-      
+    <div class="mb-5 flex justify-center gap-2">
+      <button id="nearby" class="toggle-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onclick="showSection('nearbyGyms','nearby')">Nearby Gyms</button>
+      <button id="gyms" class="toggle-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onclick="showSection('gymsCity','gyms')">Gyms Around the City</button>
+      <button id="areas" class="toggle-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onclick="showSection('recreationalAreas','areas')">Recreational Areas</button>
     </div>
-    <button id="showLoc" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300">
-      Hiding directions
+
+    <div class="flex flex-row w-full h-full">
+      <!-- Map section -->
+      <div id="map" class="w-1/2 h-[600px] mb-5 p-4 bg-gray-800 rounded-lg"></div>
+
+      <div class="w-1/2 flex flex-col gap-4">
+        <!-- Nearby Gyms section -->
+        <div id="nearbyGyms" class="section bg-gray-800 w-full max-h-[600px] overflow-y-auto p-4 rounded-lg">
+          <h2 class="text-2xl mb-5 text-white font-bold">3 Nearby Gyms</h2>
+          <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
+        </div>
+
+        <!-- Gyms Around the City section -->
+        <div id="gymsCity" class="section bg-gray-800 w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
+          <h2 class="text-2xl mb-5 text-white font-bold">Gyms Around the City</h2>
+          <ul class="list-none p-0 m-0" id="all-gyms"></ul>
+        </div>
+
+        <!-- Recreational Areas section -->
+        <div id="recreationalAreas"
+          class="section bg-gray-800  w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
+          <h2 class="text-2xl mb-5 text-white font-bold">Recreational areas</h2>
+          <ul class="list-none p-0 m-0" id="all-park"></ul>
+        </div>
+      </div>
+    </div>
+
+    <button id="showLoc"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300">
+      Hiding Directions
     </button>
   </div>
 </body>
 
 </html>
 <script>
-  
+
   var userLat = 0;
   var userLong = 0;
   var show = false;
@@ -71,7 +100,9 @@
   }).addTo(map);
 
   var gyms = [];
+  var parks = [];
   var markers = [];
+  var parkmarkers = [];
   var userLoc = [];
   var nearby = [];
 
@@ -90,7 +121,9 @@
           monthlyRates: G.monthly_rate,
           coords: [G.latitude, G.longtitude],
           img: G.img,
-          avg: G.Average
+          avg: G.Average,
+          contact: G.contact_no,
+          address: G.street_address
         });
 
       });
@@ -130,13 +163,80 @@
 
       });
       populateAllGymsList()
+      populateAllParksList()
 
     } catch (error) {
       console.error('Error fetching gyms data:', error);
     }
   }
-  fetchGyms(); //EXECUTE THE FUNCTION
+  const customMarkerIcon = L.divIcon({
+    className: 'custom-marker-icon',
+    html: `
+        <div style="position: relative; width: 25px; height: 41px;">
+            <!-- Marker background -->
+            <svg width="25" height="41" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 41">
+                <circle cx="12.5" cy="20" r="12" fill="red"/>
+                <path d="M12.5 0C5.6 0 0 5.6 0 12.5 0 21.5 12.5 41 12.5 41S25 21.5 25 12.5C25 5.6 19.4 0 12.5 0z" fill="#fff"/>
+            </svg>
+            <!-- Location icon -->
+            <i class="fas fa-map-marker-alt" style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); color: red; font-size: 16px;"></i>
+        </div>
+    `,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+  });
+  async function fetchParks() {
+    try {
+      const response = await axios.get('http://localhost:3000/parks');
+      const Parks = response.data;
+      Parks.forEach(G => {
 
+        parks.push({
+          id: G.id,
+          name: G.name,
+          coords: [G.latitude, G.longitude],
+          img: G.img,
+          address: G.address,
+          openAt: G.opens_at,
+          closeAt: G.closes_at
+        });
+
+      });
+
+      parks.forEach(function (p) {
+        var Parkmarker = L.marker(p.coords, { icon: customMarkerIcon }).addTo(map);
+        Parkmarker.bindPopup(function () {
+          // Create your popup content dynamically
+          const popupContent = `
+    <div style="max-width: 300px; padding: 10px; font-family: Arial, sans-serif; color: #333;">
+        <img src="${p.img}" alt="Gym Image" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h1 style="font-size: 18px; margin: 10px 0; color: #1a1a1a; font-weight: bold;">${p.name}</h1>
+        <div style="display: flex; align-items: center; font-size: 14px; color: #555;">
+            <i class="fas fa-map-marker-alt" style="margin-right: 8px; color: #007bff;"></i>
+            <span>${p.address}</span>
+        </div>
+    </div>
+`;
+
+          // Return the content as a string
+          return popupContent;
+
+        });
+
+        parkmarkers.push(Parkmarker);
+        Parkmarker.on('popupopen', function () {
+          setStarRatings()
+        });
+      });
+      //populateAllGymsList()
+    } catch (error) {
+      console.error('Error fetching gyms data:', error);
+    }
+  }
+
+  //EXECUTE THE FUNCTION
+  fetchGyms();
+  fetchParks();
 
 
   //THIS FUNCTION POPULATES THE 3 NEAREST GYMS AND SHOW IT TO THE USER
@@ -170,23 +270,34 @@
         "hover:bg-gray-200"
       );
       var content = `
-          <div class="al-gym-name text-lg font-bold mb-2.5">${nearbyGym.gym.name}</div>
-          <div class="all-gym-details flex gap-2.5">
-            <img src="${nearbyGym.gym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
-            <div class="rates flex flex-col">
-              <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate</strong> ${nearbyGym.gym.dailyRates}</div>
-              <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${nearbyGym.gym.monthlyRates}</div><br>
-              <div class="rates flex flex-col">
-                <div class="rating text-sm mt-1.5"><strong>Ratings</strong>: ${nearbyGym.gym.avg}</div><br>
-                    <div class="rating-stars" data-rating="${nearbyGym.gym.avg}">
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                    </div>
-              </div>
-          </div>`;
+  <div class="al-gym-name text-lg font-bold mb-2.5">${nearbyGym.gym.name}</div>
+  <div class="all-gym-details flex gap-2.5">
+    <img src="${nearbyGym.gym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
+    <div class="rates flex flex-col">
+      <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${nearbyGym.gym.dailyRates}</div>
+      <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${nearbyGym.gym.monthlyRates}</div>
+      <div class="text-sm mt-1.5">
+        <i class="fas fa-phone-alt"></i>&nbsp ${nearbyGym.gym.contact}
+      </div>
+      <div class="text-sm mt-1.5">
+        <i class="fas fa-map-marker-alt"></i>&nbsp ${nearbyGym.gym.address}
+      </div>
+      <div class="rating flex items-center text-sm mt-1.5">
+        <strong>Ratings:</strong>&nbsp${nearbyGym.gym.avg}
+        <div class="rating-stars flex ml-2" data-rating="${nearbyGym.gym.avg}">
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+        </div>
+      </div>
+            <div class="text-sm mt-1.5">
+        <button class="bg-gray-900 p-2 rounded-md text-white">See more</button>
+      </div>
+    </div>
+  </div>`;
+
       listItem.innerHTML = content;
       listItem.addEventListener("click", function (e) {
         removeLastMarker();
@@ -409,50 +520,112 @@
   }
 
 
-    function populateAllGymsList() {
-      var gymsList = document.getElementById("all-gyms");
-      var userMarker = null;
-      // Clear existing list items
-      gymsList.innerHTML = "";
-      // Add new list items
-      gyms.forEach(function (g) {
-    var listItem = document.createElement("div");
-    listItem.classList.add(
-               "gym-item",
-               "cursor-pointer",
-               "p-4", "mb-2",
-               "border",
-               "border-gray-300",
-               "rounded-lg",
-               "bg-gray-100",
-               "hover:bg-gray-200",
-               "flex", "flex-col",
-               "items-start",
-               "transition-colors",
-               "duration-300");
+  function populateAllGymsList() {
+    var gymsList = document.getElementById("all-gyms");
+    var userMarker = null;
+    // Clear existing list items
+    gymsList.innerHTML = "";
+    // Add new list items
+    gyms.forEach(function (g) {
+      var listItem = document.createElement("div");
+      listItem.classList.add(
+        "gym-item",
+        "cursor-pointer",
+        "p-4", "mb-2",
+        "border",
+        "border-gray-300",
+        "rounded-lg",
+        "bg-gray-100",
+        "hover:bg-gray-200",
+        "flex", "flex-col",
+        "items-start",
+        "transition-colors",
+        "duration-300");
 
-    var content = `
-      <div class="al-gym-name font-bold mb-2">${g.name}</div>
-      <div class="all-gym-details flex flex-col items-start">
-        <img src="${g.img}" alt="Gym Image" class="w-32 h-32 object-cover rounded-md mb-2">
-        <div class="rates">
-          <div class="Daily-rate font-semibold">Daily rate: ${g.dailyRates}</div>
-          <div class="Monthly-rate font-semibold">Monthly rate: ${g.monthlyRates}</div><br>
-          <div class="rating font-semibold">Ratings: ${g.avg}</div><br>
-          <div class="rating-stars" data-rating="${g.avg}">
-            <i class="rating-star fas fa-star"></i>
-            <i class="rating-star fas fa-star"></i>
-            <i class="rating-star fas fa-star"></i>
-            <i class="rating-star fas fa-star"></i>
-            <i class="rating-star fas fa-star"></i>
-          </div>
+      var content = `
+  <div class="al-gym-name text-lg font-bold mb-2.5">${g.name}</div>
+  <div class="all-gym-details flex gap-2.5">
+    <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
+    <div class="flex flex-col flex-1">
+      <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${g.dailyRates}</div>
+      <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${g.monthlyRates}</div>
+      <div class="text-sm mt-1.5">
+        <i class="fas fa-phone-alt"></i>&nbsp ${g.contact}
+      </div>
+      <div class="text-sm mt-1.5">
+        <i class="fas fa-map-marker-alt"></i>&nbsp ${g.address}
+      </div>
+      <div class="rating flex items-center text-sm mt-1.5">
+        <strong>Ratings:</strong>&nbsp${g.avg}
+        <div class="rating-stars flex ml-2" data-rating="${g.avg}">
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
+          <i class="rating-star fas fa-star text-gray-400"></i>
         </div>
-      </div>`;
+      </div>
+      <div class="text-sm mt-1.5">
+        <button class="bg-gray-900 p-2 rounded-md text-white">See more</button>
+      </div>
+    </div>
+  </div>`;
+      listItem.innerHTML = content;
+      document.getElementById("all-gyms").appendChild(listItem);
+    });
+  }
 
-    listItem.innerHTML = content;
-    document.getElementById("all-gyms").appendChild(listItem);
-  });
-    }
+
+
+  function populateAllParksList() {
+    var parkList = document.getElementById("all-park");
+    var userMarker = null;
+    // Clear existing list items
+    parkList.innerHTML = "";
+    // Add new list items
+    parks.forEach(function (g) {
+      var listItem = document.createElement("div");
+      listItem.classList.add(
+        "gym-item",
+        "cursor-pointer",
+        "p-4", "mb-2",
+        "border",
+        "border-gray-300",
+        "rounded-lg",
+        "bg-gray-100",
+        "hover:bg-gray-200",
+        "flex", "flex-col",
+        "items-start",
+        "transition-colors",
+        "duration-300");
+
+      var content = `
+  <div class="al-gym-name text-lg font-bold mb-2.5">${g.name}</div>
+  <div class="all-gym-details flex gap-2.5">
+    <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
+    <div class="flex flex-col flex-1">
+      <div class="text-sm mt-1.5">
+        <i class="fas fa-map-marker-alt"></i>&nbsp ${g.address}
+      </div>
+      <div class="text-sm mt-1.5 flex items-center">
+        <i class="fas fa-clock"></i>&nbsp Open: ${g.openAt} - Closes: ${g.closeAt}
+      </div>
+    </div>
+  </div>`;
+
+      listItem.innerHTML = content;
+      document.getElementById("all-park").appendChild(listItem);
+    });
+  }
+
+  function showSection(sectionId, id) {
+    document.querySelectorAll('.toggle-btn').forEach(section => section.classList.remove('bg-orange-700'));
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+    // Show the selected section
+    document.getElementById(sectionId).classList.remove('hidden');
+    document.getElementById(id).classList.add('bg-orange-700');
+  }
 
 
 </script>
