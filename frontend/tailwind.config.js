@@ -8,7 +8,11 @@ module.exports = {
     "./views/features/**/*.{html,js}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customGray: '#343639',
+        customOrange: '#EC7E4A',
+    },},
   },
   plugins: [],
 }
