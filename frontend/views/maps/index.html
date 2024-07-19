@@ -15,6 +15,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.js"></script>
 
@@ -57,12 +58,19 @@
       <div class="w-1/2 flex flex-col gap-4 m-5">
         <!-- Nearby Gyms section -->
         <div id="nearbyGyms" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg">
-          <h2 class="text-2xl mb-5 text-white ">3 Nearby Gyms</h2>
+          <h2 class="text-2xl mb-5 text-white">3 Nearby Gyms</h2>
           <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
         </div>
 
         <!-- Gyms Around the City section -->
         <div id="gymsCity" class="section bg-customOrange  w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
+          <!-- Location input section -->
+          <div class="mb-5 flex gap-2">
+            <input type="text" id="address" class="bg-white text-gray-800 px-4 py-2 rounded"
+              placeholder="Starting point">
+            <button id="locateBtn" class="bg-customGray hover:bg-orange-800 text-white py-2 px-4 rounded"
+              onclick="">Mark</button>
+          </div>
           <h2 class="text-2xl mb-5 text-white">Gyms Around the City</h2>
           <ul class="list-none p-0 m-0" id="all-gyms"></ul>
         </div>
@@ -99,9 +107,18 @@
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
+  var geocoder = L.Control.Geocoder.nominatim({
+    geocodingQueryParams: {
+      countrycodes: 'PH', // Restrict geocoding results to Philippines
+      // city: 'Davao City', // Restrict results to Davao City
+      limit: 1 // Limit number of results
+    }
+  });
+
   var gyms = [];
   var parks = [];
   var markers = [];
+  var userMarker = null;
   var parkmarkers = [];
   var userLoc = [];
   var nearby = [];
@@ -244,7 +261,6 @@
     var gymsList = document.getElementById("nearestGymsList");
     var userlat = userCoords[0];
     var userlong = userCoords[1];
-    var userMarker = null;
     // Clear existing list items
     gymsList.innerHTML = "";
 
@@ -316,7 +332,6 @@
 
         // Create a new marker for user location
         userMarker = L.marker([userlat, userlong]).addTo(map);
-        userLoc.push(userMarker);
         // Create a new marker for gym location
         var gymMarker = L.marker([gymDistanceLat, gymDistanceLong]).addTo(map);
         gymMarker.bindPopup(`
@@ -631,6 +646,34 @@
     document.getElementById(sectionId).classList.remove('hidden');
     document.getElementById(id).classList.add('bg-orange-700');
   }
+
+
+  document.getElementById('locateBtn').addEventListener('click', function (event) {
+    var userLoc = document.getElementById('address').value;
+    var address = userLoc.concat(', Davao city')
+    var coordinates = [];
+    geocoder.geocode(address, function (results) {
+      console.log(results); // Log geocoding results to inspect in the console
+      if (userMarker) {
+        map.removeLayer(userMarker)
+      }
+      if (results.length > 0) {
+        var latLng = results[0].center;
+        coordinates.push(latLng.lat); // Store latitude in the array
+        coordinates.push(latLng.lng); // Store longitude in the array
+        console.log(coordinates)
+        map.setView(latLng, 13); // Set map view to the geocoded location
+        userMarker = L.marker(latLng).addTo(map)
+          .bindPopup("Your current address: " + address.name)
+          .openPopup();
+        logDistancesToGyms(coordinates, gyms);
+        setStarRatings();
+      } else {
+        alert('Location not found');
+      }
+
+    })
+  })
 
 
 </script>
