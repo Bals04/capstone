@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Filter</title>
     <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/cardio.js"></script>
+
     <style>
         .container {
             display: flex;
@@ -139,8 +141,8 @@
                     query: checkedRadioButton,
                     number: 3,
                     minProtein: protein,
-                    maxCarbs: carbs,
-                    maxCalories: calories,
+                    minCarbs: carbs,
+                    minCalories: calories,
                     apiKey: apiKey
                 };
 
@@ -153,9 +155,9 @@
                     // Set the ID of the div
                     fetchingDataDiv.id = 'fetchingData';
                     // Add the classes to the div
-                    fetchingDataDiv.className = 'bg-teal-200 p-4 rounded-lg shadow-md text-center text-teal-700 font-semibold mt-28 hidden';
+                    fetchingDataDiv.className = 'p-4 text-center text-teal-700 font-semibold mt-28 hidden';
                     // Set the content of the div
-                    fetchingDataDiv.innerHTML = '<h3>Fetching data...</h3>';
+                    fetchingDataDiv.innerHTML = ' <l-cardio size="50" stroke="4" speed="1"color="teal" ></l-cardio>';
                     // Append the div to the body of the document
                     mealContainer.appendChild(fetchingDataDiv);
 
