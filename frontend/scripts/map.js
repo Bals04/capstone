@@ -190,7 +190,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
             "flex",
             "flex-col",
             "items-start",
-            "hover:bg-green-700",
+            "hover:bg-red-700",
             "text-white" 
         );
         var content = ` 

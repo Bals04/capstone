@@ -6,6 +6,7 @@ module.exports = {
     "./views/admin/**/*.{html,js}",
     "./views/maps/**/*.{html,js}",
     "./views/features/**/*.{html,js}",
+    "./scripts/map.js"
   ],
   theme: {
     extend: {
