@@ -12,7 +12,6 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
-
 var geocoder = L.Control.Geocoder.nominatim({
     geocodingQueryParams: {
         countrycodes: 'PH', // Restrict geocoding results to Philippines
@@ -20,7 +19,6 @@ var geocoder = L.Control.Geocoder.nominatim({
         limit: 1 // Limit number of results
     }
 });
-
 // ? ARRAYS THAT CAN BE USED AS LOCATIONS LIKE, NEARBY GYMS OR GYMS AROUND THE CITY
 var gyms = [];
 var parks = [];
@@ -31,6 +29,24 @@ let distances = [];
 
 var userMarker = null;
 var userLoc = null;
+
+const customMarkerIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    shadowSize: [41, 41]
+});
+
+const customUserIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    shadowSize: [41, 41]
+});
 
 // ? REQUEST DATA FROM DATABASE TO USE IT HERE 
 async function fetchGyms() {
@@ -94,22 +110,7 @@ async function fetchGyms() {
         console.error('Error fetching gyms data:', error);
     }
 }
-const customMarkerIcon = L.divIcon({
-    className: 'custom-marker-icon',
-    html: `
-        <div style="position: relative; width: 25px; height: 41px;">
-            <!-- Marker background -->
-            <svg width="25" height="41" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 41">
-                <circle cx="12.5" cy="20" r="12" fill="red"/>
-                <path d="M12.5 0C5.6 0 0 5.6 0 12.5 0 21.5 12.5 41 12.5 41S25 21.5 25 12.5C25 5.6 19.4 0 12.5 0z" fill="#fff"/>
-            </svg>
-            <!-- Location icon -->
-            <i class="fas fa-map-marker-alt" style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); color: red; font-size: 16px;"></i>
-        </div>
-    `,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-});
+
 async function fetchParks() {
     try {
         const response = await axios.get('http://localhost:3000/parks');
@@ -171,12 +172,12 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
     // Clear existing list items
     gymsList.innerHTML = "";
 
-    
-    distances.slice(0, 3).forEach(function (nearbyGym, index) { 
-    var listItem = document.createElement("div"); 
-        
-        listItem.classList.add( 
-            "gym-item", 
+
+    distances.slice(0, 3).forEach(function (nearbyGym, index) {
+        var listItem = document.createElement("div");
+
+        listItem.classList.add(
+            "gym-item",
             "cursor-pointer",
             "p-4",
             "mb-2.5",
@@ -191,7 +192,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
             "flex-col",
             "items-start",
             "hover:bg-red-700",
-            "text-white" 
+            "text-white"
         );
         var content = ` 
   <div class="al-gym-name text-lg font-bold mb-2.5">${nearbyGym.name} - <span>${nearbyGym.distance} km</span></div>
@@ -304,7 +305,7 @@ document.getElementById("showLoc").addEventListener("click", function () {
 //a function that lets the user click on the map and add a marker
 function onMapClick(e) {
     removeLastMarker();
-    userLoc = L.marker(e.latlng).addTo(map);
+    userLoc = L.marker(e.latlng,{ icon: customUserIcon }).addTo(map);
     if (ctr) {
         map.removeControl(ctr)
         ctr = null
