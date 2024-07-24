@@ -31,7 +31,7 @@ var userMarker = null;
 var userLoc = null;
 
 const customMarkerIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -40,12 +40,19 @@ const customMarkerIcon = L.icon({
 });
 
 const customUserIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     shadowSize: [41, 41]
+});
+const gymIcon = L.icon({
+    iconUrl: '/frontend/dumbell.svg',
+    iconSize: [40, 100],       
+    iconAnchor: [12, 41],     
+    popupAnchor: [1, -34],    
+
 });
 
 // ? REQUEST DATA FROM DATABASE TO USE IT HERE 
@@ -69,7 +76,7 @@ async function fetchGyms() {
 
         });
         gyms.forEach(function (gym) {
-            var marker = L.marker(gym.coords).addTo(map);
+            var marker = L.marker(gym.coords, { icon: gymIcon }).addTo(map);
             marker.bindPopup(function () {
                 // Create your popup content dynamically
                 const popupContent = `
@@ -298,11 +305,11 @@ function removeLastMarker() {
 document.getElementById("showLoc").addEventListener("click", function () {
     var label = document.getElementById("showLoc");
     show = !show;
-    label.innerText = show ? "SHOWING DIRECTIONS" : "HIDING WAYS";
+    label.innerText = show ? "Displaying directions" : "Hiding Directions";
     control.options.show = show;
 });
 
-//a function that lets the user click on the map and add a marker
+//a function that lets the user click on the map and add a new fakeng marker
 function onMapClick(e) {
     removeLastMarker();
     userLoc = L.marker(e.latlng,{ icon: customUserIcon }).addTo(map);
@@ -313,7 +320,7 @@ function onMapClick(e) {
     } else {
         console.log("null ang ctr na")
     }
-    // Example popup content
+    // Example sa popup content
     userLoc.bindPopup("COORDS: " + e.latlng);
     userLat = e.latlng.lat;
     userLong = e.latlng.lng;
@@ -349,11 +356,11 @@ async function logDistancesToGyms(userCoords, gyms) {
                     L.latLng(userCoords[0], userCoords[1]),
                     L.latLng(nearestGym.gymCoords[0], nearestGym.gymCoords[1]),
                 ],
-                show: false,
+                show: !true,
                 lineOptions: {
                     styles: [{ color: "red", opacity: 1, weight: 6 }],
                 },
-                routeWhileDragging: false,
+                routeWhileDragging: false,  
                 createMarker: function () {
                     return null;
                 }, // Hide default markers
@@ -391,7 +398,6 @@ async function logDistancesToGyms(userCoords, gyms) {
             show: false, // Hide the route summary panel
         }).addTo(map);
 
-        removeControlContainer(ctr);
 
         // Wait for the 'routesfound' event to get route details
         let routeDetails = await new Promise((resolve) => {
@@ -422,14 +428,6 @@ async function logDistancesToGyms(userCoords, gyms) {
     // After processing all gyms, handle completion
     handleCompletion();
 }
-
-function removeControlContainer(control) {
-    const container = control.getContainer();
-    if (container) {
-        container.parentNode.removeChild(container);
-    }
-}
-
 
 function setStarRatings() {
     const ratingContainers = document.querySelectorAll('.rating-stars');
@@ -573,7 +571,7 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
             coordinates.push(latLng.lng); // Store longitude in the array
             console.log(coordinates)
             map.setView(latLng, 13); // Set map view to the geocoded location
-            userMarker = L.marker(latLng).addTo(map)
+            userMarker = L.marker(latLng,{ icon: customUserIcon }).addTo(map)
                 .bindPopup("Your current address: " + address.name)
                 .openPopup();
             logDistancesToGyms(coordinates, gyms);

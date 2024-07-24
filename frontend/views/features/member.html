@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Workout Search</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-4 mb-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold"><i class="fas fa-dumbbell mr-2"></i> Workout Search</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Categories ComboBox -->
+        <div class="mb-6">
+            <label for="body-part" class="block text-gray-700 font-semibold mb-2">Filter by Body Part:</label>
+            <div class="relative inline-block w-auto">
+                <select id="body-part"
+                    class="block appearance-none w-auto bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg shadow leading-tight focus:outline-none focus:shadow-outline">
+                    <option>All</option>
+                    <option>Chest</option>
+                    <option>Back</option>
+                    <option>Shoulders</option>
+                    <option>Upper Legs</option>
+                    <option>Lower Legs</option>
+                    <option>Upper Arms</option>
+                    <option>Lower Arms</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout Results -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4">Results</h2>
+            <div id="workout-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+
+            </div>
+        </div>
+    </main>
+
+</body>
+<script>
+    const bodyPartSelect = document.getElementById('body-part');
+
+    // Add event listener for the change event
+    bodyPartSelect.addEventListener('change', function () {
+        const selectedBodyPart = bodyPartSelect.value.toLowerCase();;
+        getData(selectedBodyPart)
+    });
+
+    async function getData(bodyPart) {
+        const workoutCardsContainer = document.getElementById('workout-cards');
+        workoutCardsContainer.innerHTML = " ";
+        const options = {
+            method: 'GET',
+            url: `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,
+            params: {
+                limit: '10',
+                offset: '0'
+            },
+            headers: {
+                'x-rapidapi-key': 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93',
+                'x-rapidapi-host': 'exercisedb.p.rapidapi.com'
+            }
+        };
+        try {
+            const response = await axios.request(options);
+            const data = response.data; // Access the data property
+            console.log(data);
+            data.forEach(workout => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-3 rounded-lg shadow-lg flex flex-col';
+                card.innerHTML = `
+                <img src="${workout.gifUrl}" alt="Workout GIF" class="rounded-lg mb-3">
+                <h3 class="text-md font-bold mb-1">${workout.name}</h3>
+                <p class="text-gray-700 mb-1 text-sm">${workout.equipment}</p>
+                <div class="flex items-center text-gray-500 text-sm">
+                    <i class="fas fa-dumbbell mr-2"></i>
+                    <span>${workout.bodyPart}</span>
+                </div>
+            `;
+                workoutCardsContainer.appendChild(card);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+</script>
+
+</html>
