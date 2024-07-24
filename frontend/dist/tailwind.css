@@ -559,9 +559,6 @@ video {
 .right-2 {
   right: 0.5rem;
 }
-.top-0 {
-  top: 0px;
-}
 .top-2 {
   top: 0.5rem;
 }
@@ -581,11 +578,17 @@ video {
   margin-left: auto;
   margin-right: auto;
 }
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
 .mb-2 {
   margin-bottom: 0.5rem;
 }
 .mb-2\.5 {
   margin-bottom: 0.625rem;
+}
+.mb-3 {
+  margin-bottom: 0.75rem;
 }
 .mb-4 {
   margin-bottom: 1rem;
@@ -623,17 +626,8 @@ video {
 .mt-28 {
   margin-top: 7rem;
 }
-.mt-3 {
-  margin-top: 0.75rem;
-}
 .mt-4 {
   margin-top: 1rem;
-}
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-.mb-3 {
-  margin-bottom: 0.75rem;
 }
 .block {
   display: block;
@@ -671,12 +665,6 @@ video {
 .h-full {
   height: 100%;
 }
-.h-11 {
-  height: 2.75rem;
-}
-.h-80 {
-  height: 20rem;
-}
 .max-h-\[600px\] {
   max-height: 600px;
 }
@@ -701,20 +689,11 @@ video {
 .w-96 {
   width: 24rem;
 }
-.w-full {
-  width: 100%;
-}
 .w-auto {
   width: auto;
 }
-.w-2\/4 {
-  width: 50%;
-}
-.w-40 {
-  width: 10rem;
-}
-.w-64 {
-  width: 16rem;
+.w-full {
+  width: 100%;
 }
 .min-w-full {
   min-width: 100%;
@@ -780,9 +759,6 @@ video {
 }
 .gap-4 {
   gap: 1rem;
-}
-.gap-6 {
-  gap: 1.5rem;
 }
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
@@ -854,6 +830,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
+.bg-blue-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
 .bg-customGray {
   --tw-bg-opacity: 1;
   background-color: rgb(52 54 57 / var(--tw-bg-opacity));
@@ -890,6 +870,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(194 65 12 / var(--tw-bg-opacity));
 }
+.bg-red-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(127 29 29 / var(--tw-bg-opacity));
+}
 .bg-teal-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(204 251 241 / var(--tw-bg-opacity));
@@ -909,6 +893,10 @@ video {
 .bg-blue-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(30 58 138 / var(--tw-bg-opacity));
+}
+.bg-red-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
