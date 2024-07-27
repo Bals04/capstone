@@ -35,13 +35,15 @@
       min-width: 45%;
       margin-bottom: 20px;
     }
+
+    .leaflet-container {
+      z-index: 1;
+    }
   </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen m-0 bg-black">
   <div class="w-full items-center bg-customGray p-5 shadow-md">
-    <h1 class="text-5xl mb-5 text-white">Nearest Gym Locator</h1>
-
     <div class="mb-5 flex gap-2">
       <button id="nearby" class="toggle-btn bg-customOrange hover:bg-orange-700 text-white py-2 px-4 rounded"
         onclick="showSection('nearbyGyms','nearby')">Nearby Gyms</button>
@@ -51,45 +53,60 @@
         onclick="showSection('recreationalAreas','areas')">Recreational Areas</button>
     </div>
 
-    <div class="flex flex-row w-full h-full">
+    <div class="container grid grid-cols-1 md:grid-cols-3 gap-4 w-full h-full">
       <!-- Map section -->
-      <div id="map" class="w-1/2 h-[600px] mb-5 p-4 bg-gray-800 rounded-lg"></div>
-
-      <div class="w-1/2 flex flex-col gap-4 m-5">
+      <div id="map" class="relative col-span-2 h-[600px] bg-gray-800 rounded-lg">
+        <!-- Overlay div -->
+        <div id="overlay"
+             class="absolute bottom-0 right-0 w-11/12 md:w-3/4 lg:w-4/5 p-4 bg-customGray rounded-tl-lg text-white hidden"
+             style="z-index: 9999;">
+          <button id="closeView" class="close-button" aria-label="Close">
+            <i class="fas fa-times"></i> <!-- Font Awesome close icon -->
+          </button>
+          <div class="street-card mb-2 p-2 bg-gray-200 rounded-lg"></div>
+        </div>
+    
+        <div id="overlay2"
+             class="absolute bottom-0 left-0 w-11/12 md:w-3/4 lg:w-1/2 p-4 bg-customGray text-white rounded-tr-2xl hidden"
+             style="z-index: 9999;">
+          <h2 class="text-lg font-semibold mb-2">Closest gym to your current location <i class="fas fa-map-marker-alt"></i></h2>
+          <div id="nearest-gym-card" class="nearest-gym-card mb-2 p-4 bg-gray-800 rounded-lg flex items-center"></div>
+        </div>
+      </div>
+    
+      <div class="flex flex-col gap-4">
         <!-- Nearby Gyms section -->
         <div id="nearbyGyms" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg">
           <!-- Location input section -->
           <div class="mb-5 flex gap-2">
-            <input type="text" id="address" class="bg-white text-gray-800 px-4 py-2 rounded"
-              placeholder="Starting point">
-            <button id="locateBtn" class="bg-customGray hover:bg-orange-800 text-white py-2 px-4 rounded"
-              onclick="">Mark</button>
+            <input type="text" id="address" class="bg-white text-gray-800 px-4 py-2 rounded" placeholder="Starting point">
+            <button id="locateBtn" class="bg-customGray hover:bg-orange-800 text-white py-2 px-4 rounded" onclick="">Mark</button>
           </div>
           <h2 class="text-2xl mb-5 text-white">3 Nearby Gyms</h2>
           <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
         </div>
-        
+    
         <!-- Gyms Around the City section -->
-        <div id="gymsCity" class="section bg-customOrange  w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
+        <div id="gymsCity" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
           <h2 class="text-2xl mb-5 text-white">Gyms Around the City</h2>
           <ul class="list-none p-0 m-0" id="all-gyms"></ul>
         </div>
-
+    
         <!-- Recreational Areas section -->
-        <div id="recreationalAreas"
-          class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
+        <div id="recreationalAreas" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
           <h2 class="text-2xl mb-5 text-white">Recreational areas</h2>
           <ul class="list-none p-0 m-0" id="all-park"></ul>
         </div>
       </div>
     </div>
+    
 
     <button id="showLoc"
-      class="bg-customOrange hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300">
+      class="bg-customOrange hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300 hidden">
       Hiding Directions
     </button>
   </div>
 </body>
-<script src="/scripts/map.js"></script>
+<script src="/frontend/scripts/map.js"></script>
 
 </html>

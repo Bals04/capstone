@@ -48,10 +48,10 @@ const customUserIcon = L.icon({
     shadowSize: [41, 41]
 });
 const gymIcon = L.icon({
-    iconUrl: '/dumbell.svg',
-    iconSize: [40, 100],       
-    iconAnchor: [12, 41],     
-    popupAnchor: [1, -34],    
+    iconUrl: '/frontend/dumbell.svg',
+    iconSize: [40, 100],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
 
 });
 
@@ -71,7 +71,8 @@ async function fetchGyms() {
                 img: G.img,
                 avg: G.Average,
                 contact: G.contact_no,
-                address: G.street_address
+                address: G.street_address,
+                street_view: G.street_view
             });
 
         });
@@ -198,7 +199,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
             "flex",
             "flex-col",
             "items-start",
-            "hover:bg-red-700",
+            "hover:bg-gray-800",
             "text-white"
         );
         var content = ` 
@@ -227,7 +228,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
       </div>
             <div class="text-sm mt-1.5">
                 <button class="bg-customOrange p-2 rounded-md text-white flex items-center">
-          <i class="fas fa-directions mr-1"></i> &nbsp Directions
+          <i id "open" class="fas fa-directions mr-1"></i> &nbsp Street view
         </button>
       </div>
     </div>
@@ -312,7 +313,7 @@ document.getElementById("showLoc").addEventListener("click", function () {
 //a function that lets the user click on the map and add a new fakeng marker
 function onMapClick(e) {
     removeLastMarker();
-    userLoc = L.marker(e.latlng,{ icon: customUserIcon }).addTo(map);
+    userLoc = L.marker(e.latlng, { icon: customUserIcon }).addTo(map);
     if (ctr) {
         map.removeControl(ctr)
         ctr = null
@@ -333,6 +334,75 @@ function onMapClick(e) {
 // Listen for click events on the map
 map.on("click", onMapClick);
 
+function showNearby() {
+    let gym = distances[0];
+    const overlay2 = document.getElementById("overlay2");
+    const container = document.getElementById("nearest-gym-card");
+    container.innerHTML = " ";
+    overlay2.classList.remove("hidden");
+
+    // Create the main div with the required classes
+    const listItem = document.createElement('div');
+    listItem.classList.add(
+        "gym-item",
+        "cursor-pointer",
+        "p-4",
+        "mb-2.5",
+        "border",
+        "border-customGray",
+        "rounded-lg",
+        "bg-customGray",
+        "transition",
+        "duration-300",
+        "ease-in-out",
+        "flex",
+        "flex-col",
+        "items-start",
+        "hover:bg-gray-800",
+        "text-white"
+    );
+
+    // Create the content
+    const content = `
+        <div class="al-gym-name text-lg font-bold mb-2.5">${gym.name} - <span>${gym.distance} km</span></div>
+        <div class="all-gym-details flex gap-2.5">
+            <img src="${gym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
+            <div class="rates flex flex-col">
+                <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${gym.dailyRates}</div>
+                <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${gym.monthlyRates}</div>
+                <div class="text-sm mt-1.5">
+                    <i class="fas fa-phone-alt"></i>&nbsp ${gym.contact}
+                </div>
+                <div class="text-sm mt-1.5">
+                    <i class="fas fa-map-marker-alt"></i>&nbsp ${gym.address}
+                </div>
+                <div class="rating flex items-center text-sm mt-1.5">
+                    <strong>Ratings:</strong>&nbsp${gym.average}
+                    <div class="rating-stars flex ml-2" data-rating="${gym.average}">
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="text-sm mt-1.5">
+                    <button class="bg-customOrange p-2 rounded-md text-white flex items-center">
+                        <i id="open" class="fas fa-directions mr-1"></i>&nbsp Street view
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Set the content to the listItem
+    listItem.innerHTML = content;
+
+    // Append the listItem to the container
+    container.appendChild(listItem);
+}
+
+
 async function logDistancesToGyms(userCoords, gyms) {
     // Helper function to handle completion
     function handleCompletion() {
@@ -344,6 +414,7 @@ async function logDistancesToGyms(userCoords, gyms) {
 
         if (distances.length > 0) {
             // Get the nearest gym
+            showNearby();
             let nearestGym = distances[0];
             //console.log("gym distances"+distances)
             // Remove the previous routing control if it exists
@@ -360,7 +431,7 @@ async function logDistancesToGyms(userCoords, gyms) {
                 lineOptions: {
                     styles: [{ color: "red", opacity: 1, weight: 6 }],
                 },
-                routeWhileDragging: false,  
+                routeWhileDragging: false,
                 createMarker: function () {
                     return null;
                 }, // Hide default markers
@@ -465,46 +536,87 @@ function populateAllGymsList() {
             "cursor-pointer",
             "p-4", "mb-2",
             "border",
-            "border-gray-300",
+            "border-customGray",
             "rounded-lg",
-            "bg-gray-100",
-            "hover:bg-gray-200",
+            "bg-customGray",
+            "text-white",
+            "hover:bg-gray-800",
             "flex", "flex-col",
             "items-start",
             "transition-colors",
             "duration-300");
 
         var content = `
-  <div class="al-gym-name text-lg font-bold mb-2.5">${g.name}</div>
-  <div class="all-gym-details flex gap-2.5">
-    <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
-    <div class="flex flex-col flex-1">
-      <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${g.dailyRates}</div>
-      <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${g.monthlyRates}</div>
-      <div class="text-sm mt-1.5">
-        <i class="fas fa-phone-alt"></i>&nbsp ${g.contact}
-      </div>
-      <div class="text-sm mt-1.5">
-        <i class="fas fa-map-marker-alt"></i>&nbsp ${g.address}
-      </div>
-      <div class="rating flex items-center text-sm mt-1.5">
-        <strong>Ratings:</strong>&nbsp${g.avg}
-        <div class="rating-stars flex ml-2" data-rating="${g.avg}">
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-        </div>
-      </div>
-      <div class="text-sm mt-1.5">
-        <button class="bg-gray-900 p-2 rounded-md text-white">See more</button>
-      </div>
-    </div>
-  </div>`;
+            <div class="al-gym-name text-lg font-bold mb-2.5">${g.name}</div>
+            <div class="all-gym-details flex gap-2.5">
+              <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
+              <div class="flex flex-col flex-1">
+                <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${g.dailyRates}</div>
+                <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${g.monthlyRates}</div>
+                <div class="text-sm mt-1.5">
+                  <i class="fas fa-phone-alt"></i>&nbsp ${g.contact}
+                </div>
+                <div class="text-sm mt-1.5">
+                  <i class="fas fa-map-marker-alt"></i>&nbsp ${g.address}
+                </div>
+                <div class="rating flex items-center text-sm mt-1.5">
+                  <strong>Ratings:</strong>&nbsp${g.avg}
+                  <div class="rating-stars flex ml-2" data-rating="${g.avg}">
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                  </div>
+                </div>
+                <div class="text-sm mt-1.5">
+                  <button id="openStreetView_${g.id}" data-src="${g.street_view}" class="bg-customOrange hover:bg-orange-800 p-2 rounded-md text-white">
+                  <i id "open" class="fas fa-directions mr-1"></i> &nbsp Open street view</button>
+                </div>
+              </div>
+            </div>`;
         listItem.innerHTML = content;
         document.getElementById("all-gyms").appendChild(listItem);
+        setTimeout(() => {
+            const button = document.querySelector(`#openStreetView_${g.id}`);
+            if (button) {
+                button.addEventListener('click', function () {
+                    const src = this.getAttribute('data-src');
+                    ToggleStreetView(src);
+                });
+            } else {
+                console.error(`Button with ID openStreetView_${g.id} not found.`);
+            }
+        }, 0);
     });
+}
+
+function ToggleStreetView(src) {
+    const close = document.getElementById('closeView');
+    const overlay2 = document.getElementById("overlay2");
+    // Get the overlay element
+    const overlay = document.getElementById('overlay');
+    // Remove the 'hidden' class to show the overlay
+    overlay.classList.remove('hidden');
+    overlay2.classList.add('hidden')
+    // Select the target div where the iframe should be added
+    const gymCardDiv = document.querySelector('.street-card');
+    // Remove any existing iframe in the div
+    const existingIframe = gymCardDiv.querySelector('iframe');
+    if (existingIframe) {
+        existingIframe.remove();
+    }
+    // Create a new iframe element
+    const newIframe = document.createElement('iframe');
+    newIframe.className = 'w-full h-64 md:w-96 md:h-80 lg:w-full lg:h-[300px]'; // Set class names for styling
+    newIframe.src = `${src}`;
+    // Set the src dynamically
+    // Append the new iframe to the target div
+    gymCardDiv.appendChild(newIframe);
+    close.addEventListener('click', function () {
+        event.stopPropagation(); // Prevents the click event from bubbling up
+        overlay.classList.add('hidden');
+    })
 }
 
 function populateAllParksList() {
@@ -557,7 +669,6 @@ function showSection(sectionId, id) {
     document.getElementById(id).classList.add('bg-orange-700');
 }
 
-
 document.getElementById('locateBtn').addEventListener('click', function (event) {
     removeLastMarker();
     var userloc = document.getElementById('address').value;
@@ -571,7 +682,7 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
             coordinates.push(latLng.lng); // Store longitude in the array
             console.log(coordinates)
             map.setView(latLng, 13); // Set map view to the geocoded location
-            userMarker = L.marker(latLng,{ icon: customUserIcon }).addTo(map)
+            userMarker = L.marker(latLng, { icon: customUserIcon }).addTo(map)
                 .bindPopup("Your current address: " + address.name)
                 .openPopup();
             logDistancesToGyms(coordinates, gyms);
@@ -582,4 +693,6 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
 
     })
 })
+
+
 

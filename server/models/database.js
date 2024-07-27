@@ -13,7 +13,7 @@ async function getGymInfo() {
     const [rows] = await pool.query(
         `SELECT g.gym_id, g.gym_name, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img,
          COALESCE(FORMAT(SUM(r.ratings) / COUNT(r.ratings), 2), "no ratings yet") AS Average,
-         g.contact_no, g.street_address
+         g.contact_no, g.street_address, g.street_view
          FROM gyms g LEFT JOIN gym_ratings r 
          ON g.gym_id = r.gym_id
          GROUP BY g.gym_id, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img;`
