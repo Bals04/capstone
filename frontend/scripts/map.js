@@ -248,9 +248,9 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
 
 
             // Create a new marker for user location
-            userLoc = L.marker([userlat, userlong]).addTo(map);
+            userLoc = L.marker([userlat, userlong],{icon:customUserIcon}).addTo(map);
             // Create a new marker for gym location
-            var gymMarker = L.marker([gymDistanceLat, gymDistanceLong]).addTo(map);
+            var gymMarker = L.marker([gymDistanceLat, gymDistanceLong]);
             gymMarker.bindPopup(`
         <div>
           <img src="${nearbyGym.img}" alt="Gym Image" style="max-width: 100%; height: auto;">
@@ -337,8 +337,8 @@ map.on("click", onMapClick);
 function showNearby() {
     let gym = distances[0];
     const overlay2 = document.getElementById("overlay2");
-    const container = document.getElementById("nearest-gym-card");
-    container.innerHTML = " ";
+    const container = document.getElementById("overlay2");
+    container.innerHTML = "";
     overlay2.classList.remove("hidden");
 
     // Create the main div with the required classes
@@ -346,10 +346,10 @@ function showNearby() {
     listItem.classList.add(
         "gym-item",
         "cursor-pointer",
-        "p-4",
-        "mb-2.5",
+        "p-2",
+        "mb-2",
         "border",
-        "border-customGray",
+        "border-gray-800",
         "rounded-lg",
         "bg-customGray",
         "transition",
@@ -358,40 +358,47 @@ function showNearby() {
         "flex",
         "flex-col",
         "items-start",
-        "hover:bg-gray-800",
-        "text-white"
+        "shadow-md",
+        "hover:bg-gray-800"
     );
 
     // Create the content
     const content = `
-        <div class="al-gym-name text-lg font-bold mb-2.5">${gym.name} - <span>${gym.distance} km</span></div>
-        <div class="all-gym-details flex gap-2.5">
-            <img src="${gym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
-            <div class="rates flex flex-col">
-                <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${gym.dailyRates}</div>
-                <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${gym.monthlyRates}</div>
-                <div class="text-sm mt-1.5">
-                    <i class="fas fa-phone-alt"></i>&nbsp ${gym.contact}
-                </div>
-                <div class="text-sm mt-1.5">
-                    <i class="fas fa-map-marker-alt"></i>&nbsp ${gym.address}
-                </div>
-                <div class="rating flex items-center text-sm mt-1.5">
-                    <strong>Ratings:</strong>&nbsp${gym.average}
-                    <div class="rating-stars flex ml-2" data-rating="${gym.average}">
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                    </div>
-                </div>
-                <div class="text-sm mt-1.5">
-                    <button class="bg-customOrange p-2 rounded-md text-white flex items-center">
-                        <i id="open" class="fas fa-directions mr-1"></i>&nbsp Street view
-                    </button>
+        <div class="w-full h-48 bg-gray-300 rounded-t-lg" style="background-image: url('${gym.img}'); background-size: cover; background-position: center;"></div>
+        <div class="p-2">
+            <h3 class="text-lg font-bold mb-1">${gym.name}</h3>
+            <div class="flex flex-col mb-1">
+                <span class="text-sm"><strong>Daily Rates:</strong> ${gym.dailyRates}</span>
+                <span class="text-sm"><strong>Monthly Rates:</strong> ${gym.monthlyRates}</span>
+            </div>
+            <div class="text-sm mb-1">  
+                <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
+            </div>
+            <div class="text-sm mb-1">
+                <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
+            </div>
+            <div class="flex items-center text-sm mb-1">
+            <div class="rating flex items-center text-sm mt-1.5">
+                <strong>Ratings:</strong>&nbsp<span id="rating-value">${gym.average}</span>
+                <div class="rating-stars flex ml-2" data-rating="${gym.average}">
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
                 </div>
             </div>
+
+
+            </div>
+        </div>
+        <div class="flex justify-between p-2 ml-7">
+            <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm mr-2 flex items-center">
+                <i class="fas fa-phone-alt mr-1"></i> Inquire
+            </button>
+            <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center">
+                <i class="fas fa-directions mr-1"></i> Street view
+            </button>
         </div>
     `;
 
@@ -683,8 +690,6 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
             console.log(coordinates)
             map.setView(latLng, 13); // Set map view to the geocoded location
             userMarker = L.marker(latLng, { icon: customUserIcon }).addTo(map)
-                .bindPopup("Your current address: " + address.name)
-                .openPopup();
             logDistancesToGyms(coordinates, gyms);
             setStarRatings();
         } else {
