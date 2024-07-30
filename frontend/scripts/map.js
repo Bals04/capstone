@@ -96,23 +96,21 @@ async function fetchGyms() {
             </div>
         </div>
     `;
-
                 // Return the content as a string
                 return popupContent;
-
             });
-
             markers.push(marker);
             marker.on('popupopen', function () {
-
                 setStarRatings()
-
             });
 
 
         });
         populateAllGymsList()
         populateAllParksList()
+        setTimeout(() => {
+            setStarRatings()
+        }, 0);
 
     } catch (error) {
         console.error('Error fetching gyms data:', error);
@@ -197,58 +195,49 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
             "duration-300",
             "ease-in-out",
             "flex",
-            "flex-col",
-            "items-start",
+            "flex-row",
+            "items-center",
             "hover:bg-gray-800",
             "text-white"
         );
+
         var content = ` 
-  <div class="al-gym-name text-lg font-bold mb-2.5">${nearbyGym.name} - <span>${nearbyGym.distance} km</span></div>
-  
-  <div class="all-gym-details flex gap-2.5">
-    <img src="${nearbyGym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
-    <div class="rates flex flex-col">
-      <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${nearbyGym.dailyRates}</div>
-      <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${nearbyGym.monthlyRates}</div>
-      <div class="text-sm mt-1.5">
-        <i class="fas fa-phone-alt"></i>&nbsp ${nearbyGym.contact}
-      </div>
-      <div class="text-sm mt-1.5">
-        <i class="fas fa-map-marker-alt"></i>&nbsp ${nearbyGym.address}
-      </div>
-      <div class="rating flex items-center text-sm mt-1.5">
-        <strong>Ratings:</strong>&nbsp${nearbyGym.average}
-        <div class="rating-stars flex ml-2" data-rating="${nearbyGym.average}">
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-          <i class="rating-star fas fa-star text-gray-400"></i>
-        </div>
-      </div>
-            <div class="text-sm mt-1.5">
-                <button class="bg-customOrange p-2 rounded-md text-white flex items-center">
-          <i id "open" class="fas fa-directions mr-1"></i> &nbsp Street view
-        </button>
-      </div>
-    </div>
-  </div>`; //? THIS IS THE CONTENT OF THE DIV THAT WE JUST CREATED EARLIER IT HAS, IMAGE AND OTHER INFOS
+        <img src="${nearbyGym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
+        <div class="flex flex-col">
+            <div class="al-gym-name text-lg font-bold">${nearbyGym.name}</div>
+            <div class="flex items-center text-sm">
+                <i class="fas fa-location-arrow mr-1"></i>${nearbyGym.distance} Km away
+            </div>
+            <div class="rating flex items-center text-sm mt-1.5">
+                <strong>Ratings:</strong>&nbsp${nearbyGym.average}
+                <div class="rating-stars flex ml-2" data-rating="${nearbyGym.average}">
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                </div>
+            </div>
+        </div>`; //? THIS IS THE CONTENT OF THE DIV THAT WE JUST CREATED EARLIER IT HAS, IMAGE AND OTHER INFOS
 
         listItem.innerHTML = content;
+        setTimeout(() => {
+            setStarRatings()
+        }, 0);
         listItem.addEventListener("click", function (e) {
             removeLastMarker()
             var gymDistanceLat = 0;
             var gymDistanceLong = 0;
-            console.log(`Clicked on ${nearbyGym.name}`);
+            console.log(`Clicked on ${nearbyGym.name} at index ${index}`);
             console.log(
                 `coords:  ${nearbyGym.coords[0]}, ${nearbyGym.coords[1]}`
             );
+            showNearby(distances[index])
             gymDistanceLat = nearbyGym.coords[0];
             gymDistanceLong = nearbyGym.coords[1];
 
-
             // Create a new marker for user location
-            userLoc = L.marker([userlat, userlong],{icon:customUserIcon}).addTo(map);
+            userLoc = L.marker([userlat, userlong], { icon: customUserIcon }).addTo(map);
             // Create a new marker for gym location
             var gymMarker = L.marker([gymDistanceLat, gymDistanceLong]);
             gymMarker.bindPopup(`
@@ -259,6 +248,8 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
           <p><strong>Monthly rates:</strong> ${nearbyGym.monthlyRates}</p>
         </div>
       `).openPopup();
+      
+
             // Define the waypoints (user location and gym location) || CREATE A ROUTE BASED ON THE CLICKED GYM
             var waypoints = [
                 L.latLng(userlat, userlong),
@@ -288,6 +279,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
         });
         gymsList.appendChild(listItem);
     });
+
 }
 
 //THIS FUNCTION RESETS THE MARKER WHENEVER THE USER CLICKS AGAIN ON THE MAP
@@ -334,8 +326,9 @@ function onMapClick(e) {
 // Listen for click events on the map
 map.on("click", onMapClick);
 
-function showNearby() {
-    let gym = distances[0];
+function showNearby(distances) {
+    console.log("1*")
+    let gym = distances;
     const overlay2 = document.getElementById("overlay2");
     const container = document.getElementById("overlay2");
     container.innerHTML = "";
@@ -368,8 +361,12 @@ function showNearby() {
         <div class="p-2">
             <h3 class="text-lg font-bold mb-1">${gym.name}</h3>
             <div class="flex flex-col mb-1">
-                <span class="text-sm"><strong>Daily Rates:</strong> ${gym.dailyRates}</span>
-                <span class="text-sm"><strong>Monthly Rates:</strong> ${gym.monthlyRates}</span>
+                <span class="text-sm flex items-center" style="font-weight: 300;">
+                    <i class="fas fa-location-arrow mr-1"></i>
+                    ${gym.distance} km away
+                </span>
+                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
+                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
             </div>
             <div class="text-sm mb-1">  
                 <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
@@ -396,7 +393,7 @@ function showNearby() {
             <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm mr-2 flex items-center">
                 <i class="fas fa-phone-alt mr-1"></i> Inquire
             </button>
-            <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center">
+            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center">
                 <i class="fas fa-directions mr-1"></i> Street view
             </button>
         </div>
@@ -407,6 +404,21 @@ function showNearby() {
 
     // Append the listItem to the container
     container.appendChild(listItem);
+
+    //added an event listener for the click event to open streetview
+    setTimeout(() => {
+        const button = document.getElementById("openStreetView")
+        if (button) {
+            button.addEventListener('click', function () {
+                event.stopPropagation();
+                const src = this.getAttribute('data-src');
+                ToggleStreetView(src);
+            });
+        } else {
+            console.error(`Button not found.`);
+        }
+    }, 0);
+
 }
 
 
@@ -421,7 +433,7 @@ async function logDistancesToGyms(userCoords, gyms) {
 
         if (distances.length > 0) {
             // Get the nearest gym
-            showNearby();
+            showNearby(distances[0]);
             let nearestGym = distances[0];
             //console.log("gym distances"+distances)
             // Remove the previous routing control if it exists
@@ -483,6 +495,7 @@ async function logDistancesToGyms(userCoords, gyms) {
                 var route = e.routes[0]; // Get the first route
                 var distanceInKm = route.summary.totalDistance / 1000; // Convert meters to kilometers
                 resolve({
+                    id: gym.id,
                     img: gym.img,
                     name: gym.name,
                     dailyRates: gym.dailyRates,
@@ -493,12 +506,12 @@ async function logDistancesToGyms(userCoords, gyms) {
                     gymCoords: gym.coords, // Store coordinates for route creation
                     distance: distanceInKm.toFixed(2),
                     coords: gym.coords,
+                    street_view: gym.street_view
                 });
             });
         });
 
         distances.push(routeDetails);
-
         // Remove the routing control from the map
         map.removeControl(ctr);
     }
