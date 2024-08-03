@@ -228,10 +228,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
             removeLastMarker()
             var gymDistanceLat = 0;
             var gymDistanceLong = 0;
-            console.log(`Clicked on ${nearbyGym.name} at index ${index}`);
-            console.log(
-                `coords:  ${nearbyGym.coords[0]}, ${nearbyGym.coords[1]}`
-            );
+
             showNearby(distances[index])
             gymDistanceLat = nearbyGym.coords[0];
             gymDistanceLong = nearbyGym.coords[1];
@@ -248,7 +245,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
           <p><strong>Monthly rates:</strong> ${nearbyGym.monthlyRates}</p>
         </div>
       `).openPopup();
-      
+
 
             // Define the waypoints (user location and gym location) || CREATE A ROUTE BASED ON THE CLICKED GYM
             var waypoints = [
@@ -285,10 +282,8 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
 //THIS FUNCTION RESETS THE MARKER WHENEVER THE USER CLICKS AGAIN ON THE MAP
 function removeLastMarker() {
     if (userLoc) {
-        console.log("inside the function")
         map.removeLayer(userLoc)
     } else {
-        console.log("not inside")
     }
     if (userMarker) {
         map.removeLayer(userMarker)
@@ -309,9 +304,6 @@ function onMapClick(e) {
     if (ctr) {
         map.removeControl(ctr)
         ctr = null
-        console.log("hi")
-    } else {
-        console.log("null ang ctr na")
     }
     // Example sa popup content
     userLoc.bindPopup("COORDS: " + e.latlng);
@@ -327,7 +319,6 @@ function onMapClick(e) {
 map.on("click", onMapClick);
 
 function showNearby(distances) {
-    console.log("1*")
     let gym = distances;
     const overlay2 = document.getElementById("overlay2");
     const container = document.getElementById("overlay2");
@@ -361,7 +352,7 @@ function showNearby(distances) {
         <div class="p-2">
             <h3 class="text-lg font-bold mb-1">${gym.name}</h3>
             <div class="flex flex-col mb-1">
-                <span class="text-sm flex items-center" style="font-weight: 300;">
+                <span id="nearby_distance" class="text-sm flex items-center" style="font-weight: 300;">
                     <i class="fas fa-location-arrow mr-1"></i>
                     ${gym.distance} km away
                 </span>
@@ -390,11 +381,11 @@ function showNearby(distances) {
             </div>
         </div>
         <div class="flex justify-between p-2 ml-7">
-            <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm mr-2 flex items-center">
-                <i class="fas fa-phone-alt mr-1"></i> Inquire
+            <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm mr-2 flex items-center hover:bg-orange-700">
+                <i class="fas fa-directions mr-1"></i>  Directions
             </button>
-            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center">
-                <i class="fas fa-directions mr-1"></i> Street view
+            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-orange-700">
+                <i class="fas fa-eye mr-1"></i> Street view
             </button>
         </div>
     `;
@@ -435,7 +426,6 @@ async function logDistancesToGyms(userCoords, gyms) {
             // Get the nearest gym
             showNearby(distances[0]);
             let nearestGym = distances[0];
-            //console.log("gym distances"+distances)
             // Remove the previous routing control if it exists
             if (control) {
                 map.removeControl(control);
@@ -474,14 +464,14 @@ async function logDistancesToGyms(userCoords, gyms) {
             ],
             routeWhileDragging: false,
             createMarker: function () {
-                return null; // Hide default markers
+                return null;
             },
             lineOptions: {
                 styles: [
                     {
-                        color: 'blue', // Fully transparent line
-                        opacity: 10, // Line opacity
-                        weight: 3, // Line width
+                        color: 'blue', 
+                        opacity: 10, 
+                        weight: 3, 
                     },
                 ],
             },
@@ -493,7 +483,7 @@ async function logDistancesToGyms(userCoords, gyms) {
         let routeDetails = await new Promise((resolve) => {
             ctr.on('routesfound', function (e) {
                 var route = e.routes[0]; // Get the first route
-                var distanceInKm = route.summary.totalDistance / 1000; // Convert meters to kilometers
+                var distanceInKm = route.summary.totalDistance / 1000; //! Convert meters to kilometers - diri ko magkuha sa distance in km
                 resolve({
                     id: gym.id,
                     img: gym.img,
@@ -549,65 +539,53 @@ function populateAllGymsList() {
     // Clear existing list items
     gymsList.innerHTML = "";
     // Add new list items
-    gyms.forEach(function (g) {
+    gyms.forEach(function (g, index) {
         var listItem = document.createElement("div");
         listItem.classList.add(
             "gym-item",
             "cursor-pointer",
-            "p-4", "mb-2",
+            "p-4",
+            "mb-2.5",
             "border",
             "border-customGray",
             "rounded-lg",
             "bg-customGray",
-            "text-white",
+            "transition",
+            "duration-300",
+            "ease-in-out",
+            "flex",
+            "flex-row",
+            "items-center",
             "hover:bg-gray-800",
-            "flex", "flex-col",
-            "items-start",
-            "transition-colors",
-            "duration-300");
-
-        var content = `
-            <div class="al-gym-name text-lg font-bold mb-2.5">${g.name}</div>
-            <div class="all-gym-details flex gap-2.5">
-              <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg">
-              <div class="flex flex-col flex-1">
-                <div class="Daily-rate text-sm mt-1.5"><strong>Daily rate:</strong> ${g.dailyRates}</div>
-                <div class="Monthly-rate text-sm mt-1.5"><strong>Monthly rate:</strong> ${g.monthlyRates}</div>
-                <div class="text-sm mt-1.5">
-                  <i class="fas fa-phone-alt"></i>&nbsp ${g.contact}
-                </div>
-                <div class="text-sm mt-1.5">
-                  <i class="fas fa-map-marker-alt"></i>&nbsp ${g.address}
+            "text-white"
+        );
+        var content = ` 
+            <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
+            <div class="flex flex-col">
+                <div class="al-gym-name text-lg font-bold">${g.name}</div>
+                <div class="text-sm mb-1">  
+                    <i class="fas fa-map-marker-alt"></i>&nbsp; ${g.address}
                 </div>
                 <div class="rating flex items-center text-sm mt-1.5">
-                  <strong>Ratings:</strong>&nbsp${g.avg}
-                  <div class="rating-stars flex ml-2" data-rating="${g.avg}">
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                  </div>
+                    <strong>Ratings:</strong>&nbsp${g.avg}
+                    <div class="rating-stars flex ml-2" data-rating="${g.avg}">
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                        <i class="rating-star fas fa-star text-gray-400"></i>
+                    </div>
                 </div>
-                <div class="text-sm mt-1.5">
-                  <button id="openStreetView_${g.id}" data-src="${g.street_view}" class="bg-customOrange hover:bg-orange-800 p-2 rounded-md text-white">
-                  <i id "open" class="fas fa-directions mr-1"></i> &nbsp Open street view</button>
-                </div>
-              </div>
             </div>`;
         listItem.innerHTML = content;
         document.getElementById("all-gyms").appendChild(listItem);
-        setTimeout(() => {
-            const button = document.querySelector(`#openStreetView_${g.id}`);
-            if (button) {
-                button.addEventListener('click', function () {
-                    const src = this.getAttribute('data-src');
-                    ToggleStreetView(src);
-                });
-            } else {
-                console.error(`Button with ID openStreetView_${g.id} not found.`);
-            }
-        }, 0);
+
+        listItem.addEventListener("click", function (e) {
+            showNearby(gyms[index])
+            const distanceElement = document.getElementById('nearby_distance');//mao ning id sa <span> na diri nakabutang ang "2.87 km away"
+            distanceElement.classList.add('hidden'); //ihide sya gamit classlist kay and styles nato kay nasa class kay tailwind man
+
+        })
     });
 }
 

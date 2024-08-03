@@ -41,16 +41,23 @@
     }
   </style>
 </head>
-
+  
 <body class="flex items-center justify-center min-h-screen m-0 bg-black">
   <div class="w-full items-center bg-customGray p-5 shadow-md">
     <div class="mb-5 flex gap-2">
-      <button id="nearby" class="toggle-btn bg-customOrange hover:bg-orange-700 text-white py-2 px-4 rounded"
-        onclick="showSection('nearbyGyms','nearby')">Nearby Gyms</button>
       <button id="gyms" class="toggle-btn bg-customOrange hover:bg-orange-700 text-white py-2 px-4 rounded"
-        onclick="showSection('gymsCity','gyms')">Gyms Around the City</button>
+        onclick="showSection('gymsCity','gyms')">
+        <i class="fas fa-city"></i> <i class="fas fa-dumbbell"></i>
+      </button>
+      <button id="nearby" class="toggle-btn bg-customOrange hover:bg-orange-700 text-white py-2 px-4 rounded"
+        onclick="showSection('nearbyGyms','nearby')">
+        <i class="fas fa-map-marker-alt"></i> <i class="fas fa-dumbbell"></i>
+      </button>
       <button id="areas" class="toggle-btn bg-customOrange hover:bg-orange-700 text-white py-2 px-4 rounded"
-        onclick="showSection('recreationalAreas','areas')">Recreational Areas</button>
+        onclick="showSection('recreationalAreas','areas')">
+        <i class="fas fa-tree"></i> <i class="fas fa-running"></i>
+      </button>
+
     </div>
 
     <div class="container grid grid-cols-1 md:grid-cols-3 gap-4 w-full h-full">
@@ -76,12 +83,13 @@
 
       <div class="flex flex-col gap-4">
         <!-- Nearby Gyms section -->
-        <div id="nearbyGyms" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg">
+        <div id="nearbyGyms" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
           <!-- Location input section -->
-          <div class="mb-5 flex gap-2">
-            <input type="text" id="address" class="bg-white text-gray-800 px-4 py-2 rounded"
+          <div class="mb-5 flex gap-0">
+            <input type="text" id="address" class="bg-white text-gray-800 px-4 py-2 rounded-tl-lg rounded-bl-lg"
               placeholder="Starting point">
-            <button id="locateBtn" class="bg-customGray hover:bg-orange-800 text-white py-2 px-4 rounded"
+            <button id="locateBtn"
+              class="bg-customGray hover:bg-orange-800 text-white py-2 px-4 rounded-tr-lg rounded-br-lg"
               onclick="">Mark</button>
           </div>
           <h2 class="text-2xl mb-5 text-white">Nearby Gyms</h2>
@@ -89,7 +97,7 @@
         </div>
 
         <!-- Gyms Around the City section -->
-        <div id="gymsCity" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden">
+        <div id="gymsCity" class="section bg-customOrange w-full max-h-[600px] overflow-y-auto p-4 rounded-lg">
           <h2 class="text-2xl mb-5 text-white">Gyms Around the City</h2>
           <ul class="list-none p-0 m-0" id="all-gyms"></ul>
         </div>
