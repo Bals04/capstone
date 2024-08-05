@@ -8,10 +8,40 @@ var dist = 0;
 var ctr = null;
 var map = L.map("map").setView([7.110959021754781, 125.61266071845108], 13);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
+
+dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 19
+}).addTo(map);
+
+googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+}).addTo(map)
+
+googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+}).addTo(map)
+
+googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+}).addTo(map)
+
+var baseLayers = {
+    "Default": osm,
+    "Dark": dark,
+    "Detailed Satelite": googleHybrid,
+    "Satelite": googleSat,
+    "Detailed": googleStreets
+};
+L.control.layers(baseLayers).addTo(map);
+
 var geocoder = L.Control.Geocoder.nominatim({
     geocodingQueryParams: {
         countrycodes: 'PH', // Restrict geocoding results to Philippines
@@ -469,9 +499,9 @@ async function logDistancesToGyms(userCoords, gyms) {
             lineOptions: {
                 styles: [
                     {
-                        color: 'blue', 
-                        opacity: 10, 
-                        weight: 3, 
+                        color: 'blue',
+                        opacity: 10,
+                        weight: 3,
                     },
                 ],
             },
