@@ -8,7 +8,6 @@ const memberRoutes = require('./routes/memberRoutes');
 const parkRoutes = require('./routes/parkRoute');
 
 dotenv.config();
-
 const app = express();
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
@@ -24,6 +23,7 @@ app.use('/', parkRoutes);
 
 //? NAVIGATION
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../frontend/scripts')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/views/maps/index.html'));
 });
