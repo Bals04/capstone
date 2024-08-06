@@ -25,14 +25,14 @@ app.use('/', parkRoutes);
 //? NAVIGATION
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/views/features/member.html'));
-});
-app.get('/mealsPage', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/views/features/meals.html'));
-});
-app.get('/mapsPage', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/views/maps/index.html'));
 });
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../frontend/views/features/member.html'));
+// });
+// app.get('/mealsPage', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../frontend/views/features/meals.html'));
+// });
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
