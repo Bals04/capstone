@@ -9,6 +9,7 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE,
 }).promise()
 
+
 async function getGymInfo() {
     const [rows] = await pool.query(
         `SELECT g.gym_id, g.gym_name, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img,
