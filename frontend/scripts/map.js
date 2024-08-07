@@ -78,7 +78,7 @@ const customUserIcon = L.icon({
     shadowSize: [41, 41]
 });
 const gymIcon = L.icon({
-    iconUrl: '/dumbell.svg',
+    iconUrl: '/dumbell.svg',  
     iconSize: [40, 100],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
