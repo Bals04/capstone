@@ -88,7 +88,7 @@ const gymIcon = L.icon({
 // ? REQUEST DATA FROM DATABASE TO USE IT HERE 
 async function fetchGyms() {
     try {
-        const response = await axios.get('https://capstone-7092.onrender.com/gyms');
+        const response = await axios.get('http://localhost:3000/gyms');
         const Gyms = response.data;
         Gyms.forEach(G => {
 
