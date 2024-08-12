@@ -208,7 +208,7 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
     // Clear existing list items
     gymsList.innerHTML = "";
 
-
+    //* diri na part tong css sa - 3 NEARBY GYMS
     distances.slice(0, 3).forEach(function (nearbyGym, index) {
         var listItem = document.createElement("div");
 
@@ -568,7 +568,7 @@ function populateAllGymsList() {
     var userMarker = null;
     // Clear existing list items
     gymsList.innerHTML = "";
-    // Add new list items
+    // Add new list items - ITEMS PARA SA GYMS AROUND THE CITY
     gyms.forEach(function (g, index) {
         var listItem = document.createElement("div");
         listItem.classList.add(
@@ -587,7 +587,7 @@ function populateAllGymsList() {
             "flex-row",
             "items-center",
             "hover:bg-gray-800",
-            "text-white"
+            "text-green-900"
         );
         var content = ` 
             <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
@@ -619,6 +619,7 @@ function populateAllGymsList() {
     });
 }
 
+//*diri na part tong STREETVIEW 
 function ToggleStreetView(src) {
     const close = document.getElementById('closeView');
     const overlay2 = document.getElementById("overlay2");
@@ -647,6 +648,7 @@ function ToggleStreetView(src) {
     })
 }
 
+// DIRI TONG PAGBUHAT UG HTML ELEMENT UG PAG ADD UG CSS SA PARKS
 function populateAllParksList() {
     var parkList = document.getElementById("all-park");
     var userMarker = null;
@@ -660,14 +662,15 @@ function populateAllParksList() {
             "cursor-pointer",
             "p-4", "mb-2",
             "border",
-            "border-gray-300",
+            "border-customGray",
             "rounded-lg",
-            "bg-gray-100",
-            "hover:bg-gray-200",
+            "bg-customGray",
+            "hover:bg-gray-800",
             "flex", "flex-col",
             "items-start",
             "transition-colors",
-            "duration-300");
+            "duration-300",
+            "text-white");
 
         var content = `
   <div class="al-gym-name text-lg font-bold mb-2.5">${g.name}</div>
