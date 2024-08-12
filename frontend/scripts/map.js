@@ -34,11 +34,11 @@ googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
 }).addTo(map)
 
 var baseLayers = {
-    "Default": osm,
     "Dark": dark,
     "Detailed Satelite": googleHybrid,
     "Satelite": googleSat,
-    "Detailed": googleStreets
+    "Detailed": googleStreets,
+    "Default": osm
 };
 L.control.layers(baseLayers).addTo(map);
 
@@ -587,7 +587,7 @@ function populateAllGymsList() {
             "flex-row",
             "items-center",
             "hover:bg-gray-800",
-            "text-green-900"
+            "text-white"
         );
         var content = ` 
             <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
@@ -721,6 +721,28 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
         }
 
     })
+})
+
+document.getElementById('trackLocation').addEventListener('click', function (event) {
+    var x = "";
+    var coordinates = [];
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+    function showPosition(position) {
+        removeLastMarker();
+        x = "Latitude: " + position.coords.latitude +
+            " Longitude: " + position.coords.longitude;
+        console.log(x)
+        coordinates.push(position.coords.latitude ); // Store latitude in the array
+        coordinates.push(position.coords.longitude); // Store longitude in the array
+        console.log("LatLng ", coordinates)
+        map.setView(coordinates, 13); // Set map view to the geocoded location
+        userMarker = L.marker(coordinates, { icon: customUserIcon }).addTo(map)
+
+    }
 })
 
 
