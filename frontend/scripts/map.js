@@ -426,7 +426,8 @@ function showNearby(distances) {
     // Append the listItem to the container
     container.appendChild(listItem);
 
-    //added an event listener for the click event to open streetview
+    //* Added an event listener for the click event to open streetview.
+    //* I used setTimeout() here to make the button element to load first before assigning a click event 
     setTimeout(() => {
         const button = document.getElementById("openStreetView")
         if (button) {
@@ -442,7 +443,8 @@ function showNearby(distances) {
 
 }
 
-
+//* function to make a route to all the gyms in the city from the location of the user
+//* and finding the nearest gym.
 async function logDistancesToGyms(userCoords, gyms) {
     // Helper function to handle completion
     function handleCompletion() {
@@ -540,6 +542,7 @@ async function logDistancesToGyms(userCoords, gyms) {
     handleCompletion();
 }
 
+//* function to make the stars dynamic based on the given ratings
 function setStarRatings() {
     const ratingContainers = document.querySelectorAll('.rating-stars');
     ratingContainers.forEach(container => {
@@ -563,6 +566,7 @@ function setStarRatings() {
     });
 }
 
+//* function to populaate all gyms in the "Gyms around the city" section
 function populateAllGymsList() {
     var gymsList = document.getElementById("all-gyms");
     var userMarker = null;
@@ -648,7 +652,7 @@ function ToggleStreetView(src) {
     })
 }
 
-// DIRI TONG PAGBUHAT UG HTML ELEMENT UG PAG ADD UG CSS SA PARKS
+//* DIRI TONG PAGBUHAT UG HTML ELEMENT UG PAG ADD UG CSS SA PARKS
 function populateAllParksList() {
     var parkList = document.getElementById("all-park");
     var userMarker = null;
@@ -700,6 +704,7 @@ function showSection(sectionId, id) {
     document.getElementById(id).classList.add('bg-orange-700');
 }
 
+//*GEOCODING FEATURE (Address to Coordinates)
 document.getElementById('locateBtn').addEventListener('click', function (event) {
     removeLastMarker();
     var userloc = document.getElementById('address').value;
@@ -723,6 +728,7 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
     })
 })
 
+//* LIVE LOCATION FEATURE
 document.getElementById('trackLocation').addEventListener('click', function (event) {
     var x = "";
     var coordinates = [];
@@ -736,12 +742,13 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
         x = "Latitude: " + position.coords.latitude +
             " Longitude: " + position.coords.longitude;
         console.log(x)
-        coordinates.push(position.coords.latitude ); // Store latitude in the array
-        coordinates.push(position.coords.longitude); // Store longitude in the array
-        console.log("LatLng ", coordinates)
-        map.setView(coordinates, 13); // Set map view to the geocoded location
-        userMarker = L.marker(coordinates, { icon: customUserIcon }).addTo(map)
-
+        coordinates.push(position.coords.latitude ); //* Store latitude in the array
+        coordinates.push(position.coords.longitude); //* Store longitude in the array
+        console.log("user coords: ", coordinates)
+        map.setView(coordinates, 13); //* Set the map view to the live location of the user
+        userMarker = L.marker(coordinates, { icon: customUserIcon }).addTo(map) //*I USED THE ARRAY TO PINPOINT THE EXACT LOCATION OF THE USER 
+        logDistancesToGyms(coordinates, gyms);
+        setStarRatings();
     }
 })
 
