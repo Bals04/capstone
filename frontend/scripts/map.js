@@ -732,23 +732,26 @@ document.getElementById('locateBtn').addEventListener('click', function (event) 
 document.getElementById('trackLocation').addEventListener('click', function (event) {
     var x = "";
     var coordinates = [];
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+    };
+    function error(err) {
+        alert(`ERROR(${err.code}): ${err.message}`);
+    }
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(showPosition,error,options);
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
     function showPosition(position) {
         removeLastMarker();
-        x = "Latitude: " + position.coords.latitude +
-            " Longitude: " + position.coords.longitude;
-        console.log(x)
-        coordinates.push(position.coords.latitude ); //* Store latitude in the array
+        coordinates.push(position.coords.latitude); //* Store latitude in the array
         coordinates.push(position.coords.longitude); //* Store longitude in the array
-        console.log("user coords: ", coordinates)
         map.setView(coordinates, 13); //* Set the map view to the live location of the user
         userMarker = L.marker(coordinates, { icon: customUserIcon }).addTo(map) //*I USED THE ARRAY TO PINPOINT THE EXACT LOCATION OF THE USER 
-        logDistancesToGyms(coordinates, gyms);
-        setStarRatings();
+        alert(`Latitude: ${position.coords.latitude} Longtitude: ${position.coords.longitude}`)
     }
 })
 
