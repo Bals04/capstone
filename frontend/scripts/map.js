@@ -78,7 +78,7 @@ const customUserIcon = L.icon({
     shadowSize: [41, 41]
 });
 const gymIcon = L.icon({
-    iconUrl: '/dumbell.svg',
+    iconUrl: '/frontend/dumbell.svg',
     iconSize: [40, 100],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -88,7 +88,7 @@ const gymIcon = L.icon({
 // ? REQUEST DATA FROM DATABASE TO USE IT HERE 
 async function fetchGyms() {
     try {
-        const response = await axios.get('https://capstone-7092.onrender.com/gyms');
+        const response = await axios.get('http://localhost:3000/gyms');
         const Gyms = response.data;
         Gyms.forEach(G => {
 
@@ -411,9 +411,6 @@ function showNearby(distances) {
             </div>
         </div>
         <div class="flex justify-between p-2 ml-7">
-            <button class="bg-customOrange text-white px-3 py-1 rounded-md text-sm mr-2 flex items-center hover:bg-orange-700">
-                <i class="fas fa-directions mr-1"></i>  Directions
-            </button>
             <button id="openStreetView" data-src="${gym.street_view}" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-orange-700">
                 <i class="fas fa-eye mr-1"></i> Street view
             </button>
@@ -738,7 +735,7 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
         maximumAge: 0,
     };
     function error(err) {
-        alert(`ERROR(${err.code}): ${err.message}`);
+        console.warn(`ERROR(${err.code}): ${err.message}`);
     }
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition,error,options);
