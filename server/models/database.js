@@ -132,6 +132,14 @@ async function AddTemplate(trainer_id, name, desc) {
     return result
 }
 
+async function inputFilter(input) {
+    const [result] = await pool.query(`
+        SELECT * FROM gyms
+        WHERE gym_name LIKE ?;
+    `, [`${input}%`]);
+
+    return [result]
+}
 
 module.exports = {
     getGymInfo,
@@ -146,5 +154,6 @@ module.exports = {
     getWorkoutoftheDay,
     getParkInfo,
     getTemplates,
-    AddTemplate
+    AddTemplate,
+    inputFilter
 };

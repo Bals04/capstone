@@ -139,10 +139,12 @@
                 const endpoint = 'https://api.spoonacular.com/recipes/complexSearch';
                 const params = {
                     query: checkedRadioButton,
-                    number: 3,
+                    number: 6,
                     minProtein: protein,
                     minCarbs: carbs,
                     minCalories: calories,
+                    addRecipeInstructions: true,
+                    addRecipeNutrition:true,
                     apiKey: apiKey
                 };
 

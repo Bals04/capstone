@@ -365,7 +365,7 @@ function showNearby(distances) {
         "border",
         "border-gray-800",
         "rounded-lg",
-        "bg-customGray",
+        "bg-gray-800",
         "transition",
         "duration-300",
         "ease-in-out",
@@ -392,7 +392,7 @@ function showNearby(distances) {
             <div class="text-sm mb-1">  
                 <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
             </div>
-            <div class="text-sm mb-1">
+            <div id="contact" class="text-sm mb-1 hidden">
                 <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
             </div>
             <div class="flex items-center text-sm mb-1">
@@ -414,8 +414,12 @@ function showNearby(distances) {
             <button id="openStreetView" data-src="${gym.street_view}" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-orange-700">
                 <i class="fas fa-eye mr-1"></i> Street view
             </button>
+            <button id="showContact" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-orange-700">
+                <i class="fas fa-phone-alt"></i> Call
+            </button>
         </div>
     `;
+
 
     // Set the content to the listItem
     listItem.innerHTML = content;
@@ -427,19 +431,23 @@ function showNearby(distances) {
     //* I used setTimeout() here to make the button element to load first before assigning a click event 
     setTimeout(() => {
         const button = document.getElementById("openStreetView")
-        if (button) {
+        const contactBtn = document.getElementById("showContact")
+        const number = document.getElementById("contact")
+        if (button && contactBtn) {
             button.addEventListener('click', function () {
                 event.stopPropagation();
                 const src = this.getAttribute('data-src');
                 ToggleStreetView(src);
             });
+            contactBtn.addEventListener('click', function () {
+                event.stopPropagation();
+                number.classList.remove("hidden")
+            });
         } else {
             console.error(`Button not found.`);
         }
     }, 0);
-
 }
-
 //* function to make a route to all the gyms in the city from the location of the user
 //* and finding the nearest gym.
 async function logDistancesToGyms(userCoords, gyms) {
@@ -731,14 +739,14 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
     var coordinates = [];
     const options = {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 9000,
         maximumAge: 0,
     };
     function error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     }
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition,error,options);
+        navigator.geolocation.getCurrentPosition(showPosition, error, options);
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
@@ -748,9 +756,12 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
         coordinates.push(position.coords.longitude); //* Store longitude in the array
         map.setView(coordinates, 13); //* Set the map view to the live location of the user
         userMarker = L.marker(coordinates, { icon: customUserIcon }).addTo(map) //*I USED THE ARRAY TO PINPOINT THE EXACT LOCATION OF THE USER 
-        alert(`Latitude: ${position.coords.latitude} Longtitude: ${position.coords.longitude}`)
+        userMarker.bindPopup("<b>You are here!</b><br>").openPopup();
+        logDistancesToGyms(coordinates, gyms);
     }
 })
+
+
 
 
 
