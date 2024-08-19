@@ -8,6 +8,7 @@ module.exports = {
     "./views/features/**/*.{html,js}",
     "./views/Landing Page/**/*.{html,js}",
     "./scripts/map.js",
+    
   ],
   theme: {
     extend: {
