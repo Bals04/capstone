@@ -1017,7 +1017,7 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(236 126 74 / var(--tw-bg-opacity));
 }
-.bg-primary-guestNavbar{
+.bg-guestNavbar{
   --tw-bg-opacity: 1;
   background-color: rgb(35 33 33 / var(--tw-bg-opacity));
 }
@@ -1033,7 +1033,7 @@ video {
 .bg-gradient-to-r{
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
-.to-primary-forGradientWhite{
+.to-forGradientWhite{
   --tw-gradient-to: #898787 var(--tw-gradient-to-position);
 }
 .bg-clip-text{
@@ -1251,11 +1251,7 @@ video {
 .tracking-normal{
   letter-spacing: 0em;
 }
-.text-\[\#EC7E4A\]{
-  --tw-text-opacity: 1;
-  color: rgb(236 126 74 / var(--tw-text-opacity));
-}
-.text-primary-50{
+.text-50{
   --tw-text-opacity: 1;
   color: rgb(236 126 74 / var(--tw-text-opacity));
 }
@@ -1336,7 +1332,7 @@ video {
 .hover\:w-96:hover{
   width: 24rem;
 }
-.hover\:bg-primary-50:hover{
+.hover\:bg-50:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(236 126 74 / var(--tw-bg-opacity));
 }
