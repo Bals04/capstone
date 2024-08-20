@@ -4,7 +4,6 @@
   "scripts": {
     "build": "npx postcss src/tailwind.css -o dist/tailwind.css",
     "watch": "npx postcss src/tailwind.css -o dist/tailwind.css --watch"
-
   },
   "keywords": [],
   "author": "",
@@ -16,6 +15,7 @@
     "tailwindcss": "^3.4.4"
   },
   "devDependencies": {
-    "postcss-cli": "^11.0.0"
+    "postcss-cli": "^11.0.0",
+    "tailwind-scrollbar": "^3.1.0"
   }
 }
