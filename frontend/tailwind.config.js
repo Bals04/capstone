@@ -27,8 +27,13 @@ module.exports = {
         'forGradientWhite': '#898787',
         customGray: '#343639',
         customOrange: '#EC7E4A',
+        customBodyColor: '#1E1E1E',
+        customGrayBtn: '#232121',
+        customGray1: '#584D4A',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

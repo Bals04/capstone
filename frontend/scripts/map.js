@@ -61,7 +61,7 @@ var userMarker = null;
 var userLoc = null;
 
 const customMarkerIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    iconUrl: '/frontend/views/img/location.svg',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -70,7 +70,7 @@ const customMarkerIcon = L.icon({
 });
 
 const customUserIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    iconUrl: '/frontend/views/img/location-pin.svg',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -78,7 +78,7 @@ const customUserIcon = L.icon({
     shadowSize: [41, 41]
 });
 const gymIcon = L.icon({
-    iconUrl: '/frontend/dumbell.svg',
+    iconUrl: '/frontend/views/img/dumbell.svg',
     iconSize: [40, 100],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -220,14 +220,14 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
             "border",
             "border-customGray",
             "rounded-lg",
-            "bg-customGray",
+            "bg-customGrayBtn",
             "transition",
             "duration-300",
             "ease-in-out",
             "flex",
             "flex-row",
             "items-center",
-            "hover:bg-gray-800",
+            "hover:bg-customGray1",
             "text-white"
         );
 
@@ -365,7 +365,7 @@ function showNearby(distances) {
         "border",
         "border-gray-800",
         "rounded-lg",
-        "bg-gray-800",
+        "bg-customGrayBtn",
         "transition",
         "duration-300",
         "ease-in-out",
@@ -373,29 +373,22 @@ function showNearby(distances) {
         "flex-col",
         "items-start",
         "shadow-md",
-        "hover:bg-gray-800"
+        "font-[Poppins]",
     );
 
     // Create the content
     const content = `
-        <div class="w-full h-48 bg-gray-300 rounded-t-lg" style="background-image: url('${gym.img}'); background-size: cover; background-position: center;"></div>
-        <div class="p-2">
-            <h3 class="text-lg font-bold mb-1">${gym.name}</h3>
-            <div class="flex flex-col mb-1">
-                <span id="nearby_distance" class="text-sm flex items-center" style="font-weight: 300;">
-                    <i class="fas fa-location-arrow mr-1"></i>
-                    ${gym.distance} km away
-                </span>
-                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
-                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
-            </div>
-            <div class="text-sm mb-1">  
-                <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
-            </div>
-            <div id="contact" class="text-sm mb-1 hidden">
-                <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
-            </div>
-            <div class="flex items-center text-sm mb-1">
+        <div class="text-white text-2xl">
+            <button><ion-icon name="close-outline"></ion-icon></button>
+        </div>
+        <div class="w-full h-40 bg-customGrayBtn rounded-t-lg"
+            style="background-image: url('${gym.img}');
+            background-size: cover; background-position: center;">
+        </div>
+        <div class="p2 mt-2">
+            <h3 class="text-lg font-semibold"> ${gym.name}</h3>
+        </div>
+        <div class="flex items-center text-sm mb-1">
             <div class="rating flex items-center text-sm mt-1.5">
                 <strong>Ratings:</strong>&nbsp<span id="rating-value">${gym.average}</span>
                 <div class="rating-stars flex ml-2" data-rating="${gym.average}">
@@ -406,20 +399,48 @@ function showNearby(distances) {
                     <i class="rating-star fas fa-star text-gray-400"></i>
                 </div>
             </div>
-
-
+        </div>
+        <div class="p2 flex flex-col mb-1">
+            <div class="flex flex-col mb-1 mt-1">
+                <span id="nearby_distance" class="text-sm flex items-center" style="font-weight: 300;">
+                    <i class="fas fa-location-arrow mr-1 mt-1"></i>
+                    ${gym.distance} km away
+                </span>
+                <div class="flex flex-col mb-1 mt-1">
+                    <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
+                    <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
+                </div>
             </div>
         </div>
-        <div class="flex justify-between p-2 ml-7">
-            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-orange-700">
-                <i class="fas fa-eye mr-1"></i> Street view
-            </button>
-            <button id="showContact" class="bg-customOrange text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-orange-700">
-                <i class="fas fa-phone-alt"></i> Call
+        <div class="flex flex-row gap-2 text-center justify-center mx-auto my-auto text-white text-sm">
+            <div>
+                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
+                    <i class="fas fa-arrows-alt"></i>
+                </button>
+            </div>
+            <div>
+                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
+                    <i class='fas fa-phone-alt'></i>
+                </button>
+            </div>
+            <div>
+                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
+                    <i class='fas fa-bookmark'></i>
+                </button>
+            </div>
+        </div>
+        <div class="text-sm mb-1 mt-6 ">  
+            <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
+        </div>
+        <div class="text-sm mb-1">
+            <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
+        </div>
+        <div class="flex items-center justify-between my-auto mx-auto p-2">
+            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGrayBtn text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customGray shadow-lg">
+                <i class="fas fa-eye mr-2"></i> Street view
             </button>
         </div>
     `;
-
 
     // Set the content to the listItem
     listItem.innerHTML = content;
@@ -431,23 +452,19 @@ function showNearby(distances) {
     //* I used setTimeout() here to make the button element to load first before assigning a click event 
     setTimeout(() => {
         const button = document.getElementById("openStreetView")
-        const contactBtn = document.getElementById("showContact")
-        const number = document.getElementById("contact")
-        if (button && contactBtn) {
+        if (button) {
             button.addEventListener('click', function () {
                 event.stopPropagation();
                 const src = this.getAttribute('data-src');
                 ToggleStreetView(src);
             });
-            contactBtn.addEventListener('click', function () {
-                event.stopPropagation();
-                number.classList.remove("hidden")
-            });
         } else {
             console.error(`Button not found.`);
         }
     }, 0);
+
 }
+
 //* function to make a route to all the gyms in the city from the location of the user
 //* and finding the nearest gym.
 async function logDistancesToGyms(userCoords, gyms) {
@@ -588,14 +605,14 @@ function populateAllGymsList() {
             "border",
             "border-customGray",
             "rounded-lg",
-            "bg-customGray",
+            "bg-customGrayBtn",
             "transition",
             "duration-300",
             "ease-in-out",
             "flex",
             "flex-row",
             "items-center",
-            "hover:bg-gray-800",
+            "hover:bg-customGray1",
             "text-white"
         );
         var content = ` 
@@ -646,7 +663,7 @@ function ToggleStreetView(src) {
     }
     // Create a new iframe element
     const newIframe = document.createElement('iframe');
-    newIframe.className = 'w-full h-64 md:w-96 md:h-80 lg:w-full lg:h-[300px]'; // Set class names for styling
+    newIframe.className = 'w-full h-40 sm:h-[16rem] lg:h-[16rem] lg:w-full'; // Set class names for styling
     newIframe.src = `${src}`;
     // Set the src dynamically
     // Append the new iframe to the target div
@@ -673,8 +690,8 @@ function populateAllParksList() {
             "border",
             "border-customGray",
             "rounded-lg",
-            "bg-customGray",
-            "hover:bg-gray-800",
+            "bg-customGrayBtn",
+            "hover:bg-customGray1",
             "flex", "flex-col",
             "items-start",
             "transition-colors",
@@ -701,12 +718,12 @@ function populateAllParksList() {
 }
 
 function showSection(sectionId, id) {
-    document.querySelectorAll('.toggle-btn').forEach(section => section.classList.remove('bg-orange-700'));
+    document.querySelectorAll('.toggle-btn').forEach(section => section.classList.remove('bg-customGray'));
     // Hide all sections
     document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
     // Show the selected section
     document.getElementById(sectionId).classList.remove('hidden');
-    document.getElementById(id).classList.add('bg-orange-700');
+    document.getElementById(id).classList.add('bg-customGray');
 }
 
 //*GEOCODING FEATURE (Address to Coordinates)
@@ -739,14 +756,14 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
     var coordinates = [];
     const options = {
         enableHighAccuracy: true,
-        timeout: 9000,
+        timeout: 5000,
         maximumAge: 0,
     };
     function error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     }
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, error, options);
+        navigator.geolocation.getCurrentPosition(showPosition,error,options);
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
@@ -756,12 +773,15 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
         coordinates.push(position.coords.longitude); //* Store longitude in the array
         map.setView(coordinates, 13); //* Set the map view to the live location of the user
         userMarker = L.marker(coordinates, { icon: customUserIcon }).addTo(map) //*I USED THE ARRAY TO PINPOINT THE EXACT LOCATION OF THE USER 
-        userMarker.bindPopup("<b>You are here!</b><br>").openPopup();
-        logDistancesToGyms(coordinates, gyms);
+        alert(`Latitude: ${position.coords.latitude} Longtitude: ${position.coords.longitude}`)
     }
 })
 
-
-
-
-
+//TYPEWRITER
+var typed = new Typed(".auto-type",{
+    strings : ["Nearby gyms", "Gyms around the city", "Recreational areas"],
+    typeSpeed : 150,
+    backSpeed : 70,
+    looped: true,
+    loop: true
+})
