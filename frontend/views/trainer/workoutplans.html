@@ -28,6 +28,9 @@
             transition-delay: 0s;
             transform: scaleX(0);
         }
+        .sidebar, .sidebar-links{
+            overflow-x: hidden;
+        }
         .page_title {
             border-bottom: 2px solid;
             border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
@@ -38,7 +41,7 @@
     </style>
 </head>
 <body class="min-h-screen bg-[#343639] font-customFont">
-    <aside class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col overflow-x-hidden bg-[#EC7E4A] p-[25px_20px] transition-all duration-400 ease hover:w-[260px]">
+    <aside class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col overflow-y-hidden p-[25px_20px] transition-all duration-400 ease hover:w-[260px] bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
       <div class="sidebar-header flex items-center">
         <img class="w-[42px] rounded-full" src="../img/Flexperience logo.png" alt="logo" />
         <h2 class="text-white text-xl font-semibold whitespace-nowrap ml-[23px]">Flexperience</h2>
@@ -68,7 +71,7 @@
     </aside>
 
     <div class="title_div">
-        <h1 class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] mt-[20px] mb-[20px] text-base font-light pl-[100px]">
+        <h1 class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
             <span class="page_title font-normal">
                 Meal Plans
             </span>

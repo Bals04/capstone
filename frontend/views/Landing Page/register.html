@@ -9,35 +9,46 @@
     <link rel="stylesheet" href="../../dist/tailwind.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
-<body class="bg-[#1E1E1E] ml-80 mr-64 mt-7 text-white">
+<body class="bg-[#1E1E1E] ml-[14%] mr-[14%] mt-7 text-white">
     <div class="">
         <div class="mb-7">
             <span class="font-bold text-2xl">Profile</span><br>
             <span class="text-s font-extralight">Some of the information will be displayed publicly so be careful what you share.</span>
         </div>
-        <div class="flex gap-36">
+        <div class="flex gap-0">
             <div>
                 <label for="Gym_name" class="font-semibold">Gym name</label> <br>
-                <input type="text" form="Gym_name" class="w-72 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <input type="text" form="Gym_name" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
                 <br>
                 <label for="Owner_name" class="font-semibold">Owner name</label> <br>
-                <input type="text" form="Owner_name" class="w-72 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <input type="text" form="Owner_name" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
                 <br>
                 <label for="Email" class="font-semibold">Email</label> <br>
-                <input type="text" form="Email" class="w-72 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <input type="text" form="Email" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
                 <br>
                 <label for="Contact_num" class="font-semibold">Contact number <span class="text-gray-500">(Optional)</span></label> <br>
-                <input type="text" form="Contact_num" class="w-72 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <input type="text" form="Contact_num" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
                 <br>
-                <label for="Business_permit" class="font-semibold">Business permit</label> <br>
-                <input type="file" form="Business_permit">
+                <span class="font-semibold">Business Permit</span><br>
+                <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload a copy of your business permit. This is required to verify
+                    the legality of your gym. Ensure it includes the following information:
+                    Business name, permit number, issuance date, expiration date.</span>
+                <label for="file-input" class="cursor-pointer flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
+                    <input type="file" id="file-input" ref="fileInputs" class="hidden" />
+                    <span class="font-medium text-white-700 text-[14px]">Upload image</span>
+                    <span class="material-symbols-outlined">upload</span>
+                </label>
             </div>
             <div>
                 <label for="Gym_address" class="font-semibold">Gym address</label> <br>
                 <input type="text" form="Gym_address" class="w-72 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
                 <br>
-                <div class="w-72 h-56 border border-white bg-white text-black">
+                <div class="w-96 h-56 border border-white bg-white text-black">
                     map daw ni dri auto detect sa input sa gym address
+                </div>
+                <br>
+                <div class="w-96 h-56 border border-white bg-white text-black">
+                    Image sa permit
                 </div>
             </div>
         </div>
@@ -47,6 +58,7 @@
             <button class="pr-5 pl-5 p-1 border border-white rounded-lg hover:bg-black">Cancel</button>
             <button class="bg-[#aa99ff] rounded-lg pr-5 pl-5 p-1 hover:bg-white hover:text-black duration-200">Submit</button>
         </div>
+        <span class="font-thin text-xs text-justify opacity-50">For more information on business permit requirements, please refer to the [www.burat.com]</span>
     </div>
 </body>
 </html>
