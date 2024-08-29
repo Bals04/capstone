@@ -8,6 +8,9 @@ router.get("/gyms", GymController.GetGyms);
 router.get("/members", trainerController.getMembers); 
 router.get("/meals", GymController.GetMealInfo); 
 router.get("/searchFilter", GymController.SearchFilter); 
+router.post("/RegisterGym", GymController.RegisterGym); 
+router.post("/AddGymDocuments", GymController.AddGymDocuments); 
+router.post("/AddGymLogo", GymController.AddGymLogo); 
 
 module.exports = router;
 

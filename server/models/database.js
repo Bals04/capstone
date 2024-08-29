@@ -12,12 +12,34 @@ const pool = mysql.createPool({
 
 async function getGymInfo() {
     const [rows] = await pool.query(
-        `SELECT g.gym_id, g.gym_name, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img,
-         COALESCE(FORMAT(SUM(r.ratings) / COUNT(r.ratings), 2), "no ratings yet") AS Average,
-         g.contact_no, g.street_address, g.street_view
-         FROM gyms g LEFT JOIN gym_ratings r 
-         ON g.gym_id = r.gym_id
-         GROUP BY g.gym_id, g.latitude, g.longtitude, g.daily_rate, g.monthly_rate, g.img;`
+                `SELECT 
+            g.gym_id, 
+            g.gym_name, 
+            g.latitude, 
+            g.longtitude, 
+            g.daily_rate, 
+            g.monthly_rate,
+            COALESCE(FORMAT(SUM(r.ratings) / COUNT(r.ratings), 2), 'no ratings yet') AS Average,
+            g.contact_no, 
+            g.street_address, 
+            i.img_path
+        FROM 
+            gyms g 
+        LEFT JOIN 
+            gym_ratings r ON g.gym_id = r.gym_id
+        LEFT JOIN 
+            gym_images i ON g.gym_id = i.gym_id
+        GROUP BY 
+            g.gym_id, 
+            g.gym_name, 
+            g.latitude, 
+            g.longtitude, 
+            g.daily_rate, 
+            g.monthly_rate, 
+            g.contact_no, 
+            g.street_address, 
+            i.img_path;
+        `
     )
     return rows
 }
@@ -141,6 +163,33 @@ async function inputFilter(input) {
     return [result]
 }
 
+async function RegisterGym(gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status) {
+    const result = await pool.query(`
+    INSERT INTO gyms (gym_name, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status)
+    VALUES (?,?,?,?,?,?,?,?)
+    `, [gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status])
+
+    return result
+}
+
+async function AddGymDocuments (document_type, document_path) {
+    const result = await pool.query(`
+    INSERT INTO gym_documents (gym_id, document_type, document_path) 
+    VALUES ((SELECT gym_id FROM gyms ORDER BY gym_id desc LIMIT 1), ?, ?)
+    `, [document_type, document_path])
+
+    return result
+}
+
+async function AddGymLogo (img_path) {
+    const result = await pool.query(`
+    INSERT INTO gym_images (gym_id, img_path) 
+    VALUES ((SELECT gym_id FROM gyms ORDER BY gym_id desc LIMIT 1), ?)
+    `, [img_path])
+
+    return result
+}
+
 module.exports = {
     getGymInfo,
     getMealInfo,
@@ -155,5 +204,8 @@ module.exports = {
     getParkInfo,
     getTemplates,
     AddTemplate,
-    inputFilter
+    inputFilter,
+    RegisterGym,
+    AddGymDocuments,
+    AddGymLogo
 };

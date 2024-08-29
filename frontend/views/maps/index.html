@@ -89,14 +89,12 @@
         <!-- Nearby Gyms section -->
         <div id="nearbyGyms" class="section bg-customGrayBtn w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
           <!-- Location input section -->
-          <div class="mb-5 flex gap-0">
-            <input type="text" id="address" class="bg-white text-gray-800 px-4 py-2 rounded-tl-lg rounded-bl-lg"
-              placeholder="Starting point">
-            <button id="locateBtn"
-              class="bg-customGray hover:bg-customGray1 text-white py-2 px-4 rounded-tr-lg rounded-br-lg"
-              onclick="">Mark</button>
+          <div class="mb-5 space-y-4">
+            <input type="text" id="address" class="bg-white text-gray-800 w-full px-4 py-2 rounded-lg" placeholder="Starting point">
+            <input type="text" id="destination" class="bg-white text-gray-800 w-full px-4 py-2 rounded-lg" placeholder="Destination">
+            <button id="locateBtn" class="bg-customGray hover:bg-customGray1 text-white w-full py-2 px-4 rounded-lg" onclick="">Get Directions</button>
           </div>
-          <h2 class="text-2xl mb-5 text-white">Nearby Gyms</h2>
+          <h2 class="text-2xl mb-5 text-white">Nearby gyms</h2>
           <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
         </div>
 

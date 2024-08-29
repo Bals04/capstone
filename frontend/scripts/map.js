@@ -98,11 +98,10 @@ async function fetchGyms() {
                 dailyRates: G.daily_rate,
                 monthlyRates: G.monthly_rate,
                 coords: [G.latitude, G.longtitude],
-                img: G.img,
+                img: G.img_path,
                 avg: G.Average,
                 contact: G.contact_no,
                 address: G.street_address,
-                street_view: G.street_view
             });
 
         });
