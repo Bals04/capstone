@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .bg-guestNavbar {
+            background-color: #232121;
+        }
+        .text-customOrange {
+            color: #EC7E4A;
+        }
+        .bg-customOrange {
+            background-color: #EC7E4A;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <div class="bg-white shadow-md flex w-3/4 max-w-4xl rounded-lg overflow-hidden">
+        <!-- Left side (Form) -->
+        <div class="w-1/2 p-8">
+            <h2 class="text-3xl font-bold text-gray-700 mb-4">Login to Your Account</h2>
+            <p class="text-gray-500 mb-8">Enter your details below.</p>
+            <form action="#">
+                <div class="mb-4">
+                    <label class="block text-gray-600 text-sm font-bold mb-2" for="username">
+                        Username
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="your-email@example.com">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-600 text-sm font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Your Password">
+                </div>
+                <div class="flex items-center justify-between mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="form-checkbox text-customOrange">
+                        <span class="ml-2 text-gray-600">Remember me</span>
+                    </label>
+                    <a class="text-sm text-customOrange hover:text-orange-700" href="#">Forgot Password?</a>
+                </div>
+                <div>
+                    <button class="bg-customOrange hover:bg-orange-700 text-white font-bold py-2 px-4 rounded w-full" type="button">
+                        Log In
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- Right side (Image) -->
+        <div class="w-1/2 bg-cover" style="background-image: url('https://img.freepik.com/free-photo/3d-gym-equipment_23-2151114163.jpg');">
+            <!-- You can replace 'your-image-url-here' with an actual image URL -->
+        </div>
+    </div>
+</body>
+</html>

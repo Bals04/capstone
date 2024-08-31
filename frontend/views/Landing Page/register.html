@@ -24,7 +24,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 50;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
@@ -41,6 +41,11 @@
             width: 80%;
             max-width: 400px;
             border-radius: 10px;
+            position: relative;
+            /* Position relative for content inside */
+            z-index: 10000;
+            /* Extra layer of z-index on content */
+
         }
     </style>
 </head>
@@ -79,7 +84,7 @@
                     <input type="text" id="monthly_rates"
                         class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
                 </div>
-                <form id="fileUploadForm" enctype="multipart/form-data">
+                <div id="fileUploadForm">
                     <div>
                         <label for="business_permit" class="font-semibold">Business Permit</label>
                         <div class="mt-1">
@@ -88,7 +93,7 @@
                                 <span class="material-symbols-outlined mr-2">upload_file</span>
                                 <span class="text-sm">Choose File</span>
                                 <input type="file" name="business_permit" id="business_permit" class="hidden"
-                                    onchange="updateFileName(this, 'businessPermitFileName')">
+                                    onchange="">
                             </label>
                             <span id="businessPermitFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
@@ -101,13 +106,12 @@
                                 class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
                                 <span class="material-symbols-outlined mr-2">upload_file</span>
                                 <span class="text-sm">Choose File</span>
-                                <input type="file" name="gym_logo" id="gym_logo" class="hidden"
-                                    onchange="updateFileName(this, 'gymLogoFileName')">
+                                <input type="file" name="gym_logo" id="gym_logo" class="hidden" onchange="">
                             </label>
                             <span id="gymLogoFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
 
             <!-- Right Column -->
@@ -136,8 +140,8 @@
         <div class="modal-content text-center">
             <span class="text-xl font-semibold">Registration Successful!</span>
             <p class="text-gray-400 mt-2">Your gym has been registered successfully.</p>
-            <button class="bg-customOrange mt-4 py-2 px-4 rounded hover:bg-orange-800"
-                onclick="closeModal()">OK</button>
+            <button class="bg-customOrange mt-4 py-2 px-4 rounded hover:bg-orange-800" onclick="closeModal()"
+                id="Continue">OK</button>
         </div>
     </div>
 
@@ -165,35 +169,43 @@
         });
 
         const submit = document.getElementById("Submit");
-        submit.addEventListener("click", async function (event) {
-            event.preventDefault(); // Prevent default form submission
-            try {
-                var gymName = document.getElementById("Gym_name").value;
-                const contactNum = document.getElementById("Contact_num").value;
-                const dailyRates = document.getElementById("daily_rates").value;
-                const monthlyRates = document.getElementById("monthly_rates").value;
-                const gymAddress = document.getElementById("Gym_address").value;
+        document.getElementById("Submit").addEventListener("click", async function (event) {
+            const Continue = document.getElementById("Continue");
+            event.preventDefault(); // Prevent the default form submission
+            // Your existing form data submission logic
+            showModal();
+            Continue.addEventListener("click", async function () {
+                try {
+                    var gymName = document.getElementById("Gym_name").value;
+                    const contactNum = document.getElementById("Contact_num").value;
+                    const dailyRates = document.getElementById("daily_rates").value;
+                    const monthlyRates = document.getElementById("monthly_rates").value;
+                    const gymAddress = document.getElementById("Gym_address").value;
 
-                const formData = {
-                    gymname: gymName,
-                    latitude: lat,
-                    longtitude: long,
-                    daily_rate: dailyRates,
-                    monthly_rate: monthlyRates,
-                    contact_no: contactNum,
-                    street_address: gymAddress,
-                    status: 'Pending'
-                };
+                    const formData = {
+                        gymname: gymName,
+                        latitude: lat,
+                        longtitude: long,
+                        daily_rate: dailyRates,
+                        monthly_rate: monthlyRates,
+                        contact_no: contactNum,
+                        street_address: gymAddress,
+                        status: 'Pending'
+                    };
 
-                uploadFiles();
-                const response = await axios.post('http://localhost:3000/RegisterGym', formData);
-                if (response.status === 200) {
-                    showModal(); // Show success modal
+                    const response = await axios.post('http://localhost:3000/RegisterGym', formData);
+
+                    // Only call uploadFiles if the initial form data submission succeeds
+                    if (response.status === 200) {
+                        uploadFiles(); // This should be without passing the event
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
                 }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-            }
+            })
+
         });
+
 
         function updateFileName(input, fileNameId) {
             var fileName = input.files[0] ? input.files[0].name : "No file chosen";
@@ -222,14 +234,20 @@
                     const path = "/server/";
                     const businessPermitPath = path + response.data.business_permit[0].path;
                     const gymLogoPath = path + response.data.gym_logo[0].path;
-                    uploadDocs(businessPermitPath)
-                    uploadLogo(gymLogoPath)
+
+                    // Chaining the subsequent uploads
+                    uploadDocs(businessPermitPath).then(() => {
+                        uploadLogo(gymLogoPath).then(() => {
+                            // showModal(); // Only show the modal after all uploads complete successfully
+                        });
+                    });
                 })
                 .catch(error => {
                     alert('Error uploading files.');
                     console.error(error);
                 });
         }
+
 
         async function uploadDocs(path) {
             try {
@@ -249,6 +267,9 @@
                     img_path: path,
                 };
                 const response = await axios.post('http://localhost:3000/AddGymLogo', formData);
+                if (response.status === 200) {
+                    showModal(); // Show success modal
+                }
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
@@ -257,8 +278,8 @@
         function showModal() {
             document.getElementById("successModal").style.display = "block";
         }
- 
-        
+
+
         function closeModal() {
             document.getElementById("successModal").style.display = "none";
         }
