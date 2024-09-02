@@ -12,7 +12,7 @@ const pool = mysql.createPool({
 
 async function getGymInfo() {
     const [rows] = await pool.query(
-                `SELECT 
+        `SELECT 
             g.gym_id, 
             g.gym_name, 
             g.latitude, 
@@ -29,6 +29,7 @@ async function getGymInfo() {
             gym_ratings r ON g.gym_id = r.gym_id
         LEFT JOIN 
             gym_images i ON g.gym_id = i.gym_id
+        WHERE g.status = 'Approved'
         GROUP BY 
             g.gym_id, 
             g.gym_name, 
@@ -163,16 +164,16 @@ async function inputFilter(input) {
     return [result]
 }
 
-async function RegisterGym(gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status) {
+async function RegisterGym(admin_id, gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status) {
     const result = await pool.query(`
-    INSERT INTO gyms (gym_name, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status)
-    VALUES (?,?,?,?,?,?,?,?)
-    `, [gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status])
+    INSERT INTO gyms (admin_id, gym_name, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status)
+    VALUES (?,?,?,?,?,?,?,?,?)
+    `, [admin_id, gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status])
 
     return result
 }
 
-async function AddGymDocuments (document_type, document_path) {
+async function AddGymDocuments(document_type, document_path) {
     const result = await pool.query(`
     INSERT INTO gym_documents (gym_id, document_type, document_path) 
     VALUES ((SELECT gym_id FROM gyms ORDER BY gym_id desc LIMIT 1), ?, ?)
@@ -181,7 +182,7 @@ async function AddGymDocuments (document_type, document_path) {
     return result
 }
 
-async function AddGymLogo (img_path) {
+async function AddGymLogo(img_path) {
     const result = await pool.query(`
     INSERT INTO gym_images (gym_id, img_path) 
     VALUES ((SELECT gym_id FROM gyms ORDER BY gym_id desc LIMIT 1), ?)
@@ -195,7 +196,50 @@ async function query(sql, params) {
     return results;
 }
 
+async function getPendingGyms() {
+    const [rows] = await pool.query(
+        `SELECT 
+            g.gym_id, 
+            g.gym_name, 
+            CONCAT(a.lastname, ', ', a.firstname) Owner_name,
+            g.contact_no,
+            a.email,
+            g.street_address, 
+            i.img_path,
+            d.document_path
+        FROM 
+            gyms g 
+        LEFT JOIN 
+            gym_images i ON g.gym_id = i.gym_id
+        LEFT JOIN 
+            gym_documents d ON g.gym_id = d.gym_id
+        LEFT JOIN
+        	gym_admin a ON g.admin_id = a.admin_id
+        WHERE g.status = 'Pending'
+        GROUP BY 
+            g.gym_id, 
+            g.gym_name, 
+            g.contact_no, 
+            g.street_address,
+            d.document_path,
+            i.img_path;`
+    )
+    return rows
+}
+
+async function ApproveRequest(gym_id) {
+    const result = await pool.query(`
+        UPDATE gyms
+        SET status = 'Approved'
+        WHERE gym_id = ?;
+        `, [gym_id])
+
+    return result
+}
+
 module.exports = {
+    ApproveRequest,
+    getPendingGyms,
     query,
     pool,
     getGymInfo,

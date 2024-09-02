@@ -1,173 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flexperience Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../dist/tailwind.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Flexperience</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="../../dist/tailwind.css" rel="stylesheet">
+  <style>
+    .page_title {
+        border-bottom: 2px solid;
+        border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
+    }
+    .sidebar, .sidebar-links{
+        overflow-x: hidden;
+    }
+    .sidebar:hover .Menu {
+      opacity: 1;
+    }
+    .sidebar:hover .menu-separator {
+      transition-delay: 0s;
+      transform: scaleX(0);
+    }
+
+    #view_pending th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      background-color: #EC7E4A;
+      color: white;
+    }
+    #view_pending tr:nth-child(even){background-color: #5F6163;}
+    #view_pending td, #view_pending th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+  </style>
 </head>
-
-<body class="bg-gray-900 font-sans leading-normal tracking-normal text-white">
-
-    <!-- Dashboard header -->
-    <div class="flex justify-between bg-gray-900 border-gray-200 p-6">
-        <div class="text-3xl font-bold text-white">FleXperience Dashboard</div>
-        <div class="text-white ">Welcome, Admin</div>
+<body class="min-h-screen bg-[#343639] font-customFont ">
+    <div id="content_container" class="">
+        <aside class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col overflow-y-hidden p-[25px_20px] transition-all duration-400 ease hover:w-[260px] bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
+            <div class="sidebar-header flex items-center">
+            <img class="w-[42px] rounded-full" src="../img/Flexperience logo.png" alt="logo" />
+            <h2 class="text-white text-xl font-semibold whitespace-nowrap ml-[23px]">Flexperience</h2>
+            </div>
+    
+            <ul class="sidebar-links list-none mt-[20px] h-[80%] overflow-y-auto scrollbar-none">
+            <h4 class="text-white font-medium whitespace-nowrap my-[10px] relative">
+                <span class="Menu opacity-0 delay-0">Main Menu</span>
+                <div class="menu-separator transition absolute left-0 top-1/2 w-full h-[1px] bg-black transform translate-y-[-50%] menu-separator delay-100"></div>
+            </h4>
+    
+            <li>
+                <a href="adminDashboard.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
+            </li>
+            <li>
+                <a href="Pending.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined"> fitness_center </span>Pending Gym <br> Rrgistrations</a>
+            </li>
+            <li>
+                <a href="Registered.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined">groups</span>Registered Gym</a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF] hover:rounded-[4px]"><span class="material-symbols-outlined">settings</span>Settings</a>
+            </li>
+        </aside>
+    
+        <div class="title_div">
+            <h1 class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+                <span class="page_title font-normal">
+                    Admin Dashboard
+                </span>
+            </h1>
+        </div>
+    
+        <div class="pl-[120px] pt-[40px] text-white font-sans">
+            Good day, <br>
+            <span class="text-4xl font-bold font-customFont">Admin!</span>
+        </div>
+    
+        <div class="pl-[120px] pt-20 flex gap-5">
+            <button class="flex flex-col items-center justify-center text-2xl w-60 h-36 bg-[#EC7E4A] hover:bg-[#d96b3a] text-white rounded-lg shadow-lg p-5 transition ease-in-out duration-300">
+                <span class="material-symbols-outlined text-4xl mb-2">group</span>
+                Registered Gym(s): 
+                <span class="font-bold">5</span>
+            </button>
+            <button onclick="window.location.href='../../views/admin/Pending.html'" class="flex flex-col items-center justify-center text-2xl w-60 h-36 bg-[#EC7E4A] hover:bg-[#d96b3a] text-white rounded-lg shadow-lg p-5 transition ease-in-out duration-300">
+                <span class="material-symbols-outlined text-4xl mb-2">pending_actions</span>
+                Pending Registration(s):
+                <span class="font-bold">3</span>
+            </button>
+        </div>
+        
+        
     </div>
 
-    <!-- Dashboard content -->
-    <div class="container mx-auto mt-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Active Trainers -->
-            <div class="bg-gradient-to-br from-red-400 to-red-900 rounded-lg shadow-md p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i class="fas fa-dumbbell text-4xl mr-4"></i>
-                        <div class="text-2xl font-semibold">Active Trainers</div>
-                    </div>
-                    <div class="bg-white text-black font-semibold py-1 px-3 rounded-full text-sm" id="TrainerCount">0
-                    </div>
-                </div>
-            </div>
-
-            <!-- Active Members -->
-            <div class="bg-gradient-to-br from-green-400 to-green-900 rounded-lg shadow-md p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i class="fas fa-users text-4xl mr-4"></i>
-                        <div class="text-2xl font-semibold">Active Members</div>
-                    </div>
-                    <div class="bg-white text-black font-semibold py-1 px-3 rounded-full text-sm" id="MemberCount">0
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add Member -->
-            <a href="#"
-                class="bg-gray-300 rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition duration-300 ease-in-out">
-                <i class="fas fa-user-plus text-gray-700 text-4xl mb-4"></i>
-                <span class="text-lg font-semibold text-gray-800">Register new Member</span>
-            </a>
-
-            <!-- Add Trainer -->
-            <a href="#"
-                class="bg-gray-300 rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition duration-300 ease-in-out">
-                <i class="fas fa-dumbbell text-4xl mr-4 text-gray-700"></i>
-                <span class="text-lg font-semibold text-gray-800">Register new trainer</span>
-            </a>
-
-            <!-- Recent Activities -->
-            <div class="bg-gray-300 rounded-lg shadow-md p-6 col-span-2">
-                <div>
-                    <div class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</div>
-                    <ul class="divide-y divide-gray-200">
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="text-gray-800">John Doe completed a workout session.</div>
-                                <div class="text-gray-500 text-sm">2 hours ago</div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="text-gray-800">Jane Smith signed up as a new member.</div>
-                                <div class="text-gray-500 text-sm">3 hours ago</div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="text-gray-800">New nutrition plan published by Trainer1.</div>
-                                <div class="text-gray-500 text-sm">4 hours ago</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+    <div id="view_pending" class="fixed top-[40%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 mr-auto ml-auto mt-[50px] w-fit p-[20px] shadow-lg bg-[#323538] rounded-[10px] border border-[#EC7E4A] invisible">
+        <div class="title_and_button flex justify-between mb-[20px]"> 
+            <h1 class="text-2xl text-white">Gym Registration Details</h1>
+        </div>
+        <div>
+            <table class="w-[1000px] text-white">
+                <tr class="text-center">
+                    <th>Gym Name</th>
+                    <th>Owner</th>
+                    <th>Registered Date</th>
+                    <th>Actions</th>
+                </tr>
+                <tr class="text-center">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><button onclick="" class="text-white p-[10px] bg-[#373D41] shadow-[1px_2px_4px_black] border border-[#EC7E4A] rounded-[10px] hover:text-white hover:bg-[#EC7E4A] hover:p-[10px] hover:rounded-[10px] hover:w-fit">View</button></td>
+                </tr>
+            </table>
+            <div class="button_div text-center">
+                <input class="button text-white mt-[20px] bg-[#323538] w-[30%] p-[10px] rounded-[10px] shadow-[1px_2px_4px_black] border border-[#EC7E4A] hover:text-white hover:bg-black hover:w-[30%] hover:p-[10px] hover:rounded-[10px]" type="button" value="CLOSE" onclick="close_Pending()">
             </div>
         </div>
-        <!-- Modal -->
-        <div id="memberModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden">
-            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-2xl w-full p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-medium text-gray-800">Member Details</h3>
-                    <button id="closeModal" class="text-gray-800 text-xl">&times;</button>
-                </div>
-                <div>
-                    <table class="min-w-full bg-white">
-                        <thead>
-                            <tr>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">ID</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Member name</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Trainer</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Start date</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">End date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberTableBody">
-                            <!-- Member data will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
     </div>
-
 </body>
-
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            //FIRST RESPONSE WILL SET THE COUNT OF THE STUDENTS/MEMBERS
-            const response = await axios.get('http://localhost:3000/getStudentCount');
-            const data = response.data;
-            var empCount = (data[0].empCount)
-            const memberCount = document.getElementById("MemberCount");
-            memberCount.innerHTML = empCount;
-            //SECOND RESPONSE WILL SET THE COUNT OF THE TRAINERS
-            const response_2 = await axios.get('http://localhost:3000/getTrainerCount');
-            const data_2 = response_2.data;
-            const trainerCount = document.getElementById("TrainerCount")
-            var trainer_Count = (data_2[0].trainerCount)
-            trainerCount.innerHTML = trainer_Count;
-
-            memberCount.addEventListener('click', async () => {
-                const memberModal = document.getElementById('memberModal');
-                const memberTableBody = document.getElementById('memberTableBody');
-
-                //Fetch member details
-                const memberResponse = await axios.get('http://localhost:3000/getMembers');
-                const members = memberResponse.data;
-
-                // Populate table with member details
-                memberTableBody.innerHTML = '';
-                members.forEach(member => {
-                    memberTableBody.innerHTML += `
-                        <tr>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.member_id}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.member_name}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.Trainer}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.start_date}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.end_date}</td>
-                        </tr>
-                `;
-                });
-
-                // Show modal
-                memberModal.classList.remove('hidden');
-            });
-
-            // Add event listener to close button
-            document.getElementById('closeModal').addEventListener('click', () => {
-                document.getElementById('memberModal').classList.add('hidden');
-            });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-
-    });
-
-</script>
-
 </html>
+<script src="../../scripts/registration.js"></script>
