@@ -190,7 +190,14 @@ async function AddGymLogo (img_path) {
     return result
 }
 
+async function query(sql, params) {
+    const [results] = await pool.query(sql, params);
+    return results;
+}
+
 module.exports = {
+    query,
+    pool,
     getGymInfo,
     getMealInfo,
     getMembers,

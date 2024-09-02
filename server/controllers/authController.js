@@ -5,19 +5,40 @@ const users = require('../models/users');  // Import the users model
 module.exports = {
     Register: async (req, res) => {
         try {
-            const { username, password } = req.body;
+            const { username, password, usertype } = req.body;
             bcrypt.hash(password, 10).then((hash) => {
                 users.createUser({
                     username: username,
-                    password: hash
+                    password: hash,
+                    usertype: usertype
                 }).then(() => {
                     res.json("USER REGISTERED");
                 }).catch((err) => {
                     if (err) {
-                        res.status(400).json({ error: err });
+                        res.status(400).json({ error: err.message });
                     }
                 });
             });
+        } catch (error) {
+            console.error("Error:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    createGymAdmin: async (req, res) => {
+        try {
+            const {firstname, lastname, email } = req.body;
+            users.createGymAdmin({
+                firstname: firstname,
+                lastname: lastname,
+                email: email
+            }).then(() => {
+                res.json("Admin successfully created!");
+            }).catch((err) => {
+                if (err) {
+                    res.status(400).json({ error: err.message });
+                }
+            });
+
         } catch (error) {
             console.error("Error:", error.message);
             res.status(500).send("Internal Server Error");

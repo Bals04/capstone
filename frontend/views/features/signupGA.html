@@ -63,50 +63,150 @@
             <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
         </div>
         <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
-            <b class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+            <b
+                class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
         </div>
 
         <div class="pl-5 pr-10 text-50 pt-5">
-            <button class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
+            <button
+                class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
                 Log in
             </button>
         </div>
     </header>
-    <br> <br>
+    <br><br>
     <main class="flex justify-center items-center h-screen">
         <form class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-2xl text-gray-700 font-bold text-center mb-6">Sign up to showcase your gym</h2>
             <div class="mb-4">
-                <input type="text" placeholder="First name" class="w-full p-3 border border-gray-300 rounded" required>
+                <input type="text" id="firstName" placeholder="First name"
+                    class="w-full p-3 border border-gray-300 rounded" required>
             </div>
             <div class="mb-4">
-                <input type="text" placeholder="Last name" class="w-full p-3 border border-gray-300 rounded" required>
+                <input type="text" id="lastName" placeholder="Last name"
+                    class="w-full p-3 border border-gray-300 rounded" required>
             </div>
             <div class="mb-4">
-                <input type="email" placeholder="email address" class="w-full p-3 border border-gray-300 rounded" required>
+                <input type="email" id="email" placeholder="Email address"
+                    class="w-full p-3 border border-gray-300 rounded" required>
             </div>
             <div class="mb-4">
-                <input type="text" placeholder="Username" class="w-full p-3 border border-gray-300 rounded" required>
+                <input type="text" id="username" placeholder="Username"
+                    class="w-full p-3 border border-gray-300 rounded" required>
             </div>
             <div class="mb-4">
-                <input type="password" placeholder="Password (8 or more characters)" class="w-full p-3 border border-gray-300 rounded" required>
+                <input type="password" id="password" placeholder="Password (8 or more characters)"
+                    class="w-full p-3 border border-gray-300 rounded" required>
             </div>
 
             <div class="mb-4 flex items-center">
                 <input type="checkbox" id="tips" class="mr-2">
                 <label for="tips" class="text-gray-700">Send me emails with the further updates of this website</label>
             </div>
-            <button class="transition-transform transform bg-50 text-white py-2 px-4 rounded w-full hover:bg-orange-600 hover:scale-105">Sign Up</button>
+            <button id="signup"
+                class="transition-transform transform bg-50 text-white py-2 px-4 rounded w-full hover:bg-orange-600 hover:scale-105">
+                Sign Up
+            </button>
 
         </form>
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg text-center w-11/12 max-w-md">
+                <span class="text-xl font-semibold text-white">Registration Successful!</span>
+                <p class="text-gray-400 mt-2">Your gym has been registered successfully.</p>
+                <button class="bg-customOrange mt-4 py-2 px-4 rounded hover:bg-orange-800 text-white"
+                    onclick="closeModal()" id="Continue">OK</button>
+            </div>
+        </div>
+
     </main>
 
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         AOS.init({
             duration: 2000,
         });
+
+        document.getElementById("signup").addEventListener("click", async function (event) {
+            event.preventDefault();
+
+
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const email = document.getElementById("email").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                // Wait for AddToAccounts to complete before proceeding
+                await AddToAccounts(username, password);
+
+                // Now call RegisterGymAdmin
+                await RegisterGymAdmin(firstName, lastName, email);
+
+                showModal();
+
+            } catch (error) {
+                console.error('Error submitting form:', error);
+            }
+        });
+
+        async function AddToAccounts(Username, Password) {
+            try {
+                const formData = {
+                    username: Username,
+                    password: Password,
+                    usertype: "Gym admin"
+                };
+                const response = await axios.post('http://localhost:3000/auth/Register', formData);
+            } catch (error) {
+                console.error('Error submitting registration:', error);
+            }
+        }
+
+        async function RegisterGymAdmin(firstname, lastname, email) {
+            try {
+                const formData = {
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email
+                };
+                const response = await axios.post('http://localhost:3000/auth/RegisterAdmin', formData);
+            } catch (error) {
+                console.error('Error submitting registration:', error.message);
+            }
+        }
+        function showModal() {
+            const modal = document.getElementById("successModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeModal() {
+            // Get input values (if needed for other purposes)
+            const firstName = document.getElementById("firstName");
+            const lastName = document.getElementById("lastName");
+            const email = document.getElementById("email");
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+
+            // Get the modal element
+            const modal = document.getElementById("successModal");
+
+            // Hide the modal
+            modal.classList.remove("flex");
+            modal.classList.add("hidden");
+
+            // Clear the input fields
+            firstName.value = "";
+            lastName.value = "";
+            email.value = "";
+            username.value = "";
+            password.value = "";
+        }
+
     </script>
 </body>
 
