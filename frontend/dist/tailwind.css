@@ -609,12 +609,6 @@ video {
 .top-\[40\%\]{
   top: 40%;
 }
-.bottom-5{
-  bottom: 1.25rem;
-}
-.z-10{
-  z-index: 10;
-}
 .col-span-1{
   grid-column: span 1 / span 1;
 }
@@ -820,9 +814,6 @@ video {
 .hidden{
   display: none;
 }
-.aspect-video{
-  aspect-ratio: 16 / 9;
-}
 .h-10{
   height: 2.5rem;
 }
@@ -883,17 +874,11 @@ video {
 .h-screen{
   height: 100vh;
 }
-.h-2{
-  height: 0.5rem;
-}
 .max-h-\[600px\]{
   max-height: 600px;
 }
 .min-h-screen{
   min-height: 100vh;
-}
-.min-h-full{
-  min-height: 100%;
 }
 .w-1\/2{
   width: 50%;
@@ -974,14 +959,8 @@ video {
 .w-screen{
   width: 100vw;
 }
-.w-2{
-  width: 0.5rem;
-}
 .max-w-xl{
   max-width: 36rem;
-}
-.max-w-3xl{
-  max-width: 48rem;
 }
 .flex-1{
   flex: 1 1 0%;
@@ -1010,12 +989,6 @@ video {
 }
 .cursor-pointer{
   cursor: pointer;
-}
-.snap-x{
-  scroll-snap-type: x var(--tw-scroll-snap-strictness);
-}
-.snap-mandatory{
-  --tw-scroll-snap-strictness: mandatory;
 }
 .list-none{
   list-style-type: none;
@@ -1113,9 +1086,6 @@ video {
 .overflow-hidden{
   overflow: hidden;
 }
-.overflow-x-auto{
-  overflow-x: auto;
-}
 .overflow-y-auto{
   overflow-y: auto;
 }
@@ -1124,9 +1094,6 @@ video {
 }
 .overflow-y-scroll{
   overflow-y: scroll;
-}
-.scroll-smooth{
-  scroll-behavior: smooth;
 }
 .whitespace-nowrap{
   white-space: nowrap;
@@ -1360,10 +1327,6 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(202 138 4 / var(--tw-bg-opacity));
 }
-.bg-gray-700{
-  --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
 .bg-opacity-50{
   --tw-bg-opacity: 0.5;
 }
@@ -1453,9 +1416,6 @@ video {
 }
 .p-\[5px\]{
   padding: 5px;
-}
-.p-8{
-  padding: 2rem;
 }
 .px-10{
   padding-left: 2.5rem;
@@ -1764,9 +1724,6 @@ video {
 .opacity-80{
   opacity: 0.8;
 }
-.opacity-75{
-  opacity: 0.75;
-}
 .mix-blend-overlay{
   mix-blend-mode: overlay;
 }
@@ -1820,11 +1777,6 @@ video {
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-.shadow-\[0_1\.5rem_3rem_-0\.75rem_rgba\(0\2c 0\2c 0\2c 0\.25\)\]{
-  --tw-shadow: 0 1.5rem 3rem -0.75rem rgba(0,0,0,0.25);
-  --tw-shadow-colored: 0 1.5rem 3rem -0.75rem var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
 .shadow-51{
   --tw-shadow-color: #343639;
   --tw-shadow: var(--tw-shadow-colored);
@@ -1840,6 +1792,11 @@ video {
 .drop-shadow-xl{
   --tw-drop-shadow: drop-shadow(0 20px 13px rgb(0 0 0 / 0.03)) drop-shadow(0 8px 5px rgb(0 0 0 / 0.08));
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+.backdrop-blur-sm{
+  --tw-backdrop-blur: blur(4px);
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+          backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 .transition{
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
@@ -1885,9 +1842,6 @@ video {
 }
 .ease-in-out{
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-.ease-out{
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 .hover\:w-96:hover{
   width: 24rem;
@@ -1985,9 +1939,6 @@ video {
 .hover\:text-white:hover{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-.hover\:opacity-100:hover{
-  opacity: 1;
 }
 .hover\:shadow-\[2px_3px_\#1E1E1E\]:hover{
   --tw-shadow: 2px 3px #1E1E1E;
