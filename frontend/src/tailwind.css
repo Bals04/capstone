@@ -4,3 +4,318 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-shadow: border-box;
+}
+
+.sidebar {
+    z-index: 2;
+}
+
+.topbar {
+    z-index: 1;
+}
+
+.dashboard-Content {
+    z-index: 0;
+}
+
+.navbar li {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.navbar li .active {
+    font-size: 2rem;
+    line-height: 2rem;
+    color: #343639;
+    padding-top: 0.625rem;
+    padding-left: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-right: 0.625rem;
+    transition: all 200ms ease;
+}
+
+.navbar li i:hover {
+    font-size: 2rem;
+    line-height: 2rem;
+    color: #343639;
+    padding-top: 0.625rem;
+    padding-left: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-right: 0.625rem;
+    border-radius: 50%;
+    transition: all 200ms ease;
+}
+
+.navbar li .tooltip-home {
+    left: 90px;
+    top: 23%;
+    padding: 5px 8px;
+    background-color: #343639;
+    border-radius: 8px;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    visibility: hidden;
+}
+
+.navbar li .tooltip-maps {
+    left: 90px;
+    top: 33%;
+    padding: 5px 8px;
+    background-color: #343639;
+    border-radius: 8px;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    visibility: hidden;
+}
+
+.navbar li .tooltip-workout {
+    left: 90px;
+    top: 41%;
+    padding: 5px 8px;
+    background-color: #343639;
+    border-radius: 8px;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    visibility: hidden;
+}
+
+.navbar li .tooltip-meal {
+    left: 90px;
+    top: 49%;
+    padding: 5px 8px;
+    background-color: #343639;
+    border-radius: 8px;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    visibility: hidden;
+}
+
+.navbar li .tooltip-chat {
+    left: 90px;
+    top: 56%;
+    padding: 5px 8px;
+    background-color: #343639;
+    border-radius: 8px;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    visibility: hidden;
+}
+
+.navbar li .tooltip-trainers {
+    left: 90px;
+    top: 63%;
+    padding: 5px 8px;
+    background-color: #343639;
+    border-radius: 8px;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    visibility: hidden;
+}
+
+.navbar li:hover .tooltip-home {
+    top: 24%;
+    visibility: visible;
+    transition: all 200ms ease;
+}
+
+.navbar li:hover .tooltip-maps {
+    top: 34%;
+    visibility: visible;
+    transition: all 200ms ease;
+}
+
+.navbar li:hover .tooltip-workout {
+    top: 41%;
+    visibility: visible;
+    transition: all 200ms ease;
+}
+
+.navbar li:hover .tooltip-meal {
+    top: 49%;
+    visibility: visible;
+    transition: all 200ms ease;
+}
+
+.navbar li:hover .tooltip-chat {
+    top: 56%;
+    visibility: visible;
+    transition: all 200ms ease;
+}
+
+.navbar li:hover .tooltip-trainers {
+    top: 63%;
+    visibility: visible;
+    transition: all 200ms ease;
+}
+
+label {
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input {
+    position: absolute;
+    opacity: 0;
+}
+
+.sun {
+    position: absolute;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, .5));
+    transform: scale(0);
+    transition: 1s ease;
+}
+
+
+input:checked~.sun {
+    transition-delay: .8s;
+    transform: scale(1) rotate(360deg);
+}
+
+.moon {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, .5));
+    transition: 1s ease;
+    transition-delay: .8s;
+}
+
+
+input:checked~.moon {
+    transition-delay: 0s;
+    transform: rotate(360deg) scale(0);
+}
+
+.toggle {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    box-shadow: 
+        inset 0 8px 60px rgba(0, 0, 0, .1),
+        inset 0 8px 8px rgba(0, 0, 0, .1),
+        inset 0 -4px 4px rgba(0, 0, 0, .1);
+    z-index: -1;
+    transition: 1s;
+}
+
+
+input:checked~.toggle {
+    background: white;
+}
+
+.animateBG {
+    position: absolute;
+    background: white;
+    z-index: -2;
+    clip-path: circle(0% at 95% 5%);
+    transition: 1.5s ease-out;
+}
+
+/* UNDER CONSTRUCTION KY WANKO KSABOT
+input:checked~.animateBG {
+    clip-path: circle(134.6% at 95% 5%);
+}*/
+
+.notif {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, .5));
+}
+
+.wrapper {
+    font-size: smaller;
+    border-radius: 10px;
+}
+
+.wrapper header {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px 10px;
+    justify-content: space-between;
+}
+
+header .current-date {
+    font-size: medium;
+    font-weight: 500;
+}
+
+header .icons span {
+    height: 60px;
+    width: 60px;
+    color: #878787;
+    font-size: 1.3rem;
+    margin: 0 1px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 60px;
+    border-radius: 50%;
+}
+
+header .icons span:hover {
+    color: #f2f2f2;
+}
+
+header .icons span:last-child {
+    margin-right: -10px;
+}
+
+.calendar {
+    padding: 20px;
+}
+
+.calendar .days {
+    margin-bottom: 15px;
+}
+
+.calendar .weeks li {
+    font-weight: 500;
+}
+
+
+.calendar ul {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.calendar ul li {
+    position: relative;
+    width: calc(100% / 7);
+}
+
+.calendar .days li {
+    z-index: 1;
+    font-weight: 300;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.days li.inactive {
+    color: #aaa;
+}
+
+.days li.active {
+    color: #fff;
+    font-weight: 500;
+}
+
+.calendar .days li::before {
+    position: absolute;
+    content: "";
+    height: 30px;
+    width: 30px;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.days li:hover::before {
+    background: #878787;
+}
+
+.days li.active::before {
+    background: #EC7E4A;
+}
