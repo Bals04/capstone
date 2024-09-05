@@ -4,7 +4,6 @@
   "scripts": {
     "build": "npx postcss src/tailwind.css -o dist/tailwind.css",
     "watch": "npx postcss src/tailwind.css -o dist/tailwind.css --watch"
-
   },
   "keywords": [],
   "author": "",
