@@ -1,6 +1,7 @@
 const { getParkInfo } = require('../models/database');
 const bcrypt = require('bcrypt');
 const users = require('../models/users');  // Import the users model
+const { createTokens, validateToken } = require('../middlewares/JWT')
 
 module.exports = {
     Register: async (req, res) => {
@@ -26,7 +27,7 @@ module.exports = {
     },
     createGymAdmin: async (req, res) => {
         try {
-            const {firstname, lastname, email } = req.body;
+            const { firstname, lastname, email } = req.body;
             users.createGymAdmin({
                 firstname: firstname,
                 lastname: lastname,
@@ -46,7 +47,9 @@ module.exports = {
     },
     Login: async (req, res) => {
         try {
+            const { username, password } = req.body;
             const user = await users.findOne({ username });
+
             if (!user) {
                 return res.status(400).json({ error: "User doesn't exist" });
             }
@@ -59,12 +62,12 @@ module.exports = {
                         return res.status(400).json({ error: "Wrong username and password combination" });
                     } else {
                         const accessToken = createTokens(user);
-
-                        res.cookie("access-token", accessToken, {
-                            maxAge: 60 * 60 * 24 * 30 * 1000
+                        // Send the token in the response body
+                        res.json({
+                            message: `Logged in! User ID: ${user.account_id} Username: ${user.username} User type: ${user.user_type}`,
+                            accessToken: accessToken,
+                            usertype: user.user_type
                         });
-
-                        res.json(`Logged in! User ID: ${user.id} Username: ${user.username}`);
                     }
                 })
                 .catch(err => {
@@ -72,9 +75,10 @@ module.exports = {
                 });
         } catch (error) {
             console.error("Error:", error.message);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Internal Server Error", error.message);
         }
     },
+
     ShowDetails: async (req, res) => {
         try {
             const user_id = req.id;

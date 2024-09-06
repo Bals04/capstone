@@ -93,7 +93,7 @@
                                 <span class="material-symbols-outlined mr-2">upload_file</span>
                                 <span class="text-sm">Choose File</span>
                                 <input type="file" name="business_permit" id="business_permit" class="hidden"
-                                    onchange="">
+                                onchange="updateFileName(this, 'businessPermitFileName')">
                             </label>
                             <span id="businessPermitFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
@@ -106,7 +106,7 @@
                                 class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
                                 <span class="material-symbols-outlined mr-2">upload_file</span>
                                 <span class="text-sm">Choose File</span>
-                                <input type="file" name="gym_logo" id="gym_logo" class="hidden" onchange="">
+                                <input type="file" name="gym_logo" id="gym_logo" class="hidden" onchange="updateFileName(this, 'gymLogoFileName')">
                             </label>
                             <span id="gymLogoFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
@@ -165,6 +165,7 @@
                 userLoc.bindPopup("Plotted coordinates: " + e.latlng).openPopup();
                 lat = e.latlng.lat.toFixed(6);
                 long = e.latlng.lng.toFixed(6);
+                reverseGeocode(lat, long)
             });
         });
 
@@ -183,7 +184,7 @@
                     const gymAddress = document.getElementById("Gym_address").value;
 
                     const formData = {
-                        admin_id: 13,
+                        admin_id: 14,
                         gymname: gymName,
                         latitude: lat,
                         longtitude: long,
@@ -274,6 +275,20 @@
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
+        }
+
+        function reverseGeocode(lat, long) {
+            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}`;
+            axios.get(url)
+                .then(response => {
+                    if (response.data && response.data.address) {
+                        const address = `${response.data.address.road || ''}, ${response.data.address.city || ''}, ${response.data.address.state || ''}, ${response.data.address.country || ''}`.trim();
+                        document.getElementById('Gym_address').value = address;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error with reverse geocoding:', error);
+                });
         }
 
         function showModal() {

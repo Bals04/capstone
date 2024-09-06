@@ -162,6 +162,7 @@
         axios.put('http://localhost:3000/ApproveGym', formData)
             .then(response => {
                 alert("Gym approved!")
+                window.location.href='../../views/admin/Pending.html'
             })
             .catch(error => {
                 console.error('Error updating the status:', error.message);

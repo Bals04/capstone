@@ -1,5 +1,5 @@
 const db = require('./database');
-
+const { pool } = require('./database');
 
 const createUser = async ({ username, password, usertype }) => {
     return db.query(
@@ -10,21 +10,31 @@ const createUser = async ({ username, password, usertype }) => {
 const createGymAdmin = async ({ firstname, lastname, email }) => {
     return db.query(
         'INSERT INTO gym_admin (account_id,firstname, lastname, email) VALUES((SELECT account_id FROM user_accounts ORDER BY account_id desc LIMIT 1),?,?,?)',
-            [firstname, lastname, email]
-        );
+        [firstname, lastname, email]
+    );
 };
 // Find one user by username
 const findOne = async ({ username }) => {
-    const [rows] = await db.query(
-        'SELECT * FROM users WHERE username = ? LIMIT 1',
-        [username]
-    );
-    return rows[0]; // Return the first row (or undefined if no user was found)
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM user_accounts WHERE username = ? LIMIT 1',
+            [username]
+        );
+        // Since rows is an array, return the first element or null if no result found
+        return rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+        console.error("Error querying database:", error.message);
+        throw error;
+    }
 };
-const getUserinfo = async ({ user_id }) => {
+
+
+
+
+const getUserinfo = async ({ account_id }) => {
     const [rows] = await db.query(
-        'SELECT * FROM user_info WHERE user_id = ? LIMIT 1',
-        [user_id]
+        'SELECT * FROM gym_admin WHERE account_id = ? LIMIT 1',
+        [account_id]
     );
     return rows[0]; // Return the first row (or undefined if no user was found)
 };

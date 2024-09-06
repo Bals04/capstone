@@ -60,12 +60,12 @@ let distances = [];
 var userMarker = null;
 var userLoc = null;
 
-const customMarkerIcon = L.icon({
-    iconUrl: '/frontend/views/img/location.svg',
+const greenIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     shadowSize: [41, 41]
 });
 
@@ -165,7 +165,7 @@ async function fetchParks() {
         });
 
         parks.forEach(function (p) {
-            var Parkmarker = L.marker(p.coords, { icon: customMarkerIcon }).addTo(map);
+            var Parkmarker = L.marker(p.coords, { icon: greenIcon }).addTo(map);
             Parkmarker.bindPopup(function () {
                 // Create your popup content dynamically
                 const popupContent = `
@@ -329,7 +329,7 @@ document.getElementById("showLoc").addEventListener("click", function () {
 //a function that lets the user click on the map and add a new fakeng marker
 function onMapClick(e) {
     removeLastMarker();
-    userLoc = L.marker(e.latlng, { icon: customUserIcon }).addTo(map);
+    userLoc = L.marker(e.latlng).addTo(map);
     if (ctr) {
         map.removeControl(ctr)
         ctr = null
@@ -762,7 +762,7 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
         console.warn(`ERROR(${err.code}): ${err.message}`);
     }
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition,error,options);
+        navigator.geolocation.getCurrentPosition(showPosition, error, options);
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
@@ -777,10 +777,10 @@ document.getElementById('trackLocation').addEventListener('click', function (eve
 })
 
 //TYPEWRITER
-var typed = new Typed(".auto-type",{
-    strings : ["Nearby gyms", "Gyms around the city", "Recreational areas"],
-    typeSpeed : 150,
-    backSpeed : 70,
+var typed = new Typed(".auto-type", {
+    strings: ["Nearby gyms", "Gyms around the city", "Recreational areas"],
+    typeSpeed: 150,
+    backSpeed: 70,
     looped: true,
     loop: true
 })

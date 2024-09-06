@@ -8,6 +8,7 @@ const memberRoutes = require('./routes/memberRoutes');
 const parkRoutes = require('./routes/parkRoute');
 const uploadRoutes = require('./routes/uploadRoutes'); // Import upload routes
 const AuthRoutes = require('./routes/AuthRoutes'); // Import upload routes
+const NavRoutes = require('./routes/NavigationRoutes'); // Import upload routes
 const cookieParser = require("cookie-parser")
 
 const app = express();
@@ -25,14 +26,12 @@ app.use('/', trainerroutes);
 app.use('/', memberRoutes);
 app.use('/', parkRoutes);
 app.use('/', uploadRoutes);
+app.use('/nav', NavRoutes);
 app.use('/auth', AuthRoutes);
 
 //? NAVIGATION
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use(express.static(path.join(__dirname, '../frontend/scripts')));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/views/maps/index.html'));
-});
 
 // Serve the files in the 'uploads' directory
 app.use('/uploads', express.static('uploads'));

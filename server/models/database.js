@@ -237,6 +237,15 @@ async function ApproveRequest(gym_id) {
     return result
 }
 
+async function AddUserToken(userID, token, expiresAt) {
+    const result = await pool.query(`
+    INSERT INTO userTokens (userId, token, expiresAt,) 
+    VALUES (?,?,?)
+    `, [userID, token, expiresAt])
+
+    return result
+}
+
 module.exports = {
     ApproveRequest,
     getPendingGyms,
