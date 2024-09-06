@@ -7,6 +7,7 @@ const { createTokens, validateToken } = require('../middlewares/JWT')
 
 router.post("/Register", AuthController.Register); 
 router.post("/RegisterAdmin", AuthController.createGymAdmin); 
+router.post("/RegisterMember", AuthController.createMembers); 
 router.post("/Login", AuthController.Login); 
 router.get("/Profile", validateToken, AuthController.ShowDetails); 
 router.get("/validate-token", validateToken, (req, res) => {

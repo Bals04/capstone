@@ -4,7 +4,7 @@ function redirectToDashboard(userType) {
     let targetUrl;
     switch (userType) {
         case 'Member':
-            targetUrl = '/frontend/views/member/index.html';
+            targetUrl = '/frontend/views/member/memberDashboard.html';
             break;
         case 'Trainer':
             targetUrl = '/frontend/views/trainer/index.html';

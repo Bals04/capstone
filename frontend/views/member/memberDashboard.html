@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+</head>
+
+<body class="min-h-screen font-[Poppins] bg-customGray text-white">
+    <div class="flex flex-col">
+        <div class="flex flex-row">
+            <div class="sidebar bg-customOrange fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg">
+                <div class="flex items-center justify-center">
+                    <a href="#" class="list-none">
+                        <img class="w-[80px] rounded-full" src="../../img/Flexperience.png" alt="Flexperience">
+                    </a>
+                </div>
+
+                <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
+                    <!--Home-->
+                    <li>
+                        <a href="#" class="btn active flex items-center justify-center text-2xl">
+                            <i class="bx bx-home-alt-2" aria-hidden="true"></i>
+                        </a>
+                        <span class="tooltip-home absolute text-lg">Home</span>
+                    </li>
+                    <!--Maps-->
+                    <li class="mt-6">
+                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                            <i class="bx bx-map" aria-hidden="true"></i>
+                        </a>
+                        <span class="tooltip-maps absolute text-lg">Maps</span>
+                    </li>
+                    <!--WorkoutPlan-->
+                    <li class="mt-6">
+                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                            <i class="bx bx-dumbbell" aria-hidden="true"></i>
+                        </a>
+                        <span class="tooltip-workout absolute text-lg">Workout</span>
+                    </li>
+                    <!--MealPlan-->
+                    <li class="mt-6">
+                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                            <i class="bx bx-bowl-rice" aria-hidden="true"></i>
+                        </a>
+                        <span class="tooltip-meal absolute text-lg">Meal</span>
+                    </li>
+                    <!--Chat-->
+                    <li class="mt-6">
+                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                            <i class="bx bx-message-square-dots" aria-hidden="true"></i>
+                        </a>
+                        <span class="tooltip-chat absolute text-lg">Chat</span>
+                    </li>
+                    <!--Trainers-->
+                    <li class="mt-6">
+                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                            <i class="bx bx-user-pin" aria-hidden="true"></i>
+                        </a>
+                        <span class="tooltip-trainers absolute text-lg">Trainers</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="topbar bg-customGray fixed top-0 w-full h-[55px] shadow-lg flex flex-row-reverse gap-2">
+                <!--profile-->
+                <div class="flex items-center justify-center mr-10 mt-2">
+                    <button>
+                        <img class="w-[35px] h-[35px] rounded-full" src="../../img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
+                </div>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-customGray"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-Content absolute top-[15%] left-[10%]">
+            <h1 class="text-lg">Good evening,</h1>
+            <span class="nameChange text-2xl font-bold">Member Full Name</span>
+            <h1>
+                <span class="greetChange text-base">You've done a great job today!</span>
+            </h1>
+        </div>
+        <!--goals-->
+        <div
+            class="dashboard-Content absolute top-[33%] left-[10%] bg-customGray shadow-inner flex flex-row gap-2 pt-6 px-6 rounded-md">
+            <!-- Circular Progress -->
+            <div class="relative size-16">
+                <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Circle -->
+                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="2">
+                    </circle>
+                    <!-- Progress Circle -->
+                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-blue-600" stroke-width="2"
+                        stroke-dasharray="100" stroke-dashoffset="65" stroke-linecap="round"></circle>
+                </svg>
+                <!-- Percentage Text -->
+                <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                    <span class="text-center text-xl font-bold text-blue-600">35%</span>
+                </div>
+            </div>
+            <!-- End Circular Progress -->
+            <div class="relative mt-2 ml-4">
+                <h1 class="text-base">Today's plan</h1>
+                <span class="text-sm font-light">3 goals out of 6 completed</span>
+            </div>
+        </div>
+        <div
+            class="dashboard-Content absolute top-[47%] left-[10%] w-[20.2rem] h-64 overflow-auto scrollbar-thin scrollbar-thumb-customGray1 scrollbar-track-customGray bg-customGray shadow-lg flex flex-col divide-y gap-2">
+            <div class="pt-6 px-6">
+                <h1>Your goals</h1>
+            </div>
+            <div class="pt-6 px-6 flex flex-row gap-2">
+                <h1 class="text-sm">Workout <br>
+                    <span class="text-sm font-light">4/4</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 100%">100%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
+                <h1 class="text-sm">Mealplan <br>
+                    <span class="text-sm font-light">1200/1500 kkal</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 75%">75%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
+                <h1 class="text-sm">Mealplan <br>
+                    <span class="text-sm font-light">1200/1500 kkal</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 75%">75%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
+                <h1 class="text-sm">Mealplan <br>
+                    <span class="text-sm font-light">1200/1500 kkal</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 100%">100%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
+                <h1 class="text-sm">Mealplan <br>
+                    <span class="text-sm font-light">1200/1500 kkal</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 75%">75%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
+                <h1 class="text-sm">Mealplan <br>
+                    <span class="text-sm font-light">1200/1500 kkal</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 100%">100%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+        </div>
+
+        <!--workoutplan-->
+        <div class="dashboard-Content absolute top-[33%] left-[40%] shadow-md py-2 px-2 rounded-md">
+            <div class="flex flex-row gap-36">
+                <div class="text-base">
+                    <h1>Today's workout plan</h1>
+                </div>
+                <div class="text-sm font-light text-slate-300">
+                    <button>
+                        <h1>view all</h1>
+                    </button>
+                </div>
+            </div>
+            <div
+                class="grid grid-cols-2 gap-2 grid-template-columns: repeat(2, minmax(0, 1fr)); h-80 overflow-auto scrollbar-thin scrollbar-thumb-customGray1 scrollbar-track-customGray">
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
+                    <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
+                    <div class="text-sm mt-2">Yoga</div>
+                    <div class="text-sm font-light flex gap-1 mt-2">
+                        <ion-icon class="text-lg" name="timer-outline"></ion-icon>
+                        <span>30 min</span>
+                        <ion-icon class="text-lg" name="flame-outline"></ion-icon>
+                        <span>100 kkal</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
+                    <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
+                    <div class="text-sm mt-2">Yoga</div>
+                    <div class="text-sm font-light flex gap-1 mt-2">
+                        <ion-icon class="text-lg" name="timer-outline"></ion-icon>
+                        <span>30 min</span>
+                        <ion-icon class="text-lg" name="flame-outline"></ion-icon>
+                        <span>100 kkal</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
+                    <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
+                    <div class="text-sm mt-2">Yoga</div>
+                    <div class="text-sm font-light flex gap-1 mt-2">
+                        <ion-icon class="text-lg" name="timer-outline"></ion-icon>
+                        <span>30 min</span>
+                        <ion-icon class="text-lg" name="flame-outline"></ion-icon>
+                        <span>100 kkal</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
+                    <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
+                    <div class="text-sm mt-2">Yoga</div>
+                    <div class="text-sm font-light flex gap-1 mt-2">
+                        <ion-icon class="text-lg" name="timer-outline"></ion-icon>
+                        <span>30 min</span>
+                        <ion-icon class="text-lg" name="flame-outline"></ion-icon>
+                        <span>100 kkal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-Content absolute top-[33%] left-[75%] min-h-[100vh] text-sm">
+            <div class="wrapper w-[320px] bg-customGray shadow-lg">
+                <header class="">
+                    <p class="current-date"></p>
+                    <div class="icons">
+                        <span id="prev" class="materials-symbols-rounded text-black">
+                            <i class='bx bx-chevron-left text-xl'></i>
+                        </span>
+                        <span id="next" class="materials-symbols-rounded text-black">
+                            <i class='bx bx-chevron-right text-xl'></i>
+                        </span>
+                    </div>
+                </header>
+                <div class="calendar">
+                    <ul class="weeks">
+                        <li>Sun</li>
+                        <li>Mon</li>
+                        <li>Tue</li>
+                        <li>Wed</li>
+                        <li>Thu</li>
+                        <li>Fri</li>
+                        <li>Sat</li>
+                    </ul>
+                    <ul class="days"></ul>
+                </div>
+            </div>
+        </div>
+        <!--maps-->
+        <div
+            class="dashboard-content absolute top-[95%] left-[10%] bg-customGray shadow-lg w-[60%] h-[50%] flex items-center justify-center">
+            MAPS</div>
+        <!--chatbox-->
+        <div
+            class="dashboard-content absolute top-[95%] left-[75%] bg-customGray shadow-lg w-[24%] h-[50%] flex items-center justify-center">
+            CHATBOX</div>
+    </div>
+</body>
+
+<script src="/frontend/scripts/member.js"></script>
+
+</html>

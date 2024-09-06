@@ -45,6 +45,28 @@ module.exports = {
             res.status(500).send("Internal Server Error");
         }
     },
+    createMembers: async (req, res) => {
+        try {
+            const { firstname, lastname, weight, bodytype } = req.body;
+            users.createMember({
+                firstname: firstname,
+                lastname: lastname,
+                weight: weight,
+                bodytype: bodytype
+
+            }).then(() => {
+                res.json("Gym member successfully created!");
+            }).catch((err) => {
+                if (err) {
+                    res.status(400).json({ error: err.message });
+                }
+            });
+
+        } catch (error) {
+            console.error("Error:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
     Login: async (req, res) => {
         try {
             const { username, password } = req.body;

@@ -6,7 +6,7 @@ const createTokens = (user) => {
   const accessToken = sign(
     { 
       username: user.username, 
-      id: user.id,
+      id: user.account_id,
       user_type: user.user_type  // Attach the userType to the token payload (e.g., Member, Trainer, etc.)
     },
     SECRET_KEY,

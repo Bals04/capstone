@@ -13,6 +13,12 @@ const createGymAdmin = async ({ firstname, lastname, email }) => {
         [firstname, lastname, email]
     );
 };
+const createMember = async ({ firstname, lastname, weight, bodytype, }) => {
+    return db.query(
+        'INSERT INTO members (account_id,firstname, lastname, weight, bodytype) VALUES((SELECT account_id FROM user_accounts ORDER BY account_id desc LIMIT 1),?,?,?,?)',
+        [firstname, lastname, weight, bodytype]
+    );
+};
 // Find one user by username
 const findOne = async ({ username }) => {
     try {
@@ -28,9 +34,6 @@ const findOne = async ({ username }) => {
     }
 };
 
-
-
-
 const getUserinfo = async ({ account_id }) => {
     const [rows] = await db.query(
         'SELECT * FROM gym_admin WHERE account_id = ? LIMIT 1',
@@ -43,5 +46,6 @@ module.exports = {
     createUser,
     createGymAdmin,
     findOne,
-    getUserinfo
+    getUserinfo,
+    createMember
 };
