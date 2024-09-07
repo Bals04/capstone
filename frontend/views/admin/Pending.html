@@ -10,9 +10,11 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+    <script src="/frontend/scripts/auth.js"></script>
 </head>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
     .page_title {
         border-bottom: 2px solid;
         border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
@@ -162,7 +164,7 @@
         axios.put('http://localhost:3000/ApproveGym', formData)
             .then(response => {
                 alert("Gym approved!")
-                window.location.href='../../views/admin/Pending.html'
+                window.location.href = '../../views/admin/Pending.html'
             })
             .catch(error => {
                 console.error('Error updating the status:', error.message);

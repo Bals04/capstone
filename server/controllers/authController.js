@@ -99,24 +99,5 @@ module.exports = {
             console.error("Error:", error.message);
             res.status(500).send("Internal Server Error", error.message);
         }
-    },
-
-    ShowDetails: async (req, res) => {
-        try {
-            const user_id = req.id;
-            const userInfo = await users.getUserinfo({ user_id });
-            if (!userInfo) {
-                return res.status(400).json({ error: "User doesn't exist" });
-            }
-            res.json({
-                info_id: userInfo.info_id,
-                name: userInfo.name,
-                lastname: userInfo.lastname,
-                course: userInfo.course
-            });
-        } catch (error) {
-            console.error("Error:", error.message);
-            res.status(500).send("Internal Server Error");
-        }
     }
 }

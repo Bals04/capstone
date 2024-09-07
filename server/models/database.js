@@ -230,7 +230,7 @@ async function getPendingGyms() {
 async function ApproveRequest(gym_id) {
     const result = await pool.query(`
         UPDATE gyms
-        SET status = 'Approved'
+        SET status = 'Approved - Payment Pending'
         WHERE gym_id = ?;
         `, [gym_id])
 
@@ -246,7 +246,16 @@ async function AddUserToken(userID, token, expiresAt) {
     return result
 }
 
+async function GetMemberInfo(account_id) {
+    const [result] = await pool.query(`
+    SELECT * FROM members WHERE account_id = ?
+    `, [account_id])
+
+    return result
+}
+
 module.exports = {
+    GetMemberInfo,
     ApproveRequest,
     getPendingGyms,
     query,

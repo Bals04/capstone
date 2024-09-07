@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const thirdPart = pathParts[3];
 
     // Decode JWT token to get user information
-    let userId = null;
+    userId = null;
     if (token) {
         try {
             const decodedToken = jwt_decode(token); // Use jwt_decode(token) for decoding
