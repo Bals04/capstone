@@ -150,12 +150,12 @@
     transition: all 200ms ease;
 }
 
-label {
+.mode-label {
     border-radius: 50%;
     cursor: pointer;
 }
 
-input {
+.mode {
     position: absolute;
     opacity: 0;
 }

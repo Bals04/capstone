@@ -16,6 +16,9 @@ module.exports = {
         customBodyColor: '#1E1E1E',
         customGrayBtn: '#232121',
         customGray1: '#584D4A',
+        darkCharcoal: '#333333',
+        davysGrey: '#555555',
+        eerieBlack: '#191919',
     },},
   },
   plugins: [
