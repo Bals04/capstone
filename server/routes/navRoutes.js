@@ -1,7 +1,9 @@
+// navRoutes.js
 const express = require('express');
 const path = require('path');
 const router = express.Router();
 const { handleAddPaymentRecord } = require('../controllers/orderController');
+const { VerifyGym } = require('../controllers/gymController');
 const paypal = require('../services/paypal');
 
 router.get('/gym_admin/success', (req, res) => {
@@ -39,6 +41,9 @@ router.get('/complete-order', async (req, res) => {
             );
 
             if (result.success) {
+                // Call VerifyGym if payment record was added successfully
+                await VerifyGym(gym_id); // Directly pass gym_id here
+
                 // Redirect to the success page
                 return res.redirect('/gym_admin/success');
             } else {

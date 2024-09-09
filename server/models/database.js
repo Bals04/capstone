@@ -306,6 +306,16 @@ async function ApproveRequest(gym_id) {
     return result
 }
 
+async function verifyGymInDb(gym_id) {
+    const result = await pool.query(`
+        UPDATE gyms
+        SET status = 'Verified'
+        WHERE gym_id = ?;
+        `, [gym_id])
+
+    return result
+}
+
 async function AddUserToken(userID, token, expiresAt) {
     const result = await pool.query(`
     INSERT INTO userTokens (userId, token, expiresAt,) 
@@ -342,6 +352,7 @@ async function addPaymentRecord(admin_id, gym_id, subscription_id, amount, payme
 
 
 module.exports = {
+    verifyGymInDb,
     addPaymentRecord,
     getPendingGymsByID,
     GetGymAdminInfo,
