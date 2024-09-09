@@ -6,10 +6,14 @@ const gymroutes = require('./routes/gymRoutes');
 const trainerroutes = require('./routes/trainerroutes');
 const memberRoutes = require('./routes/memberRoutes');
 const parkRoutes = require('./routes/parkRoute');
+const gymAdminRoutes = require('./routes/gymAdminRoutes');
 const uploadRoutes = require('./routes/uploadRoutes'); // Import upload routes
 const AuthRoutes = require('./routes/AuthRoutes'); // Import upload routes
-const NavRoutes = require('./routes/NavigationRoutes'); // Import upload routes
+//const NavRoutes = require('./routes/NavigationRoutes'); // Import upload routes
 const cookieParser = require("cookie-parser")
+const paypal = require('./services/paypal')
+const NavRoutes = require('./routes/navRoutes'); // Import upload routes
+const paymentRoute = require('./routes/paymentRoute'); 
 
 const app = express();
 dotenv.config();
@@ -26,15 +30,19 @@ app.use('/', trainerroutes);
 app.use('/', memberRoutes);
 app.use('/', parkRoutes);
 app.use('/', uploadRoutes);
-app.use('/nav', NavRoutes);
+app.use('/', gymAdminRoutes);
+app.use('/', NavRoutes);
+app.use('/', paymentRoute);
 app.use('/auth', AuthRoutes);
 
 //? NAVIGATION
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/frontend', express.static(path.join(__dirname, '../frontend')));
 app.use(express.static(path.join(__dirname, '../frontend/scripts')));
+app.use(express.urlencoded({ extended: true })); // To handle form data
 
 // Serve the files in the 'uploads' directory
 app.use('/uploads', express.static('uploads'));
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -328,10 +328,11 @@
                     lastname = memberData.lastname;
                     weight = memberData.weight;
                     bodytype = memberData.bodytype;
+                    id = memberData.member_id
 
                     // Optionally, update the DOM with the fetched data
                     document.querySelector('.nameChange').textContent = `${firstname} ${lastname}`;
-                    console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}`);
+                    console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${id}`);
                 })
                 .catch(error => {
                     console.error('Error fetching member info:', error);

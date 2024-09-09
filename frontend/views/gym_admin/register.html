@@ -93,7 +93,7 @@
                                 <span class="material-symbols-outlined mr-2">upload_file</span>
                                 <span class="text-sm">Choose File</span>
                                 <input type="file" name="business_permit" id="business_permit" class="hidden"
-                                onchange="updateFileName(this, 'businessPermitFileName')">
+                                    onchange="updateFileName(this, 'businessPermitFileName')">
                             </label>
                             <span id="businessPermitFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
@@ -106,7 +106,8 @@
                                 class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
                                 <span class="material-symbols-outlined mr-2">upload_file</span>
                                 <span class="text-sm">Choose File</span>
-                                <input type="file" name="gym_logo" id="gym_logo" class="hidden" onchange="updateFileName(this, 'gymLogoFileName')">
+                                <input type="file" name="gym_logo" id="gym_logo" class="hidden"
+                                    onchange="updateFileName(this, 'gymLogoFileName')">
                             </label>
                             <span id="gymLogoFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
@@ -169,6 +170,20 @@
             });
         });
 
+        async function fetchGymAdminInfo() {
+            try {
+                const response = await axios.get('http://localhost:3000/getGymAdminInfo', {
+                    params: {
+                        account_id: userId
+                    }
+                });
+                const data = response.data[0]; // Assuming the response data contains the member info
+                return data.admin_id; // Return the admin_id
+            } catch (error) {
+                console.error('Error fetching gym admin info:', error.message);
+            }
+        }
+
         const submit = document.getElementById("Submit");
         document.getElementById("Submit").addEventListener("click", async function (event) {
             const Continue = document.getElementById("Continue");
@@ -182,9 +197,10 @@
                     const dailyRates = document.getElementById("daily_rates").value;
                     const monthlyRates = document.getElementById("monthly_rates").value;
                     const gymAddress = document.getElementById("Gym_address").value;
-
+                    const admin_id = await fetchGymAdminInfo();
+                    await fetchGymAdminInfo()
                     const formData = {
-                        admin_id: 14,
+                        admin_id: admin_id,
                         gymname: gymName,
                         latitude: lat,
                         longtitude: long,
@@ -202,7 +218,7 @@
                         uploadFiles(); // This should be without passing the event
                     }
                 } catch (error) {
-                    console.error('Error submitting form:', error);
+                    console.error('Error submitting form:', error.message);
                 }
             })
 
@@ -291,6 +307,7 @@
                 });
         }
 
+
         function showModal() {
             document.getElementById("successModal").style.display = "block";
         }
@@ -301,5 +318,7 @@
         }
     </script>
 </body>
+<script src="/frontend/scripts/auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 
 </html>

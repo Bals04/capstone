@@ -7,7 +7,7 @@ module.exports = {
     "./views/maps/**/*.{html,js}",
     "./views/features/**/*.{html,js}",
     "./views/Landing Page/**/*.{html,js}",
-    "./views/gym admin/**/*.{html,js}",
+    "./views/gym_admin/**/*.{html,js}",
     "./scripts/map.js",
 
   ],

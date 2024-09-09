@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const decodedToken = jwt_decode(token); // Use jwt_decode(token) for decoding
             console.log('Decoded Token:', decodedToken); // Log the entire decoded token for inspection
             userId = decodedToken.id; // Replace 'id' with the actual key in your token payload
-
-        } catch (error) { 
+        } catch (error) {
             console.error('Failed to decode token', error);
         }
     } else {
@@ -28,9 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (userType === 'Trainer') {
             window.location.href = '/frontend/views/trainer/index.html';
         } else if (userType === 'Admin') {
-            window.location.href = '/frontend/views/admin/adminDashboard.html';
+            window.location.href = '/frontend/views/admin/gymAdminDashboard.html';
         } else if (userType === 'Gym admin') {
-            window.location.href = '/frontend/views/admin/adminDashboard.html';
+            window.location.href = '/frontend/views/admin/AdminDashboard.html';
         } else {
             window.location.href = '/frontend/views/Landing Page/index.html'; // Fallback
         }
@@ -59,6 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case 'Gym admin':
+                if (thirdPart !== 'gym_admin') {
+                    window.location.href = '/frontend/views/gym_admin/gymAdminDashboard.html';
+                }
+                break;
+            case 'Admin':
                 if (thirdPart !== 'admin') {
                     window.location.href = '/frontend/views/admin/adminDashboard.html';
                 }

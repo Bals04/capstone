@@ -12,6 +12,9 @@ function redirectToDashboard(userType) {
         case 'Gym admin':
             targetUrl = '/frontend/views/admin/adminDashboard.html';
             break;
+        case 'Admin':
+            targetUrl = '/frontend/views/admin/adminDashboard.html';
+            break;
         default:
             targetUrl = '/frontend/views/Landing Page/index.html';
             break;

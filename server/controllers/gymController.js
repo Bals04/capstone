@@ -1,4 +1,6 @@
-const { getGymInfo, getMealInfo, inputFilter, RegisterGym, AddGymDocuments, AddGymLogo, getPendingGyms,ApproveRequest, getPaymentPendingGyms} = require('../models/database');
+const { getGymInfo, getMealInfo, inputFilter, RegisterGym,
+        AddGymDocuments, AddGymLogo, getPendingGyms,ApproveRequest,
+         getPaymentPendingGyms, getPendingGymsByID} = require('../models/database');
 
 module.exports = {
     GetGyms: async (req, res) => {
@@ -19,10 +21,21 @@ module.exports = {
             res.status(500).send("Internal Server Error");
         }
     },  
+    getPendingGymsByID: async (req, res) => {
+        try {
+            const {admin_id} = req.query;
+            const data = await getPendingGymsByID(admin_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching pending gyms:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },  
 
     getPaymentPendingGyms: async (req, res) => {
         try {
-            const users = await getPaymentPendingGyms();
+            const {admin_id} = req.query;
+            const users = await getPaymentPendingGyms(admin_id);
             res.json(users);
         } catch (error) {
             console.error("Error fetching payment pending gyms:", error);
@@ -67,7 +80,7 @@ module.exports = {
             const data = await RegisterGym(admin_id, gymname, latitude, longtitude, daily_rate, monthly_rate, contact_no, street_address, status);
             res.json(data);
         } catch (error) {
-            console.error("Error fetching users:", error);
+            console.error("Error fetching users:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },

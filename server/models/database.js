@@ -29,7 +29,7 @@ async function getGymInfo() {
             gym_ratings r ON g.gym_id = r.gym_id
         LEFT JOIN 
             gym_images i ON g.gym_id = i.gym_id
-        WHERE g.status = 'Approved'
+        WHERE g.status = 'Verified'
         GROUP BY 
             g.gym_id, 
             g.gym_name, 
@@ -227,7 +227,7 @@ async function getPendingGyms() {
     return rows
 }
 
-async function getPaymentPendingGyms() {
+async function getPendingGymsByID(admin_id) {
     const [rows] = await pool.query(
         `SELECT 
             g.gym_id, 
@@ -246,14 +246,52 @@ async function getPaymentPendingGyms() {
             gym_documents d ON g.gym_id = d.gym_id
         LEFT JOIN
         	gym_admin a ON g.admin_id = a.admin_id
-        WHERE g.status = 'Approved - Payment Pending'
+        WHERE g.status = 'Pending' AND
+        a.admin_id = ?
         GROUP BY 
             g.gym_id, 
             g.gym_name, 
             g.contact_no, 
             g.street_address,
             d.document_path,
-            i.img_path`
+            i.img_path;`,
+        [admin_id]
+    )
+    return rows
+}
+
+async function getPaymentPendingGyms(admin_id) {
+    const [rows] = await pool.query(
+        `SELECT 
+            g.gym_id,
+            a.admin_id,
+            g.gym_name, 
+            CONCAT(a.lastname, ', ', a.firstname) Owner_name,
+            g.contact_no,
+            a.email,
+            g.street_address, 
+            i.img_path,
+            d.document_path
+        FROM 
+            gyms g 
+        LEFT JOIN 
+            gym_images i ON g.gym_id = i.gym_id
+        LEFT JOIN 
+            gym_documents d ON g.gym_id = d.gym_id
+        LEFT JOIN
+        	gym_admin a ON g.admin_id = a.admin_id
+        WHERE g.status = 'Approved - Payment Pending'
+        AND
+        a.admin_id = ?
+        GROUP BY 
+        	a.admin_id,
+            g.gym_id, 
+            g.gym_name, 
+            g.contact_no, 
+            g.street_address,
+            d.document_path,
+            i.img_path`,
+        [admin_id]
     )
     return rows
 }
@@ -284,8 +322,29 @@ async function GetMemberInfo(account_id) {
 
     return result
 }
+async function GetGymAdminInfo(account_id) {
+    const [result] = await pool.query(`
+    SELECT * FROM gym_admin WHERE account_id = ?
+    `, [account_id])
+
+    return result
+}
+
+async function addPaymentRecord(admin_id, gym_id, subscription_id, amount, payment_status) {
+    const [result] = await pool.query(`
+        INSERT INTO payments_table (admin_id, gym_id, subscription_id, amount, payment_status) 
+        VALUES (?,?,?,?,?)
+        `, [admin_id, gym_id, subscription_id, amount, payment_status]);
+
+    console.log("DB Query Result:", result); // Log result here
+    return result; // Return only the result object
+}
+
 
 module.exports = {
+    addPaymentRecord,
+    getPendingGymsByID,
+    GetGymAdminInfo,
     getPaymentPendingGyms,
     GetMemberInfo,
     ApproveRequest,
