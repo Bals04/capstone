@@ -12,7 +12,6 @@ const createTokens = (user) => {
     SECRET_KEY,
     { expiresIn: '1h' }  // You can set an expiration time for the token
   );
-  console.log('Generated Access Token:', accessToken);
   return accessToken;
 };
 

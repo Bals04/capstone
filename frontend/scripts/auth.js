@@ -1,6 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('accessToken');
-    const userType = localStorage.getItem('userType');
+    // Helper function to retrieve cookies
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    // Retrieve token and userType from cookies
+    const token = getCookie('accessToken');
+    const userType = getCookie('userType');
+
     const isLoggedIn = !!token;
 
     const currentPath = window.location.pathname; // Gets the current path
@@ -18,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to decode token', error);
         }
     } else {
-        console.log('No token found in localStorage.');
+        console.log('No token found in cookies.');
     }
+
     // Redirect logged-in users away from the login page
     if (currentPath === '/frontend/views/features/login.html' && isLoggedIn) {
         if (userType === 'Member') {
@@ -27,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (userType === 'Trainer') {
             window.location.href = '/frontend/views/trainer/index.html';
         } else if (userType === 'Admin') {
-            window.location.href = '/frontend/views/admin/gymAdminDashboard.html';
+            window.location.href = '/frontend/views/admin/adminDashboard.html';
         } else if (userType === 'Gym admin') {
-            window.location.href = '/frontend/views/admin/AdminDashboard.html';
+            window.location.href = '/frontend/views/gym_admin/gymAdminDashboard.html';
         } else {
             window.location.href = '/frontend/views/Landing Page/index.html'; // Fallback
         }

@@ -185,7 +185,19 @@
             document.getElementById('proceedButton').classList.add('enabled');
         }
 
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
 
+        // Retrieve token and userType from cookies
+        const token = getCookie('accessToken');
+        const userType = getCookie('userType');
 
         async function proceed() {
             if (selectedOption === '') return;
@@ -204,7 +216,7 @@
             try {
                 const response = await axios.post('http://localhost:3000/pay', {
                     admin_id: adminId,
-                    gym_id: localStorage.getItem('gymId'),
+                    gym_id: getCookie('gymId'),
                     subscriptionID: id,
                     price: price,
                     subscriptionName: name,

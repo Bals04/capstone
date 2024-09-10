@@ -2,6 +2,7 @@
 
 function redirectToDashboard(userType) {
     let targetUrl;
+    alert("utype " + userType)
     switch (userType) {
         case 'Member':
             targetUrl = '/frontend/views/member/memberDashboard.html';
@@ -10,7 +11,7 @@ function redirectToDashboard(userType) {
             targetUrl = '/frontend/views/trainer/index.html';
             break;
         case 'Gym admin':
-            targetUrl = '/frontend/views/admin/adminDashboard.html';
+            targetUrl = '/frontend/views/gym_admin/gymAdminDashboard.html';
             break;
         case 'Admin':
             targetUrl = '/frontend/views/admin/adminDashboard.html';

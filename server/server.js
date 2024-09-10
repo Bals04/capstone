@@ -13,7 +13,7 @@ const AuthRoutes = require('./routes/AuthRoutes'); // Import upload routes
 const cookieParser = require("cookie-parser")
 const paypal = require('./services/paypal')
 const NavRoutes = require('./routes/navRoutes'); // Import upload routes
-const paymentRoute = require('./routes/paymentRoute'); 
+const paymentRoute = require('./routes/paymentRoute');
 
 const app = express();
 dotenv.config();

@@ -9,6 +9,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="../../dist/tailwind.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <style>
@@ -221,12 +222,20 @@
         }
         function handlePaymentClick(gymId) {
             console.log('Gym ID passed to function:', gymId);
-            localStorage.setItem('gymId', gymId);
+            setCookie('gymId', gymId, 1); // Expires in 1 day
             console.log('Selected Gym ID:', gymId);
-
-
             window.location.href = `../../views/gym_admin/subscription.html`;
 
+        }
+        // Helper function to set cookies
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
 

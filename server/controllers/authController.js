@@ -77,27 +77,27 @@ module.exports = {
             }
 
             const dbPassword = user.password;
-            bcrypt.compare(password, dbPassword)
-                .then((match) => {
-                    if (!match) {
-                        console.log("Passwords do not match");
-                        return res.status(400).json({ error: "Wrong username and password combination" });
-                    } else {
-                        const accessToken = createTokens(user);
-                        // Send the token in the response body
-                        res.json({
-                            message: `Logged in! User ID: ${user.account_id} Username: ${user.username} User type: ${user.user_type}`,
-                            accessToken: accessToken,
-                            usertype: user.user_type
-                        });
-                    }
-                })
-                .catch(err => {
-                    res.status(500).json({ error: err.message });
-                });
+            const match = await bcrypt.compare(password, dbPassword);
+
+            if (!match) {
+                return res.status(400).json({ error: "Wrong username and password combination" });
+            }
+
+            const accessToken = createTokens(user);
+
+            // Send a success response
+            res.json({
+                message: `Logged in! User ID: ${user.account_id} Username: ${user.username} User type: ${user.user_type}`,
+                accessToken: accessToken,
+                userType: user.user_type
+            });
         } catch (error) {
             console.error("Error:", error.message);
             res.status(500).send("Internal Server Error", error.message);
         }
-    }
+    },
+
+    
+    
+
 }
