@@ -1,6 +1,6 @@
 const { getGymInfo, getMealInfo, inputFilter, RegisterGym,
     AddGymDocuments, AddGymLogo, getPendingGyms, ApproveRequest,
-    getPaymentPendingGyms, getPendingGymsByID, verifyGymInDb } = require('../models/database');
+    getPaymentPendingGyms, getPendingGymsByID, verifyGymInDb, getVerifiedGyms } = require('../models/database');
 
 module.exports = {
     GetGyms: async (req, res) => {
@@ -39,6 +39,17 @@ module.exports = {
             res.json(users);
         } catch (error) {
             console.error("Error fetching payment pending gyms:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    getVerifiedGyms: async (req, res) => {
+        try {
+            const { admin_id } = req.query;
+            const data = await getVerifiedGyms(admin_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching verified gyms:", error);
             res.status(500).send("Internal Server Error");
         }
     },

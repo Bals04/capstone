@@ -296,6 +296,42 @@ async function getPaymentPendingGyms(admin_id) {
     return rows
 }
 
+async function getVerifiedGyms(admin_id) {
+    const [rows] = await pool.query(
+        `SELECT 
+            g.gym_id,
+            a.admin_id,
+            g.gym_name, 
+            CONCAT(a.lastname, ', ', a.firstname) Owner_name,
+            g.contact_no,
+            a.email,
+            g.street_address, 
+            i.img_path,
+            d.document_path
+        FROM 
+            gyms g 
+        LEFT JOIN 
+            gym_images i ON g.gym_id = i.gym_id
+        LEFT JOIN 
+            gym_documents d ON g.gym_id = d.gym_id
+        LEFT JOIN
+        	gym_admin a ON g.admin_id = a.admin_id
+        WHERE g.status = 'Verified'
+        AND
+        a.admin_id = ?
+        GROUP BY 
+        	a.admin_id,
+            g.gym_id, 
+            g.gym_name, 
+            g.contact_no, 
+            g.street_address,
+            d.document_path,
+            i.img_path`,
+        [admin_id]
+    )
+    return rows
+}
+
 async function ApproveRequest(gym_id) {
     const result = await pool.query(`
         UPDATE gyms
@@ -350,8 +386,36 @@ async function addPaymentRecord(admin_id, gym_id, subscription_id, amount, payme
     return result; // Return only the result object
 }
 
+async function addSubscriptionRecord(admin_id, gym_id, subscription_id, days) {
+    console.log("Received days value:", days); // Log the raw days value
+
+    // Convert days to a number and check validity
+    const daysNumber = Number(days);
+    console.log("Converted days value:", daysNumber); // Log the converted days value
+    if (isNaN(daysNumber) || daysNumber <= 0) {
+        throw new Error('Invalid days value');
+    }
+
+    // Calculate the end date
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + daysNumber);
+
+    // Format endDate to 'YYYY-MM-DD'
+    const formattedEndDate = endDate.toISOString().split('T')[0];
+    
+    const [result] = await pool.query(`
+        INSERT INTO admin_subscription (admin_id, gym_id, subscription_id, start_date, end_date)
+        VALUES (?, ?, ?, NOW(), ?)
+        `, [admin_id, gym_id, subscription_id, formattedEndDate]);
+
+    return result;
+}
+
 
 module.exports = {
+    addSubscriptionRecord,
+    getVerifiedGyms,
     verifyGymInDb,
     addPaymentRecord,
     getPendingGymsByID,

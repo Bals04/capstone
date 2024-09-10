@@ -203,12 +203,12 @@
             if (selectedOption === '') return;
 
             const subscriptions = {
-                monthly: { name: 'Monthly Gym Spotlight', price: 500, id: 1 },
-                quarterly: { name: 'Quarterly Gym Boost', price: 1200, id: 2 },
-                yearly: { name: 'Elite Yearly Presence', price: 3500, id: 3 }
+                monthly: { name: 'Monthly Gym Spotlight', price: 500, id: 1, days: 30 },
+                quarterly: { name: 'Quarterly Gym Boost', price: 1200, id: 2, days: 90 },
+                yearly: { name: 'Elite Yearly Presence', price: 3500, id: 3, days: 365 }
             };
 
-            const { name, price, id } = subscriptions[selectedOption];
+            const { name, price, id, days } = subscriptions[selectedOption];
 
             const adminId = getCookie('admin_id');
 
@@ -220,6 +220,7 @@
                     subscriptionID: id,
                     price: price,
                     subscriptionName: name,
+                    days: days
                 });
 
                 const result = response.data;

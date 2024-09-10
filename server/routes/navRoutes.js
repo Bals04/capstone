@@ -2,7 +2,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const { handleAddPaymentRecord } = require('../controllers/orderController');
+const { handleAddPaymentRecord, addSubscriptionRecord } = require('../controllers/orderController');
 const { VerifyGym } = require('../controllers/gymController');
 const paypal = require('../services/paypal');
 
@@ -17,6 +17,7 @@ router.get('/complete-order', async (req, res) => {
         const gym_id = req.query.gym_id;
         const subscription_id = req.query.subscriptionID;
         const price = req.query.price;
+        const day = req.query.day;
 
         // Capture the payment using the token from PayPal
         const captureResponse = await paypal.capturePayment(token);
@@ -43,6 +44,7 @@ router.get('/complete-order', async (req, res) => {
             if (result.success) {
                 // Call VerifyGym if payment record was added successfully
                 await VerifyGym(gym_id); // Directly pass gym_id here
+                await addSubscriptionRecord(admin_id, gym_id, subscription_id, day)
 
                 // Redirect to the success page
                 return res.redirect('/gym_admin/success');

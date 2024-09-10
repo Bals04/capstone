@@ -14,7 +14,7 @@ async function generateAccessToken() {
     return response.data.access_token;
 }
 
-exports.createOrder = async (admin_id, gym_id, subscriptionID, price, subscriptionName) => {
+exports.createOrder = async (admin_id, gym_id, subscriptionID, price, subscriptionName, days) => {
     const access_token = await generateAccessToken();
 
     const response = await axios({
@@ -52,7 +52,7 @@ exports.createOrder = async (admin_id, gym_id, subscriptionID, price, subscripti
                 }
             ],
             application_context: {
-                return_url: `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&subscriptionID=${subscriptionID}&price=${price}`,
+                return_url: `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&subscriptionID=${subscriptionID}&price=${price}&day=${days}`,
                 cancel_url: process.env.BASE_URL + '/cancel-order',
                 shipping_preference: 'NO_SHIPPING',
                 user_action: 'PAY_NOW',
