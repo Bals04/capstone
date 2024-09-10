@@ -9,6 +9,11 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 <style>
     .page_title {
@@ -104,12 +109,37 @@
             </ul>
         </div>
 
-        <div class="title_div">
-            <h1 class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+        <div class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639] ">
+            <h1 class="">
                 <span class="page_title font-normal">
                     Registered Trainer
                 </span>
             </h1>
+
+            <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5">
+                <!--profile-->
+                <div class="flex items-center justify-center mr-24 mt-0">
+                    <button>
+                        <img class="w-10 h-[35px] rounded-full" src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
+                </div>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
+                </div>
+            </div>
         </div>
     
         <div class="bg-[#323538] border border-50 shadow-black shadow-md rounded-lg p-6 ml-32 mr-10">
