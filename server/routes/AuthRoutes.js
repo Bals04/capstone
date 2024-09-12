@@ -9,11 +9,23 @@ router.post("/Register", AuthController.Register);
 router.post("/RegisterAdmin", AuthController.createGymAdmin);
 router.post("/RegisterMember", AuthController.createMembers);
 router.post("/Login", AuthController.Login);
-router.get("/validate-token", validateToken, (req, res) => {
-    // If validateToken middleware succeeds, the request reaches here
-    res.status(200).json({ valid: true });
+// Express route to get session data
+router.get('/session-data', (req, res) => {
+    console.log('Session data:', req.session.data);
+    if (req.session.authorized) {
+        res.json({
+            userType: req.session.userType,
+            authorized: req.session.authorized,
+            accessToken: req.session.accessToken
+        });
+    } else {
+        res.json({
+            userType: null,
+            authorized: false,
+            accessToken: null
+        });
+    }
 });
-
 
 
 
