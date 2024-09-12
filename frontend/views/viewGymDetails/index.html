@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<style>
+    html{
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+    li{
+        text-decoration: none;
+        color: white;
+        letter-spacing: 0.5px;
+    }
+    li:after {
+        content: "";
+        position: absolute;
+        background-color: white;
+        height: 3px;
+        width: 0;
+        left: 0;
+        bottom: -10px;
+        transition: 0.3s;
+    }
+    li:hover{
+        color: white;
+    }
+    li:hover:after{
+        width: 100%;
+    }
+    .box{
+        width: 250px;
+        height: 280px;
+        margin: 0px 5px;
+        transition: 1s;
+        border-radius: 10px;
+    }
+    .box:hover{
+        transform: scale(1.1);
+        z-index: 2;
+        box-shadow: 1px 1px 20px 6px #EC7E4A;
+    }
+</style>
+<body class="bg-customGray font-customFont">
+    <div class="">
+        <div class="flex justify-between px-36 w-auto h-auto min-h-screen text-white p-10">
+            <div class="flex flex-col">
+                <!-- gym logo -->
+                <div>
+                    <img class=" rounded-lg" src="../../views/img/elavation_sampleimage.png" alt="gym logo">
+                </div>
+                <div class="flex flex-col gap-10 mt-10 bg-[#1E1E1E] py-12 pl-10 pr-36  rounded-lg">
+                    <span>Rating: </span>
+                    <span>Contact: </span>
+                    <span>Session: </span>
+                    <span>Monthly: </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="bg-[#1E1E1E] py-28 pl-10 pr-36 rounded-lg">
+                    <!-- gym name and address -->
+                    <span class="text-4xl font-bold">Elevation Fitness Gym</span>
+                    <br>
+                    <br>
+                    <span>[Location Street, Davao City, Philippines]</span>
+                </div>
+
+                <div class="mt-10 bg-[#1E1E1E] rounded-lg">
+                    <h2 class="mt-10 ml-5 font-semibold">Photos</h2>
+                    <div class="flex justify-around  py-14  ">
+                        <img class="max-h-32" src="../../views/img/gymImage_sample.png" alt="">
+                        <img class="max-h-32" src="../../views/img/gymImage_sample.png" alt="">
+                        <img class="max-h-32" src="../../views/img/gymImage_sample.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-lg bg-[#1E1E1E] py-1 mx-28 text-white mb-10 flex flex-col">
+        <div class="p-10 border-gray-500 border-b-2 text-center">
+            <span class="font-bold tracking-widest text-xl">Trainers</span>
+        </div>
+
+        <div class="flex justify-between items-center p-5 border-gray-400 border-b-2 mx-5">
+            <div class="flex items-center">
+                <!-- trainer profile img-->
+                <div class="pl-10 pr-10">
+                    <img class="w-16 rounded-full" src="../../views/img/heinzprof.jpg" alt="trainer profile">
+                </div>
+    
+                <!-- trainer name -->
+                <div>
+                    <span>Heinz Kyle Hora</span>
+                </div>
+
+            </div>
+            <div class="mr-28">
+                <span>32</span>
+                <span> years training experience</span>
+            </div>
+        </div>
+        <div class="flex justify-between items-center p-5 border-gray-400 border-b-2 mx-5">
+            <div class="flex items-center">
+                <!-- trainer profile img-->
+                <div class="pl-10 pr-10">
+                    <img class="w-16 rounded-full" src="../../views/img/heinzprof.jpg" alt="trainer profile">
+                </div>
+    
+                <!-- trainer name -->
+                <div>
+                    <span>Heinz Kyle Hora</span>
+                </div>
+
+            </div>
+            <div class="mr-28">
+                <span>32</span>
+                <span> years training experience</span>
+            </div>
+        </div>
+</body>
