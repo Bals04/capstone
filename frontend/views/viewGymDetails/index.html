@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../../dist/tailwind.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <style>
     html{
@@ -36,93 +37,157 @@
         width: 100%;
     }
     .box{
-        width: 250px;
-        height: 280px;
+        width: auto;
+        height: auto;
         margin: 0px 5px;
         transition: 1s;
         border-radius: 10px;
     }
     .box:hover{
-        transform: scale(1.1);
+        transform: scale(2.0);
         z-index: 2;
-        box-shadow: 1px 1px 20px 6px #EC7E4A;
+        box-shadow: 1px 1px 20px 6px gray;
+    }
+    .checked {
+        color: orange;
     }
 </style>
-<body class="bg-customGray font-customFont">
+<body class="bg-[#373D41] font-customFont">
+        <header class="h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg">
+            <div class="relative">
+                <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+            </div>
+            <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
+                <b class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+            </div>
+            <div class="text-white pt-5">
+                <ul class="ml-[21% pl-">
+                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section1" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Member</a></li>
+                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section2" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Member</a></li>
+                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section3" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Trainer</a></li>
+                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section4" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">About</a></li>
+                </ul>
+            </div>
+            <div class="pl-5 pr-10 text-50 pt-5 ">
+                <button class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
+                    Register Now
+                </button>
+            </div>
+        </header>
+
     <div class="">
-        <div class="flex justify-between px-36 w-auto h-auto min-h-screen text-white p-10">
-            <div class="flex flex-col">
+        <div class="flex flex-col justify-between px-20 w-auto text-white">
+            <div class="flex flex-row items-center justify-center">
                 <!-- gym logo -->
                 <div>
-                    <img class=" rounded-lg" src="../../views/img/elavation_sampleimage.png" alt="gym logo">
+                    <img class=" rounded-full max-h-40 border border-gray-400" src="../../views/img/elavation_sampleimage.png" alt="gym logo">
                 </div>
-                <div class="flex flex-col gap-10 mt-10 bg-[#1E1E1E] py-12 pl-10 pr-36  rounded-lg">
-                    <span>Rating: </span>
-                    <span>Contact: </span>
-                    <span>Session: </span>
-                    <span>Monthly: </span>
-                </div>
-            </div>
-
-            <div class="flex flex-col">
-                <div class="bg-[#1E1E1E] py-28 pl-10 pr-36 rounded-lg">
+                <div class=" my-20 pl-10 pr-10 border-r-2 border-r-white h-48 flex flex-col justify-center items-start">
                     <!-- gym name and address -->
                     <span class="text-4xl font-bold">Elevation Fitness Gym</span>
                     <br>
-                    <br>
                     <span>[Location Street, Davao City, Philippines]</span>
                 </div>
+                <div class="flex gap-2 pl-10">
+                    <div class="flex flex-col gap-2 pr-10">
+                        <div>Rating: </div>
+                        <div>Contact: </div>
+                        <div>Session: </div>
+                        <div>Monthly: </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </span>
+                        <span>+63 123 4567 798</span>
+                        <span>₱ 100</span>
+                        <span>₱ 2000</span>
+                    </div>
+                </div>
+            </div>
 
-                <div class="mt-10 bg-[#1E1E1E] rounded-lg">
-                    <h2 class="mt-10 ml-5 font-semibold">Photos</h2>
-                    <div class="flex justify-around  py-14  ">
-                        <img class="max-h-32" src="../../views/img/gymImage_sample.png" alt="">
-                        <img class="max-h-32" src="../../views/img/gymImage_sample.png" alt="">
-                        <img class="max-h-32" src="../../views/img/gymImage_sample.png" alt="">
+            <div class="flex">
+                <div class="rounded-lg bg-[#1E1E1E] py-1 mx-auto text-white mb-10 flex flex-col mt-5">
+                    <div class="p-10 px-80 border-gray-500 border-b-2 text-center">
+                        <span class="font-bold tracking-widest text-2xl">Trainers</span>
+                    </div>
+            
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-center text-white">
+                            <thead class="text-xs text-white uppercase bg-transparent">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Profile
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-transparent">
+                                    <th scope="row" class="px-6 py-4 flex justify-center items-center">
+                                        <img class="w-16 rounded-full border border-white" src="../../views/img/heinzprof.jpg" alt="trainer_profile">
+                                    </th>
+                                    <td class="px-6 py-4 text-lg">
+                                        Heinz Igop
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">View Profile</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr class="bg-transparent">
+                                    <th scope="row" class="px-6 py-4 flex justify-center items-center">
+                                        <img class="w-16 rounded-full border border-white" src="../../views/img/heinzprof.jpg" alt="trainer_profile">
+                                    </th>
+                                    <td class="px-6 py-4 text-lg">
+                                        Heinz Igop
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">View Profile</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr class="bg-transparent">
+                                    <th scope="row" class="px-6 py-4 flex justify-center items-center">
+                                        <img class="w-16 rounded-full border border-white" src="../../views/img/heinzprof.jpg" alt="trainer_profile">
+                                    </th>
+                                    <td class="px-6 py-4 text-lg">
+                                        Heinz Igop
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">View Profile</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="rounded-lg bg-[#1E1E1E] py-1 mx-28 text-white mb-10 flex flex-col">
-        <div class="p-10 border-gray-500 border-b-2 text-center">
-            <span class="font-bold tracking-widest text-xl">Trainers</span>
-        </div>
-
-        <div class="flex justify-between items-center p-5 border-gray-400 border-b-2 mx-5">
-            <div class="flex items-center">
-                <!-- trainer profile img-->
-                <div class="pl-10 pr-10">
-                    <img class="w-16 rounded-full" src="../../views/img/heinzprof.jpg" alt="trainer profile">
-                </div>
-    
-                <!-- trainer name -->
-                <div>
-                    <span>Heinz Kyle Hora</span>
-                </div>
-
+    <div class="mt-10 bg-[#1E1E1E] rounded-lg text-white mx-10 mb-10 text-center">
+        <h2 class="p-10 font-semibold text-2xl">Photos</h2>
+        <div class="flex justify-around  py-5 ">
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
             </div>
-            <div class="mr-28">
-                <span>32</span>
-                <span> years training experience</span>
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
+            </div>
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
             </div>
         </div>
-        <div class="flex justify-between items-center p-5 border-gray-400 border-b-2 mx-5">
-            <div class="flex items-center">
-                <!-- trainer profile img-->
-                <div class="pl-10 pr-10">
-                    <img class="w-16 rounded-full" src="../../views/img/heinzprof.jpg" alt="trainer profile">
-                </div>
-    
-                <!-- trainer name -->
-                <div>
-                    <span>Heinz Kyle Hora</span>
-                </div>
-
-            </div>
-            <div class="mr-28">
-                <span>32</span>
-                <span> years training experience</span>
-            </div>
-        </div>
+    </div>
 </body>

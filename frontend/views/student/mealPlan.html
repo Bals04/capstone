@@ -9,6 +9,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
@@ -33,7 +34,7 @@
 
 </style>
 <body class="min-h-screen bg-[#343639] font-customFont ">
-    <div id="content_container" class="">
+    <div id="content_container" class="flex flex-col">
         <!-- <aside class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col overflow-y-hidden p-[25px_20px] transition-all duration-400 ease hover:w-[260px] bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
             <div class="sidebar-header flex items-center">
             <img class="w-[42px] rounded-full" src="../img/Flexperience logo.png" alt="logo" />
@@ -73,38 +74,45 @@
             <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
                 <!--Home-->
                 <li>
-                    <a href="gymAdminDashboard.html" class="btn active flex items-center justify-center text-2xl">
-                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color:#ffffff"></i> 
+                    <a href="studentDashboard.html" class="btn active flex items-center justify-center text-2xl">
+                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color: white;"></i> 
                     </a>
                     <span class="tooltip-home absolute text-lg">Home</span> 
                 </li>
-                <!--Pending Gym Registration-->
+                <!--Maps-->
                 <li class="mt-6">
-                    <a href="pendingGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-dots-horizontal-rounded' aria-hidden="true" style="color:#ffffff"  ></i>
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-map" aria-hidden="true" style="color: white;"></i>
                     </a>
-                    <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span> 
+                    <span class="tooltip-maps absolute text-lg">Maps</span> 
                 </li>
-                <!--Registered Gym-->
+                <!--WorkoutPlan-->
                 <li class="mt-6">
-                    <a href="registeredGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-list-check' style="color:white"></i>
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-dumbbell" aria-hidden="true" style="color: white;"></i>
                     </a>
-                    <span class="tooltip-workout absolute text-lg">Registered Gym</span> 
+                    <span class="tooltip-workout absolute text-lg">Workout</span> 
                 </li>
-                <!--Trainers-->
+                <!--MealPlan-->
                 <li class="mt-6">
-                    <a href="registeredTrainer.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bxs-user' style="color: white;"></i>
+                    <a href="mealPlan.html" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-bowl-rice" aria-hidden="true" style="color: white;"></i>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Registered Trainers</span> 
+                    <span class="tooltip-meal absolute text-lg">Meal</span> 
                 </li>
                 <!--Chat-->
                 <li class="mt-6">
                     <a href="#" class="btn flex items-center justify-center text-2xl">
-                        <i class="bx bx-message-square-dots" aria-hidden="true" style="color:#ffffff"></i>
+                        <i class="bx bx-message-square-dots" aria-hidden="true" style="color: white;"></i>
                     </a>
                     <span class="tooltip-chat absolute text-lg">Chat</span> 
+                </li>
+                <!--Trainers-->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-user-pin" aria-hidden="true" style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-trainers absolute text-lg">Trainers</span> 
                 </li>
             </ul>
         </div>
@@ -152,7 +160,7 @@
                 </div>
             </div>
         </div>
-        <div class=" bg-[#1E1E1E] text-white pt-5 flex flex-col items-center pb-12">
+        <div class=" bg-[#1E1E1E] text-white pt-5 flex flex-col items-center pb-12 invisible">
             <div>
                 <div id="date-time-container" class="flex flex-col items-center p-4 font-semibold rounded-md shadow-md">
                     <div id="current-date" class="text-lg font-semibold"></div>
@@ -192,6 +200,7 @@
 </body>
 </html>
 <script src="../../scripts/registration.js"></script>
+<script src="../../scripts/student.js" ></script>
 <script>
      // Function to update date and time
   function updateDateTime() {
