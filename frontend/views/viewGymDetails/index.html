@@ -51,8 +51,11 @@
     .checked {
         color: orange;
     }
+    .rating{
+        background-color: #2b3032;
+    }
 </style>
-<body class="bg-[#373D41] font-customFont">
+<body class=" font-customFont" style="background: linear-gradient(90deg, rgba(55,61,65,1) 55%, rgba(141,157,167,1) 100%);">
         <header class="h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg">
             <div class="relative">
                 <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
@@ -77,25 +80,28 @@
 
     <div class="">
         <div class="flex flex-col justify-between px-20 w-auto text-white">
-            <div class="flex flex-row items-center justify-center">
+            <div class="flex flex-row items-center justify-start">
                 <!-- gym logo -->
                 <div>
-                    <img class=" rounded-full max-h-40 border border-gray-400" src="../../views/img/elavation_sampleimage.png" alt="gym logo">
+                    <img class=" w-32 h-32 rounded-full object-cover border border-gray-400" src="../../views/img/elavation_sampleimage.png" alt="gym logo">
                 </div>
-                <div class=" my-20 pl-10 pr-10 border-r-2 border-r-white h-48 flex flex-col justify-center items-start">
+                <div class=" my-20 pl-10 pr-10 flex flex-col justify-center items-start">
                     <!-- gym name and address -->
                     <span class="text-4xl font-bold">Elevation Fitness Gym</span>
                     <br>
                     <span>[Location Street, Davao City, Philippines]</span>
                 </div>
-                <div class="flex gap-2 pl-10">
+            </div>
+
+            <div class="flex justify-between">
+                <div class="rating my-28 pl-10 flex items-center rounded-lg">
                     <div class="flex flex-col gap-2 pr-10">
                         <div>Rating: </div>
                         <div>Contact: </div>
                         <div>Session: </div>
                         <div>Monthly: </div>
                     </div>
-                    <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-2 pr-20">
                         <span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
@@ -108,11 +114,9 @@
                         <span>₱ 2000</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="flex">
-                <div class="rounded-lg bg-[#1E1E1E] py-1 mx-auto text-white mb-10 flex flex-col mt-5">
-                    <div class="p-10 px-80 border-gray-500 border-b-2 text-center">
+                
+                <div class="rounded-lg py-1 text-white mb-10 flex flex-col mt-5 w-7/12 shadow-lg" style="background: linear-gradient(0deg, rgba(55,61,65,1) 0%, rgba(141,157,167,1) 100%);">
+                    <div class="py-10 pl-10 border-gray-500 border-b-2 text-left shadow-lg drop-shadow-lg shadow-gray-600">
                         <span class="font-bold tracking-widest text-2xl">Trainers</span>
                     </div>
             
@@ -176,9 +180,12 @@
             </div>
         </div>
     </div>
-    <div class="mt-10 bg-[#1E1E1E] rounded-lg text-white mx-10 mb-10 text-center">
+    <div class="mt-10 bg-transparent rounded-lg text-white mx-10 mb-10 text-left">
         <h2 class="p-10 font-semibold text-2xl">Photos</h2>
-        <div class="flex justify-around  py-5 ">
+        <div class="flex justify-around py-5 ">
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
+            </div>
             <div class="box w-auto">
                 <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
             </div>
