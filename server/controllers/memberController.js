@@ -1,4 +1,4 @@
-const { getWorkoutOftheWeek, getWorkoutoftheDay, GetMemberInfo} = require('../models/database');
+const { getWorkoutOftheWeek, getWorkoutoftheDay, GetMemberInfo, retrieveTrainerchatLog} = require('../models/database');
 
 module.exports = {
     GetTodaysMeal: async (req, res) => {
@@ -29,6 +29,18 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching members:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    retrieveTrainerchatLog: async (req, res) => {
+        try {
+            const { member_id } = req.query;
+            console.log("received data: ", member_id)
+            const data = await retrieveTrainerchatLog(member_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching members chatlog:", error.message);
             res.status(500).send("Internal Server Error");
         }
     }

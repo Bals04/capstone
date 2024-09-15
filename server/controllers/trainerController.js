@@ -1,7 +1,7 @@
 const { getMembers, getExercises,
     AddCustomWorkout, getStudCount,
     getTrainerCount, getAllMembers,
-    getTemplates, AddTemplate, GetTrainerInfo } = require('../models/database');
+    getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog } = require('../models/database');
 const { getAllTrainers, getGymTrainers } = require('../models/trainers');
 
 module.exports = {
@@ -11,6 +11,17 @@ module.exports = {
             const { account_id } = req.query;
             console.log(account_id)
             const data = await GetTrainerInfo(account_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching members:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    retrieveMemberChatLog: async (req, res) => {
+        try {
+            const { trainer_id } = req.query;
+            console.log("received data: ", trainer_id)
+            const data = await retrieveMemberChatLog(trainer_id);
             res.json(data);
         } catch (error) {
             console.error("Error fetching members:", error.message);

@@ -430,8 +430,32 @@ async function addSubscriptionRecord(admin_id, gym_id, subscription_id, days) {
     return result;
 }
 
+async function retrieveMemberChatLog(trainer_id) {
+    const [result] = await pool.query(`
+        SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS member_name, c.member_id
+        FROM conversation_tbl c
+        INNER JOIN members m ON c.member_id = m.member_id
+        WHERE trainer_id = ?
+    `, [trainer_id])
+
+    return result
+}
+
+async function retrieveTrainerchatLog(member_id) {
+    const [result] = await pool.query(`
+        SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS trainer_name, c.trainer_id
+        FROM conversation_tbl c
+        INNER JOIN gym_trainer m ON c.trainer_id = m.trainer_id
+        WHERE member_id = ?
+    `, [member_id])
+
+    return result
+}
+
 
 module.exports = {
+    retrieveTrainerchatLog,
+    retrieveMemberChatLog,
     GetGymData,
     GetTrainerInfo,
     addSubscriptionRecord,

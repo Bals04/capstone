@@ -37,8 +37,6 @@ const updateLastMessageTimestamp = async ({ conversation_id }) => {
 
 // Get chat history between a member and trainer
 const getChatHistory = async ( member_id, trainer_id ) => {
-    console.log('Parameters received:', member_id, trainer_id); // Debug log
-
     const [rows] = await pool.query(
         `SELECT m.message, m.sent_at, 
                 CASE 
@@ -52,7 +50,7 @@ const getChatHistory = async ( member_id, trainer_id ) => {
         [member_id, member_id, trainer_id]
     );
 
-    console.log('Query result:', rows); // Debug log
+    // console.log('Query result:', rows); // Debug log
 
     return rows;
 };

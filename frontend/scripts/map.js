@@ -434,10 +434,10 @@ function showNearby(distances) {
         <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
     </div>
     <div class="flex items-center justify-between my-auto mx-auto p-2">
-        <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGrayBtn text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customGray shadow-lg">
+        <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGray text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-gray-800 shadow-lg">
             <i class="fas fa-eye mr-2"></i> Street view
         </button>
-        <button id="viewGymButton" data-src="${gym.id}" class="bg-customBlue text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customBlue shadow-lg">
+        <button id="viewGymButton" data-src="${gym.id}" class="bg-customGray text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-gray-800 shadow-lg">
             View Gym
         </button>
     </div>
