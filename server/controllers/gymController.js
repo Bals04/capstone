@@ -1,6 +1,6 @@
 const { getGymInfo, getMealInfo, inputFilter, RegisterGym,
     AddGymDocuments, AddGymLogo, getPendingGyms, ApproveRequest,
-    getPaymentPendingGyms, getPendingGymsByID, verifyGymInDb, getVerifiedGyms } = require('../models/database');
+    getPaymentPendingGyms, getPendingGymsByID, verifyGymInDb, getVerifiedGyms, GetGymData } = require('../models/database');
 
 module.exports = {
     GetGyms: async (req, res) => {
@@ -9,6 +9,21 @@ module.exports = {
             res.json(users);
         } catch (error) {
             console.error("Error fetching gyms:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    // Controller function to get gym data by ID
+    GetGymData: async (req, res) => {
+        const gymId = req.query.gymid; // Extract the gym ID from the request URL
+        try {
+            const gymData = await GetGymData(gymId); // Fetch gym data from the database
+            if (gymData) {
+                res.json(gymData); // Send gym data back to the frontend
+            } else {
+                res.status(404).send("Gym not found");
+            }
+        } catch (error) {
+            console.error("Error fetching gym data:", error);
             res.status(500).send("Internal Server Error");
         }
     },

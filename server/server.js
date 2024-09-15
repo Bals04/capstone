@@ -10,49 +10,45 @@ const gymAdminRoutes = require('./routes/gymAdminRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const AuthRoutes = require('./routes/AuthRoutes');
 const NavRoutes = require('./routes/navRoutes');
+const messageRoute = require('./routes/messageRoutes');
+const trainerRoute = require('./routes/trainerroutes');
 const paymentRoute = require('./routes/paymentRoute');
-const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
+const session = require('express-session'); // No need to require MySQLStore anymore
+const http = require('http');
+const { Server } = require ("socket.io")
+
 
 const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const server = http.createServer(app);
 
-app.use(cors({
-  origin: 'http://127.0.0.1:5500', // Replace with your frontend's actual origin
-  credentials: true
-}));
-
-
-const PORT = process.env.PORT || 3000;
-
-// MySQL connection options for the session store
-const sessionStore = new MySQLStore({
-  host: process.env.MYSQL_HOST,
-  port: process.env.DB_PORT || 3306,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  clearExpired: true,
-  checkExpirationInterval: 900000, // 15 minutes
-  expiration: 86400000 // 1 day
+// Check if running in production to set the secure flag for cookies
+const isProduction = process.env.NODE_ENV === 'production';
+const io = new Server(server, {
+  cors: {
+      origin: "http://127.0.0.1:5500",
+      methods: ["GET", "POST"]
+  }
 });
 
-// Express session configuration using the same MySQL database as your gym app
-app.use(session({
-  key: 'session_cookie_name',
-  secret: 'your-secret-key',
-  store: sessionStore,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    sameSite: 'Lax',
-    maxAge: 1000 * 60 * 60 * 24 // 1 day
-  }
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+  
+  socket.on("send_message", (data) => {
+      socket.broadcast.emit("receive_message", data);
+  });
+});
+
+
+// CORS configuration
+app.use(cors({
+  origin: 'http://127.0.0.1:5500', // Replace with your frontend's actual origin
+  credentials: true // Allow sending of cookies from frontend
 }));
 
+const PORT = process.env.PORT || 3000;
 
 // Use the routes in the routes folder
 app.use('/', gymroutes);
@@ -63,6 +59,8 @@ app.use('/', uploadRoutes);
 app.use('/', gymAdminRoutes);
 app.use('/', NavRoutes);
 app.use('/', paymentRoute);
+app.use('/', messageRoute);
+app.use('/', trainerRoute);
 app.use('/auth', AuthRoutes);
 
 // Serve frontend files
@@ -77,6 +75,6 @@ app.get('/', (req, res) => {
   res.send('hello');
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -368,6 +368,24 @@ async function GetMemberInfo(account_id) {
 
     return result
 }
+
+async function GetTrainerInfo(account_id) {
+    const [result] = await pool.query(`
+    SELECT * FROM gym_trainer WHERE user_id = ?
+    `, [account_id])
+
+    return result
+}
+async function GetGymData(gym_id) {
+    const [result] = await pool.query(`
+    SELECT g.gym_name, g.daily_rate, g.monthly_rate, g.contact_no, g.street_address, i.img_path
+    FROM gyms g
+    INNER JOIN gym_images i ON g.gym_id = i.gym_id
+    WHERE g.gym_id = ?
+    `, [gym_id])
+
+    return result
+}
 async function GetGymAdminInfo(account_id) {
     const [result] = await pool.query(`
     SELECT * FROM gym_admin WHERE account_id = ?
@@ -403,7 +421,7 @@ async function addSubscriptionRecord(admin_id, gym_id, subscription_id, days) {
 
     // Format endDate to 'YYYY-MM-DD'
     const formattedEndDate = endDate.toISOString().split('T')[0];
-    
+
     const [result] = await pool.query(`
         INSERT INTO admin_subscription (admin_id, gym_id, subscription_id, start_date, end_date)
         VALUES (?, ?, ?, NOW(), ?)
@@ -414,6 +432,8 @@ async function addSubscriptionRecord(admin_id, gym_id, subscription_id, days) {
 
 
 module.exports = {
+    GetGymData,
+    GetTrainerInfo,
     addSubscriptionRecord,
     getVerifiedGyms,
     verifyGymInDb,

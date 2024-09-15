@@ -377,69 +377,71 @@ function showNearby(distances) {
 
     // Create the content
     const content = `
-        <div class="text-white text-2xl">
-            <button><ion-icon name="close-outline"></ion-icon></button>
-        </div>
-        <div class="w-full h-40 bg-customGrayBtn rounded-t-lg"
-            style="background-image: url('${gym.img}');
-            background-size: cover; background-position: center;">
-        </div>
-        <div class="p2 mt-2">
-            <h3 class="text-lg font-semibold"> ${gym.name}</h3>
-        </div>
-        <div class="flex items-center text-sm mb-1">
-            <div class="rating flex items-center text-sm mt-1.5">
-                <strong>Ratings:</strong>&nbsp<span id="rating-value">${gym.average}</span>
-                <div class="rating-stars flex ml-2" data-rating="${gym.average}">
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                    <i class="rating-star fas fa-star text-gray-400"></i>
-                </div>
+    <div class="text-white text-2xl">
+        <button><ion-icon name="close-outline"></ion-icon></button>
+    </div>
+    <div class="w-full h-40 bg-customGrayBtn rounded-t-lg"
+        style="background-image: url('${gym.img}'); background-size: cover; background-position: center;">
+    </div>
+    <div class="p2 mt-2">
+        <h3 class="text-lg font-semibold"> ${gym.name}</h3>
+    </div>
+    <div class="flex items-center text-sm mb-1">
+        <div class="rating flex items-center text-sm mt-1.5">
+            <strong>Ratings:</strong>&nbsp<span id="rating-value">${gym.average}</span>
+            <div class="rating-stars flex ml-2" data-rating="${gym.average}">
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
+                <i class="rating-star fas fa-star text-gray-400"></i>
             </div>
         </div>
-        <div class="p2 flex flex-col mb-1">
+    </div>
+    <div class="p2 flex flex-col mb-1">
+        <div class="flex flex-col mb-1 mt-1">
+            <span id="nearby_distance" class="text-sm flex items-center" style="font-weight: 300;">
+                <i class="fas fa-location-arrow mr-1 mt-1"></i>
+                ${gym.distance} km away
+            </span>
             <div class="flex flex-col mb-1 mt-1">
-                <span id="nearby_distance" class="text-sm flex items-center" style="font-weight: 300;">
-                    <i class="fas fa-location-arrow mr-1 mt-1"></i>
-                    ${gym.distance} km away
-                </span>
-                <div class="flex flex-col mb-1 mt-1">
-                    <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
-                    <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
-                </div>
+                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
+                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
             </div>
         </div>
-        <div class="flex flex-row gap-2 text-center justify-center mx-auto my-auto text-white text-sm">
-            <div>
-                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
-                    <i class="fas fa-arrows-alt"></i>
-                </button>
-            </div>
-            <div>
-                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
-                    <i class='fas fa-phone-alt'></i>
-                </button>
-            </div>
-            <div>
-                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
-                    <i class='fas fa-bookmark'></i>
-                </button>
-            </div>
-        </div>
-        <div class="text-sm mb-1 mt-6 ">  
-            <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
-        </div>
-        <div class="text-sm mb-1">
-            <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
-        </div>
-        <div class="flex items-center justify-between my-auto mx-auto p-2">
-            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGrayBtn text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customGray shadow-lg">
-                <i class="fas fa-eye mr-2"></i> Street view
+    </div>
+    <div class="flex flex-row gap-2 text-center justify-center mx-auto my-auto text-white text-sm">
+        <div>
+            <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
+                <i class="fas fa-arrows-alt"></i>
             </button>
         </div>
-    `;
+        <div>
+            <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
+                <i class='fas fa-phone-alt'></i>
+            </button>
+        </div>
+        <div>
+            <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
+                <i class='fas fa-bookmark'></i>
+            </button>
+        </div>
+    </div>
+    <div class="text-sm mb-1 mt-6 ">  
+        <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
+    </div>
+    <div class="text-sm mb-1">
+        <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
+    </div>
+    <div class="flex items-center justify-between my-auto mx-auto p-2">
+        <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGrayBtn text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customGray shadow-lg">
+            <i class="fas fa-eye mr-2"></i> Street view
+        </button>
+        <button id="viewGymButton" data-src="${gym.id}" class="bg-customBlue text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customBlue shadow-lg">
+            View Gym
+        </button>
+    </div>
+`;
 
     // Set the content to the listItem
     listItem.innerHTML = content;
@@ -451,11 +453,17 @@ function showNearby(distances) {
     //* I used setTimeout() here to make the button element to load first before assigning a click event 
     setTimeout(() => {
         const button = document.getElementById("openStreetView")
-        if (button) {
+        const gymbutton = document.getElementById("viewGymButton")
+        if (button && gymbutton) {
             button.addEventListener('click', function () {
                 event.stopPropagation();
                 const src = this.getAttribute('data-src');
                 ToggleStreetView(src);
+            });
+            gymbutton.addEventListener('click', function () {
+                event.stopPropagation();
+                const gymid = this.getAttribute('data-src');
+                window.location.href = `./viewGym.html?gymid=${gymid}`;
             });
         } else {
             console.error(`Button not found.`);
@@ -615,23 +623,24 @@ function populateAllGymsList() {
             "text-white"
         );
         var content = ` 
-            <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
-            <div class="flex flex-col">
-                <div class="al-gym-name text-lg font-bold">${g.name}</div>
-                <div class="text-sm mb-1">  
-                    <i class="fas fa-map-marker-alt"></i>&nbsp; ${g.address}
+        <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
+        <div class="flex flex-col">
+            <div class="al-gym-name text-lg font-bold">${g.name}</div>
+            <div class="text-sm mb-1">  
+                <i class="fas fa-map-marker-alt"></i>&nbsp; ${g.address}
+            </div>
+            <div class="rating flex items-center text-sm mt-1.5">
+                <strong>Ratings:</strong>&nbsp${g.avg}
+                <div class="rating-stars flex ml-2" data-rating="${g.avg}">
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
+                    <i class="rating-star fas fa-star text-gray-400"></i>
                 </div>
-                <div class="rating flex items-center text-sm mt-1.5">
-                    <strong>Ratings:</strong>&nbsp${g.avg}
-                    <div class="rating-stars flex ml-2" data-rating="${g.avg}">
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                        <i class="rating-star fas fa-star text-gray-400"></i>
-                    </div>
-                </div>
-            </div>`;
+            </div>
+        </div>`;
+
         listItem.innerHTML = content;
         document.getElementById("all-gyms").appendChild(listItem);
 

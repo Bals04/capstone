@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #chatContainer {
+            background-color: white;
+            width: 420px;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #messageDisplay {
+            flex-grow: 1;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            overflow-y: auto;
+            height: 350px;
+            background-color: #fafafa;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 10px;
+            background-color: #e1f5fe;
+            max-width: 75%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.4;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.sent {
+            background-color: #c8e6c9;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message.received {
+            background-color: #e1f5fe;
+            align-self: flex-start;
+        }
+
+        #inputContainer {
+            display: flex;
+            padding: 10px 15px;
+            background-color: #f5f5f5;
+            align-items: center;
+            border-top: 1px solid #ddd;
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            font-size: 15px;
+            margin-right: 10px;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #sendButton {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            outline: none;
+            transition: background-color 0.3s ease;
+        }
+
+        #sendButton:hover {
+            background-color: #45a049;
+        }
+
+        #fileInputLabel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background-color: #2196F3;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+            outline: none;
+        }
+
+        #fileInputLabel:hover {
+            background-color: #1976D2;
+        }
+
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>possible use case</h1>
+    <div id="chatContainer">
+        <div id="messageDisplay"></div>
+        <div id="inputContainer">
+            <label id="fileInputLabel" for="fileInput">
+                <i class="fas fa-paperclip"></i>
+            </label>
+            <input type="file" id="fileInput">
+            <input placeholder="Type a message..." type="text" id="messageInput">
+            <button id="sendButton" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect("http://localhost:3000");
+
+        // Set up the listener (equivalent to useEffect)
+        socket.on("receive_message", (data) => {
+            displayMessage(data, "received");
+        });
+
+        // Function to send a message
+        const sendMessage = () => {
+            const reader = new FileReader();
+            const message = document.getElementById("messageInput").value;
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+
+            if (!message && !file) {
+                alert("No message or file selected");
+                return;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    socket.emit("send_message", {
+                        message: message || "",  // If there's no message, send an empty string
+                        image: reader.result     // Send the Base64 image string
+                    });
+                    displayMessage({ message: message, image: reader.result }, "sent");
+                    document.getElementById("messageInput").value = "";
+                    fileInput.value = ""; // Clear the file input after sending
+                };
+            } else {
+                socket.emit("send_message", {
+                    message: message,
+                    image: null // No image
+                });
+                displayMessage({ message: message }, "sent");
+                document.getElementById("messageInput").value = "";
+            }
+        };
+
+
+
+        // Function to display messages in the chat box
+        // Function to display messages in the chat box
+        const displayMessage = (data, type) => {
+            const messageDisplay = document.getElementById("messageDisplay");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", type);
+
+            if (data.image) {
+                // Create an image element for the image message
+                const imgElement = document.createElement("img");
+                imgElement.src = data.image;
+                imgElement.style.maxWidth = "100%";
+                imgElement.style.borderRadius = "10px";
+                messageElement.appendChild(imgElement);
+            }
+
+            if (data.message) {
+                // Create a text element for the text message
+                const textElement = document.createElement("p");
+                textElement.textContent = data.message;
+                messageElement.appendChild(textElement);
+            }
+
+            messageDisplay.appendChild(messageElement);
+            messageDisplay.scrollTop = messageDisplay.scrollHeight;
+        };
+
+
+        // Optional cleanup (similar to cleanup in useEffect)
+        window.addEventListener('beforeunload', () => {
+            socket.off("receive_message");
+        });
+    </script>
+</body>
+
+</html>

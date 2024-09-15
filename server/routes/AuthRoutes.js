@@ -11,7 +11,9 @@ router.post("/RegisterMember", AuthController.createMembers);
 router.post("/Login", AuthController.Login);
 // Express route to get session data
 router.get('/session-data', (req, res) => {
-    console.log('Session data:', req.session.data);
+    // Log session data for debugging
+    console.log('Session data:', req.session);
+
     if (req.session.authorized) {
         res.json({
             userType: req.session.userType,
@@ -26,6 +28,7 @@ router.get('/session-data', (req, res) => {
         });
     }
 });
+
 
 
 

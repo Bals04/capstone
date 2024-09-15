@@ -8,7 +8,7 @@ function redirectToDashboard(userType) {
             targetUrl = '/frontend/views/member/memberDashboard.html';
             break;
         case 'Trainer':
-            targetUrl = '/frontend/views/trainer/index.html';
+            targetUrl = '/frontend/views/trainer/chat.html';
             break;
         case 'Gym admin':
             targetUrl = '/frontend/views/gym_admin/gymAdminDashboard.html';

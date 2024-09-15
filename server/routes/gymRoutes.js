@@ -5,6 +5,7 @@ const GymController = require('../controllers/gymController');
 const trainerController = require('../controllers/trainerController');
 
 router.get("/gyms", GymController.GetGyms); 
+router.get("/gymdata", GymController.GetGymData); 
 router.get("/members", trainerController.getMembers); 
 router.get("/meals", GymController.GetMealInfo); 
 router.get("/searchFilter", GymController.SearchFilter); 

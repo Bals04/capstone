@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        :root {
+            --custom-gray: #343639;
+            --custom-orange: #EC7E4A;
+            --custom-blue: #007BFF;
+            --custom-light-blue: #E0F7FA;
+        }
+
+        .trainer-card:hover {
+            background-color: #EC7E4A;
+        }
+    </style>
+    <script src="/frontend/scripts/auth.js"></script>
+</head>
+
+<body class="font-sans bg-customGray flex items-center justify-center h-screen m-0">
+    <div class="w-full max-w-5xl mx-4 sm:mx-0 flex">
+        <!-- Trainers List -->
+        <div id="trainersList" class="w-1/4 bg-gray-800 rounded-lg shadow-lg p-4 mr-4">
+            <h2 class="text-white text-lg font-bold mb-4">Available Trainers</h2>
+            <div id="trainerContainer" class="space-y-4 overflow-y-auto h-[60vh] text-white">
+                <!-- Trainers will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Chat Box -->
+        <div class="w-3/4 max-w-lg mx-4 sm:mx-0">
+            <h1 class="text-center mb-6 text-2xl font-bold text-white">Chat Application(MEMBER)</h1>
+            <div id="chatContainer"
+                class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 rounded-lg shadow-lg flex flex-col h-[80vh]">
+                <div id="messageDisplay"
+                    class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-auto rounded-t-lg">
+                    <!-- Messages will appear here -->
+                </div>
+                <div id="inputContainer"
+                    class="flex items-center p-3 bg-gray-200 border-t border-gray-300 rounded-b-lg">
+                    <label id="fileInputLabel" for="fileInput"
+                        class="flex items-center justify-center p-2 bg-orange-500 text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-orange-400 transition-colors">
+                        <i class="fas fa-paperclip"></i>
+                    </label>
+                    <input type="file" id="fileInput" class="hidden">
+                    <input placeholder="Type a message..." type="text" id="messageInput"
+                        class="flex-grow p-2 border border-gray-300 rounded-full text-base mr-2 outline-none bg-white shadow-inner">
+                    <button id="sendButton" onclick="sendMessage()"
+                        class="p-2 bg-blue-500 text-white rounded-full cursor-pointer text-xl flex items-center justify-center mr-2 hover:bg-blue-400 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            axios.get('http://localhost:3000/getTrainers')
+                .then(response => {
+                    const trainers = response.data[0];
+                    const trainerContainer = document.getElementById('trainerContainer');
+
+                    trainers.forEach(trainer => {
+                        const trainerCard = document.createElement('div');
+                        trainerCard.classList.add('bg-white', 'p-4', 'rounded-lg', 'shadow-md', 'trainer-card', 'hover:text-white');
+                        trainerCard.setAttribute('data-trainer-id', trainer.id); // Store trainer id in a data attribute
+
+                        trainerCard.innerHTML = `
+        <h3 class="text-lg font-bold text-gray-800">${trainer.firstname} ${trainer.lastname}</h3>
+        <p class="text-sm text-gray-600 mb-2">${trainer.bio}</p>
+        <p class="text-xs text-gray-500">Experience: ${trainer.experience} years</p>
+    `;
+
+                        // Add an event listener to alert the trainer's ID when clicked
+                        trainerCard.addEventListener('click', () => {
+                            clear();
+                            trainerid = trainer.trainer_id
+                            console.log(trainerid)
+                            setTimeout(() => {
+                                loadChatHistory();
+                            }, 1000);
+                        });
+
+                        trainerContainer.appendChild(trainerCard);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching trainers:', error);
+                });
+
+            let socket;
+            let memberid;
+            let trainerid;
+
+            socket = io.connect("http://localhost:3000");
+            id = window.userId;
+
+            fetchMemberInfo();
+
+            function fetchMemberInfo() {
+                axios.get('http://localhost:3000/getMemberInfo', {
+                    params: {
+                        account_id: id
+                    }
+                })
+                    .then(response => {
+                        const memberData = response.data[0];
+                        memberid = memberData.member_id;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching member info:', error);
+                    });
+            }
+
+            socket.on("receive_message", (data) => {
+                displayMessage(data, "received");
+            });
+
+            const loadChatHistory = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3000/messages', {
+                        params: {
+                            member_id: memberid,
+                            trainer_id: trainerid
+                        }
+                    });
+
+                    if (response.status === 200) {
+                        const messages = response.data;
+                        messages.forEach((message) => {
+                            const type = (message.sender === 'Member') ? 'sent' : 'received';
+                            displayMessage(message, type);
+                        });
+                    } else {
+                        console.error('Failed to load messages:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            };
+
+            window.sendMessage = () => {
+                const reader = new FileReader();
+                const messageContent = document.getElementById("messageInput").value.trim();
+                const fileInput = document.getElementById("fileInput");
+                const file = fileInput.files[0];
+
+                if (!messageContent && !file) {
+                    alert("Please enter a message or select a file to send.");
+                    return;
+                }
+
+                const messageData = {
+                    conversation_id: 2,
+                    sender_id: memberid,
+                    message: messageContent || "",
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                    reader.onload = () => {
+                        messageData.image = reader.result;
+
+                        socket.emit("send_message", messageData);
+                        displayMessage(messageData, "sent");
+
+                        document.getElementById("messageInput").value = "";
+                        fileInput.value = "";
+
+                        axios.post('/api/messages/send', messageData)
+                            .then(response => {
+                                if (response.status !== 200) {
+                                    console.error('Failed to send message:', response.statusText);
+                                }
+                            })
+                            .catch(error => console.error('Error sending message:', error));
+                    };
+                } else {
+                    socket.emit("send_message", messageData);
+                    displayMessage(messageData, "sent");
+
+                    document.getElementById("messageInput").value = "";
+
+                    axios.post('http://localhost:3000/send', messageData)
+                        .then(response => {
+                            if (response.status !== 200) {
+                                console.error('Failed to send message:', response.statusText);
+                            }
+                        })
+                        .catch(error => console.error('Error sending message:', error));
+                }
+            };
+
+
+            const clear = () => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                messageDisplay.innerHTML = '';
+
+            }
+            const displayMessage = (data, type) => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
+
+                if (type === "sent") {
+                    messageElement.classList.add("bg-green-200", "ml-auto");
+                } else {
+                    messageElement.classList.add("bg-white", "text-gray-800", "mr-auto");
+                }
+
+                if (data.image) {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = data.image;
+                    imgElement.classList.add("w-full", "rounded-lg", "mb-2");
+                    messageElement.appendChild(imgElement);
+                }
+
+                if (data.message) {
+                    const textElement = document.createElement("p");
+                    textElement.textContent = data.message;
+                    messageElement.appendChild(textElement);
+                }
+
+                messageDisplay.appendChild(messageElement);
+                messageDisplay.scrollTop = messageDisplay.scrollHeight;
+            };
+
+            window.addEventListener('beforeunload', () => {
+                socket.off("receive_message");
+            });
+        });
+    </script>
+</body>
+
+</html>

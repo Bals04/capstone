@@ -1,12 +1,46 @@
 const { getMembers, getExercises,
-        AddCustomWorkout, getStudCount,
-        getTrainerCount, getAllMembers,
-        getTemplates, AddTemplate } = require('../models/database');
+    AddCustomWorkout, getStudCount,
+    getTrainerCount, getAllMembers,
+    getTemplates, AddTemplate, GetTrainerInfo } = require('../models/database');
+const { getAllTrainers, getGymTrainers } = require('../models/trainers');
 
 module.exports = {
+
+    getTrainerInfo: async (req, res) => {
+        try {
+            const { account_id } = req.query;
+            console.log(account_id)
+            const data = await GetTrainerInfo(account_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching members:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getGymTrainer: async (req, res) => {
+        try {
+            const gym_id = req.query.gymid;
+            console.log("received data: " + gym_id)
+            const data = await getGymTrainers(gym_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching members:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
     getMembers: async (req, res) => {
         try {
             const data = await getMembers();
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getAllTrainers: async (req, res) => {
+        try {
+            const data = await getAllTrainers();
             res.json(data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -73,7 +107,7 @@ module.exports = {
         const { trainer_id, name, desc } = req.body;
         try {
             await AddTemplate(trainer_id, name, desc);
-            res.status(200).send("Template added successfully"); 
+            res.status(200).send("Template added successfully");
 
         } catch (error) {
             console.error("Error adding user:", error);
