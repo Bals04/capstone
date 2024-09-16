@@ -132,7 +132,7 @@
                 <a href="#" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF] hover:rounded-[4px]"><span class="material-symbols-outlined">settings</span>Settings</a>
             </li>
         </aside> -->
-        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50"></div>
+        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
             <div class="flex items-center justify-center">
                 <a href="#" class="list-none">
                     <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
@@ -169,17 +169,41 @@
                     <a href="#" class="btn flex items-center justify-center text-2xl">
                         <i class='bx bx-cog' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Settings</span> 
+                    <span class="tooltip-workout absolute text-lg">Settings</span> 
                 </li>
             </ul>
         </div>
 
-        <div class="title_div">
-            <h1 class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+        <div class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+            <h1 class="">
                 <span class="page_title font-normal">
                     Dashboard
                 </span>
             </h1>
+            <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5 items-center">
+                <!--profile-->
+                <div class="flex items-center justify-center mr-24 mt-0">
+                    <button>
+                        <img class="w-10 h-10 rounded-full object-cover border border-gray-400" src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
+                </div>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
+                </div>
+            </div>
         </div>
     
         <div class="flex justify-between">
