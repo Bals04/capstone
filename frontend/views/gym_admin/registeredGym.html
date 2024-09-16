@@ -39,8 +39,7 @@
 <body class="min-h-screen bg-[#343639] font-customFont ">
     <div id="content_container" class="">
 
-        <div
-            class="sidebar bg-customOrange fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
+        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
             <div class="flex items-center justify-center">
                 <a href="#" class="list-none">
                     <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
@@ -55,34 +54,31 @@
                     </a>
                     <span class="tooltip-home absolute text-lg">Home</span>
                 </li>
+
                 <!--Pending Gym Registration-->
                 <li class="mt-6">
                     <a href="pendingGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-dots-horizontal-rounded' aria-hidden="true" style="color:#ffffff"></i>
+                        <i class='bx bx-list-check' style="color:white"></i>
                     </a>
                     <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
-                <!--Registered Gym-->
+
+                <!--Approved Gym-->
                 <li class="mt-6">
                     <a href="registeredGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-list-check' style="color:white"></i>
+                        <i class='bx bx-check-double' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-workout absolute text-lg">Registered Gym</span>
+                    <span class="tooltip-workout absolute text-lg">Approved Gym</span>
                 </li>
-                <!--Trainers-->
+
+                <!-- Verified Gym -->
                 <li class="mt-6">
                     <a href="registeredTrainer.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bxs-user' style="color: white;"></i>
+                        <i class='bx bxs-badge-check' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Registered Trainers</span>
+                    <span class="tooltip-trainers absolute text-lg">Verified Gym</span>
                 </li>
-                <!--Chat-->
-                <li class="mt-6">
-                    <a href="#" class="btn flex items-center justify-center text-2xl">
-                        <i class="bx bx-message-square-dots" aria-hidden="true" style="color:#ffffff"></i>
-                    </a>
-                    <span class="tooltip-chat absolute text-lg">Chat</span>
-                </li>
+
             </ul>
         </div>
 

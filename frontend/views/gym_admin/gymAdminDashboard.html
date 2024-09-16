@@ -116,8 +116,7 @@
 
 <body class="min-h-screen bg-[#343639] font-customFont ">
     <div id="content_container" class="">
-        <div
-            class="sidebar bg-customOrange fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
+        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
             <div class="flex items-center justify-center">
                 <a href="#" class="list-none">
                     <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
@@ -132,86 +131,108 @@
                     </a>
                     <span class="tooltip-home absolute text-lg">Home</span>
                 </li>
+
                 <!--Pending Gym Registration-->
                 <li class="mt-6">
                     <a href="pendingGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-dots-horizontal-rounded' aria-hidden="true" style="color:#ffffff"></i>
+                        <i class='bx bx-list-check' style="color:white"></i>
                     </a>
                     <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
-                <!--Registered Gym-->
+
+                <!--Approved Gym-->
                 <li class="mt-6">
                     <a href="registeredGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-list-check' style="color:white"></i>
+                        <i class='bx bx-check-double' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-workout absolute text-lg">Approved Gyms</span>
+                    <span class="tooltip-workout absolute text-lg">Approved Gym</span>
                 </li>
-                <!--Trainers-->
+
+                <!-- Verified Gym -->
                 <li class="mt-6">
                     <a href="registeredTrainer.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bxs-user' style="color: white;"></i>
+                        <i class='bx bxs-badge-check' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Registered Trainers</span>
+                    <span class="tooltip-trainers absolute text-lg">Verified Gym</span>
                 </li>
-                <!--Chat-->
-                <li class="mt-6">
-                    <a href="#" class="btn flex items-center justify-center text-2xl">
-                        <i class="bx bx-message-square-dots" aria-hidden="true" style="color:#ffffff"></i>
-                    </a>
-                    <span class="tooltip-chat absolute text-lg">Chat</span>
-                </li>
+
             </ul>
         </div>
-        <div class="title_div">
-            <h1
-                class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
-                <span class="page_title font-normal text-lg">
-                   Gym Admin Dashboard
+        <div
+            class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+            <h1 class="">
+                <span class="page_title font-normal">
+                    Dashboard
                 </span>
             </h1>
+            <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5 items-center">
+                <!--profile-->
+                <div class="flex items-center justify-center mr-24 mt-0">
+                    <button>
+                        <img class="w-10 h-10 rounded-full object-cover border border-gray-400"
+                            src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
+                </div>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
+                </div>
+            </div>
         </div>
 
         <div class="flex">
             <div class="pl-[120px] pt-[40px] text-white font-sans mr-10">
                 Good day, <br>
-                <span class="text-4xl font-bold font-customFont">[Gym Admin name!]</span> <br>
+                <span class="text-4xl font-bold font-customFont">Admin!</span> <br>
                 Pag trabaho na boss!
 
                 <div class="mt-20 flex flex-col gap-5">
 
                     <div class="flex gap-5">
-                        <a href="registeredGym.html"
-                            class="text-white text-2xl w-auto py-10 px-10 border-y-2 border-50 shadow-2xl bg-transparent hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">Approved gym(s)</span><br>
+                        <div
+                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color  hover:shadow-lg rounded-lg text-left duration-300">
+                            <span class="text-lg font-customFont">Registered Gym(s)</span><br>
                             <br>
                             <span class="font-bold ml-3">1</span>
-                        </a>
-                        <a href="pendingGym.html"
-                            class="text-white text-2xl w-auto py-10 px-10 border-y-2 border-50 shadow-2xl bg-transparent hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300">
+                        </div>
+                        <div
+                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color  hover:shadow-lg rounded-lg text-left duration-300">
                             <span class="text-lg font-customFont">Pending Gym Registration(s)</span><br>
                             <br>
                             <span class="font-bold ml-3">1</span>
-                        </a>
-                        <a href="registeredTrainer.html"
-                            class="text-white text-2xl w-auto py-10 px-10 border-y-2 border-50 shadow-2xl bg-transparent hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">Verified gyms(s)</span><br>
+                        </div>
+                        <div
+                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
+                            <span class="text-lg font-customFont">Registered Trainer(s)</span><br>
                             <br>
                             <span class="font-bold ml-3">1</span>
-                        </a>
+                        </div>
                     </div>
                     <div class="flex justify-between gap-5">
-                        <a href="../gym_admin/register.html"
-                            class="text-center w-full bg-transparent border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
+                        <a href="registerGym.html"
+                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
                             Gym</a>
                         <a href="registerTrainer.html"
-                            class="text-center w-full bg-transparent border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
+                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
                             Trainer</a>
                     </div>
                 </div>
             </div>
 
             <div class="dashboard-Content text-sm text-white mr-10 ">
-                <div class="wrapper w-[320px] bg-customGray shadow-lg">
+                <div class="wrapper w-[320px] bg-div_color shadow-lg border border-border_color">
                     <header class="">
                         <p class="current-date"></p>
                         <div class="icons">
@@ -241,8 +262,8 @@
     </div>
     <div class="container p-4 pl-[120px] shadow-lg ">
         <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
-        <div class="bg-51 p-6 rounded-lg shadow-xl max-w-3xl border-50 border-y-2">
-            <canvas id="myChart" class="bg-51"></canvas>
+        <div class="bg-div_color p-6 rounded-lg shadow-xl max-w-3xl border-border_color border-2">
+          <canvas id="myChart" class="bg-div_color"></canvas>
         </div>
     </div>
 </body>

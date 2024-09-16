@@ -10,6 +10,13 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
@@ -37,8 +44,7 @@
 
 <body class="min-h-screen bg-[#343639] font-customFont ">
     <div id="content_container" class="">
-        <div
-            class="sidebar bg-customOrange fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
+        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
             <div class="flex items-center justify-center">
                 <a href="#" class="list-none">
                     <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
@@ -53,53 +59,80 @@
                     </a>
                     <span class="tooltip-home absolute text-lg">Home</span>
                 </li>
+
                 <!--Pending Gym Registration-->
                 <li class="mt-6">
                     <a href="pendingGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-dots-horizontal-rounded' aria-hidden="true" style="color:#ffffff"></i>
+                        <i class='bx bx-list-check' style="color:white"></i>
                     </a>
                     <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
-                <!--Registered Gym-->
+
+                <!--Approved Gym-->
                 <li class="mt-6">
                     <a href="registeredGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-list-check' style="color:white"></i>
+                        <i class='bx bx-check-double' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-workout absolute text-lg">Registered Gym</span>
+                    <span class="tooltip-workout absolute text-lg">Approved Gym</span>
                 </li>
-                <!--Trainers-->
+
+                <!-- Verified Gym -->
                 <li class="mt-6">
                     <a href="registeredTrainer.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bxs-user' style="color: white;"></i>
+                        <i class='bx bxs-badge-check' style="color: white;"></i>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Registered Trainers</span>
+                    <span class="tooltip-trainers absolute text-lg">Verified Gym</span>
                 </li>
-                <!--Chat-->
-                <li class="mt-6">
-                    <a href="#" class="btn flex items-center justify-center text-2xl">
-                        <i class="bx bx-message-square-dots" aria-hidden="true" style="color:#ffffff"></i>
-                    </a>
-                    <span class="tooltip-chat absolute text-lg">Chat</span>
-                </li>
+
             </ul>
         </div>
-        <div class="title_div">
-            <h1
-                class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
-                <span class="page_title font-normal text-lg">
+
+        <div
+            class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+            <h1 class="">
+                <span class="page_title font-normal">
                     Pending Gym Registrations
                 </span>
             </h1>
+
+            <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5 items-center">
+                <!--profile-->
+                <div class="flex items-center justify-center mr-24 mt-0">
+                    <button>
+                        <img class="w-10 h-10 rounded-full object-cover border border-gray-400"
+                            src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
+                </div>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
+                </div>
+            </div>
         </div>
 
         <div class="bg-[#323538] border border-50 shadow-black shadow-md rounded-lg p-6 ml-32 mr-10">
             <p class="text-sm text-white mb-4 p-3 border-l-4 border-orange-600 bg-gray-600 rounded-md">
-                NOTE: These gyms are under admin evaluation and will be displayed in the approved gyms section if they are approved.
+                NOTE: These gyms are under admin evaluation and will be displayed in the approved gyms section if they
+                are approved.
             </p>
             <div id="pendingGymCards" class="space-y-4">
                 <!-- Dynamic pending gym registration cards will be inserted here -->
             </div>
+            <!-- More pending registration cards can go here -->
         </div>
+    </div>
     </div>
 
     <div id="view_permit" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white hidden">
@@ -111,10 +144,6 @@
         </div>
         <img id="permit_image" src="" class="w-96" alt="permit_image">
     </div>
-    <script src="/frontend/scripts/auth.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
             if (typeof userId === 'undefined' || userId === null) {
@@ -212,7 +241,5 @@
 
     </script>
 </body>
-<!-- <script src="/frontend/scripts/gymAdmin.js"></script>
-<script src="../../scripts/registration.js"></script> -->
 
 </html>

@@ -34,6 +34,8 @@ module.exports = {
         darkCharcoal: '#333333',
         davysGrey: '#555555',
         eerieBlack: '#191919',
+        div_color: '#373D41',
+        border_color: '#464646',
       },
     },
   },
