@@ -21,6 +21,8 @@ module.exports = {
         50: '#EC7E4A',
         51: '#343639',
         52: '#FFFFFF',
+        div_color: '#373D41',
+        border_color: '#464646',
         'custom-bg': '#323538',
         'custom-border': '#EC7E4A',
         guestNavbar: '#232121',

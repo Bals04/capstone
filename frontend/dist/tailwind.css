@@ -1262,6 +1262,10 @@ video {
   --tw-border-opacity: 1;
   border-color: rgb(236 126 74 / var(--tw-border-opacity));
 }
+.border-border_color{
+  --tw-border-opacity: 1;
+  border-color: rgb(70 70 70 / var(--tw-border-opacity));
+}
 .border-customGray{
   --tw-border-opacity: 1;
   border-color: rgb(52 54 57 / var(--tw-border-opacity));
@@ -1357,6 +1361,10 @@ video {
 .bg-customOrange{
   --tw-bg-opacity: 1;
   background-color: rgb(236 126 74 / var(--tw-bg-opacity));
+}
+.bg-div_color{
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 61 65 / var(--tw-bg-opacity));
 }
 .bg-gray-100{
   --tw-bg-opacity: 1;
