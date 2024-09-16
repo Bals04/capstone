@@ -716,6 +716,9 @@ video {
 .mt-\[1rem\] {
   margin-top: 1rem;
 }
+.ml-3 {
+  margin-left: 0.75rem;
+}
 .block {
   display: block;
 }
@@ -1041,9 +1044,6 @@ video {
 .rounded-br-none {
   border-bottom-right-radius: 0px;
 }
-.rounded-tl-2xl {
-  border-top-left-radius: 1rem;
-}
 .rounded-tl-lg {
   border-top-left-radius: 0.5rem;
 }
@@ -1075,6 +1075,10 @@ video {
 .border-gray-800 {
   --tw-border-opacity: 1;
   border-color: rgb(31 41 55 / var(--tw-border-opacity));
+}
+.bg-\[\#373D41\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 61 65 / var(--tw-bg-opacity));
 }
 .bg-black {
   --tw-bg-opacity: 1;
@@ -1236,6 +1240,10 @@ video {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -1259,10 +1267,6 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
-}
-.px-8 {
-  padding-left: 2rem;
-  padding-right: 2rem;
 }
 .pl-10 {
   padding-left: 2.5rem;
@@ -1947,6 +1951,10 @@ header .icons span:last-child {
 
 @media (min-width: 640px) {
 
+  .sm\:flex {
+    display: flex;
+  }
+
   .sm\:h-\[16rem\] {
     height: 16rem;
   }
@@ -1959,12 +1967,24 @@ header .icons span:last-child {
     height: 20rem;
   }
 
+  .sm\:w-\[40rem\] {
+    width: 40rem;
+  }
+
   .sm\:w-full {
     width: 100%;
   }
 
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sm\:flex-col {
+    flex-direction: column;
+  }
+
+  .sm\:gap-2 {
+    gap: 0.5rem;
   }
 
   .sm\:rounded-tr-2xl {
@@ -1982,6 +2002,14 @@ header .icons span:last-child {
     grid-column: span 2 / span 2;
   }
 
+  .md\:mb-1 {
+    margin-bottom: 0.25rem;
+  }
+
+  .md\:mt-2 {
+    margin-top: 0.5rem;
+  }
+
   .md\:block {
     display: block;
   }
@@ -1990,12 +2018,21 @@ header .icons span:last-child {
     width: 50%;
   }
 
+  .md\:w-\[60rem\] {
+    width: 60rem;
+  }
+
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .md\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .md\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 }
 

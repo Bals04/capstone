@@ -37,14 +37,13 @@
 </head>
   
 <body class="font-[Poppins] items-center justify-center min-h-screen m-0 bg-customBodyColor scrollbar scrollbar-thumb-customGray">
-  <!--iinsert lng dnhia tung navbar ni charls, itry copypaste if mabungkag awww mano.x-->
 
   <div class="flex items-center justify-center text-white mt-8 mb-8">
     <h1 class="text-4xl font-bold">Discover <span class="auto-type text-customOrange"></span></h1>
   </div>
 
   <div class="w-full items-center bg-customBodyColor p-5 shadow-md">
-    <div class="flex gap-2">
+    <div class="flex gap-2 sm:w-[40rem] md:w-[60rem]">
       <button id="gyms" class="toggle-btn bg-customGray1 hover:bg-customGray text-white py-2 px-4 rounded rounded-bl-none rounded-br-none"
         onclick="showSection('gymsCity','gyms')">
         <i class="fas fa-city mr-1"></i> Gyms around the city
@@ -79,7 +78,7 @@
 
         <!-- Overlay div PARA SA INFO CARD -->
         <div id="overlay2"
-          class="absolute bottom-0 right-0 w-72 lg:w-72 lg:h-[24rem] sm:w-full sm:h-[18rem] sm:rounded-tr-2xl p-2 bg-customGrayBtn scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor overflow-auto text-white rounded-tl-2xl hidden"
+          class="absolute bottom-0 right-0 w-72 lg:w-72 lg:h-[24rem] sm:w-full sm:h-[18rem] sm:rounded-tr-2xl p-2 bg-customGrayBtn scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor overflow-auto text-white hidden"
           style="z-index: 9999;">
         </div>
 
@@ -123,6 +122,6 @@
     </button>
   </div>
 </body>
-<script src="/capstone/frontend/scripts/map.js"></script>
+<script src="../../scripts/map.js"></script>
 
 </html>

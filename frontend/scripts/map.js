@@ -412,32 +412,22 @@ function showNearby(distances) {
                 </div>
             </div>
         </div>
-        <div class="flex flex-row gap-2 text-center justify-center mx-auto my-auto text-white text-sm">
-            <div>
-                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
-                    <i class="fas fa-arrows-alt"></i>
-                </button>
+        <div class="sm:flex sm:flex-col sm:gap-2">
+            <div class="md:text-sm md:mb-1 md:mt-2">  
+                <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
             </div>
-            <div>
-                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
-                    <i class='fas fa-phone-alt'></i>
-                </button>
+            <div class="md:text-sm md:mb-1">
+                <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
             </div>
-            <div>
-                <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
-                    <i class='fas fa-bookmark'></i>
-                </button>
-            </div>
-        </div>
-        <div class="text-sm mb-1 mt-6 ">  
-            <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
-        </div>
-        <div class="text-sm mb-1">
-            <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
         </div>
         <div class="flex items-center justify-between my-auto mx-auto p-2">
             <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGrayBtn text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customGray shadow-lg">
                 <i class="fas fa-eye mr-2"></i> Street view
+            </button>
+        </div>
+        <div class="flex items-center justify-between my-auto mx-auto p-2">
+            <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGrayBtn text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-customGray shadow-lg">
+                <i class="fas fa-dumbbell mr-2"></i>  View Gym
             </button>
         </div>
     `;

@@ -19,6 +19,7 @@ module.exports = {
         darkCharcoal: '#333333',
         davysGrey: '#555555',
         eerieBlack: '#191919',
+        borderStroke: '#464646',
     },},
   },
   plugins: [
