@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="bg-gray-500 min-h-screen flex items-center justify-center">
+
+    <div class="w-full max-w-3xl bg-white rounded-lg shadow-lg flex flex-col h-[90vh]">
+
+        <!-- Chat Header -->
+        <div class="bg-orange-700 text-white p-4 text-center rounded-t-lg">
+            <h1 class="text-xl font-bold">Chatting with: <span id="chatWith" class="font-semibold"></span></h1>
+        </div>
+
+        <!-- Chat Messages Display -->
+        <div id="messageDisplay" class="flex-grow p-4 bg-gray-100 overflow-y-auto">
+            <!-- Messages will appear here -->
+            <div id="loadingPrompt" class="text-center text-gray-600 rounded-lg py-4 bg-gray-200 hidden">
+                <p>Loading messages...</p>
+            </div>
+        </div>
+
+        <!-- Message Input -->
+        <div class="p-3 bg-white border-t border-gray-300 flex items-center space-x-2 rounded-b-lg">
+            <label id="fileInputLabel" for="fileInput"
+                class="p-2 bg-orange-500 text-white rounded-full cursor-pointer text-xl flex items-center justify-center hover:bg-orange-400 transition-colors">
+                <i class="fas fa-paperclip"></i>
+            </label>
+            <input type="file" id="fileInput" class="hidden">
+            <input type="text" id="messageInput" placeholder="Type a message..."
+                class="w-full p-2 border border-gray-300 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50 shadow-inner">
+            <button id="sendButton" onclick="sendMessage()"
+                class="p-2 bg-blue-500 text-white rounded-full text-xl flex items-center justify-center hover:bg-blue-400 transition-colors">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let socket = io.connect("http://localhost:3000");
+            let memberid;
+            let conversationId;
+            const trainerid = getCookie('trainer_iddd');
+            const trainerName = getCookie('trainer_name');
+
+            // Fetch member info
+            fetchMemberInfo();
+
+            socket.on("receive_message", (data) => {
+                displayMessage(data, "received");
+            });
+
+            function fetchMemberInfo() {
+                axios.get('http://localhost:3000/getMemberInfo', {
+                    params: { account_id: window.userId }
+                })
+                    .then(response => {
+                        memberid = response.data[0].member_id;
+                        console.log("member id: ", memberid)
+                        console.log("trainer id: ", trainerid)
+                        checkConversation(memberid, trainerid);
+                        document.getElementById('chatWith').textContent = trainerName;
+                        loadChatHistory();
+
+                    })
+                    .catch(error => console.error('Error fetching member info:', error));
+            }
+
+            function loadChatHistory() {
+                console.log("helloooooooooooo")
+                axios.get('http://localhost:3000/messages', {
+                    params: {
+                        member_id: memberid,
+                        trainer_id: trainerid
+                    }
+                })
+                    .then(response => {
+                        const messages = response.data;
+                        messages.forEach(message => {
+                            const type = message.sender === 'Member' ? 'sent' : 'received';
+                            displayMessage(message, type);
+                        });
+                    })
+                    .catch(error => console.error('Error loading chat history:', error.message));
+            }
+
+            function checkConversation(memberid, trainerid) {
+                axios.get('http://localhost:3000/checkConvo', {
+                    params: {
+                        member_id: memberid,
+                        trainer_id: trainerid
+                    }
+                })
+                    .then(response => {
+                        // Check if response contains a conversation ID
+                        conversationId = response.data?.id;
+
+                        if (conversationId) {
+                            console.log("Conversation exists with ID:", conversationId);
+                        } else {
+                            console.log("Conversation doesn't exist. Creating a new one...");
+                            checkConversation(memberid, trainerid)
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking or creating conversation:', error.message);
+                    });
+            }
+
+
+
+            window.sendMessage = () => {
+                const messageContent = document.getElementById("messageInput").value.trim();
+                const fileInput = document.getElementById("fileInput");
+                const file = fileInput.files[0];
+
+                if (!messageContent && !file) {
+                    alert("Please enter a message or select a file to send.");
+                    return;
+                }
+
+                const messageData = {
+                    conversation_id: conversationId,
+                    sender_id: memberid,
+                    message: messageContent || "",
+                };
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        messageData.image = reader.result;
+                        sendSocketMessage(messageData);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    sendSocketMessage(messageData);
+                }
+
+                document.getElementById("messageInput").value = "";
+                fileInput.value = "";
+            };
+
+            function sendSocketMessage(data) {
+                socket.emit("send_message", data);
+                displayMessage(data, "sent");
+
+                axios.post('http://localhost:3000/send', data)
+                    .catch(error => console.error('Error sending message:', error));
+            }
+
+            const displayMessage = (data, type) => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
+
+                if (type === "sent") {
+                    messageElement.classList.add("bg-orange-500", "ml-auto", "text-white");
+                } else {
+                    messageElement.classList.add("bg-gray-200", "mr-auto");
+                }
+
+                if (data.image) {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = data.image;
+                    imgElement.classList.add("w-full", "rounded-lg", "mb-2");
+                    messageElement.appendChild(imgElement);
+                }
+
+                if (data.message) {
+                    const textElement = document.createElement("p");
+                    textElement.textContent = data.message;
+                    messageElement.appendChild(textElement);
+                }
+
+                messageDisplay.appendChild(messageElement);
+                messageDisplay.scrollTop = messageDisplay.scrollHeight;
+            };
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+        });
+    </script>
+</body>
+
+</html>

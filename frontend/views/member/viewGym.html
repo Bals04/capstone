@@ -178,7 +178,7 @@
         // Fetch trainers data and dynamically populate the table
         axios.get(`http://localhost:3000/getGymTrainer?gymid=${gymId}`)
             .then(response => {
-                console.log(gymId)
+                console.log(gymId);
                 const trainers = response.data; // Response contains the list of trainers
                 console.log(trainers);
                 const trainersBody = document.getElementById('trainers-body');
@@ -186,22 +186,56 @@
 
                 trainers.forEach(trainer => {
                     const row = `
-                        <tr class="bg-transparent">
-                            <th scope="row" class="px-6 py-4 flex justify-center items-center">
-                                <img class="w-16 rounded-full border border-white" src="../../views/img/heinzprof.jpg" alt="trainer_profile">
-                            </th>
-                            <td class="px-6 py-4 text-lg">${trainer.firstname} ${trainer.lastname}</td>
-                            <td class="px-6 py-4">
-                                <button class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">View Profile</button>
-                            </td>
-                        </tr>
-                    `;
+                <tr class="bg-transparent">
+                    <th scope="row" class="px-6 py-4 flex justify-center items-center">
+                        <img class="w-16 rounded-full border border-white" src="../../views/img/heinzprof.jpg" alt="trainer_profile">
+                    </th>
+                    <td class="px-6 py-4 text-lg">${trainer.firstname} ${trainer.lastname}</td>
+                    <td class="px-6 py-4">
+                        <button id="messageTrainer-${trainer.trainer_id}" class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">Message</button>
+                    </td>
+                </tr>
+            `;
                     trainersBody.insertAdjacentHTML('beforeend', row);
+
+                    // Add event listener to the button
+                    const messageTrainerButton = document.getElementById(`messageTrainer-${trainer.trainer_id}`);
+                    messageTrainerButton.addEventListener('click', () => {
+                        setCookie('trainer_iddd', trainer.trainer_id, 7); // Set cookie for 7 days
+                        setCookie('trainer_name', trainer.firstname, 7); // Set cookie for 7 days
+                        console.log(`Cookie set for trainer_id: ${trainer.trainer_id}`);
+                        window.location.href = './privateChat.html'; // Redirect to chat.html
+                    });
+
                 });
             })
             .catch(error => {
                 console.error("Error fetching trainers:", error);
             });
+
+        // Helper function to set cookies
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Helper function to retrieve cookies (if needed)
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
     </script>
 
 </body>

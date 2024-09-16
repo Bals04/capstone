@@ -24,8 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const server = http.createServer(app);
 
-// Check if running in production to set the secure flag for cookies
-const isProduction = process.env.NODE_ENV === 'production';
+
 const io = new Server(server, {
   cors: {
       origin: "http://127.0.0.1:5500",
@@ -70,10 +69,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve the files in the 'uploads' directory
 app.use('/uploads', express.static('uploads'));
-
-app.get('/', (req, res) => {
-  res.send('hello');
-});
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

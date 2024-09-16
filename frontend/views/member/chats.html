@@ -36,9 +36,11 @@
 
         <!-- Chat Box -->
         <div class="flex-grow p-6 bg-gray-100 flex flex-col">
-            <h1 class="text-center mb-6 text-2xl font-bold rounded-xl p-2 bg-blue-400 text-blue-900">Kachat nimo ron:
-                <span id="chatWith">wala (sad life :<)< /span>
+            <h1 class="text-center mb-6 text-2xl font-bold rounded-xl p-2 bg-gray-800 text-white">
+                Chatting with: 
+                <span id="chatWith" class="font-light">wala (sad life :<)</span>
             </h1>
+            
 
             <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex overflow-y-auto flex-col h-full">
                 <div id="messageDisplay"
@@ -75,11 +77,34 @@
         let socket;
         let memberid;
         let trainerid;
+        let conversationId;
 
         socket = io.connect("http://localhost:3000");
         id = window.userId;
 
         fetchMemberInfo();
+
+        const CheckConversation = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/checkConvo', {
+                    params: {
+                        member_id: memberid,
+                        trainer_id: trainerid
+                    }
+                });
+                if (response.status === 200) {
+                    const messages = response.data;
+                    messages.forEach((message) => {
+                        const type = (message.sender === 'Member') ? 'sent' : 'received';
+                        displayMessage(message, type);
+                    });
+                } else {
+                    console.error('Failed to load messages:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error loading chat history:', error);
+            }
+        };
 
         function fetchMemberInfo() {
             axios.get('http://localhost:3000/getMemberInfo', {
@@ -219,7 +244,7 @@
             messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
 
             if (type === "sent") {
-                messageElement.classList.add("bg-blue-100", "ml-auto");
+                messageElement.classList.add("bg-gray-800", "ml-auto", "text-white");
             } else {
                 messageElement.classList.add("bg-gray-200", "mr-auto");
             }
