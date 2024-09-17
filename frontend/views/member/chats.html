@@ -37,10 +37,10 @@
         <!-- Chat Box -->
         <div class="flex-grow p-6 bg-gray-100 flex flex-col">
             <h1 class="text-center mb-6 text-2xl font-bold rounded-xl p-2 bg-gray-800 text-white">
-                Chatting with: 
+                Chatting with:
                 <span id="chatWith" class="font-light">wala (sad life :<)</span>
             </h1>
-            
+
 
             <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex overflow-y-auto flex-col h-full">
                 <div id="messageDisplay"
@@ -93,11 +93,7 @@
                     }
                 });
                 if (response.status === 200) {
-                    const messages = response.data;
-                    messages.forEach((message) => {
-                        const type = (message.sender === 'Member') ? 'sent' : 'received';
-                        displayMessage(message, type);
-                    });
+                    conversationId = response.data.id
                 } else {
                     console.error('Failed to load messages:', response.statusText);
                 }
@@ -151,9 +147,9 @@
                 listItem.addEventListener('click', () => {
                     clear();
                     document.getElementById('chatWith').textContent = trainer.trainer_name;
-                    console.log(trainer.trainer_id)
                     trainerid = trainer.trainer_id;  // Use this ID to load member-specific chat
                     loadChatHistory(trainerid);  // Load chat history for the clicked member
+                    CheckConversation();
                 });
 
                 chatListElement.appendChild(listItem);
@@ -186,57 +182,60 @@
             }
         };
 
-        window.sendMessage = () => {
-            const reader = new FileReader();
+        window.sendMessage = async () => {
             const messageContent = document.getElementById("messageInput").value.trim();
             const fileInput = document.getElementById("fileInput");
             const file = fileInput.files[0];
 
-            if (!messageContent && !file) {
+            let imgPath = "";
+
+            if (file) {
+                // Upload the file first
+                const path = "/server/";
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    imgPath = path + uploadResponse.data.filePath; // Store the file path from the response
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    alert("Image upload failed.");
+                    return;
+                }
+            }
+
+            if (!messageContent && !imgPath) {
                 alert("Please enter a message or select a file to send.");
                 return;
             }
 
             const messageData = {
-                conversation_id: 2,
+                conversation_id: conversationId,
                 sender_id: memberid,
                 message: messageContent || "",
+                img_path: imgPath || "" // Include the image path if present
             };
 
-            if (file) {
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                    messageData.image = reader.result;
+            sendSocketMessage(messageData);
 
-                    socket.emit("send_message", messageData);
-                    displayMessage(messageData, "sent");
-
-                    document.getElementById("messageInput").value = "";
-                    fileInput.value = "";
-
-                    axios.post('/api/messages/send', messageData)
-                        .then(response => {
-                            if (response.status !== 200) {
-                                console.error('Failed to send message:', response.statusText);
-                            }
-                        })
-                        .catch(error => console.error('Error sending message:', error));
-                };
-            } else {
-                socket.emit("send_message", messageData);
-                displayMessage(messageData, "sent");
-
-                document.getElementById("messageInput").value = "";
-
-                axios.post('http://localhost:3000/send', messageData)
-                    .then(response => {
-                        if (response.status !== 200) {
-                            console.error('Failed to send message:', response.statusText);
-                        }
-                    })
-                    .catch(error => console.error('Error sending message:', error));
-            }
+            // Clear inputs
+            document.getElementById("messageInput").value = "";
+            fileInput.value = "";
         };
+
+
+        function sendSocketMessage(data) {
+            socket.emit("send_message", data);
+            displayMessage(data, "sent");
+
+            axios.post('http://localhost:3000/send', data)
+                .catch(error => console.error('Error sending message:', error));
+        }
 
         const displayMessage = (data, type) => {
             const messageDisplay = document.getElementById("messageDisplay");
@@ -249,10 +248,10 @@
                 messageElement.classList.add("bg-gray-200", "mr-auto");
             }
 
-            if (data.image) {
+            if (data.img_path) {
                 const imgElement = document.createElement("img");
-                imgElement.src = data.image;
-                imgElement.classList.add("w-full", "rounded-lg", "mb-2");
+                imgElement.src = data.img_path;
+                imgElement.classList.add("w-full", "rounded-md", "mb-2");
                 messageElement.appendChild(imgElement);
             }
 

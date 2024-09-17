@@ -20,10 +20,10 @@ const checkConversationExists = async (member_id, trainer_id) => {
 };
 
 // Insert a message into an existing conversation
-const sendMessage = async ({ conversation_id, sender_id, message }) => {
+const sendMessage = async ({ conversation_id, sender_id, message, img_path }) => {
     return db.query(
-        'INSERT INTO messages (conversation_id, sender_id, message, sent_at) VALUES (?, ?, ?, NOW())',
-        [conversation_id, sender_id, message]
+        'INSERT INTO messages (conversation_id, sender_id, message, img_path, sent_at) VALUES (?, ?, ?, ?, NOW())',
+        [conversation_id, sender_id, message, img_path]
     );
 };
 
@@ -38,7 +38,7 @@ const updateLastMessageTimestamp = async ({ conversation_id }) => {
 // Get chat history between a member and trainer
 const getChatHistory = async (member_id, trainer_id) => {
     const [rows] = await pool.query(
-        `SELECT m.message, m.sent_at, 
+        `SELECT m.message, m.sent_at, img_path, 
                 CASE 
                     WHEN m.sender_id = ? THEN 'Member' 
                     ELSE 'Trainer' 

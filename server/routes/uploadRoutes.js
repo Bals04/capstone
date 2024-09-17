@@ -28,12 +28,14 @@ router.post('/uploadSingle', upload.single('file'), (req, res) => {
   if (req.file) {
     // Normalize the path by replacing backslashes with forward slashes
     req.file.path = req.file.path.replace(/\\/g, '/');
-    // Respond with JSON data containing information about the uploaded file
-    res.json(req.file);
+    
+    // Return the path to be used by the frontend
+    res.json({ filePath: req.file.path });
     console.log(req.file);
   } else {
     res.status(400).json({ error: 'File upload failed' });
   }
 });
+
 
 module.exports = router;

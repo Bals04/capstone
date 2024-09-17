@@ -17,10 +17,10 @@ module.exports = {
     
     sendMessage: async (req, res) => {
         try {
-            const { conversation_id, sender_id, message} = req.body;
+            const { conversation_id, sender_id, message, img_path} = req.body;
 
             
-            await sendMessage({ conversation_id, sender_id, message});
+            await sendMessage({ conversation_id, sender_id, message, img_path});
            // await updateLastMessageTimestamp(conversationId, timestamp);
             
             res.status(200).send("Message sent successfully");

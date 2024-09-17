@@ -76,6 +76,7 @@
             let socket;
             let memberid;
             let trainerid;
+            let conversationId;
 
             socket = io.connect("http://localhost:3000");
             id = window.userId;
@@ -86,6 +87,26 @@
             });
 
             fetchTrainerInfo();
+
+
+            const CheckConversation = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3000/checkConvo', {
+                        params: {
+                            member_id: memberid,
+                            trainer_id: trainerid
+                        }
+                    });
+                    if (response.status === 200) {
+                        conversationId = response.data.id
+                        alert(conversationId)
+                    } else {
+                        console.error('Failed to load messages:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            };
 
             function fetchTrainerInfo() {
                 axios.get('http://localhost:3000/getTrainerInfo', {
@@ -137,6 +158,7 @@
                         console.log(member.member_id)
                         memberid = member.member_id;  // Use this ID to load member-specific chat
                         loadChatHistory(memberid);  // Load chat history for the clicked member
+                        CheckConversation(); 
                     });
 
                     chatListElement.appendChild(listItem);
@@ -155,6 +177,7 @@
                     if (response.status === 200) {
                         const messages = response.data;
                         messages.forEach((message) => {
+                            console.log(message.sender)
                             const type = (message.sender === 'Trainer') ? 'sent' : 'received';
                             displayMessage(message, type);
                         });
@@ -166,57 +189,60 @@
                 }
             };
 
-            window.sendMessage = () => {
-                const reader = new FileReader();
+            window.sendMessage = async () => {
                 const messageContent = document.getElementById("messageInput").value.trim();
                 const fileInput = document.getElementById("fileInput");
                 const file = fileInput.files[0];
 
-                if (!messageContent && !file) {
+                let imgPath = "";
+
+                if (file) {
+                    // Upload the file first
+                    const path = "/server/";
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        console.log("jejejeje")
+                        const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                        imgPath = path + uploadResponse.data.filePath; // Store the file path from the response
+                    } catch (error) {
+                        console.error("Error uploading image:", error);
+                        alert("Image upload failed.");
+                        return;
+                    }
+                }
+
+                if (!messageContent && !imgPath) {
                     alert("Please enter a message or select a file to send.");
                     return;
                 }
 
                 const messageData = {
-                    conversation_id: 2,
+                    conversation_id: conversationId,
                     sender_id: trainerid,
                     message: messageContent || "",
+                    img_path: imgPath || "" // Include the image path if present
                 };
 
-                if (file) {
-                    reader.readAsDataURL(file);
-                    reader.onload = () => {
-                        messageData.image = reader.result;
+                sendSocketMessage(messageData);
 
-                        socket.emit("send_message", messageData);
-                        displayMessage(messageData, "sent");
-
-                        document.getElementById("messageInput").value = "";
-                        fileInput.value = "";
-
-                        axios.post('/api/messages/send', messageData)
-                            .then(response => {
-                                if (response.status !== 200) {
-                                    console.error('Failed to send message:', response.statusText);
-                                }
-                            })
-                            .catch(error => console.error('Error sending message:', error));
-                    };
-                } else {
-                    socket.emit("send_message", messageData);
-                    displayMessage(messageData, "sent");
-
-                    document.getElementById("messageInput").value = "";
-
-                    axios.post('http://localhost:3000/send', messageData)
-                        .then(response => {
-                            if (response.status !== 200) {
-                                console.error('Failed to send message:', response.statusText);
-                            }
-                        })
-                        .catch(error => console.error('Error sending message:', error));
-                }
+                // Clear inputs
+                // document.getElementById("messageInput").value = "";
+                // fileInput.value = "";
             };
+
+
+            function sendSocketMessage(data) {
+                socket.emit("send_message", data);
+                displayMessage(data, "sent");
+                axios.post('http://localhost:3000/send', data)
+                    .catch(error => console.error('Error sending message:', error.message));
+            }
 
             const clear = () => {
                 const messageDisplay = document.getElementById("messageDisplay");
@@ -231,15 +257,15 @@
                 messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
 
                 if (type === "sent") {
-                    messageElement.classList.add("bg-blue-100", "ml-auto");
+                    messageElement.classList.add("bg-orange-500", "ml-auto", "text-white");
                 } else {
                     messageElement.classList.add("bg-gray-200", "mr-auto");
                 }
 
-                if (data.image) {
+                if (data.img_path) {
                     const imgElement = document.createElement("img");
-                    imgElement.src = data.image;
-                    imgElement.classList.add("w-full", "rounded-lg", "mb-2");
+                    imgElement.src = data.img_path;
+                    imgElement.classList.add("w-full", "rounded-md", "mb-2");
                     messageElement.appendChild(imgElement);
                 }
 
@@ -253,9 +279,9 @@
                 messageDisplay.scrollTop = messageDisplay.scrollHeight;
             };
 
-            window.addEventListener('beforeunload', () => {
-                socket.off("receive_message");
-            });
+            // window.addEventListener('beforeunload', () => {
+            //     socket.off("receive_message");
+            // });
         });
     </script>
 

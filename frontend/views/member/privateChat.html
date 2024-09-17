@@ -120,36 +120,54 @@
 
 
 
-            window.sendMessage = () => {
+            window.sendMessage = async () => {
                 const messageContent = document.getElementById("messageInput").value.trim();
                 const fileInput = document.getElementById("fileInput");
                 const file = fileInput.files[0];
 
-                if (!messageContent && !file) {
+                let imgPath = "";
+
+                if (file) {
+                    // Upload the file first
+                    const path = "/server/";
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        console.log("jejejeje")
+                        const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                        imgPath = path + uploadResponse.data.filePath; // Store the file path from the response
+                    } catch (error) {
+                        console.error("Error uploading image:", error);
+                        alert("Image upload failed.");
+                        return;
+                    }
+                }
+                
+                if (!messageContent && !imgPath) {
                     alert("Please enter a message or select a file to send.");
                     return;
                 }
-
+                
                 const messageData = {
                     conversation_id: conversationId,
                     sender_id: memberid,
                     message: messageContent || "",
+                    img_path: imgPath || "" // Include the image path if present
                 };
+                alert(imgPath)
 
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        messageData.image = reader.result;
-                        sendSocketMessage(messageData);
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    sendSocketMessage(messageData);
-                }
+                sendSocketMessage(messageData);
 
+                // Clear inputs
                 document.getElementById("messageInput").value = "";
                 fileInput.value = "";
             };
+
 
             function sendSocketMessage(data) {
                 socket.emit("send_message", data);
@@ -170,10 +188,10 @@
                     messageElement.classList.add("bg-gray-200", "mr-auto");
                 }
 
-                if (data.image) {
+                if (data.img_path) {
                     const imgElement = document.createElement("img");
-                    imgElement.src = data.image;
-                    imgElement.classList.add("w-full", "rounded-lg", "mb-2");
+                    imgElement.src = data.img_path;
+                    imgElement.classList.add("w-full", "rounded-md", "mb-2");
                     messageElement.appendChild(imgElement);
                 }
 
