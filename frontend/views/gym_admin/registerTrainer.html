@@ -1,76 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flexperience</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../../dist/tailwind.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <style>
-    input{
+    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+    input {
         opacity: 1;
     }
 </style>
-<body class="bg-[#1E1E1E] ml-[14%] mr-[14%] mt-7 text-white">
+
+<body class="bg-[#1E1E1E] ml-[14%] mr-[14%] mt-7 text-white font-customFont">
     <div class="">
-        <div class="text-center border border-gray-50 rounded-sm text-2xl font-bold py-2 mb-10">
-            REGISTER TRAINER
-        </div>
         <div class="mb-7">
-            <span class="font-bold text-2xl">Profile</span><br>
-            <span class="text-s font-extralight">Some of the information will be displayed publicly so be careful what you share.</span>
+            <span class="font-bold text-2xl">Trainer Registration Form</span><br>
+            <span class="text-s font-extralight text-gray-400">Some of the information will be displayed publicly so be
+                careful what
+                you share.</span>
         </div>
         <div class="flex justify-between gap-2">
             <div>
                 <label for="Gym_name" class="font-semibold">First name</label> <br>
-                <input type="text" form="Gym_name" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black pl-5" placeholder="First name"> <br>
+                <input type="text" id="first_name" class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5"
+                    placeholder="First name"> <br>
                 <br>
                 <label for="Owner_name" class="font-semibold">Last name</label> <br>
-                <input type="text" form="Owner_name" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black pl-5" placeholder="Last name"> <br>
+                <input type="text" id="last_name" class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5"
+                    placeholder="Last name"> <br>
                 <br>
-                <label for="Email" class="font-semibold">Email</label> <br>
-                <input type="text" form="Email" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black pl-5" placeholder="Email"> <br>
+                <label for="Username" class="font-semibold">Username</label> <br>
+                <input type="text" id="username" class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5"
+                    placeholder="Username"> <br>
                 <br>
-                <label for="Contact_num" class="font-semibold">Bio</label> <br>
-                <input type="text" form="Contact_num" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black pl-5" placeholder="Bio"> <br>
+                <label for="Password" class="font-semibold">Password</label> <br>
+                <input type="password" id="password" class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5"
+                    placeholder="Password"> <br>
                 <br>
-                <label for="Contact_num" class="font-semibold">Years of Experience</label> <br>
-                <input type="number" form="Contact_num" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black pl-5" placeholder="Years of experience"> <br>
+                <label for="Bio" class="font-semibold">Bio</label> <br>
+                <input type="text" id="bio" class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5"
+                    placeholder="Bio"> <br>
+                <br>
+                <label for="Experience" class="font-semibold">Years of Experience</label> <br>
+                <input type="number" id="experience" class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5"
+                    placeholder="Years of experience"> <br>
                 <br>
             </div>
             <div>
+                <label for="gym_select" class="font-semibold">Assign to Gym</label> <br>
+                <select id="gym_select" name="gym_select"
+                    class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5">
+                    <!-- Dynamic options will be inserted here -->
+                </select> <br>
+                <br>
+
+                <label for="rate" class="font-semibold">Rates/Month (in pesos)</label> <br>
+                <input type="text" id="rate" name="rate"
+                    class="w-80 h-10 rounded-lg shadow-51 shadow-inner text-black pl-5" placeholder="Rates per month">
+                <br><br>
                 <span class="font-semibold">Proof of Trainer Certification</span><br>
-                <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload a copy of your trainer certificate. This is required to verify
-                    the legality of your registration.</span>
-                <label for="file-input" class="cursor-pointer mb-10 flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
+                <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload a copy of your trainer
+                    certificate. This is required to verify the legality of your registration.</span>
+                <label for="file-input"
+                    class="cursor-pointer mb-10 flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
                     <input type="file" id="file-input" ref="fileInputs" class="hidden" />
-                    <span class="font-medium text-white-700 text-[14px]">Upload image</span>
+                    <span class="font-medium text-white-700 text-[13px]">Upload image</span>
                     <span class="material-symbols-outlined">upload</span>
                 </label>
                 <label for="Gym_address" class="font-semibold">Profile image</label> <br>
-                <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload an image for your display profile/avatar.</span>
-                <label for="file-input" class="cursor-pointer flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
+                <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload an image for your display
+                    profile/avatar.</span>
+                <label for="file-input"
+                    class="cursor-pointer flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
                     <input type="file" id="file-input" ref="fileInputs" class="hidden" />
-                    <span class="font-medium text-white-700 text-[14px]">Upload image</span>
+                    <span class="font-medium text-white-700 text-[13px]">Upload image</span>
                     <span class="material-symbols-outlined">upload</span>
                 </label>
                 <br>
                 <br>
-                <!-- <div class="w-96 h-56 border border-white bg-white text-black">
-                    Image sa cert
-                </div> -->
             </div>
         </div>
         <div class="mt-10 w-full border border-white">
         </div>
         <div class="float-right font-extralight mt-2 mb-10 text-base">
             <button class="pr-5 pl-5 p-1 border border-white rounded-lg hover:bg-black">Cancel</button>
-            <button class="bg-[#aa99ff] rounded-lg pr-5 pl-5 p-1 hover:bg-white hover:text-black duration-200">Submit</button>
+            <button id="submit"
+                class="bg-50 rounded-lg pr-5 pl-5 p-1 hover:bg-white hover:text-black duration-200">Submit</button>
         </div>
-        <span class="font-thin text-xs text-justify opacity-50">For more information on business permit requirements, please refer to the [www.burat.com]</span>
+        <span class="font-thin text-xs text-justify opacity-50">For more information about this website,
+            please refer to the [www.Flexperience/About.com]</span>
     </div>
 </body>
+
 </html>
+
+<script>
+    // Call this function when the page loads
+    window.onload = async function () {
+        try {
+            const gymAdminId = getCookie('gymAdminId');
+            const response = await axios.get('http://localhost:3000/gymsById', {
+                params: {
+                    admin_id: gymAdminId
+                }
+            });
+            const gyms = response.data;
+            const gymSelect = document.getElementById('gym_select');
+
+            // Loop through the gyms and add them as options to the select element
+            gyms.forEach(gym => {
+                if (gym.status === "Verified") { // Only add gyms with status 'Verified'
+                    const option = document.createElement('option');
+                    option.value = gym.gym_id;
+                    option.text = gym.gym_name;
+                    gymSelect.appendChild(option);
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching gyms:', error);
+        }
+    };
+
+    // Function to store username and password and call AddToAccounts
+    document.getElementById('submit').addEventListener('click', async function (event) {
+        event.preventDefault();
+
+        const Username = document.getElementById('username').value;
+        const Password = document.getElementById('password').value;
+        const FirstName = document.getElementById('first_name').value;
+        const LastName = document.getElementById('last_name').value;
+        const Bio = document.getElementById('bio').value;
+        const Experience = document.getElementById('experience').value;
+        const GymId = document.getElementById('gym_select').value;
+        const Rates = document.getElementById('rate').value;
+
+        console.log("gym id value: " + GymId)
+
+        // First, call AddToAccounts function to add the user credentials in the accounts table
+        const accountAdded = await AddToAccounts(Username, Password);
+
+        // 
+        if (accountAdded) {
+            RegisterTrainer(GymId, FirstName, LastName, Bio, Experience, Rates);
+        }
+    });
+
+    async function AddToAccounts(Username, Password) {
+        try {
+            const formData = {
+                username: Username,
+                password: Password,
+                usertype: "Trainer"
+            };
+            const response = await axios.post('http://localhost:3000/auth/Register', formData);
+            console.log('Registration successful:', response.data);
+            return true;  // Indicate success
+        } catch (error) {
+            console.error('Error submitting registration:', error);
+            return false;  // Indicate failure
+        }
+    }
+
+    async function RegisterTrainer(gymid, firstname, lastname, bio, experience, rates) {
+        try {
+            const formData = {
+                gymid: gymid,
+                firstname: firstname,
+                lastname: lastname,
+                bio: bio,
+                experience: experience,
+                rates: rates
+            };
+            const response = await axios.post('http://localhost:3000/createGymTrainer', formData);
+            console.log('Trainer registration successful:', response.data);
+        } catch (error) {
+            console.error('Error submitting Gym Trainer Registration:', error.message);
+        }
+    }
+
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+</script>

@@ -11,6 +11,12 @@
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../../scripts/gymAdmin.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -221,7 +227,7 @@
                         </div>
                     </div>
                     <div class="flex justify-between gap-5">
-                        <a href="registerGym.html"
+                        <a href="register.html"
                             class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
                             Gym</a>
                         <a href="registerTrainer.html"
@@ -263,15 +269,37 @@
     <div class="container p-4 pl-[120px] shadow-lg ">
         <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
         <div class="bg-div_color p-6 rounded-lg shadow-xl max-w-3xl border-border_color border-2">
-          <canvas id="myChart" class="bg-div_color"></canvas>
+            <canvas id="myChart" class="bg-div_color"></canvas>
         </div>
     </div>
 </body>
 
 </html>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/frontend/scripts/auth.js"></script>
-<script src="../../scripts/gymAdmin.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script>
+    window.onload = async function () {
+        const adminId = fetchGymAdminInfo()
+        async function fetchGymAdminInfo() {
+            try {
+                const response = await axios.get('http://localhost:3000/getGymAdminInfo', {
+                    params: {
+                        account_id: userId
+                    }
+                });
+                const data = response.data[0]; // Assuming the response data contains the member info
+                setCookie('gymAdminId', data.admin_id, 1); // Expires in 1 day
+                return data.admin_id; // Return the admin_id
+            } catch (error) {
+                console.error('Error fetching gym admin info:', error.message);
+            }
+        }
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+    }
+</script>

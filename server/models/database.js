@@ -452,8 +452,19 @@ async function retrieveTrainerchatLog(member_id) {
     return result
 }
 
+async function getGymsByID(admin_id) {
+    const [result] = await pool.query(`
+        SELECT gym_id, gym_name, status FROM gyms
+        WHERE admin_id = ?
+        AND status = 'verified'
+    `, [admin_id])
+
+    return result
+}
+
 
 module.exports = {
+    getGymsByID,
     retrieveTrainerchatLog,
     retrieveMemberChatLog,
     GetGymData,

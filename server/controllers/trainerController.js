@@ -2,7 +2,7 @@ const { getMembers, getExercises,
     AddCustomWorkout, getStudCount,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog } = require('../models/database');
-const { getAllTrainers, getGymTrainers } = require('../models/trainers');
+const { getAllTrainers, getGymTrainers, insertGymTrainers } = require('../models/trainers');
 
 module.exports = {
 
@@ -125,5 +125,16 @@ module.exports = {
             res.status(500).send("Internal Server Error");
         }
     },
+    createGymTrainer: async (req, res) => {
+        const { gymid, firstname, lastname, bio, experience, rates } = req.body;
+        try {
+            await insertGymTrainers(gymid, firstname, lastname, bio, experience, rates);
+            res.status(200).send("Trainer added successfully");
+
+        } catch (error) {
+            console.error("Error adding trainer:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    }
 
 }
