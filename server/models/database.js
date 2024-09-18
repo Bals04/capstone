@@ -369,10 +369,11 @@ async function GetMemberInfo(account_id) {
     return result
 }
 
-async function GetTrainerInfo(account_id) {
+async function GetTrainerInfo(user_id) {
+    console.log("res:", user_id)
     const [result] = await pool.query(`
     SELECT * FROM gym_trainer WHERE user_id = ?
-    `, [account_id])
+    `, [user_id])
 
     return result
 }

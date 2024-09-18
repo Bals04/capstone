@@ -8,12 +8,12 @@ module.exports = {
 
     getTrainerInfo: async (req, res) => {
         try {
-            const { account_id } = req.query;
-            console.log(account_id)
-            const data = await GetTrainerInfo(account_id);
+            const { user_id } = req.query;
+            console.log("query: "+ user_id)
+            const data = await GetTrainerInfo(user_id);
             res.json(data);
         } catch (error) {
-            console.error("Error fetching members:", error.message);
+            console.error("Error fetching trainer:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },

@@ -7,6 +7,7 @@
     <title>Chat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
     <link rel="stylesheet" href="../../dist/tailwind.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
@@ -17,7 +18,6 @@
             --custom-light-blue: #E0F7FA;
         }
     </style>
-    <script src="/frontend/scripts/auth.js"></script>
 </head>
 
 <body class="font-sans bg-gray-500 min-h-screen flex items-center justify-center p-4">
@@ -109,12 +109,14 @@
             };
 
             function fetchTrainerInfo() {
+                console.log(id)
                 axios.get('http://localhost:3000/getTrainerInfo', {
                     params: {
-                        account_id: id
+                        user_id: id
                     }
                 })
                     .then(response => {
+                        console.log("--", id)
                         console.log(response.data[0]);
                         const trainerData = response.data[0];
                         trainerid = trainerData.trainer_id;
