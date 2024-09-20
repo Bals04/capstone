@@ -100,6 +100,28 @@
         <span class="font-thin text-xs text-justify opacity-50">For more information about this website,
             please refer to the [www.Flexperience/About.com]</span>
     </div>
+    <div id="error-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden transition-opacity duration-300 ease-in-out">
+        <div
+            class="bg-white text-gray-800 max-w-sm w-full p-6 rounded-lg shadow-2xl transform transition-transform duration-300 ease-in-out scale-95">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold text-orange-700">Form Error</h2>
+                <button id="close-modal"
+                    class="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors duration-200">
+                </button>
+            </div>
+            <p id="error-message" class="text-sm text-gray-600 leading-relaxed mb-6"></p>
+            <div class="flex justify-end">
+                <button id="close-modal-btn"
+                    class="bg-orange-700 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-orange-600 transition-colors duration-200 focus:outline-none">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
 </body>
 
 </html>
@@ -144,15 +166,28 @@
         const GymId = document.getElementById('gym_select').value;
         const Rates = document.getElementById('rate').value;
 
-        console.log("gym id value: " + GymId)
+        try {
+            const accountAdded = await AddToAccounts(Username, Password);
 
-        // First, call AddToAccounts function to add the user credentials in the accounts table
-        const accountAdded = await AddToAccounts(Username, Password);
+            if (accountAdded) {
+                await RegisterTrainer(GymId, FirstName, LastName, Bio, Experience, Rates);
+            }
+        } catch (error) {
 
-        // 
-        if (accountAdded) {
-            RegisterTrainer(GymId, FirstName, LastName, Bio, Experience, Rates);
         }
+    });
+
+    function showModal(message) {
+        const modal = document.getElementById('error-modal');
+        const errorMessageElement = document.getElementById('error-message');
+        errorMessageElement.textContent = message;  // Set the error message
+        modal.classList.remove('hidden');  // Show the modal
+    }
+
+    // Close the modal
+    document.getElementById('close-modal-btn').addEventListener('click', function () {
+        const modal = document.getElementById('error-modal');
+        modal.classList.add('hidden');  // Hide the modal
     });
 
     async function AddToAccounts(Username, Password) {
@@ -166,10 +201,18 @@
             console.log('Registration successful:', response.data);
             return true;  // Indicate success
         } catch (error) {
+            if (error.response && error.response.data.message) {
+                const errorMessage = error.response.data.message;  // Access the error message directly
+                console.log(errorMessage);
+                showModal(errorMessage);  // Display the error message in a modal
+            } else {
+                console.error('Error submitting Gym Trainer Registration:', error.message);
+            }
             console.error('Error submitting registration:', error);
             return false;  // Indicate failure
         }
     }
+
 
     async function RegisterTrainer(gymid, firstname, lastname, bio, experience, rates) {
         try {
@@ -184,11 +227,18 @@
             };
             const response = await axios.post('http://localhost:3000/createGymTrainer', formData);
             console.log('Trainer registration successful:', response.data);
-            window.location.href = "gymAdminDashboard.html"; // Corrected here
+            window.location.href = "gymAdminDashboard.html";  // Redirect on success
         } catch (error) {
-            console.error('Error submitting Gym Trainer Registration:', error.message);
+            if (error.response && error.response.data.message) {
+                const errorMessage = error.response.data.message;  // Access the error message directly
+                console.log(errorMessage);
+                showModal(errorMessage);  // Display the error message in a modal
+            } else {
+                console.error('Error submitting Gym Trainer Registration:', error.message);
+            }
         }
     }
+
 
     function getCookie(name) {
         const nameEQ = name + "=";

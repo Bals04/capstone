@@ -3,9 +3,10 @@ const router = express.Router();
 const path = require('path');
 const AuthController = require('../controllers/authController');
 const { createTokens, validateToken } = require('../middlewares/JWT')
+const validation = require('../middlewares/validation')
+const userSchema = require('../validations/userValidations')
 
-
-router.post("/Register", AuthController.Register);
+router.post("/Register", validation(userSchema), AuthController.Register);
 router.post("/RegisterAdmin", AuthController.createGymAdmin);
 router.post("/RegisterMember", AuthController.createMembers);
 router.post("/Login", AuthController.Login);

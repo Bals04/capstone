@@ -18,6 +18,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        /* Modal Styling */
+        #errorModal {
+            z-index: 50;
+        }
     </style>
 </head>
 
@@ -40,7 +45,8 @@
                     <div class="relative">
                         <input class="p-2 mt-4 rounded-xl border w-full" id="password" type="password" name="email"
                             placeholder="Password">
-                        <ion-icon class="absolute mt-2 text-2xl text-gray-400 top-1/2 right-3 -translate-y-1/2"
+                        <ion-icon id="showPassword"
+                            class="absolute mt-2 text-2xl text-gray-400 top-1/2 right-3 -translate-y-1/2 cursor-pointer"
                             name="eye-outline"></ion-icon>
                     </div>
                     <button class="text-white bg-customOrange rounded-xl py-2 hover:scale-105 duration-300"
@@ -78,6 +84,25 @@
             </div>
         </div>
     </section>
+    <!-- Modal HTML -->
+    <div id="errorModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm">
+        <div
+            class="bg-white rounded-xl shadow-lg w-1/3 p-8 text-center text-black transition-transform duration-300 transform scale-105">
+            <!-- Modal Heading -->
+            <h2 class="text-2xl font-bold mb-6 text-customOrange">Login Failed</h2>
+
+            <!-- Modal Content -->
+            <p class="text-gray-700 mb-6">Oops! Incorrect username or password. Please try again.</p>
+
+            <!-- Close Button -->
+            <button id="closeModal"
+                class="mt-4 bg-customOrange text-white py-3 px-6 rounded-full shadow-md hover:bg-opacity-90 transition duration-300 transform hover:scale-110">
+                Close
+            </button>
+        </div>
+    </div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -85,7 +110,6 @@
     <script src="/frontend/scripts/redirect.js"></script>
     <script>
         document.getElementById("login").addEventListener("click", async function (event) {
-            console.log("clickeddasdad")
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
@@ -97,7 +121,6 @@
                     withCredentials: true // This ensures the session cookie is sent with the request
                 });
 
-
                 if (response.status === 200) {
                     // Set cookies instead of localStorage
                     setCookie('accessToken', response.data.accessToken, 1); // Expires in 1 day
@@ -105,11 +128,21 @@
 
                     redirectToDashboard(response.data.userType);
                 } else {
-                    console.error('Login failed:', response.data.error);
+                    showModal();
                 }
             } catch (error) {
-                console.error('Login failed:', error.response ? error.response.data.error : error.message);
+                showModal();
             }
+        });
+
+        // Function to show modal
+        function showModal() {
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        // Function to close modal
+        document.getElementById("closeModal").addEventListener("click", function () {
+            document.getElementById('errorModal').classList.add('hidden');
         });
 
         // Helper function to set cookies
@@ -134,6 +167,15 @@
             }
             return null;
         }
+
+        document.getElementById("showPassword").addEventListener("click", async function (event) {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type == "text") {
+                passwordField.type = "password"
+            } else {
+                passwordField.type = "text"
+            }
+        })
 
     </script>
 </body>

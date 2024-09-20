@@ -17,6 +17,7 @@
         /* Ensure the map has a defined height */
         @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
         #map_section {
             height: 300px;
             width: 100%;
@@ -33,6 +34,10 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #error-modal {
+            z-index: 1000;
         }
 
         .modal-content {
@@ -87,8 +92,12 @@
                         class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
                 </div>
                 <div id="fileUploadForm">
+                    <span class="font-semibold">Business Permit</span><br>
+                    <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload a copy of your business
+                        permit. This is required to verify
+                        the legality of your gym. Ensure it includes the following information:
+                        Business name, permit number, issuance date, expiration date.</span> <br>
                     <div>
-                        <label for="business_permit" class="font-semibold">Business Permit</label>
                         <div class="mt-1">
                             <label
                                 class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
@@ -99,10 +108,13 @@
                             </label>
                             <span id="businessPermitFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
                         </div>
-                    </div>
-
+                    </div><br>
+                    <span class="font-semibold">Gym Logo</span><br>
+                    <span class="font-thin text-xs text-justify opacity-50 w-auto">Please upload a copy of your gym
+                        logo. This is essential for branding and promotional purposes. Ensure the logo is
+                        high-resolution and visually represents your gym's identity.</span>
+                    <br>
                     <div>
-                        <label for="gym_logo" class="font-semibold">Gym Logo</label>
                         <div class="mt-1">
                             <label
                                 class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
@@ -148,6 +160,26 @@
         </div>
     </div>
 
+    <div id="error-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden transition-opacity duration-300 ease-in-out">
+        <div
+            class="bg-white text-gray-800 max-w-sm w-full p-6 rounded-lg shadow-2xl transform transition-transform duration-300 ease-in-out scale-95">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold text-orange-700">Form Error</h2>
+                <button id="close-modal"
+                    class="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors duration-200">
+                </button>
+            </div>
+            <p id="error-message" class="text-sm text-gray-600 leading-relaxed mb-6"></p>
+            <div class="flex justify-end">
+                <button id="close-modal-btn"
+                    class="bg-orange-700 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-orange-600 transition-colors duration-200 focus:outline-none">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -188,41 +220,48 @@
 
         const submit = document.getElementById("Submit");
         document.getElementById("Submit").addEventListener("click", async function (event) {
-            const Continue = document.getElementById("Continue");
+            console.log("asdsda")
             event.preventDefault(); // Prevent the default form submission
-            // Your existing form data submission logic
-            showModal();
-            Continue.addEventListener("click", async function () {
-                try {
-                    var gymName = document.getElementById("Gym_name").value;
-                    const contactNum = document.getElementById("Contact_num").value;
-                    const dailyRates = document.getElementById("daily_rates").value;
-                    const monthlyRates = document.getElementById("monthly_rates").value;
-                    const gymAddress = document.getElementById("Gym_address").value;
-                    const admin_id = await fetchGymAdminInfo();
-                    await fetchGymAdminInfo()
-                    const formData = {
-                        admin_id: admin_id,
-                        gymname: gymName,
-                        latitude: lat,
-                        longtitude: long,
-                        daily_rate: dailyRates,
-                        monthly_rate: monthlyRates,
-                        contact_no: contactNum,
-                        street_address: gymAddress,
-                        status: 'Pending'
-                    };
 
-                    const response = await axios.post('http://localhost:3000/RegisterGym', formData);
+            try {
+                console.log("here")
+                var gymName = document.getElementById("Gym_name").value;
+                const contactNum = document.getElementById("Contact_num").value;
+                const dailyRates = document.getElementById("daily_rates").value;
+                const monthlyRates = document.getElementById("monthly_rates").value;
+                const gymAddress = document.getElementById("Gym_address").value;
+                const admin_id = await fetchGymAdminInfo();
+                await fetchGymAdminInfo()
+                const formData = {
+                    admin_id: admin_id,
+                    gymname: gymName,
+                    latitude: lat,
+                    longtitude: long,
+                    daily_rate: dailyRates,
+                    monthly_rate: monthlyRates,
+                    contact_no: contactNum,
+                    street_address: gymAddress,
+                    status: 'Pending'
+                };
 
-                    // Only call uploadFiles if the initial form data submission succeeds
-                    if (response.status === 200) {
-                        uploadFiles(); // This should be without passing the event
-                    }
-                } catch (error) {
-                    console.error('Error submitting form:', error.message);
+                const response = await axios.post('http://localhost:3000/RegisterGym', formData);
+
+                // Only call uploadFiles if the initial form data submission succeeds
+                if (response.status === 200) {
+                    // uploadFiles(); // This should be without passing the event
+                    showModal();
                 }
-            })
+            } catch (error) {
+                if (error.response && error.response.data.message) {
+                    const errorMessage = error.response.data.message;  // Access the error message directly
+                    console.log(errorMessage);
+                    showValidationModal(errorMessage);  // Display the error message in a modal
+                } else {
+                    console.error('Error submitting Gym Trainer Registration:', error.message);
+                }
+                console.error('Error submitting registration:', error);
+                return false;  // Indicate failure
+            }
 
         });
 
@@ -318,6 +357,19 @@
         function closeModal() {
             document.getElementById("successModal").style.display = "none";
         }
+
+        function showValidationModal(message) {
+            const modal = document.getElementById('error-modal');
+            const errorMessageElement = document.getElementById('error-message');
+            errorMessageElement.textContent = message;  // Set the error message
+            modal.classList.remove('hidden');  // Show the modal
+        }
+
+        // Close the modal
+        document.getElementById('close-modal-btn').addEventListener('click', function () {
+            const modal = document.getElementById('error-modal');
+            modal.classList.add('hidden');  // Hide the modal
+        });
     </script>
 </body>
 <script src="/frontend/scripts/auth.js"></script>
