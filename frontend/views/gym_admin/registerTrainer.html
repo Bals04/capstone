@@ -179,10 +179,12 @@
                 lastname: lastname,
                 bio: bio,
                 experience: experience,
-                rates: rates
+                rates: rates,
+                trainerType: "gym trainer"
             };
             const response = await axios.post('http://localhost:3000/createGymTrainer', formData);
             console.log('Trainer registration successful:', response.data);
+            window.location.href = "gymAdminDashboard.html"; // Corrected here
         } catch (error) {
             console.error('Error submitting Gym Trainer Registration:', error.message);
         }

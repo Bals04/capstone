@@ -8,7 +8,11 @@ const pool = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
 }).promise()
-
+// Log the credentials without the password
+console.log('Database connection details:');
+console.log(`Host: ${process.env.MYSQL_HOST}`);
+console.log(`User: ${process.env.MYSQL_USER}`);
+console.log(`Database: ${process.env.MYSQL_DATABASE}`);
 
 async function getGymInfo() {
     const [rows] = await pool.query(
@@ -106,29 +110,34 @@ async function AddCustomWorkout(member_id, exercise_id, reps, sets, workout_date
     return result
 }
 
-async function getWorkoutOftheWeek(memberId, weekNo) {
+async function getWorkoutOftheWeek(memberId) {
     const [rows] = await pool.query(`
-    WITH CTE_WORKOUT_SCHEDULE AS (
-    SELECT concat(m.lastname, ', ', m.firstname) AS Name, e.exercise, mw.repititions, mw.sets, DATE_FORMAT(mw.workout_date, '%M %e, %Y') AS formatted_workout_date,
-    DATEDIFF(mw.workout_date, mr.start_date) + DAY(mr.start_date) AS Day
-    FROM member_workout_details mw
-    JOIN members m on mw.member_id = m.member_id
-    JOIN exercises e ON mw.exercise_id = e.exercise_id
-    JOIN member_registration mr ON mr.member_id = mw.member_id
-    WHERE mw.member_id = ?
-    ),
-    CTE_WEEK AS (
-        SELECT Name, Exercise,repititions,sets,Day,
-        CASE 
-        WHEN Day >= 1 AND Day < 7 THEN 1
-        WHEN Day >= 7 AND Day < 14 THEN 2
-        WHEN Day >= 14 AND Day < 21 THEN 3
-        WHEN Day >= 21 AND Day < 28 THEN 4
-        END AS Current_week
-        FROM CTE_WORKOUT_SCHEDULE
-    )
-    SELECT * FROM CTE_WEEK WHERE Current_week = ?
-        `, [memberId, weekNo])
+        WITH CTE_CURRENT_WEEK AS (
+            SELECT 
+                template_id, (SELECT CONCAT(lastname, ', ', firstname) FROM members WHERE member_id = ?) AS Name,
+                m.date_started, 
+                CASE 
+                    WHEN DATEDIFF(CURRENT_DATE, m.date_started) >= 1 AND DATEDIFF(CURRENT_DATE, m.date_started) < 7 THEN 1
+                    WHEN DATEDIFF(CURRENT_DATE, m.date_started) >= 7 AND DATEDIFF(CURRENT_DATE, m.date_started) < 14 THEN 2
+                    WHEN DATEDIFF(CURRENT_DATE, m.date_started) >= 14 AND DATEDIFF(CURRENT_DATE, m.date_started) < 21 THEN 3
+                    WHEN DATEDIFF(CURRENT_DATE, m.date_started) >= 21 AND DATEDIFF(CURRENT_DATE, m.date_started) < 28 THEN 4
+                    ELSE 0
+                END AS Week_Number,
+                DATEDIFF(CURRENT_DATE, m.date_started) AS day_number
+            FROM 
+                member_workout_plan m
+        ),
+
+        CTE_WORKOUT AS (
+            SELECT c.template_id, c.Name, t.exercise_name,
+            t.repetitions, t.sets, t.week_no, t.day_no, c.Week_number, c.day_number
+            FROM CTE_CURRENT_WEEK c
+            LEFT JOIN template_exercises t 
+            ON t.template_id = c.template_id
+            WHERE t.week_no = c.Week_number AND t.day_no = c.day_number AND c.member_id
+        )
+        SELECT * FROM CTE_WORKOUT;`,
+        [memberId, memberId])
     return rows
 }
 async function getWorkoutoftheDay(memberId, date) {
@@ -372,7 +381,7 @@ async function GetMemberInfo(account_id) {
 async function GetTrainerInfo(user_id) {
     console.log("res:", user_id)
     const [result] = await pool.query(`
-    SELECT * FROM gym_trainer WHERE user_id = ?
+    SELECT * FROM trainers WHERE account_id = ?
     `, [user_id])
 
     return result
@@ -446,7 +455,7 @@ async function retrieveTrainerchatLog(member_id) {
     const [result] = await pool.query(`
         SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS trainer_name, c.trainer_id
         FROM conversation_tbl c
-        INNER JOIN gym_trainer m ON c.trainer_id = m.trainer_id
+        INNER JOIN trainers m ON c.trainer_id = m.trainer_id
         WHERE member_id = ?
     `, [member_id])
 

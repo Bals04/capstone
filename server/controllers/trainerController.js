@@ -126,9 +126,9 @@ module.exports = {
         }
     },
     createGymTrainer: async (req, res) => {
-        const { gymid, firstname, lastname, bio, experience, rates } = req.body;
+        const { gymid, firstname, lastname, bio, experience, rates, trainerType } = req.body;
         try {
-            await insertGymTrainers(gymid, firstname, lastname, bio, experience, rates);
+            await insertGymTrainers(gymid, firstname, lastname, bio, experience, rates, trainerType);
             res.status(200).send("Trainer added successfully");
 
         } catch (error) {
