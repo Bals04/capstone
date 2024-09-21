@@ -160,23 +160,27 @@
         </div>
     </div>
 
-    <div id="error-modal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden transition-opacity duration-300 ease-in-out">
-        <div
-            class="bg-white text-gray-800 max-w-sm w-full p-6 rounded-lg shadow-2xl transform transition-transform duration-300 ease-in-out scale-95">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-semibold text-orange-700">Form Error</h2>
-                <button id="close-modal"
-                    class="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors duration-200">
-                </button>
+    <div id="error-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-orange-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
             </div>
-            <p id="error-message" class="text-sm text-gray-600 leading-relaxed mb-6"></p>
-            <div class="flex justify-end">
-                <button id="close-modal-btn"
-                    class="bg-orange-700 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-orange-600 transition-colors duration-200 focus:outline-none">
-                    Close
-                </button>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-orange-600">Form Error</h2>
+                <p id="error-message-toast" class="text-sm text-gray-600">Your error message here</p>
             </div>
+            <button id="close-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -220,11 +224,10 @@
 
         const submit = document.getElementById("Submit");
         document.getElementById("Submit").addEventListener("click", async function (event) {
-            console.log("asdsda")
             event.preventDefault(); // Prevent the default form submission
-
+            let businessPermitPath;
+            let gymLogoPath;
             try {
-                console.log("here")
                 var gymName = document.getElementById("Gym_name").value;
                 const contactNum = document.getElementById("Contact_num").value;
                 const dailyRates = document.getElementById("daily_rates").value;
@@ -248,14 +251,13 @@
 
                 // Only call uploadFiles if the initial form data submission succeeds
                 if (response.status === 200) {
-                    // uploadFiles(); // This should be without passing the event
-                    showModal();
+                    await uploadFiles(); // This should be without passing the event
                 }
             } catch (error) {
                 if (error.response && error.response.data.message) {
                     const errorMessage = error.response.data.message;  // Access the error message directly
                     console.log(errorMessage);
-                    showValidationModal(errorMessage);  // Display the error message in a modal
+                    showToast(errorMessage);  // Display the error message in a modal
                 } else {
                     console.error('Error submitting Gym Trainer Registration:', error.message);
                 }
@@ -266,47 +268,65 @@
         });
 
 
-        function updateFileName(input, fileNameId) {
-            var fileName = input.files[0] ? input.files[0].name : "No file chosen";
-            document.getElementById(fileNameId).textContent = fileName;
-        }
+        async function uploadFiles() {
+            try {
+                const businessPermitFile = document.getElementById("business_permit").files[0];
+                const gymLogoFile = document.getElementById("gym_logo").files[0];
 
-        function uploadFiles() {
-            const businessPermitFile = document.getElementById("business_permit").files[0];
-            const gymLogoFile = document.getElementById("gym_logo").files[0];
-
-            if (!businessPermitFile || !gymLogoFile) {
-                alert("Please select both files to upload.");
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('business_permit', businessPermitFile);
-            formData.append('gym_logo', gymLogoFile);
-
-            axios.post('http://localhost:3000/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+                if (!businessPermitFile || !gymLogoFile) {
+                    alert("Please select both files to upload.");
+                    return;
                 }
-            })
-                .then(response => {
-                    const path = "/server/";
-                    const businessPermitPath = path + response.data.business_permit[0].path;
-                    const gymLogoPath = path + response.data.gym_logo[0].path;
 
-                    // Chaining the subsequent uploads
-                    uploadDocs(businessPermitPath).then(() => {
-                        uploadLogo(gymLogoPath).then(() => {
-                            // showModal(); // Only show the modal after all uploads complete successfully
-                        });
-                    });
+                const formData = new FormData();
+                formData.append('business_permit', businessPermitFile);
+                formData.append('gym_logo', gymLogoFile);
+
+                // First, upload the files using .then()
+                axios.post('http://localhost:3000/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 })
-                .catch(error => {
-                    alert('Error uploading files.');
-                    console.error(error);
-                });
+                    .then((response) => {
+                        // Pass the file paths to the uploadGymFiles function
+                        businessPermitPath = response.data.business_permit[0].path
+                        gymLogoPath = response.data.gym_logo[0].path
+                        console.log("All uploads completed successfully.");
+                        uploadGymFiles();
+                        alert("finishedd")
+                    })
+                    .catch((error) => {
+                        console.error("Error during upload: ", error);
+                        alert('Error uploading files.');
+                    });
+
+            } catch (error) {
+                console.error("Unexpected error: ", error);
+                alert('Error uploading files.');
+            }
         }
 
+
+        async function uploadGymFiles() {
+            try {
+                const path = "/server/";
+                console.log("business pertmit path," + businessPermitPath)
+                console.log("gym logo path, " + gymLogoPath)
+                // Upload the logo first
+                console.log("Starting logo upload...");
+                await uploadLogo(gymLogoPath);
+                console.log("Logo uploaded successfully.");
+                console.log("Starting document upload...");
+                await uploadDocs(businessPermitPath);
+                console.log("Document uploaded successfully.");
+
+
+            } catch (error) {
+                console.error("Error during the gym file upload: ", error.message);
+                alert('Error uploading gym files.');
+            }
+        }
 
         async function uploadDocs(path) {
             try {
@@ -315,8 +335,10 @@
                     document_path: path,
                 };
                 const response = await axios.post('http://localhost:3000/AddGymDocuments', formData);
+                console.log("Docs upload response:", response.status);
             } catch (error) {
-                console.error('Error submitting form:', error);
+                console.error('Error submitting docs:', error);
+                throw error;  // Re-throw the error so it can be caught in the chain
             }
         }
 
@@ -327,12 +349,16 @@
                 };
                 const response = await axios.post('http://localhost:3000/AddGymLogo', formData);
                 if (response.status === 200) {
-                    showModal(); // Show success modal
+                    return response;  // Return to ensure promise resolves
+                } else {
+                    throw new Error("Logo upload failed");
                 }
             } catch (error) {
-                console.error('Error submitting form:', error);
+                console.error('Error submitting logo:', error);
+                throw error;  // Re-throw to be caught in chain
             }
         }
+
 
         function reverseGeocode(lat, long) {
             const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}`;
@@ -358,17 +384,29 @@
             document.getElementById("successModal").style.display = "none";
         }
 
-        function showValidationModal(message) {
-            const modal = document.getElementById('error-modal');
-            const errorMessageElement = document.getElementById('error-message');
-            errorMessageElement.textContent = message;  // Set the error message
-            modal.classList.remove('hidden');  // Show the modal
+        function showToast(message) {
+            const toast = document.getElementById('error-toast');
+            const errorMessageElement = document.getElementById('error-message-toast');
+
+            // Set the error message
+            errorMessageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove the hidden state and the off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+            }, 3000);
         }
 
-        // Close the modal
-        document.getElementById('close-modal-btn').addEventListener('click', function () {
-            const modal = document.getElementById('error-modal');
-            modal.classList.add('hidden');  // Hide the modal
+        // Close button functionality
+        document.getElementById('close-toast-btn').addEventListener('click', () => {
+            const toast = document.getElementById('error-toast');
+            toast.classList.add('translate-x-full');  // Slide out
+            setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
         });
     </script>
 </body>

@@ -184,8 +184,8 @@ async function RegisterGym(admin_id, gymname, latitude, longtitude, daily_rate, 
 
 async function AddGymDocuments(document_type, document_path) {
     const result = await pool.query(`
-    INSERT INTO gym_documents (gym_id, document_type, document_path) 
-    VALUES ((SELECT gym_id FROM gyms ORDER BY gym_id desc LIMIT 1), ?, ?)
+    INSERT INTO gym_documents (gym_id, document_type, document_path, submitted_at) 
+    VALUES ((SELECT gym_id FROM gyms ORDER BY gym_id desc LIMIT 1), ?, ?, NOW())
     `, [document_type, document_path])
 
     return result

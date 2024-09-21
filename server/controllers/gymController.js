@@ -137,7 +137,7 @@ module.exports = {
     AddGymDocuments: async (req, res) => {
         try {
             const { document_type, document_path } = req.body;
-            console.log("Received data on the server:", req.body);
+            console.log("Received data on the server[document]:", req.body);
             const data = await AddGymDocuments(document_type, document_path);
             res.json(data);
         } catch (error) {
@@ -148,7 +148,7 @@ module.exports = {
     AddGymLogo: async (req, res) => {
         try {
             const { img_path } = req.body;
-            console.log("Received data on the server:", req.body);
+            console.log("Received data on the server[logo]:", req.body);
             const data = await AddGymLogo(img_path);
             res.json(data);
         } catch (error) {
