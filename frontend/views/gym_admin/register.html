@@ -290,8 +290,8 @@
                 })
                     .then((response) => {
                         // Pass the file paths to the uploadGymFiles function
-                        businessPermitPath = response.data.business_permit[0].path
-                        gymLogoPath = response.data.gym_logo[0].path
+                        businessPermitPath = "/server/"+response.data.business_permit[0].path
+                        gymLogoPath = "/server/"+response.data.gym_logo[0].path
                         console.log("All uploads completed successfully.");
                         uploadGymFiles();
                         console.log("delay")

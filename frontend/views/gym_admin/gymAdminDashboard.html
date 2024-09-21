@@ -302,6 +302,7 @@
 <script>
     window.onload = async function () {
         // Check the value of the 'status' parameter
+        fetchGymAdminInfo()
         const status = getQueryParam('status');
         if (status === 'gym_registered') {
             // Show your toast notification
@@ -345,6 +346,7 @@
                     }
                 });
                 const data = response.data[0]; // Assuming the response data contains the member info
+                console.log("id", data.admin_id)
                 setCookie('gymAdminId', data.admin_id, 1); // Expires in 1 day
                 return data.admin_id; // Return the admin_id
             } catch (error) {
