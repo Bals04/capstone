@@ -272,12 +272,70 @@
             <canvas id="myChart" class="bg-div_color"></canvas>
         </div>
     </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 z-50 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+
 </body>
 
 </html>
 <script>
     window.onload = async function () {
-        const adminId = fetchGymAdminInfo()
+        // Check the value of the 'status' parameter
+        const status = getQueryParam('status');
+        if (status === 'gym_registered') {
+            // Show your toast notification
+            showToastNotification("Gym has been successfully registered!");
+        }
+
+        // Function to show toast notification
+        function showToastNotification(message) {
+            const toast = document.getElementById("success-toast");
+            const messageElement = document.getElementById("success-message-toast");
+            messageElement.textContent = message;
+
+            // Show the toast
+            toast.classList.remove("hidden");
+            toast.classList.remove("translate-x-full");
+            toast.classList.add("translate-x-0");
+
+            // Hide the toast after 3 seconds
+            setTimeout(() => {
+                hideToast();
+            }, 4000);
+        }
+
+        // Function to hide the toast
+        function hideToast() {
+            const toast = document.getElementById("success-toast");
+            toast.classList.add("translate-x-full");
+
+            // Optionally hide it after transition
+            setTimeout(() => {
+                toast.classList.add("hidden");
+            }, 300); // Match this with your transition duration
+        }
+
         async function fetchGymAdminInfo() {
             try {
                 const response = await axios.get('http://localhost:3000/getGymAdminInfo', {
@@ -292,6 +350,7 @@
                 console.error('Error fetching gym admin info:', error.message);
             }
         }
+
         function setCookie(name, value, days) {
             let expires = "";
             if (days) {
@@ -300,6 +359,11 @@
                 expires = "; expires=" + date.toUTCString();
             }
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
         }
     }
 </script>

@@ -123,12 +123,29 @@
             </button>
         </div>
     </div>
-
-
-
-
-
-
+    <!-- Success Toast -->
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
 
 </body>
 
@@ -185,15 +202,15 @@
         }
     });
 
-    function showToast(message) {
-        const toast = document.getElementById('error-toast');
-        const errorMessageElement = document.getElementById('error-message-toast');
+    function showToast(type, message) {
+        const toast = type === 'success' ? document.getElementById('success-toast') : document.getElementById('error-toast');
+        const messageElement = type === 'success' ? document.getElementById('success-message-toast') : document.getElementById('error-message-toast');
 
-        // Set the error message
-        errorMessageElement.textContent = message;
+        // Set the message
+        messageElement.textContent = message;
 
         // Show and slide in the toast
-        toast.classList.remove('hidden', 'translate-x-full'); // Remove the hidden state and the off-screen translation
+        toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
         toast.classList.add('translate-x-0'); // Move the toast in view
 
         // Auto-hide the toast after 3 seconds
@@ -210,11 +227,10 @@
         setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
     });
 
-
-    // Close the modal
-    document.getElementById('close-modal-btn').addEventListener('click', function () {
-        const modal = document.getElementById('error-modal');
-        modal.classList.add('hidden');  // Hide the modal
+    document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+        const toast = document.getElementById('success-toast');
+        toast.classList.add('translate-x-full');  // Slide out
+        setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
     });
 
     async function AddToAccounts(Username, Password) {
@@ -231,7 +247,7 @@
             if (error.response && error.response.data.message) {
                 const errorMessage = error.response.data.message;  // Access the error message directly
                 console.log(errorMessage);
-                showToast(errorMessage);  // Display the error message in a modal
+                showToast('error', errorMessage);  // Display the error message in a modal
             } else {
                 console.error('Error submitting Gym Trainer Registration:', error.message);
             }
@@ -254,12 +270,15 @@
             };
             const response = await axios.post('http://localhost:3000/createGymTrainer', formData);
             console.log('Trainer registration successful:', response.data);
-            window.location.href = "gymAdminDashboard.html";  // Redirect on success
+            showToast('success', 'Trainer registration successful');
+            setTimeout(() => {
+                window.location.href = "gymAdminDashboard.html";
+            }, 3000);
         } catch (error) {
             if (error.response && error.response.data.message) {
                 const errorMessage = error.response.data.message;  // Access the error message directly
                 console.log(errorMessage);
-                showToast(errorMessage);  // Display the error message in a modal
+                showToast('error', errorMessage);  // Display the error message in a modal
             } else {
                 console.error('Error submitting Gym Trainer Registration:', error.message);
             }

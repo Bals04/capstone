@@ -294,6 +294,7 @@
                         gymLogoPath = response.data.gym_logo[0].path
                         console.log("All uploads completed successfully.");
                         uploadGymFiles();
+                        setTimeout(() => { window.location.href = "gymAdminDashboard.html?status=gym_registered"; }, 1000); // 3000 milliseconds = 3 seconds delay
                         alert("finishedd")
                     })
                     .catch((error) => {
