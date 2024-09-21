@@ -323,6 +323,7 @@
             setTimeout(() => {
                 hideToast();
             }, 4000);
+            //clearUrlParams()
         }
 
         // Function to hide the toast
@@ -364,6 +365,11 @@
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+        function clearUrlParams() {
+            const url = new URL(window.location);
+            url.searchParams.delete('status'); // Remove the 'status' parameter
+            window.history.replaceState({}, document.title, url); // Update the URL without reloading
         }
     }
 </script>

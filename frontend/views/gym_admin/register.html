@@ -294,8 +294,8 @@
                         gymLogoPath = response.data.gym_logo[0].path
                         console.log("All uploads completed successfully.");
                         uploadGymFiles();
-                        setTimeout(() => { window.location.href = "gymAdminDashboard.html?status=gym_registered"; }, 1000); // 3000 milliseconds = 3 seconds delay
-                        alert("finishedd")
+                        console.log("delay")
+                        window.location.href = "gymAdminDashboard.html?status=gym_registered"
                     })
                     .catch((error) => {
                         console.error("Error during upload: ", error);
@@ -311,43 +311,48 @@
 
         async function uploadGymFiles() {
             try {
-                const path = "/server/";
-                console.log("business pertmit path," + businessPermitPath)
-                console.log("gym logo path, " + gymLogoPath)
+                console.log("Business permit path:", businessPermitPath);
+                console.log("Gym logo path:", gymLogoPath);
                 // Upload the logo first
                 console.log("Starting logo upload...");
-                await uploadLogo(gymLogoPath);
+                uploadLogo(gymLogoPath);
                 console.log("Logo uploaded successfully.");
+
+                // Then upload the document
                 console.log("Starting document upload...");
-                await uploadDocs(businessPermitPath);
+                uploadDocs(businessPermitPath);
                 console.log("Document uploaded successfully.");
-
-
             } catch (error) {
                 console.error("Error during the gym file upload: ", error.message);
-                alert('Error uploading gym files.');
+                alert('Error uploading gym files: ' + error.message);
             }
         }
 
-        async function uploadDocs(path) {
+        const uploadDocs = async (path) => {
             try {
                 const formData = {
                     document_type: 'Business permit',
                     document_path: path,
                 };
+
                 const response = await axios.post('http://localhost:3000/AddGymDocuments', formData);
-                console.log("Docs upload response:", response.status);
+                if (response.status === 200) {
+                    return response;  // Return to ensure promise resolves
+                } else {
+                    throw new Error("Docs upload failed");
+                }
             } catch (error) {
                 console.error('Error submitting docs:', error);
                 throw error;  // Re-throw the error so it can be caught in the chain
             }
         }
 
-        async function uploadLogo(path) {
+        const uploadLogo = async (path) => {
             try {
                 const formData = {
                     img_path: path,
                 };
+
                 const response = await axios.post('http://localhost:3000/AddGymLogo', formData);
                 if (response.status === 200) {
                     return response;  // Return to ensure promise resolves
