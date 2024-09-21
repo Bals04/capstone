@@ -109,13 +109,49 @@
             </button>
 
         </form>
-        <!-- Success Modal -->
-        <div id="successModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg text-center w-11/12 max-w-md">
-                <span class="text-xl font-semibold text-white">Registration Successful!</span>
-                <p class="text-gray-400 mt-2">Your gym has been registered successfully.</p>
-                <button class="bg-customOrange mt-4 py-2 px-4 rounded hover:bg-orange-800 text-white"
-                    onclick="closeModal()" id="Continue">OK</button>
+        <div id="error-toast"
+            class="fixed top-5 right-5 bg-white border-l-4 border-orange-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+            <div class="flex items-center">
+                <div class="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h2 class="text-lg font-semibold text-orange-600">Form Error</h2>
+                    <p id="error-message-toast" class="text-sm text-gray-600">Your error message here</p>
+                </div>
+                <button id="close-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="success-toast"
+            class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+            <div class="flex items-center">
+                <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                    <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+                </div>
+                <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -141,12 +177,12 @@
 
             try {
                 // Wait for AddToAccounts to complete before proceeding
-                await AddToAccounts(username, password);
+                const accountAdded = await AddToAccounts(username, password);
 
-                // Now call RegisterGymAdmin
-                await RegisterGymAdmin(firstName, lastName, email);
+                if (accountAdded) {
+                    await RegisterGymAdmin(firstName, lastName, email);
+                }
 
-                showModal();
 
             } catch (error) {
                 console.error('Error submitting form:', error);
@@ -161,8 +197,17 @@
                     usertype: "Gym admin"
                 };
                 const response = await axios.post('http://localhost:3000/auth/Register', formData);
+                console.log('Registration successful:', response.data);
+                return true;  // Indicate success
             } catch (error) {
-                console.error('Error submitting registration:', error);
+                if (error.response && error.response.data.message) {
+                    const errorMessage = error.response.data.message;  // Access the error message directly
+                    console.log(errorMessage);
+                    showToast('error', errorMessage);  // Display the error message in a modal
+                } else {
+                    console.error('Error submitting Gym Admin Registration:', error.message);
+                }
+                return false;  // Indicate failure
             }
         }
 
@@ -174,38 +219,50 @@
                     email: email
                 };
                 const response = await axios.post('http://localhost:3000/auth/RegisterAdmin', formData);
+                if (response.status == 200) {
+                    showToast('success', 'Account created successfully');
+                }
             } catch (error) {
-                console.error('Error submitting registration:', error.message);
+                if (error.response && error.response.data.message) {
+                    const errorMessage = error.response.data.message;  // Access the error message directly
+                    console.log(errorMessage);
+                    showToast('error', errorMessage);  // Display the error message in a modal
+                } else {
+                    console.error('Error submitting Gym Admin Registration:', error.message);
+                }
+                return false;  // Indicate failure
             }
         }
-        function showModal() {
-            const modal = document.getElementById("successModal");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
+        function showToast(type, message) {
+            const toast = type === 'success' ? document.getElementById('success-toast') : document.getElementById('error-toast');
+            const messageElement = type === 'success' ? document.getElementById('success-message-toast') : document.getElementById('error-message-toast');
+
+            // Set the message
+            messageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+            }, 3000);
         }
 
-        function closeModal() {
-            // Get input values (if needed for other purposes)
-            const firstName = document.getElementById("firstName");
-            const lastName = document.getElementById("lastName");
-            const email = document.getElementById("email");
-            const username = document.getElementById("username");
-            const password = document.getElementById("password");
+        // Close button functionality
+        document.getElementById('close-toast-btn').addEventListener('click', () => {
+            const toast = document.getElementById('error-toast');
+            toast.classList.add('translate-x-full');  // Slide out
+            setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+        });
 
-            // Get the modal element
-            const modal = document.getElementById("successModal");
-
-            // Hide the modal
-            modal.classList.remove("flex");
-            modal.classList.add("hidden");
-
-            // Clear the input fields
-            firstName.value = "";
-            lastName.value = "";
-            email.value = "";
-            username.value = "";
-            password.value = "";
-        }
+        document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+            const toast = document.getElementById('success-toast');
+            toast.classList.add('translate-x-full');  // Slide out
+            setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+        });
 
     </script>
 </body>

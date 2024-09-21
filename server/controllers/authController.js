@@ -7,6 +7,7 @@ module.exports = {
     Register: async (req, res) => {
         try {
             const { username, password, usertype } = req.body;
+            console.log("received data: ", req.body)
             bcrypt.hash(password, 10).then((hash) => {
                 users.createUser({
                     username: username,

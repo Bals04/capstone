@@ -5,9 +5,10 @@ const AuthController = require('../controllers/authController');
 const { createTokens, validateToken } = require('../middlewares/JWT')
 const validation = require('../middlewares/validation')
 const userSchema = require('../validations/userValidations')
+const gymAdminSchema = require('../validations/gymAdminValidations')
 
 router.post("/Register", validation(userSchema), AuthController.Register);
-router.post("/RegisterAdmin", AuthController.createGymAdmin);
+router.post("/RegisterAdmin",validation(gymAdminSchema), AuthController.createGymAdmin);
 router.post("/RegisterMember", AuthController.createMembers);
 router.post("/Login", AuthController.Login);
 // Express route to get session data
