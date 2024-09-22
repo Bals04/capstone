@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        .selection-box {
+            width: 250px;
+            padding: 20px;
+            border: 2px solid #343639;
+            /* Use your border color */
+            border-radius: 8px;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            background-color: rgba(52, 54, 57, 0.2);
+            /* Semi-transparent background */
+            z-index: 10;
+            /* Ensure boxes are above the background */
+        }
+
+        .selection-box.selected {
+            border-color: #EC7E4A;
+            /* Your selected color */
+            background-color: #343639;
+            /* Your selected background color */
+        }
+
+        .selection-box:hover {
+            border-color: #EC7E4A;
+            /* Hover color */
+        }
+
+        .check-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFFFFF;
+            /* Initial border color */
+            border-radius: 50%;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .check-circle.selected {
+            border-color: #EC7E4A;
+            /* Selected border color */
+            background-color: #EC7E4A;
+            /* Selected background color */
+        }
+
+        /* Background image styles */
+        .background-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+            z-index: 0;
+            /* Place it behind the content */
+        }
+
+        .proceed-btn {
+            background-color: #343639;
+            /* Default color */
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: not-allowed;
+            /* Initially disabled */
+            opacity: 0.5;
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+        }
+
+        .proceed-btn.enabled {
+            cursor: pointer;
+            opacity: 1;
+            background-color: #EC7E4A;
+            /* Enabled color */
+        }
+    </style>
+</head>
+
+<body class="bg-[#1E1E1E] font-customFont relative">
+    <!-- Background Image -->
+    <img class="background-img"
+        src="../../views/img/Black and White Modern Minimalist Creative Portfolio Our Service Page Website Design Prototype 2.png"
+        alt="cannot load">
+
+    <!-- Content -->
+    <header class="fixed h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg z-20">
+        <div class="relative">
+            <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+        </div>
+        <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
+            <b
+                class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+        </div>
+    </header>
+
+    <div class="flex items-center justify-center min-h-screen mb-[200px] relative z-20">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-white mb-8">Choose Your Subscription</h1>
+            <div class="flex justify-center space-x-8 mb-8">
+                <!-- Monthly Gym Spotlight Option -->
+                <div id="monthlyBox" class="selection-box flex flex-col items-start" onclick="selectBox('monthly')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="material-symbols-outlined text-3xl text-white">
+                            calendar_month
+                        </span>
+                        <div id="monthlyCheck" class="check-circle"></div>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mt-4">Monthly Gym Spotlight</h2>
+                    <p class="text-gray-300 mt-1">500 PHP - Listed on our maps for a one-month period</p>
+                </div>
+
+                <!-- Quarterly Gym Boost Option -->
+                <div id="quarterlyBox" class="selection-box flex flex-col items-start" onclick="selectBox('quarterly')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="material-symbols-outlined text-3xl text-white">
+                            calendar_month
+                        </span>
+                        <div id="quarterlyCheck" class="check-circle"></div>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mt-4">Quarterly Gym Boost</h2>
+                    <p class="text-gray-300 mt-1"> 1200 PHP - Listed on our maps for a three-month period</p>
+                </div>
+
+                <!-- Elite Yearly Presence Option -->
+                <div id="yearlyBox" class="selection-box flex flex-col items-start" onclick="selectBox('yearly')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="material-symbols-outlined text-3xl text-white">
+                            calendar_month
+                        </span>
+                        <div id="yearlyCheck" class="check-circle"></div>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mt-4">Elite Yearly Presence</h2>
+                    <p class="text-gray-300 mt-1">3500 PHP - A year-long subscription for maximum map exposure</p>
+                </div>
+            </div>
+            <!-- Proceed Button -->
+            <button id="proceedButton" class="proceed-btn" onclick="proceed()" disabled>Proceed</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+
+        let selectedOption = '';
+        let btn = document.getElementById('proceedButton');
+        function selectBox(type) {
+            // Remove 'selected' class from all options
+            document.querySelectorAll('.selection-box').forEach(box => box.classList.remove('selected'));
+            document.querySelectorAll('.check-circle').forEach(circle => circle.classList.remove('selected'));
+
+            // Add 'selected' class to the chosen option
+            if (type === 'monthly') {
+                document.getElementById('monthlyBox').classList.add('selected');
+                document.getElementById('monthlyCheck').classList.add('selected');
+                btn.innerHTML = 'Subscribe Monthly';
+                selectedOption = 'monthly';
+
+            } else if (type === 'quarterly') {
+                document.getElementById('quarterlyBox').classList.add('selected');
+                document.getElementById('quarterlyCheck').classList.add('selected');
+                btn.innerHTML = 'Subscribe Quarterly';
+                selectedOption = 'quarterly';
+
+            } else if (type === 'yearly') {
+                document.getElementById('yearlyBox').classList.add('selected');
+                document.getElementById('yearlyCheck').classList.add('selected');
+                btn.innerHTML = 'Subscribe Yearly';
+                selectedOption = 'yearly';
+
+            }
+
+            // Enable the proceed button
+            document.getElementById('proceedButton').disabled = false;
+            document.getElementById('proceedButton').classList.add('enabled');
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Retrieve token and userType from cookies
+        const token = getCookie('accessToken');
+        const userType = getCookie('userType');
+
+        async function proceed() {
+            if (selectedOption === '') return;
+
+            const subscriptions = {
+                monthly: { name: 'Monthly Gym Spotlight', price: 500, id: 1, days: 30 },
+                quarterly: { name: 'Quarterly Gym Boost', price: 1200, id: 2, days: 90 },
+                yearly: { name: 'Elite Yearly Presence', price: 3500, id: 3, days: 365 }
+            };
+
+            const { name, price, id, days } = subscriptions[selectedOption];
+
+            const adminId = getCookie('admin_id');
+
+            // Send price and name to the backend
+            try {
+                const response = await axios.post('http://localhost:3000/pay', {
+                    admin_id: adminId,
+                    gym_id: getCookie('gymId'),
+                    subscriptionID: id,
+                    price: price,
+                    subscriptionName: name,
+                    days: days
+                });
+
+                const result = response.data;
+                window.location.href = result; // Redirect to PayPal
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+
+
+</body>
+
+</html>

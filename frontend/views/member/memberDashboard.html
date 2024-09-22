@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Dashboard</title>
     <link rel="stylesheet" href="../../dist/tailwind.css">
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script> -->
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
 </head>
 
 <body class="min-h-screen font-[Poppins] bg-customGray text-white">
@@ -23,49 +28,49 @@
                         <img class="w-[80px] rounded-full" src="../../img/Flexperience.png" alt="Flexperience">
                     </a>
                 </div>
-    
+
                 <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
                     <!--Home-->
                     <li>
                         <a href="#" class="btn active flex items-center justify-center text-2xl">
-                            <i class="bx bx-home-alt-2" aria-hidden="true"></i> 
-                        </a>
-                        <span class="tooltip-home absolute text-lg">Home</span> 
+                            <i class="bx bx-home-alt-2" aria-hidden="true"></i>
+                        </a> 
+                        <span class="tooltip-home absolute text-lg">Home</span>
                     </li>
                     <!--Maps-->
                     <li class="mt-6">
-                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <a href="./maps.html" class="btn flex items-center justify-center text-2xl">
                             <i class="bx bx-map" aria-hidden="true"></i>
                         </a>
-                        <span class="tooltip-maps absolute text-lg">Maps</span> 
+                        <span class="tooltip-maps absolute text-lg">Maps</span>
                     </li>
                     <!--WorkoutPlan-->
                     <li class="mt-6">
                         <a href="#" class="btn flex items-center justify-center text-2xl">
                             <i class="bx bx-dumbbell" aria-hidden="true"></i>
                         </a>
-                        <span class="tooltip-workout absolute text-lg">Workout</span> 
+                        <span class="tooltip-workout absolute text-lg">Workout</span>
                     </li>
                     <!--MealPlan-->
                     <li class="mt-6">
                         <a href="#" class="btn flex items-center justify-center text-2xl">
                             <i class="bx bx-bowl-rice" aria-hidden="true"></i>
                         </a>
-                        <span class="tooltip-meal absolute text-lg">Meal</span> 
+                        <span class="tooltip-meal absolute text-lg">Meal</span>
                     </li>
                     <!--Chat-->
                     <li class="mt-6">
-                        <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <a href="./chats.html" class="btn flex items-center justify-center text-2xl">
                             <i class="bx bx-message-square-dots" aria-hidden="true"></i>
                         </a>
-                        <span class="tooltip-chat absolute text-lg">Chat</span> 
+                        <span class="tooltip-chat absolute text-lg">Chat</span>
                     </li>
                     <!--Trainers-->
                     <li class="mt-6">
                         <a href="#" class="btn flex items-center justify-center text-2xl">
                             <i class="bx bx-user-pin" aria-hidden="true"></i>
                         </a>
-                        <span class="tooltip-trainers absolute text-lg">Trainers</span> 
+                        <span class="tooltip-trainers absolute text-lg">Trainers</span>
                     </li>
                 </ul>
             </div>
@@ -102,14 +107,17 @@
             </h1>
         </div>
         <!--goals-->
-        <div class="dashboard-Content absolute top-[33%] left-[10%] bg-[#373D41] shadow-inner flex flex-row gap-2 pt-6 px-6 rounded-md">
+        <div
+            class="dashboard-Content absolute top-[33%] left-[10%] bg-customGray shadow-inner flex flex-row gap-2 pt-6 px-6 rounded-md">
             <!-- Circular Progress -->
-             <div class="relative size-16">
+            <div class="relative size-16">
                 <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
                     <!-- Background Circle -->
-                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="2"></circle>
+                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="2">
+                    </circle>
                     <!-- Progress Circle -->
-                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-blue-600" stroke-width="2" stroke-dasharray="100" stroke-dashoffset="65" stroke-linecap="round"></circle>
+                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-blue-600" stroke-width="2"
+                        stroke-dasharray="100" stroke-dashoffset="65" stroke-linecap="round"></circle>
                 </svg>
                 <!-- Percentage Text -->
                 <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
@@ -117,12 +125,13 @@
                 </div>
             </div>
             <!-- End Circular Progress -->
-             <div class="relative mt-2 ml-4">
+            <div class="relative mt-2 ml-4">
                 <h1 class="text-base">Today's plan</h1>
                 <span class="text-sm font-light">3 goals out of 6 completed</span>
-             </div>
+            </div>
         </div>
-        <div class="dashboard-Content absolute top-[47%] left-[10%] w-[20.2rem] h-64 overflow-auto scrollbar-thin scrollbar-thumb-customGray1 scrollbar-track-customGray bg-[#373D41] shadow-lg flex flex-col divide-y gap-2">
+        <div
+            class="dashboard-Content absolute top-[47%] left-[10%] w-[20.2rem] h-64 overflow-auto scrollbar-thin scrollbar-thumb-customGray1 scrollbar-track-customGray bg-customGray shadow-lg flex flex-col divide-y gap-2">
             <div class="pt-6 px-6">
                 <h1>Your goals</h1>
             </div>
@@ -131,18 +140,10 @@
                     <span class="text-sm font-light">4/4</span>
                 </h1>
                 <!-- Progress -->
-                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500" style="width: 100%">100%</div>
-                </div>
-                <!-- End Progress -->
-            </div>    
-            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
-                <h1 class="text-sm">Mealplan <br>
-                     <span class="text-sm font-light">1200/1500 kkal</span>
-                </h1>
-                <!-- Progress -->
-                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500" style="width: 75%">75%</div>
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 100%">100%</div>
                 </div>
                 <!-- End Progress -->
             </div>
@@ -151,9 +152,11 @@
                     <span class="text-sm font-light">1200/1500 kkal</span>
                 </h1>
                 <!-- Progress -->
-                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500" style="width: 75%">75%</div>
-                 </div>
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 75%">75%</div>
+                </div>
                 <!-- End Progress -->
             </div>
             <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
@@ -161,9 +164,11 @@
                     <span class="text-sm font-light">1200/1500 kkal</span>
                 </h1>
                 <!-- Progress -->
-                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500" style="width: 100%">100%</div>
-                 </div>
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 75%">75%</div>
+                </div>
                 <!-- End Progress -->
             </div>
             <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
@@ -171,9 +176,11 @@
                     <span class="text-sm font-light">1200/1500 kkal</span>
                 </h1>
                 <!-- Progress -->
-                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500" style="width: 75%">75%</div>
-                 </div>
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 100%">100%</div>
+                </div>
                 <!-- End Progress -->
             </div>
             <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
@@ -181,15 +188,29 @@
                     <span class="text-sm font-light">1200/1500 kkal</span>
                 </h1>
                 <!-- Progress -->
-                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500" style="width: 100%">100%</div>
-                 </div>
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 75%">75%</div>
+                </div>
+                <!-- End Progress -->
+            </div>
+            <div class="pt-6 px-4 mt-1 flex flex-row gap-2">
+                <h1 class="text-sm">Mealplan <br>
+                    <span class="text-sm font-light">1200/1500 kkal</span>
+                </h1>
+                <!-- Progress -->
+                <div class="flex w-full h-4 mt-4 ml-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+                    role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-customOrange text-xs text-white text-center whitespace-nowrap dark:bg-customOrange transition duration-500"
+                        style="width: 100%">100%</div>
+                </div>
                 <!-- End Progress -->
             </div>
         </div>
 
         <!--workoutplan-->
-        <div class="dashboard-Content absolute top-[33%] left-[40%] bg-[#373D41] shadow-md py-2 px-2 rounded-md">
+        <div class="dashboard-Content absolute top-[33%] left-[40%] shadow-md py-2 px-2 rounded-md">
             <div class="flex flex-row gap-36">
                 <div class="text-base">
                     <h1>Today's workout plan</h1>
@@ -200,8 +221,9 @@
                     </button>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-2 grid-template-columns: repeat(2, minmax(0, 1fr)); h-80 overflow-auto scrollbar-thin scrollbar-thumb-customGray1 scrollbar-track-customGray">
-                <div class="flex flex-col items-start justify-center bg-[#373D41] border border-borderStroke-100 shadow-md rounded-xl mt-2 py-3 px-3">
+            <div
+                class="grid grid-cols-2 gap-2 grid-template-columns: repeat(2, minmax(0, 1fr)); h-80 overflow-auto scrollbar-thin scrollbar-thumb-customGray1 scrollbar-track-customGray">
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
                     <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
                     <div class="text-sm mt-2">Yoga</div>
                     <div class="text-sm font-light flex gap-1 mt-2">
@@ -211,7 +233,7 @@
                         <span>100 kkal</span>
                     </div>
                 </div>
-                <div class="flex flex-col items-start justify-center bg-[#373D41] border border-borderStroke-100 rounded-xl shadow-md mt-2 py-3 px-3">
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
                     <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
                     <div class="text-sm mt-2">Yoga</div>
                     <div class="text-sm font-light flex gap-1 mt-2">
@@ -221,7 +243,7 @@
                         <span>100 kkal</span>
                     </div>
                 </div>
-                <div class="flex flex-col items-start justify-center bg-[#373D41] border border-borderStroke-100 rounded-xl shadow-md mt-2 py-3 px-3">
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
                     <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
                     <div class="text-sm mt-2">Yoga</div>
                     <div class="text-sm font-light flex gap-1 mt-2">
@@ -231,7 +253,7 @@
                         <span>100 kkal</span>
                     </div>
                 </div>
-                <div class="flex flex-col items-start justify-center bg-[#373D41] border border-borderStroke-100 rounded-xl shadow-md mt-2 py-3 px-3">
+                <div class="flex flex-col items-start justify-center bg-customGray shadow-md mt-2 py-3 px-3">
                     <img class="rounded-xl" src="../../img/image17.png" alt="ExercisePic">
                     <div class="text-sm mt-2">Yoga</div>
                     <div class="text-sm font-light flex gap-1 mt-2">
@@ -244,7 +266,7 @@
             </div>
         </div>
         <div class="dashboard-Content absolute top-[33%] left-[75%] min-h-[100vh] text-sm">
-            <div class="wrapper w-[320px] bg-[#373D41] shadow-lg">
+            <div class="wrapper w-[320px] bg-customGray shadow-lg">
                 <header class="">
                     <p class="current-date"></p>
                     <div class="icons">
@@ -271,11 +293,53 @@
             </div>
         </div>
         <!--maps-->
-        <div class="dashboard-content absolute top-[95%] left-[10%] bg-[#373D41] shadow-lg w-[60%] h-[50%] flex items-center justify-center">MAPS</div>
+        <div
+            class="dashboard-content absolute top-[95%] left-[10%] bg-customGray shadow-lg w-[60%] h-[50%] flex items-center justify-center">
+            MAPS</div>
         <!--chatbox-->
-        <div class="dashboard-content absolute top-[95%] left-[75%] bg-[#373D41] shadow-lg w-[24%] h-[50%] flex items-center justify-center">CHATBOX</div>
+        <div
+            class="dashboard-content absolute top-[95%] left-[75%] bg-customGray shadow-lg w-[24%] h-[50%] flex items-center justify-center">
+            CHATBOX</div>
     </div>
 </body>
 
-<script src="../../scripts/member.js"></script>
+<script src="/frontend/scripts/member.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let firstname = null;
+        let lastname = null;
+        let weight = null;
+        let bodytype = null;
+        const uid = userId;
+
+        // Fetch and assign member information when the page loads
+        fetchMemberInfo();
+        function fetchMemberInfo() {
+            axios.get('http://localhost:3000/getMemberInfo', {
+                params: {
+                    account_id: uid
+                }
+            })
+                .then(response => {
+                    const memberData = response.data[0]; // Assuming the response data contains the member info
+                    console.log(memberData)
+                    // Assign the data to variables
+                    firstname = memberData.firstname;
+                    lastname = memberData.lastname;
+                    weight = memberData.weight;
+                    bodytype = memberData.bodytype;
+                    id = memberData.member_id
+                    
+
+                    // Optionally, update the DOM with the fetched data
+                    document.querySelector('.nameChange').textContent = `${firstname} ${lastname}`;
+                    console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${id}`);
+                })
+                .catch(error => {
+                    console.error('Error fetching member info:', error);
+                });
+        }
+    });
+</script>
+
 </html>

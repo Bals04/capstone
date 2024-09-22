@@ -1,23 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const path = require('path');
 const trainerController = require('../controllers/trainerController');
+const validation = require('../middlewares/validation')
+const trainerSchema = require('../validations/trainerValidations')
 
-router.get("/members", trainerController.getMembers); 
-
-router.get("/exercises", trainerController.getExercises); 
-
-router.post("/addCustomWorkout", trainerController.AddCustom); 
-
-router.get("/getStudentCount", trainerController.getCount); 
-
-router.get("/getTrainerCount", trainerController.getTrainerCount); 
-
-router.get("/getMembers", trainerController.getAllMembers);
-
-router.get("/getTemplates", trainerController.getTemplates);
-
-router.post("/addTemplates", trainerController.AddTemplate);
+router.get("/getTrainers", trainerController.getAllTrainers); 
+router.get("/getTrainerInfo", trainerController.getTrainerInfo); 
+router.get("/getGymTrainer", trainerController.getGymTrainer); 
+router.get("/retrieveMemberChatLog", trainerController.retrieveMemberChatLog); 
+router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 
 module.exports = router;
 

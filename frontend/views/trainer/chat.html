@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        :root {
+            --custom-gray: #343639;
+            --custom-orange: #EC7E4A;
+            --custom-blue: #007BFF;
+            --custom-light-blue: #E0F7FA;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gray-500 min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg flex flex-col sm:flex-row h-[90vh]">
+        <!-- Sidebar: Chat List -->
+        <div class="w-full sm:w-1/4 bg-gray-900 text-white rounded-l-lg p-4 flex flex-col">
+            <h2 class="text-2xl font-bold mb-6">Member Conversations</h2>
+            <ul id="chatList" class="space-y-4 overflow-y-auto flex-grow">
+                <!-- List of chats will be dynamically populated here -->
+                <li class="p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">Gym Member 1</li>
+                <li class="p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">Gym Member 2</li>
+                <li class="p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">Gym Member 3</li>
+            </ul>
+            <button class="mt-4 bg-orange-500 py-2 px-4 rounded-lg hover:bg-orange-400 text-center">Start New
+                Chat</button>
+        </div>
+
+        <!-- Chat Box -->
+        <div class="flex-grow p-6 bg-gray-100 flex flex-col">
+            <h1 class="text-center mb-6 text-2xl font-bold rounded-xl p-2 bg-blue-400 text-blue-900">Kachat nimo ron:
+                <span id="chatWith">wala (sad life :<)< /span>
+            </h1>
+
+            <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex overflow-y-auto flex-col h-full">
+                <div id="messageDisplay"
+                    class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-auto rounded-t-lg">
+                    <!-- Messages will appear here -->
+                    <div id="loadingPrompt" class="text-center text-white rounded-lg py-4 bg-gray-800 hidden">
+                        <p>Fetching messages...</p>
+                    </div>
+                </div>
+
+                <div id="inputContainer" class="flex items-center p-3 bg-white border-t border-gray-300 rounded-b-lg">
+                    <label id="fileInputLabel" for="fileInput"
+                        class="flex items-center justify-center p-2 bg-orange-500 text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-orange-400 transition-colors">
+                        <i class="fas fa-paperclip"></i>
+                    </label>
+                    <input type="file" id="fileInput" class="hidden">
+                    <input placeholder="Type a message..." type="text" id="messageInput"
+                        class="flex-grow p-2 border border-gray-300 rounded-full text-base mr-2 outline-none bg-gray-50 shadow-inner">
+                    <button id="sendButton" onclick="sendMessage()"
+                        class="p-2 bg-blue-500 text-white rounded-full cursor-pointer text-xl flex items-center justify-center mr-2 hover:bg-blue-400 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let socket;
+            let memberid;
+            let trainerid;
+            let conversationId;
+
+            socket = io.connect("http://localhost:3000");
+            id = window.userId;
+
+
+            socket.on("receive_message", (data) => {
+                displayMessage(data, "received");
+            });
+
+            fetchTrainerInfo();
+
+
+            const CheckConversation = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3000/checkConvo', {
+                        params: {
+                            member_id: memberid,
+                            trainer_id: trainerid
+                        }
+                    });
+                    if (response.status === 200) {
+                        conversationId = response.data.id
+                        alert(conversationId)
+                    } else {
+                        console.error('Failed to load messages:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            };
+
+            function fetchTrainerInfo() {
+                console.log(id)
+                axios.get('http://localhost:3000/getTrainerInfo', {
+                    params: {
+                        user_id: id
+                    }
+                })
+                    .then(response => {
+                        console.log("--", id)
+                        console.log(response.data[0]);
+                        const trainerData = response.data[0];
+                        trainerid = trainerData.trainer_id;
+
+                        // Fetch and populate the chat list after trainer info is fetched
+                        fetchMemberChatLog(trainerid);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching trainer info:', error);
+                    });
+            }
+
+            function fetchMemberChatLog(trainerId) {
+                axios.get('http://localhost:3000/retrieveMemberChatLog', {
+                    params: {
+                        trainer_id: trainerId
+                    }
+                })
+                    .then(response => {
+                        const chatList = response.data;
+                        populateChatList(chatList);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching member chat log:', error);
+                    });
+            }
+
+            function populateChatList(chatList) {
+                const chatListElement = document.getElementById('chatList');
+                chatListElement.innerHTML = ''; // Clear any existing content
+
+                chatList.forEach(member => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('p-3', 'bg-gray-700', 'rounded-lg', 'hover:bg-gray-600', 'cursor-pointer');
+                    listItem.textContent = member.member_name;
+
+                    // Optional: Add a click event to select the member for chat
+                    listItem.addEventListener('click', () => {
+                        clear();
+                        document.getElementById('chatWith').textContent = member.member_name;
+                        console.log(member.member_id)
+                        memberid = member.member_id;  // Use this ID to load member-specific chat
+                        loadChatHistory(memberid);  // Load chat history for the clicked member
+                        CheckConversation(); 
+                    });
+
+                    chatListElement.appendChild(listItem);
+                });
+            }
+
+            const loadChatHistory = async (memberId) => {
+                try {
+                    const response = await axios.get('http://localhost:3000/messages', {
+                        params: {
+                            member_id: memberId,
+                            trainer_id: trainerid
+                        }
+                    });
+
+                    if (response.status === 200) {
+                        const messages = response.data;
+                        messages.forEach((message) => {
+                            console.log(message.sender)
+                            const type = (message.sender === 'Trainer') ? 'sent' : 'received';
+                            displayMessage(message, type);
+                        });
+                    } else {
+                        console.error('Failed to load messages:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            };
+
+            window.sendMessage = async () => {
+                const messageContent = document.getElementById("messageInput").value.trim();
+                const fileInput = document.getElementById("fileInput");
+                const file = fileInput.files[0];
+
+                let imgPath = "";
+
+                if (file) {
+                    // Upload the file first
+                    const path = "/server/";
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        console.log("jejejeje")
+                        const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                        imgPath = path + uploadResponse.data.filePath; // Store the file path from the response
+                    } catch (error) {
+                        console.error("Error uploading image:", error);
+                        alert("Image upload failed.");
+                        return;
+                    }
+                }
+
+                if (!messageContent && !imgPath) {
+                    alert("Please enter a message or select a file to send.");
+                    return;
+                }
+
+                const messageData = {
+                    conversation_id: conversationId,
+                    sender_id: trainerid,
+                    message: messageContent || "",
+                    img_path: imgPath || "" // Include the image path if present
+                };
+
+                sendSocketMessage(messageData);
+
+                // Clear inputs
+                // document.getElementById("messageInput").value = "";
+                // fileInput.value = "";
+            };
+
+
+            function sendSocketMessage(data) {
+                socket.emit("send_message", data);
+                displayMessage(data, "sent");
+                axios.post('http://localhost:3000/send', data)
+                    .catch(error => console.error('Error sending message:', error.message));
+            }
+
+            const clear = () => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                messageDisplay.innerHTML = '';
+
+            }
+
+            // Function to display messages (remains unchanged)
+            const displayMessage = (data, type) => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
+
+                if (type === "sent") {
+                    messageElement.classList.add("bg-orange-500", "ml-auto", "text-white");
+                } else {
+                    messageElement.classList.add("bg-gray-200", "mr-auto");
+                }
+
+                if (data.img_path) {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = data.img_path;
+                    imgElement.classList.add("w-full", "rounded-md", "mb-2");
+                    messageElement.appendChild(imgElement);
+                }
+
+                if (data.message) {
+                    const textElement = document.createElement("p");
+                    textElement.textContent = data.message;
+                    messageElement.appendChild(textElement);
+                }
+
+                messageDisplay.appendChild(messageElement);
+                messageDisplay.scrollTop = messageDisplay.scrollHeight;
+            };
+
+            // window.addEventListener('beforeunload', () => {
+            //     socket.off("receive_message");
+            // });
+        });
+    </script>
+
+</body>
+
+</html>

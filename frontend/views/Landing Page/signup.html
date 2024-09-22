@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        .selection-box {
+            width: 250px;
+            padding: 20px;
+            border: 2px solid #343639; /* Use your border color */
+            border-radius: 8px;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            background-color: rgba(52, 54, 57, 0.2); /* Semi-transparent background */
+            z-index: 10; /* Ensure buttons are above the background */
+        }
+        .selection-box.selected {
+            border-color: #EC7E4A; /* Your selected color */
+            background-color: #343639; /* Your selected background color */
+        }
+        .selection-box:hover {
+            border-color: #EC7E4A; /* Hover color */
+        }
+        .check-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFFFFF; /* Initial border color */
+            border-radius: 50%;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .check-circle.selected {
+            border-color: #EC7E4A; /* Selected border color */
+            background-color: #EC7E4A; /* Selected background color */
+        }
+        /* Background image styles */
+        .background-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+            z-index: 0; /* Place it behind the content */
+        }
+        .proceed-btn {
+            background-color: #343639; /* Default color */
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: not-allowed; /* Initially disabled */
+            opacity: 0.5;
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+        }
+        .proceed-btn.enabled {
+            cursor: pointer;
+            opacity: 1;
+            background-color: #EC7E4A; /* Enabled color */
+        }
+    </style>
+</head>
+<body class="bg-[#1E1E1E] font-customFont relative">
+    <!-- Background Image -->
+    <img class="background-img" src="../../views/img/Black and White Modern Minimalist Creative Portfolio Our Service Page Website Design Prototype 2.png" alt="cannot load">
+    
+    <!-- Content -->
+    <header class="fixed h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg z-20">
+        <div class="relative">
+            <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+        </div>
+        <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
+            <b class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+        </div>
+        <div class="pl-5 pr-10 text-50 pt-5">
+            <button class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
+                Log in
+            </button>
+        </div>
+    </header>
+
+    <div class="flex items-center justify-center min-h-screen mb-[200px] relative z-20">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-white mb-8">Join as a Gym Admin or Student</h1>
+            <div class="flex justify-center space-x-8 mb-8">
+                <!-- Gym Admin Option -->
+                <div id="adminBox" class="selection-box flex flex-col items-start" onclick="selectBox('admin')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="material-symbols-outlined text-3xl text-white">
+                            admin_panel_settings
+                        </span>
+                        <div id="adminCheck" class="check-circle"></div>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mt-4">I'm a Gym Admin</h2>
+                    <p class="text-gray-300 mt-1">Manage your gym and oversee members</p>
+                </div>
+
+                <!-- Student Option -->
+                <div id="studentBox" class="selection-box flex flex-col items-start" onclick="selectBox('student')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="material-symbols-outlined text-3xl text-white">
+                            person
+                        </span>
+                        <div id="studentCheck" class="check-circle"></div>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mt-4">I'm a Student</h2>
+                    <p class="text-gray-300 mt-1">Access workout plans and more</p>
+                </div>
+            </div>
+            <!-- Proceed Button -->
+            <button id="proceedButton" class="proceed-btn" onclick="proceed()" disabled>Proceed</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedOption = '';
+        let btn = document.getElementById('proceedButton')
+        function selectBox(type) {
+            // Remove 'selected' class from both options
+            document.getElementById('adminBox').classList.remove('selected');
+            document.getElementById('studentBox').classList.remove('selected');
+            document.getElementById('adminCheck').classList.remove('selected');
+            document.getElementById('studentCheck').classList.remove('selected');
+
+            // Add 'selected' class to the chosen option
+            if (type === 'admin') {
+                document.getElementById('adminBox').classList.add('selected');
+                document.getElementById('adminCheck').classList.add('selected');
+                btn.innerHTML = 'Signup as Gym admin'
+                selectedOption = 'admin';
+            } else if (type === 'student') {
+                document.getElementById('studentBox').classList.add('selected');
+                document.getElementById('studentCheck').classList.add('selected');
+                btn.innerHTML = 'Signup as Student'
+                selectedOption = 'student';
+            }
+
+            // Enable the proceed button
+            document.getElementById('proceedButton').disabled = false;
+            document.getElementById('proceedButton').classList.add('enabled');
+        }
+
+        function proceed() {
+            if (selectedOption === 'admin') {
+                window.location.href='../../views/features/signupGA.html'
+            } else if (selectedOption === 'student') {
+                window.location.href = '/student-dashboard.html'; // Replace with your student page URL
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience - Gym Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* Ensure the map has a defined height */
+        @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        #map_section {
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Modal backdrop and container styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #error-modal {
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1E1E1E;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            position: relative;
+            /* Position relative for content inside */
+            z-index: 10000;
+            /* Extra layer of z-index on content */
+
+        }
+    </style>
+</head>
+
+<body class="bg-[#1E1E1E] text-white min-h-screen font-customFont">
+    <div class="container mx-auto p-8">
+        <!-- Header Section -->
+        <div class="mb-10">
+            <h1 class="font-bold text-3xl">Gym Registration Form</h1>
+            <p class="text-sm text-gray-400">Fill out the information below to register your gym. Some of the details
+                will be displayed publicly, so be cautious about what you share.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Left Column -->
+            <div class="space-y-6">
+                <div>
+                    <label for="Gym_name" class="font-semibold">Gym Name</label>
+                    <input type="text" id="Gym_name"
+                        class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
+                </div>
+                <div>
+                    <label for="Contact_num" class="font-semibold">Contact Number <span
+                            class="text-gray-500">(Optional)</span></label>
+                    <input type="text" id="Contact_num"
+                        class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
+                </div>
+                <div>
+                    <label for="daily_rates" class="font-semibold">Daily Rates</label>
+                    <input type="text" id="daily_rates"
+                        class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
+                </div>
+                <div>
+                    <label for="monthly_rates" class="font-semibold">Monthly Rates</label>
+                    <input type="text" id="monthly_rates"
+                        class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
+                </div>
+                <div id="fileUploadForm">
+                    <span class="font-semibold">Business Permit</span><br>
+                    <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload a copy of your business
+                        permit. This is required to verify
+                        the legality of your gym. Ensure it includes the following information:
+                        Business name, permit number, issuance date, expiration date.</span> <br>
+                    <div>
+                        <div class="mt-1">
+                            <label
+                                class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
+                                <span class="material-symbols-outlined mr-2">upload_file</span>
+                                <span class="text-sm">Choose File</span>
+                                <input type="file" name="business_permit" id="business_permit" class="hidden"
+                                    onchange="updateFileName(this, 'businessPermitFileName')">
+                            </label>
+                            <span id="businessPermitFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
+                        </div>
+                    </div><br>
+                    <span class="font-semibold">Gym Logo</span><br>
+                    <span class="font-thin text-xs text-justify opacity-50 w-auto">Please upload a copy of your gym
+                        logo. This is essential for branding and promotional purposes. Ensure the logo is
+                        high-resolution and visually represents your gym's identity.</span>
+                    <br>
+                    <div>
+                        <div class="mt-1">
+                            <label
+                                class="w-full flex items-center px-3 py-2 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600">
+                                <span class="material-symbols-outlined mr-2">upload_file</span>
+                                <span class="text-sm">Choose File</span>
+                                <input type="file" name="gym_logo" id="gym_logo" class="hidden"
+                                    onchange="updateFileName(this, 'gymLogoFileName')">
+                            </label>
+                            <span id="gymLogoFileName" class="ml-2 text-sm text-gray-400">No file chosen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <div>
+                    <label for="Gym_address" class="font-semibold">Gym Address</label>
+                    <input type="text" id="Gym_address"
+                        class="w-full h-10 rounded-lg shadow-sm bg-white text-black px-3 mt-1">
+                </div>
+                <div class="w-full bg-white text-black border border-gray-200 rounded-lg overflow-hidden">
+                    <div id="map_section"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div class="mt-10 flex justify-end space-x-4">
+            <button class="border border-white text-white py-2 px-6 rounded-lg hover:bg-black">Cancel</button>
+            <button id="Submit" type="button"
+                class="bg-customOrange text-white py-2 px-6 rounded-lg hover:bg-orange-800 hover:text-white duration-200">Submit</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content text-center">
+            <span class="text-xl font-semibold">Registration Successful!</span>
+            <p class="text-gray-400 mt-2">Your gym has been registered successfully.</p>
+            <button class="bg-customOrange mt-4 py-2 px-4 rounded hover:bg-orange-800" onclick="closeModal()"
+                id="Continue">OK</button>
+        </div>
+    </div>
+
+    <div id="error-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-orange-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-orange-600">Form Error</h2>
+                <p id="error-message-toast" class="text-sm text-gray-600">Your error message here</p>
+            </div>
+            <button id="close-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var lat;
+        var long;
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Initialize the map
+            var map = L.map('map_section').setView([7.0772, 125.6151], 13); // Coordinates for Buhangin, Davao City
+
+            // Add a tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Handle map clicks
+            map.on("click", function (e) {
+                var userLoc = L.marker(e.latlng).addTo(map);
+                userLoc.bindPopup("Plotted coordinates: " + e.latlng).openPopup();
+                lat = e.latlng.lat.toFixed(6);
+                long = e.latlng.lng.toFixed(6);
+                reverseGeocode(lat, long)
+            });
+        });
+
+        async function fetchGymAdminInfo() {
+            try {
+                const response = await axios.get('http://localhost:3000/getGymAdminInfo', {
+                    params: {
+                        account_id: userId
+                    }
+                });
+                const data = response.data[0]; // Assuming the response data contains the member info
+                return data.admin_id; // Return the admin_id
+            } catch (error) {
+                console.error('Error fetching gym admin info:', error.message);
+            }
+        }
+
+        const submit = document.getElementById("Submit");
+        document.getElementById("Submit").addEventListener("click", async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            let businessPermitPath;
+            let gymLogoPath;
+            try {
+                var gymName = document.getElementById("Gym_name").value;
+                const contactNum = document.getElementById("Contact_num").value;
+                const dailyRates = document.getElementById("daily_rates").value;
+                const monthlyRates = document.getElementById("monthly_rates").value;
+                const gymAddress = document.getElementById("Gym_address").value;
+                const admin_id = await fetchGymAdminInfo();
+                await fetchGymAdminInfo()
+                const formData = {
+                    admin_id: admin_id,
+                    gymname: gymName,
+                    latitude: lat,
+                    longtitude: long,
+                    daily_rate: dailyRates,
+                    monthly_rate: monthlyRates,
+                    contact_no: contactNum,
+                    street_address: gymAddress,
+                    status: 'Pending'
+                };
+
+                const response = await axios.post('http://localhost:3000/RegisterGym', formData);
+
+                // Only call uploadFiles if the initial form data submission succeeds
+                if (response.status === 200) {
+                    await uploadFiles(); // This should be without passing the event
+                }
+            } catch (error) {
+                if (error.response && error.response.data.message) {
+                    const errorMessage = error.response.data.message;  // Access the error message directly
+                    console.log(errorMessage);
+                    showToast(errorMessage);  // Display the error message in a modal
+                } else {
+                    console.error('Error submitting Gym Trainer Registration:', error.message);
+                }
+                console.error('Error submitting registration:', error);
+                return false;  // Indicate failure
+            }
+
+        });
+
+
+        async function uploadFiles() {
+            try {
+                const businessPermitFile = document.getElementById("business_permit").files[0];
+                const gymLogoFile = document.getElementById("gym_logo").files[0];
+
+                if (!businessPermitFile || !gymLogoFile) {
+                    alert("Please select both files to upload.");
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('business_permit', businessPermitFile);
+                formData.append('gym_logo', gymLogoFile);
+
+                // First, upload the files using .then()
+                axios.post('http://localhost:3000/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then((response) => {
+                        // Pass the file paths to the uploadGymFiles function
+                        businessPermitPath = response.data.business_permit[0].path
+                        gymLogoPath = response.data.gym_logo[0].path
+                        console.log("All uploads completed successfully.");
+                        uploadGymFiles();
+                        console.log("delay")
+                        window.location.href = "gymAdminDashboard.html?status=gym_registered"
+                    })
+                    .catch((error) => {
+                        console.error("Error during upload: ", error);
+                        alert('Error uploading files.');
+                    });
+
+            } catch (error) {
+                console.error("Unexpected error: ", error);
+                alert('Error uploading files.');
+            }
+        }
+
+
+        async function uploadGymFiles() {
+            try {
+                console.log("Business permit path:", businessPermitPath);
+                console.log("Gym logo path:", gymLogoPath);
+                // Upload the logo first
+                console.log("Starting logo upload...");
+                uploadLogo(gymLogoPath);
+                console.log("Logo uploaded successfully.");
+
+                // Then upload the document
+                console.log("Starting document upload...");
+                uploadDocs(businessPermitPath);
+                console.log("Document uploaded successfully.");
+            } catch (error) {
+                console.error("Error during the gym file upload: ", error.message);
+                alert('Error uploading gym files: ' + error.message);
+            }
+        }
+
+        const uploadDocs = async (path) => {
+            try {
+                const formData = {
+                    document_type: 'Business permit',
+                    document_path: path,
+                };
+
+                const response = await axios.post('http://localhost:3000/AddGymDocuments', formData);
+                if (response.status === 200) {
+                    return response;  // Return to ensure promise resolves
+                } else {
+                    throw new Error("Docs upload failed");
+                }
+            } catch (error) {
+                console.error('Error submitting docs:', error);
+                throw error;  // Re-throw the error so it can be caught in the chain
+            }
+        }
+
+        const uploadLogo = async (path) => {
+            try {
+                const formData = {
+                    img_path: path,
+                };
+
+                const response = await axios.post('http://localhost:3000/AddGymLogo', formData);
+                if (response.status === 200) {
+                    return response;  // Return to ensure promise resolves
+                } else {
+                    throw new Error("Logo upload failed");
+                }
+            } catch (error) {
+                console.error('Error submitting logo:', error);
+                throw error;  // Re-throw to be caught in chain
+            }
+        }
+
+
+        function reverseGeocode(lat, long) {
+            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}`;
+            axios.get(url)
+                .then(response => {
+                    if (response.data && response.data.address) {
+                        const address = `${response.data.address.road || ''}, ${response.data.address.city || ''}, ${response.data.address.state || ''}, ${response.data.address.country || ''}`.trim();
+                        document.getElementById('Gym_address').value = address;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error with reverse geocoding:', error);
+                });
+        }
+
+
+        function showModal() {
+            document.getElementById("successModal").style.display = "block";
+        }
+
+
+        function closeModal() {
+            document.getElementById("successModal").style.display = "none";
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('error-toast');
+            const errorMessageElement = document.getElementById('error-message-toast');
+
+            // Set the error message
+            errorMessageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove the hidden state and the off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+            }, 3000);
+        }
+
+        // Close button functionality
+        document.getElementById('close-toast-btn').addEventListener('click', () => {
+            const toast = document.getElementById('error-toast');
+            toast.classList.add('translate-x-full');  // Slide out
+            setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+        });
+    </script>
+</body>
+<script src="/frontend/scripts/auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+</html>

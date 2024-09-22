@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <script src="https://kit.fontawesome.com/64d58efce2.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        /* Modal Styling */
+        #errorModal {
+            z-index: 50;
+        }
+    </style>
+</head>
+
+
+<body class="text-white font-customFont">
+    <section class="bg-eerieBlack min-h-screen flex items-center justify-center">
+        <!--login container-->
+        <div class="bg-customBodyColor shadow-lg flex rounded-2xl max-w-3xl p-5 items-center">
+            <!--image-->
+            <div class="md:block hidden w-1/2">
+                <img class="rounded-xl py-8 px-8" src="../../img/undraw_destination_re_sr74.svg" alt="">
+            </div>
+
+            <!--form-->
+            <div class="md:w-1/2 px-16">
+                <h2 class="font-bold text-2xl text-gray-200">Login</h2>
+                <div class="text-black flex flex-col gap-4">
+                    <input class="p-2 mt-4 rounded-xl border" id="username" type="text" name="email"
+                        placeholder="Username">
+                    <div class="relative">
+                        <input class="p-2 mt-4 rounded-xl border w-full" id="password" type="password" name="email"
+                            placeholder="Password">
+                        <ion-icon id="showPassword"
+                            class="absolute mt-2 text-2xl text-gray-400 top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+                            name="eye-outline"></ion-icon>
+                    </div>
+                    <button class="text-white bg-customOrange rounded-xl py-2 hover:scale-105 duration-300"
+                        id="login">Login</button>
+                </div>
+
+                <div class="mt-8 grid grid-cols-3 items-center text-gray-400">
+                    <hr class="border-gray-400">
+                    <p class="text-center text-xs">OR</p>
+                    <hr class="border-gray-400">
+                </div>
+
+                <button
+                    class="bg-white text-black border py-2 rounded-xl mt-5 w-full flex justify-center items-center text-xs hover:scale-105 duration-300">
+                    <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20px">
+                        <path fill="#FFC107"
+                            d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+                        <path fill="#FF3D00"
+                            d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+                        <path fill="#4CAF50"
+                            d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+                        <path fill="#1976D2"
+                            d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+                    </svg>
+                    Login with Google
+                </button>
+
+                <p class="mt-6 text-xs border-b border-gray-400 py-2">Forgot your password?</p>
+
+                <div class="mt-3 text-xs flex justify-between items-center">
+                    <p>Don't have an account?</p>
+                    <button
+                        class="py-2 px-4 hover:text-customOrange bg-transparent hover:scale-110 duration-300">Register</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Modal HTML -->
+    <div id="errorModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm">
+        <div
+            class="bg-white rounded-xl shadow-lg w-1/3 p-8 text-center text-black transition-transform duration-300 transform scale-105">
+            <!-- Modal Heading -->
+            <h2 class="text-2xl font-bold mb-6 text-customOrange">Login Failed</h2>
+
+            <!-- Modal Content -->
+            <p class="text-gray-700 mb-6">Oops! Incorrect username or password. Please try again.</p>
+
+            <!-- Close Button -->
+            <button id="closeModal"
+                class="mt-4 bg-customOrange text-white py-3 px-6 rounded-full shadow-md hover:bg-opacity-90 transition duration-300 transform hover:scale-110">
+                Close
+            </button>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="/frontend/scripts/redirect.js"></script>
+    <script>
+        document.getElementById("login").addEventListener("click", async function (event) {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await axios.post('http://localhost:3000/auth/Login', {
+                    username,
+                    password
+                }, {
+                    withCredentials: true // This ensures the session cookie is sent with the request
+                });
+
+                if (response.status === 200) {
+                    // Set cookies instead of localStorage
+                    setCookie('accessToken', response.data.accessToken, 1); // Expires in 1 day
+                    setCookie('userType', response.data.userType, 1); // Expires in 1 day
+
+                    redirectToDashboard(response.data.userType);
+                } else {
+                    showModal();
+                }
+            } catch (error) {
+                showModal();
+            }
+        });
+
+        // Function to show modal
+        function showModal() {
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        // Function to close modal
+        document.getElementById("closeModal").addEventListener("click", function () {
+            document.getElementById('errorModal').classList.add('hidden');
+        });
+
+        // Helper function to set cookies
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Helper function to retrieve cookies (if needed)
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        document.getElementById("showPassword").addEventListener("click", async function (event) {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type == "text") {
+                passwordField.type = "password"
+            } else {
+                passwordField.type = "text"
+            }
+        })
+
+    </script>
+</body>
+<script src="/frontend/scripts/auth.js"></script>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainers List</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #343639;
+        }
+    </style>
+</head>
+
+<body class="text-white">
+
+    <div id="app" class="flex justify-center items-center min-h-screen">
+        <div class="bg-gray-700 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h1 class="text-3xl font-bold mb-6 text-center">Trainers List</h1>
+            <div id="trainers" class="space-y-4">
+                <!-- Trainers will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            axios.get('http://localhost:3000/getTrainers')
+                .then(response => {
+                    const trainers = response.data[0]; // Access the first element of the outer array
+                    const trainersContainer = document.getElementById('trainers');
+                    trainers.forEach(trainer => {
+                        // Create a card for each trainer
+                        const trainerCard = document.createElement('div');
+                        trainerCard.classList.add('bg-gray-800', 'p-4', 'rounded-lg', 'shadow-md', 'relative', 'flex', 'items-start', 'justify-between');
+    
+                        // Create the content for the trainer card
+                        const trainerContent = document.createElement('div');
+                        trainerContent.classList.add('flex-1');
+                        trainerContent.innerHTML = `
+                            <h2 class="text-xl font-semibold">${trainer.firstname} ${trainer.lastname}</h2>
+                            <p class="text-gray-400">${trainer.bio}</p>
+                            <p class="mt-2">Experience: ${trainer.experience} years</p>
+                        `;
+    
+                        // Create the message button
+                        const messageButton = document.createElement('button');
+                        messageButton.classList.add('bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded', 'hover:bg-blue-600', 'transition', 'duration-150', 'ease-in-out');
+                        messageButton.textContent = 'Message';
+    
+                        // Append content and button to the trainer card
+                        trainerCard.appendChild(trainerContent);
+                        trainerCard.appendChild(messageButton);
+    
+                        // Add event listener for the entire card
+                        trainerCard.addEventListener('click', () => {
+                            trainerid = trainer.trainer_id;
+                            alert(`Trainer ID: ${trainerid}`);
+                        });
+    
+                        // Add event listener for the message button
+                        messageButton.addEventListener('click', (event) => {
+                            // Prevent the event from bubbling up to the card click event
+                            event.stopPropagation();
+                            trainerid = trainer.trainer_id;
+    
+                            // Redirect to chat.html with trainer ID as a query parameter
+                            window.location.href = `./chat.html?trainerid=${trainerid}`;
+                        });
+    
+                        // Add the card to the container
+                        trainersContainer.appendChild(trainerCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    </script>
+
+</body>
+
+</html>

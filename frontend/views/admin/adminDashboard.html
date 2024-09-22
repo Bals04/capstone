@@ -2,172 +2,353 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flexperience Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../dist/tailwind.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="../../dist/tailwind.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+            @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+        .page_title {
+            border-bottom: 2px solid;
+            border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
+        }
+
+        .sidebar,
+        .sidebar-links {
+            overflow-x: hidden;
+        }
+
+        .sidebar:hover .Menu {
+            opacity: 1;
+        }
+
+        .sidebar:hover .menu-separator {
+            transition-delay: 0s;
+            transform: scaleX(0);
+        }
+
+        #view_pending th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #EC7E4A;
+            color: white;
+        }
+
+        #view_pending tr:nth-child(even) {
+            background-color: #5F6163;
+        }
+
+        #view_pending td,
+        #view_pending th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .calendar {
+            padding: 20px;
+        }
+
+        .calendar .days {
+            margin-bottom: 15px;
+        }
+
+        .calendar .weeks li {
+            font-weight: 500;
+        }
+
+
+        .calendar ul {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+
+        .calendar ul li {
+            position: relative;
+            width: calc(100% / 7);
+        }
+
+        .calendar .days li {
+            z-index: 1;
+            font-weight: 300;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .days li.inactive {
+            color: #aaa;
+        }
+
+        .days li.active {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .calendar .days li::before {
+            position: absolute;
+            content: "";
+            height: 30px;
+            width: 30px;
+            top: 50%;
+            left: 50%;
+            z-index: -1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .days li:hover::before {
+            background: #878787;
+        }
+
+        .days li.active::before {
+            background: #EC7E4A;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-900 font-sans leading-normal tracking-normal text-white">
-
-    <!-- Dashboard header -->
-    <div class="flex justify-between bg-gray-900 border-gray-200 p-6">
-        <div class="text-3xl font-bold text-white">FleXperience Dashboard</div>
-        <div class="text-white ">Welcome, Admin</div>
-    </div>
-
-    <!-- Dashboard content -->
-    <div class="container mx-auto mt-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Active Trainers -->
-            <div class="bg-gradient-to-br from-red-400 to-red-900 rounded-lg shadow-md p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i class="fas fa-dumbbell text-4xl mr-4"></i>
-                        <div class="text-2xl font-semibold">Active Trainers</div>
-                    </div>
-                    <div class="bg-white text-black font-semibold py-1 px-3 rounded-full text-sm" id="TrainerCount">0
-                    </div>
-                </div>
+<body class="min-h-screen bg-[#343639] font-customFont ">
+    <div id="content_container" class="">
+        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
+            <div class="flex items-center justify-center">
+                <a href="#" class="list-none">
+                    <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
+                </a>
             </div>
 
-            <!-- Active Members -->
-            <div class="bg-gradient-to-br from-green-400 to-green-900 rounded-lg shadow-md p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i class="fas fa-users text-4xl mr-4"></i>
-                        <div class="text-2xl font-semibold">Active Members</div>
-                    </div>
-                    <div class="bg-white text-black font-semibold py-1 px-3 rounded-full text-sm" id="MemberCount">0
-                    </div>
-                </div>
-            </div>
+            <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
+                <!--Home-->
+                <li>
+                    <a href="adminDashboard.html" class="btn active flex items-center justify-center text-2xl">
+                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color:#ffffff"></i>
+                    </a>
+                    <span class="tooltip-home absolute text-lg">Home</span>
+                </li>
 
-            <!-- Add Member -->
-            <a href="#"
-                class="bg-gray-300 rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition duration-300 ease-in-out">
-                <i class="fas fa-user-plus text-gray-700 text-4xl mb-4"></i>
-                <span class="text-lg font-semibold text-gray-800">Register new Member</span>
-            </a>
+                <!--Pending Gym Registration-->
+                <li class="mt-6">
+                    <a href="Pending.html" class="btn flex items-center justify-center text-2xl">
+                        <i class='bx bx-dots-horizontal-rounded' aria-hidden="true" style="color:#ffffff"></i>
+                    </a>
+                    <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
+                </li>
 
-            <!-- Add Trainer -->
-            <a href="#"
-                class="bg-gray-300 rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition duration-300 ease-in-out">
-                <i class="fas fa-dumbbell text-4xl mr-4 text-gray-700"></i>
-                <span class="text-lg font-semibold text-gray-800">Register new trainer</span>
-            </a>
+                <!--Registered Gym-->
+                <li class="mt-6">
+                    <a href="Registered.html" class="btn flex items-center justify-center text-2xl">
+                        <i class='bx bx-list-check' style="color:white"></i>
+                    </a>
+                    <span class="tooltip-workout absolute text-lg">Registered Gym</span>
+                </li>
 
-            <!-- Recent Activities -->
-            <div class="bg-gray-300 rounded-lg shadow-md p-6 col-span-2">
-                <div>
-                    <div class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</div>
-                    <ul class="divide-y divide-gray-200">
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="text-gray-800">John Doe completed a workout session.</div>
-                                <div class="text-gray-500 text-sm">2 hours ago</div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="text-gray-800">Jane Smith signed up as a new member.</div>
-                                <div class="text-gray-500 text-sm">3 hours ago</div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="text-gray-800">New nutrition plan published by Trainer1.</div>
-                                <div class="text-gray-500 text-sm">4 hours ago</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                <!-- Settings -->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class='bx bx-cog' style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-workout absolute text-lg">Settings</span>
+                </li>
+            </ul>
         </div>
-        <!-- Modal -->
-        <div id="memberModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden">
-            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-2xl w-full p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-medium text-gray-800">Member Details</h3>
-                    <button id="closeModal" class="text-gray-800 text-xl">&times;</button>
+
+        <div
+            class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+            <h1 class="">
+                <span class="page_title font-normal">
+                    Dashboard
+                </span>
+            </h1>
+            <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5 items-center">
+                <!--profile-->
+                <div class="flex items-center justify-center mr-24 mt-0">
+                    <button>
+                        <img class="w-10 h-10 rounded-full object-cover border border-gray-400"
+                            src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
                 </div>
-                <div>
-                    <table class="min-w-full bg-white">
-                        <thead>
-                            <tr>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">ID</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Member name</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Trainer</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">Start date</th>
-                                <th class="py-2 px-4 border-b border-gray-300 bg-gray-800 text-white">End date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberTableBody">
-                            <!-- Member data will be populated here -->
-                        </tbody>
-                    </table>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
                 </div>
             </div>
         </div>
 
+        <div class="flex justify-between">
+            <div class="pl-[120px] pt-[40px] text-white font-sans">
+                Good day, <br>
+                <span class="text-4xl font-bold font-customFont">Admin!</span> <br>
+                Pag trabaho na boss!
+
+                <div class="mt-20 flex gap-5">
+                    <a href="Registered.html"
+                        class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300 flex items-center gap-3">
+                        <i class="fas fa-check-circle text-3xl"></i> <!-- Registered Icon -->
+                        <div>
+                            <span class="text-lg">Registered Gym(s)</span><br>
+                            <span class="font-bold ml-3">1</span>
+                        </div>
+                    </a>
+                    <a href="Pending.html"
+                        class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300 flex items-center gap-3">
+                        <i class="fas fa-hourglass-half text-3xl"></i> <!-- Pending Icon -->
+                        <div>
+                            <span class="text-lg">Pending Gym Registration(s)</span><br>
+                            <span class="font-bold ml-3">1</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="dashboard-Content text-sm text-white mr-10">
+                <div class="wrapper w-[320px] bg-div_color shadow-lg  border-border_color border-2">
+                    <header class="">
+                        <p class="current-date"></p>
+                        <div class="icons">
+                            <span id="prev" class="materials-symbols-rounded text-black">
+                                <i class='bx bx-chevron-left text-xl'></i>
+                            </span>
+                            <span id="next" class="materials-symbols-rounded text-black">
+                                <i class='bx bx-chevron-right text-xl'></i>
+                            </span>
+                        </div>
+                    </header>
+                    <div class="calendar">
+                        <ul class="weeks">
+                            <li>Sun</li>
+                            <li>Mon</li>
+                            <li>Tue</li>
+                            <li>Wed</li>
+                            <li>Thu</li>
+                            <li>Fri</li>
+                            <li>Sat</li>
+                        </ul>
+                        <ul class="days"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="container p-4 pl-[120px] shadow-lg">
+        <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
+        <div class="bg-div_color p-6 shadow-xl max-w-3xl border-border_color border-2 rounded-lg">
+            <table class="w-full text-white table-auto border-collapse rounded-sm">
+                <thead>
+                    <tr class="bg-orange-600">
+                        <th class="p-3 border-b-2 border-border_color text-center">Gym Admin</th>
+                        <th class="p-3 border-b-2 border-border_color text-center">Gym Name</th>
+                        <th class="p-3 border-b-2 border-border_color text-center">Street Address</th>
+                        <th class="p-3 border-b-2 border-border_color text-center">Subscription</th>
+                        <th class="p-3 border-b-2 border-border_color text-center">Subscription Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example Row -->
+                    <tr class="bg-gray-800 hover:bg-gray-600">
+                        <td class="p-3 border-b border-border_color text-center align-middle">John Doe</td>
+                        <td class="p-3 border-b border-border_color text-center align-middle">Fitness Pro Gym</td>
+                        <td class="p-3 border-b border-border_color text-center align-middle">123 Street Name</td>
+                        <td class="p-3 border-b border-border_color text-center align-middle">Monthly</td>
+                        <td class="p-3 border-b border-border_color text-center align-middle">
+                            <span class="bg-50 text-white px-2 py-1 rounded-full">Active</span>
+                        </td>
+                    </tr>
+                    <!-- Repeat for each registered gym -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
 
 </body>
 
+</html>
+<script src="../../scripts/admin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            //FIRST RESPONSE WILL SET THE COUNT OF THE STUDENTS/MEMBERS
-            const response = await axios.get('http://localhost:3000/getStudentCount');
-            const data = response.data;
-            var empCount = (data[0].empCount)
-            const memberCount = document.getElementById("MemberCount");
-            memberCount.innerHTML = empCount;
-            //SECOND RESPONSE WILL SET THE COUNT OF THE TRAINERS
-            const response_2 = await axios.get('http://localhost:3000/getTrainerCount');
-            const data_2 = response_2.data;
-            const trainerCount = document.getElementById("TrainerCount")
-            var trainer_Count = (data_2[0].trainerCount)
-            trainerCount.innerHTML = trainer_Count;
+    //calendar
 
-            memberCount.addEventListener('click', async () => {
-                const memberModal = document.getElementById('memberModal');
-                const memberTableBody = document.getElementById('memberTableBody');
+    const currentDate = document.querySelector(".current-date"),
+        daysTag = document.querySelector(".days"),
+        prevNextIcon = document.querySelectorAll(".icons span");
 
-                //Fetch member details
-                const memberResponse = await axios.get('http://localhost:3000/getMembers');
-                const members = memberResponse.data;
+    //getting new date, current year and month
+    let date = new Date(),
+        currYear = date.getFullYear(),
+        currMonth = date.getMonth();
 
-                // Populate table with member details
-                memberTableBody.innerHTML = '';
-                members.forEach(member => {
-                    memberTableBody.innerHTML += `
-                        <tr>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.member_id}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.member_name}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.Trainer}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.start_date}</td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-gray-800">${member.end_date}</td>
-                        </tr>
-                `;
-                });
+    const months = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
 
-                // Show modal
-                memberModal.classList.remove('hidden');
-            });
+    const renderCalendar = () => {
+        let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), //first day
+            lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), //last date sa month
+            lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), //last day sa month
+            lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); //last date previous month
+        let liTag = "";
 
-            // Add event listener to close button
-            document.getElementById('closeModal').addEventListener('click', () => {
-                document.getElementById('memberModal').classList.add('hidden');
-            });
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        for (let i = firstDayofMonth; i > 0; i--) { //previous month last days
+            liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
         }
 
+        for (let i = 1; i <= lastDateofMonth; i++) { // all days of current month
+
+            //current day,month, year active
+            let isToday = i === date.getDate() && currMonth === new Date().getMonth()
+                && currYear === new Date().getFullYear() ? "active" : "";
+            liTag += `<li class="${isToday}">${i}</li>`;
+        }
+
+        for (let i = lastDayofMonth; i < 6; i++) { //next month first days
+            liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
+        }
+
+        currentDate.innerText = `${months[currMonth]} ${currYear}`;
+        daysTag.innerHTML = liTag;
+    }
+    renderCalendar();
+
+    //click event sa icons
+    prevNextIcon.forEach(icon => {
+        icon.addEventListener("click", () => {
+            currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+
+            if (currMonth < 0 || currMonth > 11) {
+                date = new Date(currYear, currMonth);
+                currYear = date.getFullYear(); //updates current year with new date year
+                currMonth = date.getMonth(); //updates current month with new date month
+            } else { //pass new date as date value
+                date = new Date();
+            }
+            renderCalendar();
+        });
     });
-
 </script>
-
-</html>

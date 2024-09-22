@@ -6,11 +6,26 @@ module.exports = {
     "./views/admin/**/*.{html,js}",
     "./views/maps/**/*.{html,js}",
     "./views/features/**/*.{html,js}",
-    "./scripts/map.js"
+    "./views/Landing Page/**/*.{html,js}",
+    "./views/gym_admin/**/*.{html,js}",
+    "./scripts/map.js",
+
   ],
   theme: {
     extend: {
+      fontFamily:{
+        customFont: ['"Aldrich"', "sans-serif"],
+        customFont2:['"Montserrat"', "sans-serif"]
+      },
       colors: {
+        50: '#EC7E4A',
+        51: '#343639',
+        52: '#FFFFFF',
+        'custom-bg': '#323538',
+        'custom-border': '#EC7E4A',
+        guestNavbar: '#232121',
+        forGradientGray: '#232323',
+        'forGradientWhite': '#898787',
         customGray: '#343639',
         customOrange: '#EC7E4A',
         customBodyColor: '#1E1E1E',
@@ -19,8 +34,10 @@ module.exports = {
         darkCharcoal: '#333333',
         davysGrey: '#555555',
         eerieBlack: '#191919',
-        borderStroke: '#464646',
-    },},
+        div_color: '#373D41',
+        border_color: '#464646',
+      },
+    },
   },
   plugins: [
     require('tailwind-scrollbar'),
