@@ -67,3 +67,13 @@ prevNextIcon.forEach(icon => {
         renderCalendar();
     });
 }); //thank u chatgpt og yt lablats <3
+
+document.getElementById('sidebarToggle').addEventListener('click', function () {
+    const sidebar = document.getElementById('logo-sidebar');
+    sidebar.classList.toggle('-translate-x-full');
+});
+
+document.getElementById('userDropdownToggle').addEventListener('click', function () {
+    const dropdown = document.getElementById('dropdown-user');
+    dropdown.classList.toggle('hidden');
+});
