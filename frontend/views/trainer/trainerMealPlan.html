@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Meal Plan</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="min-h-screen font-[Poppins] bg-customGray">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center justify-start rtl:justify-end">
+                <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                  <span class="sr-only">Open sidebar</span>
+                  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                     <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+                  </svg>
+                </button>
+                <a href="#" class="flex ms-2 md:me-24">
+                    <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                </a>
+            </div>
+            <div class="flex items-center">
+                <div class="flex items-center ms-3">
+                    <div class="mr-6 mt-1">
+                        <button>
+                            <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" id="userDropdownToggle" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                          <span class="sr-only">Open user menu</span>
+                          <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                        </button>
+                    </div>
+                    <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600" id="dropdown-user">
+                        <div class="px-4 py-3" role="none">
+                          <p class="text-sm text-gray-900 dark:text-white" role="none">
+                            Heinz Padilla
+                          </p>
+                          <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                            heinzpadilla2024@flexperience.com
+                          </p>
+                        </div>
+                    <ul class="py-1" role="none">
+                      <li>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
+                      </li>
+                      <li>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
+                      </li>
+                      <li>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Earnings</a>
+                      </li>
+                      <li>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+    </nav>
+    
+    <!--Sidebar-->
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+           <ul class="space-y-2 font-medium" id="forActive">
+              <li>
+                <a href="index.html" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
+                    <ion-icon name="home-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
+                    <span class="mt-1 ms-3">Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <a href="trainerWorkoutPlan.html" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
+                    <ion-icon name="barbell-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
+                    <span class="mt-1 ms-3">Workout Plan</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
+                    <ion-icon name="egg-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
+                    <span class="mt-1 ms-3">Meal Plan</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
+                    <ion-icon name="people-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
+                    <span class="mt-1 ms-3">Students</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
+                    <ion-icon name="chatbubbles-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
+                    <span class="mt-1 ms-3">Chat</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
+                    <ion-icon name="settings-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
+                    <span class="mt-1 ms-3">Settings</span>
+                </a>
+            </li>
+           </ul>
+        </div>
+    </aside>
+
+    <!--Dashboard Content-->
+    <div class="sm:ml-64">
+        <div class="m-4 p-4 mt-20">
+            <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-div_color dark:border-gray-700">
+                <div class="sm:hidden">
+                    <label for="tabs" class="sr-only">Select tab</label>
+                    <select id="tabs" class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg block w-full p-2.5 dark:bg-div_color dark:border-gray-600 dark:placeholder-white dark:text-white">
+                        <option>Custom Meal</option>
+                        <option>Premade Meal</option>
+                    </select>
+                </div>
+                <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-white rtl:divide-x-reverse" id="fullWidthTab" role="tablist">
+                    <li class="w-full">
+                        <button id="stats-tab" onclick="toggleTab('stats', this)" type="button" class="inline-block w-full p-4 rounded-ss-lg bg-customGray hover:bg-customGray focus:outline-none dark:bg-customGray dark:hover:border-gray-700">Custom Meal</button>
+                    </li>
+                    <li class="w-full">
+                        <button id="about-tab" onclick="toggleTab('about', this)" type="button" class="inline-block w-full p-4 bg-customGray hover:bg-customGray focus:outline-none dark:bg-div_color dark:hover:border-gray-700">Premade Meal</button>
+                    </li>
+                </ul>
+                <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+                    <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="stats">
+                        <!-- Content for Custom Meal -->
+                        <div class="text-white text-2xl font-semibold">
+                            <h1>Meal Plan Templates</h1>
+                        </div>
+                        <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
+                            <form class="max-w-lg w-full">
+                                <div class="flex flex-col md:flex-row md:items-center">
+                                    <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                    <div class="flex w-full relative">
+                                        <button id="dropdown-button" type="button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                            All categories
+                                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            </svg>
+                                        </button>
+                                        <div id="dropdown" class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-div_color">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="relative w-full">
+                                            <input type="search" id="search-dropdown" class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-div_color dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Search workout plan" required />
+                                            <button type="submit" class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                                </svg>
+                                                <span class="sr-only">Search</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                                        
+                            <div class="mt-4 md:mt-0">
+                                <button type="button" class="text-white bg-gradient-to-r from-customGray via-red-300 to-customOrange hover:text-black hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">Add template</button>
+                            </div>
+                        </div>
+
+                        <!--grid-->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Tabemono</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://images.immediate.co.uk/production/volatile/sites/30/2022/03/Sesame-salmon-purple-sprouting-broccoli-sweet-potato-mash-02-8062a36.jpg?quality=90&resize=556,505" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkain</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://i.pinimg.com/736x/df/cc/10/dfcc10d397fc5e40073772e6e15c62dc.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Food</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://static01.nyt.com/images/2023/04/20/multimedia/as-ginger-scallion-fish-fgqk/as-ginger-scallion-fish-fgqk-articleLarge.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkaon</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://media.self.com/photos/5fe36191fa75923c77cd821f/4:3/w_2560%2Cc_limit/GettyImages-1128962609.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Bento</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="about">
+                        <!-- Content for Premade Meal -->
+                        <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
+                            <div class="text-white text-2xl font-semibold">
+                                <h1>Meal Plan Templates</h1>
+                            </div>
+                            <form class="max-w-lg w-full">
+                                <div class="flex flex-col md:flex-row md:items-center">
+                                    <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                    <div class="flex w-full relative">
+                                        <button id="dropdown-button" type="button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                            All categories
+                                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            </svg>
+                                        </button>
+                                        <div id="dropdown" class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-div_color">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG Meal Plan</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="relative w-full">
+                                            <input type="search" id="search-dropdown" class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-div_color dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Search workout plan" required />
+                                            <button type="submit" class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                                </svg>
+                                                <span class="sr-only">Search</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!--grid-->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Tabemono</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://images.immediate.co.uk/production/volatile/sites/30/2022/03/Sesame-salmon-purple-sprouting-broccoli-sweet-potato-mash-02-8062a36.jpg?quality=90&resize=556,505" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkain</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://i.pinimg.com/736x/df/cc/10/dfcc10d397fc5e40073772e6e15c62dc.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Food</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://static01.nyt.com/images/2023/04/20/multimedia/as-ginger-scallion-fish-fgqk/as-ginger-scallion-fish-fgqk-articleLarge.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkaon</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40" src="https://media.self.com/photos/5fe36191fa75923c77cd821f/4:3/w_2560%2Cc_limit/GettyImages-1128962609.jpg" alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Bento</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="../../scripts/trainer.js"></script>
+</body>
+</html>

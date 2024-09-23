@@ -34,3 +34,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function toggleTab(tabId, activeButton) {
+    // Hide all tab contents
+    const tabs = document.querySelectorAll('#fullWidthTabContent > div');
+    tabs.forEach(tab => {
+        tab.classList.add('hidden');
+    });
+
+    // Show the selected tab content
+    const activeTab = document.getElementById(tabId);
+    activeTab.classList.remove('hidden');
+
+    // Reset all button classes
+    const buttons = document.querySelectorAll('#fullWidthTab button');
+    buttons.forEach(button => {
+        button.classList.remove('bg-customGray', 'dark:bg-customGray');
+        button.classList.add('bg-div_color', 'dark:bg-div_color');
+    });
+
+    // Set the active button's background
+    activeButton.classList.add('bg-customGray', 'dark:bg-customGray');
+}
+
