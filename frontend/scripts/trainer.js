@@ -56,3 +56,24 @@ function toggleTab(tabId, activeButton) {
     activeButton.classList.add('bg-customGray', 'dark:bg-customGray');
 }
 
+// Wait for the DOM to fully load
+document.addEventListener('DOMContentLoaded', function() {
+    // Select the button
+    const button = document.querySelector('.mt-4 button');
+    // Select the modal
+    const modal = document.getElementById('crud-modal');
+    
+    // Add click event listener to the button
+    button.addEventListener('click', function() {
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false'); // Update aria-hidden attribute
+    });
+
+    // Add click event listener to the close button in the modal
+    const closeButton = modal.querySelector('button[data-modal-toggle]');
+    closeButton.addEventListener('click', function() {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true'); // Update aria-hidden attribute
+    });
+});
+

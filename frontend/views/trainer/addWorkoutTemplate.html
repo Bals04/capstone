@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Exercise</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-customGray text-white font-[Poppins]">
+    <div class="flex">
+        <div class="shadow m-7 p-10 rounded bg-div_color text-xl font-semibold w-[50rem]">
+            <div>
+                Add Exercises to Workout Template
+                <hr class="mt-7 border-gray-500">
+            </div>
+    
+            <div>
+                <div>
+                    <form class="mt-7 max-w-sm">
+                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Week</label>
+                        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                          <option>Week 1</option>
+                          <option>Week 2</option>
+                          <option>Week 3</option>
+                          <option>Week 4</option>
+                        </select>
+                    </form>
+                    <form class="mt-7 max-w-sm">
+                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Day</label>
+                        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                      
+                          <option>Day 1</option>
+                          <option>Day 2</option>
+                          <option>Day 3</option>
+                          <option>Day 4</option>
+                        </select>
+                    </form>
+                    <form class="mt-7 max-w-sm">
+                        <div class="mb-5">
+                          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Exercise Name</label>
+                          <input type="email" id="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-sm-light" placeholder="Exercise name" required />
+                        </div>
+                    </form>
+                    <button type="submit" class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-400">Select exercise from API</button>
+                    <form class="mt-4 max-w-sm">
+                        <div class="mb-5">
+                          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Reps</label>
+                          <input type="email" id="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="repititions" required />
+                        </div>
+                    </form>
+                    <form class="max-w-sm">
+                        <div class="mb-5">
+                          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sets</label>
+                          <input type="email" id="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="sets" required />
+                        </div>
+                    </form>
+                    <button type="submit" class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-400">Add to plan</button>
+                </div>
+            </div>
+        </div>
+        <div class="bg-div_color shadow m-7 p-10 rounded text-xl font-semibold w-[30rem]">
+            <div>
+                Added Exercises
+                <hr class="mt-7 border-gray-500">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
