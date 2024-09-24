@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Exercises</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+  <!-- Header -->
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Add Exercises to Workout Template</h1>
+    <p class="text-gray-600">Template: <strong>Strength Training Phase 1</strong></p>
+  </header>
+
+  <!-- Exercise Form -->
+  <section class="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
+    <form id="exerciseForm">
+      <!-- Week Selector -->
+      <div class="mb-4">
+        <label for="week" class="block text-gray-700 font-semibold">Week</label>
+        <select id="week" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option>Week 1</option>
+          <option>Week 2</option>
+          <option>Week 3</option>
+          <option>Week 4</option>
+        </select>
+      </div>
+
+      <!-- Day Selector -->
+      <div class="mb-4">
+        <label for="day" class="block text-gray-700 font-semibold">Day</label>
+        <select id="day" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option>Day 1</option>
+          <option>Day 2</option>
+          <option>Day 3</option>
+          <option>Day 4</option>
+          <option>Day 5</option>
+          <option>Day 6</option>
+          <option>Day 7</option>
+        </select>
+      </div>
+
+      <!-- Exercise Name -->
+      <div class="mb-4">
+        <label for="exerciseName" class="block text-gray-700 font-semibold">Exercise Name</label>
+        <input type="text" id="exerciseName" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Bench Press">
+      </div>
+
+      <!-- Repetitions -->
+      <div class="mb-4">
+        <label for="repetitions" class="block text-gray-700 font-semibold">Repetitions</label>
+        <input type="number" id="repetitions" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10">
+      </div>
+
+      <!-- Sets -->
+      <div class="mb-4">
+        <label for="sets" class="block text-gray-700 font-semibold">Sets</label>
+        <input type="number" id="sets" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 4">
+      </div>
+
+      <!-- Add Exercise Button -->
+      <div class="mt-6">
+        <button type="submit" class="w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600">Add Exercise</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Added Exercises List -->
+  <section class="mt-8 max-w-lg mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Added Exercises</h2>
+    <div id="exerciseList" class="bg-white p-4 rounded-lg shadow-md">
+      <!-- Example of an added exercise -->
+      <div class="mb-2 p-2 bg-gray-100 rounded">
+        <p class="font-semibold">Week 1 - Day 1</p>
+        <p>Bench Press - 10 reps x 4 sets</p>
+        <div class="text-right">
+          <button class="text-blue-500 hover:underline">Edit</button> | 
+          <button class="text-red-500 hover:underline">Delete</button>
+        </div>
+      </div>
+      <!-- More exercises will be appended here -->
+    </div>
+  </section>
+</body>
+</html>

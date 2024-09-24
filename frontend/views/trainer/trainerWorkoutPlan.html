@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Workout Plan</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <style>
+        #success-toast {
+            z-index: 9000;
+        }
+
+        #success-message-toast {
+            word-break: break-word;
+            max-width: 250px;
+            /* Adjust this width as needed */
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-[Poppins] bg-customGray">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium" id="forActive">
+                <li>
+                    <a href="index.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="barbell-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Workout Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerMealPlan.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="egg-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Meal Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="people-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!--Dashboard Content-->
+    <div class="sm:ml-64">
+        <div class="m-4 p-4 mt-20">
+            <div class="text-white text-2xl font-semibold">
+                <h1>Workout Plan Templates</h1>
+            </div>
+            <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
+                <form class="max-w-lg w-full">
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <label for="search-dropdown"
+                            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                        <div class="flex w-full relative">
+                            <button id="dropdown-button" type="button"
+                                class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                All categories
+                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 4 4 4-4" />
+                                </svg>
+                            </button>
+                            <div id="dropdown"
+                                class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropdown-button">
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full">
+                                <input type="search" id="search-dropdown"
+                                    class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                    placeholder="Search workout plan" required />
+                                <button type="submit"
+                                    class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                    <span class="sr-only">Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="mt-4 md:mt-0">
+                    <button type="button" id="addTemplateBtn"
+                        class="text-white bg-gradient-to-r from-customGray via-orange-300 to-customOrange hover: hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">Add
+                        template</button>
+                </div>
+
+            </div>
+
+            <!--grid-->
+            <div id="templateContainer"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
+            </div>
+        </div>
+    </div>
+    <div id="templateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Create Workout Template</h2>
+            </div>
+            <form id="templateForm">
+                <!-- Template Name -->
+                <div class="mb-4">
+                    <label for="templateName" class="block text-gray-700 font-semibold">Template Name</label>
+                    <input type="text" id="templateName"
+                        class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="e.g., Strength Training Phase 1">
+                </div>
+
+                <!-- Template Description -->
+                <div class="mb-4">
+                    <label for="templateDescription" class="block text-gray-700 font-semibold">Template
+                        Description</label>
+                    <textarea id="templateDescription"
+                        class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        rows="4" placeholder="Brief description of the training program goals"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-between mt-6">
+                    <button type="button" id="closeModalBtn"
+                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Cancel</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500">Save &
+                        Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <!-- Ensures the circle stays round even if the text is long -->
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full flex-shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <script src="../../scripts/trainer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trainerid = getCookie("trainer_id")
+            const templateContainer = document.getElementById('template-container');
+            const status = getQueryParam('status');
+            console.log(status)
+            if (status === 'template_added') {
+                showToast("success", "Template successfully created! Redirecting you to the exercise page shortly.")
+
+            }
+            axios.get('http://localhost:3000/getTemplates', {
+                params: {
+                    trainer_id: trainerid // Send trainer_id as a query parameter
+                }
+            })
+                .then(response => {
+                    let templates = response.data;
+
+                    // If the response is a single object, wrap it in an array
+                    if (!Array.isArray(templates)) {
+                        templates = [templates];
+                    }
+
+                    // Iterate over the templates array
+                    templates.forEach(template => {
+                        // Create card HTML for each template
+                        const templateCard = `
+            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                    <img class="object-cover w-full h-40" src="https://cdn.shopify.com/s/files/1/1585/6091/files/Decline_dumbbell_press_large.gif?v=1594065202" alt="workout image" />
+                </a>
+                <div class="mt-4 px-5 pb-5">
+                    <a href="#">
+                        <h5 class="text-xl tracking-tight text-slate-900">${template.template_name}</h5>
+                    </a>
+                    <div class="mt-2 mb-5 flex items-center justify-center">
+                        <p>${template.description}</p>
+                    </div>
+                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                        View template
+                    </a>
+                </div>
+            </div>
+        `;
+                        // Append card to the container
+                        document.getElementById('templateContainer').innerHTML += templateCard;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching templates:', error);
+                });
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i].trim();
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            // Open Modal
+            document.getElementById('addTemplateBtn').addEventListener('click', function () {
+                document.getElementById('templateModal').classList.remove('hidden');
+            });
+
+            // Close Modal
+            document.getElementById('closeModalBtn').addEventListener('click', function () {
+                document.getElementById('templateModal').classList.add('hidden');
+            });
+
+            // Handle form submission (for example purposes, you can customize the logic)
+            document.getElementById('templateForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const templateName = document.getElementById('templateName').value;
+                const templateDescription = document.getElementById('templateDescription').value;
+
+                // Axios POST request
+                axios.post('http://localhost:3000/createWorkoutTemplate', {
+                    trainer_id: trainerid,
+                    template_name: templateName,
+                    description: templateDescription
+                })
+                    .then(function (response) {
+                        console.log('Success:', response.data);
+                        window.location.href = "trainerWorkoutPlan.html?status=template_added"
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error.response ? error.response.data : error.message);
+                    });
+
+                // Close the modal after submission
+                document.getElementById('templateModal').classList.add('hidden');
+            });
+        })
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function clearUrlParams() {
+            const url = new URL(window.location);
+            url.searchParams.delete('status'); // Remove the 'status' parameter
+            window.history.replaceState({}, document.title, url); // Update the URL without reloading
+        }
+
+        function showToast(type, message) {
+            const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
+            const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error
+
+            // Set the message
+            messageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => {
+                    toast.classList.add('hidden'); // Hide completely after the transition
+                }, 300);  // Wait for the transition to complete before hiding
+            }, 3000); // Ensure this is set to 3000 ms (3 seconds) for visibility
+        }
+
+        document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+            const toast = document.getElementById('success-toast');
+            console.log("clicked")
+            toast.classList.add('translate-x-full');  // Slide out
+            setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+        });
+    </script>
+</body>
+
+</html>

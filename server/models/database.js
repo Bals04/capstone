@@ -150,10 +150,12 @@ async function getWorkoutoftheDay(memberId, date) {
         `, [memberId, date])
     return rows
 }
-async function getTemplates() {
-    const [rows] = await pool.query(`SELECT * FROM workout_plan_templates`)
+async function getTemplates(trainer_id) {
+    const [rows] = await pool.query(`SELECT * FROM workout_plan_templates WHERE trainer_id = ?`,
+        [trainer_id])
     return rows
 }
+
 
 async function AddTemplate(trainer_id, name, desc) {
     const result = await pool.query(`

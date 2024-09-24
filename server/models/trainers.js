@@ -21,6 +21,13 @@ const insertGymTrainers = async (gymid, userid, firstname, lastname, bio, experi
     );
     return rows.length > 0 ? rows : null;
 };
+const insertWorkoutTemplates = async (trainer_id, template_name, description) => {
+    const [rows] = await pool.query(
+        'INSERT INTO workout_plan_templates (trainer_id, template_name, description) VALUES(?,?,?)',
+        [trainer_id, template_name, description]
+    );
+    return rows.length > 0 ? rows : null;
+};
 
 
 
@@ -28,5 +35,6 @@ const insertGymTrainers = async (gymid, userid, firstname, lastname, bio, experi
 module.exports = {
     insertGymTrainers,
     getAllTrainers,
-    getGymTrainers
+    getGymTrainers,
+    insertWorkoutTemplates
 };
