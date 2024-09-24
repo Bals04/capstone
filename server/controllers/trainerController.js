@@ -1,8 +1,8 @@
 const { getMembers, getExercises,
     AddCustomWorkout, getStudCount,
     getTrainerCount, getAllMembers,
-    getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog } = require('../models/database');
-const { getAllTrainers, getGymTrainers, insertGymTrainers,insertWorkoutTemplates } = require('../models/trainers');
+    getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
+const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates } = require('../models/trainers');
 
 module.exports = {
 
@@ -11,6 +11,17 @@ module.exports = {
             const { user_id } = req.query;
             console.log("query: " + user_id)
             const data = await GetTrainerInfo(user_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching trainer:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getTemplateId: async (req, res) => {
+        try {
+            const { template_name } = req.query;
+            console.log("received template nane: " + template_name)
+            const data = await getTemplateId(template_name);
             res.json(data);
         } catch (error) {
             console.error("Error fetching trainer:", error.message);

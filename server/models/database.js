@@ -474,8 +474,18 @@ async function getGymsByID(admin_id) {
     return result
 }
 
+async function getTemplateId(template_name) {
+    const [result] = await pool.query(`
+        SELECT * FROM workout_plan_templates
+        WHERE template_name = ?
+    `, [template_name])
+
+    return result
+}
+
 
 module.exports = {
+    getTemplateId,
     getGymsByID,
     retrieveTrainerchatLog,
     retrieveMemberChatLog,

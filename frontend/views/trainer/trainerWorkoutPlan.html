@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -242,11 +243,12 @@
                     </div>
                 </form>
 
-                <div class="mt-4 md:mt-0">
-                    <button type="button" id="addTemplateBtn"
-                        class="text-white bg-gradient-to-r from-customGray via-orange-300 to-customOrange hover: hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">Add
-                        template</button>
-                </div>
+                <button type="button" id="addTemplateBtn"
+                    class="text-white bg-50 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">
+                    <i class="fas fa-plus"></i> &nbsp Create template
+                </button>
+
+
 
             </div>
 
@@ -317,12 +319,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             const trainerid = getCookie("trainer_id")
             const templateContainer = document.getElementById('template-container');
-            const status = getQueryParam('status');
-            console.log(status)
-            if (status === 'template_added') {
-                showToast("success", "Template successfully created! Redirecting you to the exercise page shortly.")
+            // if (status === 'template_added') {
+            //     showToast("success", "Template successfully created! Redirecting you to the exercise page shortly.")
+            //     setTimeout(() =>
+            //      window.location.href = "addExercises.html", 3000);  // Hide completely after transition
 
-            }
+            // }
             axios.get('http://localhost:3000/getTemplates', {
                 params: {
                     trainer_id: trainerid // Send trainer_id as a query parameter
@@ -373,6 +375,15 @@
                 }
                 return null;
             }
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
 
             // Open Modal
             document.getElementById('addTemplateBtn').addEventListener('click', function () {
@@ -397,8 +408,8 @@
                     description: templateDescription
                 })
                     .then(function (response) {
-                        console.log('Success:', response.data);
-                        window.location.href = "trainerWorkoutPlan.html?status=template_added"
+                        setCookie('template_name', templateName, 1);
+                        window.location.href = "addExercises.html"
                     })
                     .catch(function (error) {
                         console.error('Error:', error.response ? error.response.data : error.message);
@@ -408,18 +419,6 @@
                 document.getElementById('templateModal').classList.add('hidden');
             });
         })
-
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        function clearUrlParams() {
-            const url = new URL(window.location);
-            url.searchParams.delete('status'); // Remove the 'status' parameter
-            window.history.replaceState({}, document.title, url); // Update the URL without reloading
-        }
-
         function showToast(type, message) {
             const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
             const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error

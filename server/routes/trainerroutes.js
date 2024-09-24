@@ -9,6 +9,7 @@ router.get("/getTrainerInfo", trainerController.getTrainerInfo);
 router.get("/getGymTrainer", trainerController.getGymTrainer); 
 router.get("/retrieveMemberChatLog", trainerController.retrieveMemberChatLog); 
 router.get("/getTemplates", trainerController.getTemplates); 
+router.get("/getTemplateId", trainerController.getTemplateId); 
 router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 router.post("/createWorkoutTemplate", trainerController.insertWorkoutTemplate); 
 
