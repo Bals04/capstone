@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Exercise</title>
+  <link rel="stylesheet" href="../../dist/tailwind.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    #success-toast {
+      z-index: 9000;
+    }
+
+    #success-message-toast {
+      word-break: break-word;
+      max-width: 250px;
+      /* Adjust this width as needed */
+    }
+
+    #exerciseModal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .scrollable-exercises {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* Additional styling */
+    .exercise-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      color: black;
+    }
+
+    .exercise-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .exercise-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .exercise-details {
+      flex: 1;
+    }
+
+    .exercise-details h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .exercise-details p {
+      font-size: 0.875rem;
+      color: #4a5568;
+    }
+
+    .filter-button {
+      transition: background-color 0.3s ease;
+    }
+
+    .filter-button:hover {
+      background-color: #38bdf8;
+    }
+  </style>
+</head>
+
+<body class="bg-customGray text-white font-[Poppins]">
+
+  <!--Header-->
+  <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+            aria-controls="logo-sidebar" type="button"
+            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+              </path>
+            </svg>
+          </button>
+          <a href="#" class="flex ms-2 md:me-24">
+            <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+            <span
+              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <div class="flex items-center ms-3">
+            <div class="mr-6 mt-1">
+              <button>
+                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+              </button>
+            </div>
+            <div>
+              <button type="button" id="userDropdownToggle"
+                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false"
+                data-dropdown-toggle="dropdown-user">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+              </button>
+            </div>
+            <div
+              class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+              id="dropdown-user">
+              <div class="px-4 py-3" role="none">
+                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                  Heinz Padilla
+                </p>
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                  heinzpadilla2024@flexperience.com
+                </p>
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Dashboard</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Earnings</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Sign out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!--breadcrump-->
+  <nav class="mt-20 ml-8 flex" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+      <li class="inline-flex items-center">
+        <a href="index.html"
+          class="inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-400 dark:hover:text-white">
+          <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+            viewBox="0 0 20 20">
+            <path
+              d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+          </svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 9 4-4-4-4" />
+          </svg>
+          <a href="trainerWorkoutPlan.html"
+            class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:hover:text-white">Workout
+            templates</a>
+        </div>
+      </li>
+      <li aria-current="page">
+        <div class="flex items-center">
+          <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 9 4-4-4-4" />
+          </svg>
+          <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Add exercise</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Content -->
+  <div class="flex flex-col md:flex-row mt-2">
+    <div class="shadow m-4 md:m-7 p-10 rounded bg-div_color text-xl font-semibold w-full md:w-[50rem]">
+      <div>
+        Add Exercises to Workout Template
+        <hr class="mt-7 border-gray-500">
+      </div>
+
+      <div>
+        <form class="mt-7 max-w-sm">
+          <label for="week" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Week</label>
+          <select id="week"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <option>Week 1</option>
+            <option>Week 2</option>
+            <option>Week 3</option>
+            <option>Week 4</option>
+          </select>
+        </form>
+
+        <form class="mt-7 max-w-sm">
+          <label for="day" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Day</label>
+          <select id="day"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <option>Day 1</option>
+            <option>Day 2</option>
+            <option>Day 3</option>
+            <option>Day 4</option>
+          </select>
+        </form>
+
+        <form class="mt-7 max-w-sm">
+          <div class="mb-5">
+            <label for="exercise-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Exercise
+              Name</label>
+            <input type="text" id="exerciseName"
+              class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-sm-light"
+              placeholder="Exercise name" required />
+          </div>
+        </form>
+
+        <button id="addExerciseBtn"
+          class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-400">Select
+          exercise from API</button>
+
+        <form class="mt-4 max-w-sm">
+          <div class="mb-5">
+            <label for="reps" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Reps</label>
+            <input type="number" id="reps"
+              class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              placeholder="Repetitions" required />
+          </div>
+        </form>
+
+        <form class="max-w-sm">
+          <div class="mb-5">
+            <label for="sets" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sets</label>
+            <input type="number" id="sets"
+              class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              placeholder="Sets" required />
+          </div>
+        </form>
+        <button onclick="submitExercise()"
+          class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-400">Add
+          to plan</button>
+      </div>
+    </div>
+
+    <div class="bg-div_color shadow m-4 md:m-7 p-10 rounded text-xl font-semibold w-full md:w-[30rem]">
+      <div>
+        Added Exercises
+        <hr class="mt-7 border-gray-500">
+      </div>
+
+      <div id="exerciseList" class="block max-w-sm p-3 mt-4 border-gray-200 rounded shadow dark:bg-gray-700">
+
+      </div>
+    </div>
+  </div>
+  <div id="exerciseModal" class="flex">
+    <div class="modal-content">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Select Exercises</h2>
+
+      <!-- Search by Exercise Name -->
+      <div class="mb-4">
+        <label for="searchExercise" class="block text-gray-700 font-semibold">Search by Exercise Name</label>
+        <input id="searchExercise" type="text" placeholder="Search exercise..."
+          class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Filter by Body Part Dropdown -->
+      <div class="mb-4">
+        <label for="bodyPart" class="block text-gray-700 font-semibold">Filter by Body Part</label>
+        <select id="bodyPart"
+          class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="all">All</option>
+          <option value="back">Back</option>
+          <option value="chest">Chest</option>
+          <option value="legs">Legs</option>
+          <option value="arms">Arms</option>
+          <option value="shoulders">Shoulders</option>
+        </select>
+      </div>
+
+      <!-- Exercise Options -->
+      <div id="exerciseOptions" class="space-y-2 scrollable-exercises">
+        <!-- Exercises from API will be populated here -->
+      </div>
+
+      <!-- Close Button -->
+      <div class="mt-4">
+        <button id="closeModal"
+          class="w-full bg-orange-500 text-white p-2 rounded hover:bg-red-600 transition-all duration-200 ease-in-out">Close</button>
+      </div>
+    </div>
+  </div>
+  <div id="success-toast"
+    class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+    <div class="flex items-center">
+      <!-- Ensures the circle stays round even if the text is long -->
+      <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full flex-shrink-0">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h2 class="text-lg font-semibold text-green-600">Success</h2>
+        <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+      </div>
+      <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</body>
+<script>
+
+
+  const apiKey = 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93'; // Replace with your exerciseDB API key
+  let selectedExercises = [];
+  let templateId = 0;
+  const templateName = getCookie("template_name")
+  showToast("success", `Template ${templateName} successfully created!`)
+  function fetchExercises(query = '', bodyPart = 'all') {
+    let apiUrl;
+    if (query) {
+      apiUrl = `https://exercisedb.p.rapidapi.com/exercises/name/${query}`;
+    } else if (bodyPart !== 'all') {
+      apiUrl = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`;
+    } else {
+      apiUrl = 'https://exercisedb.p.rapidapi.com/exercises';
+    }
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+      }
+    };
+
+    fetch(apiUrl, options)
+      .then(response => response.json())
+      .then(data => {
+        displayExercises(data.slice(0, 10)); // Limit to 10 exercises
+      })
+      .catch(error => console.error('Error fetching exercises:', error));
+  }
+
+  function fetchTemplateInfo() {
+    axios.get('http://localhost:3000/getTemplateId', {
+      params: {
+        template_name: templateName
+      }
+    })
+      .then(response => {
+        const data = response.data[0];
+        templateId = data.template_id;
+
+      })
+      .catch(error => {
+        console.error('Error fetching trainer info:', error);
+      });
+  }
+
+  function displayExercises(exercises) {
+    const exerciseOptions = document.getElementById('exerciseOptions');
+    exerciseOptions.innerHTML = '';
+
+    exercises.forEach(exercise => {
+      const exerciseCard = `
+          <div class="exercise-card">
+            <img src="${exercise.gifUrl}" alt="${exercise.name}">
+            <div class="exercise-details">
+              <h3>${exercise.name}</h3>
+              <p>Target: ${exercise.target}</p>
+              <button class="bg-blue-500 text-white p-2 mt-2 rounded filter-button" onclick="addExercise('${exercise.name}', '${exercise.target}', '${exercise.gifUrl}')">
+                Add Exercise
+              </button>
+            </div>
+          </div>
+        `;
+      exerciseOptions.innerHTML += exerciseCard;
+    });
+  }
+
+  function addExercise(name, target, gifUrl) {
+    const week = document.getElementById('week').value;
+    const day = document.getElementById('day').value;
+    const reps = document.getElementById('reps').value;
+    const sets = document.getElementById('sets').value;
+    document.getElementById('exerciseName').value = name
+    // Close the modal
+    document.getElementById('exerciseModal').style.display = 'none';
+  }
+
+  function submitExercise() {
+    const name = document.getElementById('exerciseName').value;
+    const reps = document.getElementById('reps').value;
+    const sets = document.getElementById('sets').value;
+    const week = document.getElementById('week').value || 'N/A'; // Example of additional fields
+    const day = document.getElementById('day').value || 'N/A';  // Example of additional fields
+
+    const exerciseItem = `
+        <div class="block max-w-sm p-3 mt-4 border-gray-200 rounded shadow dark:bg-gray-700">
+          <div class="bg-gray-700 border border-gray-500 shadow-md py-5 rounded">
+            <div class="ml-5">
+              <h5 class="mb-2 text-sm font-semibold tracking-tight dark:text-white">${name}</h5>
+            </div>
+            <div class="flex items-center gap-8 ml-5">
+              <div class="flex gap-2">
+                <p class="font-normal text-sm">Sets:</p>
+                <p class="font-normal text-sm">${sets}</p>
+              </div>
+              <div class="flex gap-2 ml-5">
+                <p class="font-normal text-sm">Reps:</p>
+                <p class="font-normal text-sm">${reps}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-8 ml-5 mt-2">
+              <p class="font-normal text-sm">Week No.: ${week}</p>
+              <p class="font-normal text-sm">Day No.: ${day}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+    selectedExercises.push({ name, reps, sets, week, day });
+    document.getElementById('exerciseList').innerHTML += exerciseItem;
+
+    // Close modal and clear the form
+    document.getElementById('addExerciseForm').reset();
+    document.getElementById('exerciseModal').style.display = 'none';
+  }
+
+
+
+  // Handle search input
+  document.getElementById('searchExercise').addEventListener('input', function () {
+    const query = this.value;
+    fetchExercises(query);
+  });
+
+  // Handle body part filter change
+  document.getElementById('bodyPart').addEventListener('change', function () {
+    const bodyPart = this.value;
+    fetchExercises('', bodyPart);
+  });
+
+
+
+  document.getElementById('addExerciseBtn').addEventListener('click', function () {
+    document.getElementById('exerciseModal').style.display = 'flex';
+    fetchExercises(); // Fetch exercises when modal opens
+  });
+  // Close the modal
+  document.getElementById('closeModal').addEventListener('click', function () {
+    document.getElementById('exerciseModal').style.display = 'none';
+  });
+
+
+  function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i].trim();
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  function showToast(type, message) {
+    const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
+    const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error
+
+    // Set the message
+    messageElement.textContent = message;
+
+    // Show and slide in the toast
+    toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+    toast.classList.add('translate-x-0'); // Move the toast in view
+
+    // Auto-hide the toast after 3 seconds
+    setTimeout(() => {
+      toast.classList.add('translate-x-full');  // Slide toast out to the right
+      setTimeout(() => {
+        toast.classList.add('hidden'); // Hide completely after the transition
+      }, 300);  // Wait for the transition to complete before hiding
+    }, 3000); // Ensure this is set to 3000 ms (3 seconds) for visibility
+  }
+</script>
+
+</html>
