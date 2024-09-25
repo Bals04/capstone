@@ -245,10 +245,10 @@
           <label for="week" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Week</label>
           <select id="week"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-            <option>Week 1</option>
-            <option>Week 2</option>
-            <option>Week 3</option>
-            <option>Week 4</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
           </select>
         </form>
 
@@ -256,10 +256,10 @@
           <label for="day" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Day</label>
           <select id="day"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-            <option>Day 1</option>
-            <option>Day 2</option>
-            <option>Day 3</option>
-            <option>Day 4</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
           </select>
         </form>
 
@@ -378,7 +378,10 @@
   const apiKey = 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93'; // Replace with your exerciseDB API key
   let selectedExercises = [];
   let templateId = 0;
+  let exerciseId = 0;
+  let bodyPart;
   const templateName = getCookie("template_name")
+  fetchTemplateInfo()
   showToast("success", `Template ${templateName} successfully created!`)
   function fetchExercises(query = '', bodyPart = 'all') {
     let apiUrl;
@@ -401,6 +404,7 @@
     fetch(apiUrl, options)
       .then(response => response.json())
       .then(data => {
+        console.log(data)
         displayExercises(data.slice(0, 10)); // Limit to 10 exercises
       })
       .catch(error => console.error('Error fetching exercises:', error));
@@ -415,7 +419,7 @@
       .then(response => {
         const data = response.data[0];
         templateId = data.template_id;
-
+        alert(templateId)
       })
       .catch(error => {
         console.error('Error fetching trainer info:', error);
@@ -425,7 +429,7 @@
   function displayExercises(exercises) {
     const exerciseOptions = document.getElementById('exerciseOptions');
     exerciseOptions.innerHTML = '';
-
+alert(templateId)
     exercises.forEach(exercise => {
       const exerciseCard = `
           <div class="exercise-card">
@@ -433,7 +437,7 @@
             <div class="exercise-details">
               <h3>${exercise.name}</h3>
               <p>Target: ${exercise.target}</p>
-              <button class="bg-blue-500 text-white p-2 mt-2 rounded filter-button" onclick="addExercise('${exercise.name}', '${exercise.target}', '${exercise.gifUrl}')">
+              <button class="bg-blue-500 text-white p-2 mt-2 rounded filter-button" onclick="addExercise('${exercise.id}','${exercise.name}', '${exercise.target}', '${exercise.gifUrl}', '${exercise.bodyPart}')">
                 Add Exercise
               </button>
             </div>
@@ -443,11 +447,17 @@
     });
   }
 
-  function addExercise(name, target, gifUrl) {
+  function addExercise(id, name, target, gifUrl, part) {
+    console.log(id)
     const week = document.getElementById('week').value;
     const day = document.getElementById('day').value;
     const reps = document.getElementById('reps').value;
     const sets = document.getElementById('sets').value;
+    exerciseId = id;
+    bodyPart = part
+    alert(exerciseId)
+    alert(bodyPart)
+
     document.getElementById('exerciseName').value = name
     // Close the modal
     document.getElementById('exerciseModal').style.display = 'none';
@@ -460,11 +470,13 @@
     const week = document.getElementById('week').value || 'N/A'; // Example of additional fields
     const day = document.getElementById('day').value || 'N/A';  // Example of additional fields
 
+
     const exerciseItem = `
         <div class="block max-w-sm p-3 mt-4 border-gray-200 rounded shadow dark:bg-gray-700">
           <div class="bg-gray-700 border border-gray-500 shadow-md py-5 rounded">
             <div class="ml-5">
               <h5 class="mb-2 text-sm font-semibold tracking-tight dark:text-white">${name}</h5>
+              <h5 class="mb-2 text-sm font-semibold tracking-tight dark:text-white">${exerciseId}</h5>
             </div>
             <div class="flex items-center gap-8 ml-5">
               <div class="flex gap-2">
@@ -484,12 +496,29 @@
         </div>
       `;
 
-    selectedExercises.push({ name, reps, sets, week, day });
-    document.getElementById('exerciseList').innerHTML += exerciseItem;
+    // Axios POST request
+    axios.post('http://localhost:3000/createWorkoutTemplateExercises', {
+      template_id: templateId,
+      exercise_id: exerciseId,
+      exercise_name: name,
+      reps: reps,
+      sets: sets,
+      muscle_group: "waist",
+      week_no: week,
+      day_no: day
+    })
+      .then(function (response) {
+        selectedExercises.push({ name, reps, sets, week, day });
+        document.getElementById('exerciseList').innerHTML += exerciseItem;
 
-    // Close modal and clear the form
-    document.getElementById('addExerciseForm').reset();
-    document.getElementById('exerciseModal').style.display = 'none';
+        // Close modal and clear the form
+        document.getElementById('addExerciseForm').reset();
+        document.getElementById('exerciseModal').style.display = 'none';
+      })
+      .catch(function (error) {
+        console.error('Error:', error.response ? error.response.data : error.message);
+      });
+
   }
 
 

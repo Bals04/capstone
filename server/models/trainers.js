@@ -28,11 +28,19 @@ const insertWorkoutTemplates = async (trainer_id, template_name, description) =>
     );
     return rows.length > 0 ? rows : null;
 };
+const insertWorkoutTemplateExercise = async (template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no) => {
+    const [rows] = await pool.query(
+        'INSERT INTO template_exercises (template_id, exercise_id, exercise_name, repetitions, sets, target_muscle_group, week_no, day_no) VALUES(?,?,?,?,?,?,?,?)',
+        [template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no]
+    );
+    return rows.length > 0 ? rows : null;
+};
 
 
 
 
 module.exports = {
+    insertWorkoutTemplateExercise,
     insertGymTrainers,
     getAllTrainers,
     getGymTrainers,

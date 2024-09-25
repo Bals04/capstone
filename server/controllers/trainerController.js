@@ -2,7 +2,7 @@ const { getMembers, getExercises,
     AddCustomWorkout, getStudCount,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
-const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates } = require('../models/trainers');
+const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates, insertWorkoutTemplateExercise  } = require('../models/trainers');
 
 module.exports = {
 
@@ -156,6 +156,18 @@ module.exports = {
 
         } catch (error) {
             console.error("Error adding workout template:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    insertWorkoutTemplateExercise: async (req, res) => {
+        const { template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no } = req.body;
+        try {
+            await insertWorkoutTemplateExercise (template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no);
+            res.status(200).send("Workout template exercises added successfully");
+
+        } catch (error) {
+            console.error("Error adding workout template exercises:", error.message);
             res.status(500).send("Internal Server Error");
         }
     }
