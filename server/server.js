@@ -41,13 +41,46 @@ const io = new Server(server, {
     methods: ["GET", "POST"]
   }
 });
+const users = {}; // e.g., { userId: socketId }
 
-// Socket.IO connection handler
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
-  
+
+  // Event for when a user logs in or identifies themselves
+  socket.on("user_connected", (userId) => {
+    users[userId] = socket.id; // Store the userId and socketId
+    console.log(`User with ID ${userId} is connected and mapped to socket ${socket.id}`);
+    console.log(users)
+  });
+
+  // Event for sending a message
   socket.on("send_message", (data) => {
-    socket.broadcast.emit("receive_message", data);
+    const { recipientId, message } = data;  // Assume data includes recipientId and message
+    const recipientSocketId = users[recipientId];  // Look up the recipient's socket ID
+
+    if (recipientSocketId) {
+      // Send the message directly to the recipient's socket
+      io.to(recipientSocketId).emit("receive_message", {
+        message: message,
+        fromUserId: socket.id,  // You can also add userId if needed
+      });
+      console.log(`Message sent to user ${recipientId}`);
+    } else {
+      console.log(`Recipient ${recipientId} is not connected.`);
+    }
+  });
+
+  // Handle disconnection
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+
+    // Find and remove the disconnected user's socketId
+    for (const userId in users) {
+      if (users[userId] === socket.id) {
+        delete users[userId];
+        break;
+      }
+    }
   });
 });
 
