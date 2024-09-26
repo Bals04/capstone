@@ -16,6 +16,7 @@ const AuthRoutes = require('./routes/AuthRoutes');
 const NavRoutes = require('./routes/navRoutes');
 const messageRoute = require('./routes/messageRoutes');
 const paymentRoute = require('./routes/paymentRoute');
+const workoutRoute = require('./routes/workoutRoutes');
 
 // Initialize environment variables (.env file)
 dotenv.config();
@@ -63,6 +64,7 @@ const initializeRoutes = () => {
   app.use('/', NavRoutes);
   app.use('/', messageRoute);
   app.use('/', paymentRoute);
+  app.use('/', workoutRoute);
 
   // Static file serving
   app.use('/frontend', express.static(path.join(__dirname, '../frontend')));

@@ -27,6 +27,10 @@
             max-width: 250px;
             /* Adjust this width as needed */
         }
+
+        #TemplateModal {
+            z-index: 9000;
+        }
     </style>
 </head>
 
@@ -314,6 +318,18 @@
             </button>
         </div>
     </div>
+    <!-- Modal HTML -->
+    <div id="TemplateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Workout Template Details</h2>
+            <!-- Accordion for Weeks -->
+            <div id="weekAccordion" class="space-y-4">
+                <!-- Dynamic content will be injected here -->
+            </div>
+            <!-- Close Modal -->
+            <button class="bg-red-500 text-white py-2 px-4 rounded-md mt-4" onclick="closeModal()">Close</button>
+        </div>
+    </div>
     <script src="../../scripts/trainer.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -344,7 +360,7 @@
                         const templateCard = `
             <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                 <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                    <img class="object-cover w-full h-40" src="https://cdn.shopify.com/s/files/1/1585/6091/files/Decline_dumbbell_press_large.gif?v=1594065202" alt="workout image" />
+                    <img class="object-cover w-full h-40" src="../img/pexels-823sl-2294361.jpg" alt="workout image" />
                 </a>
                 <div class="mt-4 px-5 pb-5">
                     <a href="#">
@@ -353,7 +369,7 @@
                     <div class="mt-2 mb-5 flex items-center justify-center">
                         <p>${template.description}</p>
                     </div>
-                    <a href="#" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
                         View template
                     </a>
                 </div>
@@ -445,6 +461,93 @@
             toast.classList.add('translate-x-full');  // Slide out
             setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
         });
+        async function openModal(templateId) {
+            // Show the modal
+            document.getElementById('TemplateModal').classList.remove('hidden');
+
+            try {
+                // Fetch workout details from the backend
+                const response = await fetch(`http://localhost:3000/getWorkoutsById?template_id=${templateId}`);
+                const workoutData = await response.json();
+
+                // Process the data and create a dynamic structure
+                const weekAccordion = document.getElementById('weekAccordion');
+                weekAccordion.innerHTML = ''; // Clear previous content
+                // Check if the response has data
+                if (!workoutData) {
+                    // Show message for no exercises available
+                    const noExercisesMessage = document.createElement('p');
+                    noExercisesMessage.className = 'text-center text-gray-500';
+                    noExercisesMessage.innerText = 'No exercises made yet for this template.';
+                    weekAccordion.appendChild(noExercisesMessage);
+                } else {
+                    // Group exercises by week and day
+                    const groupedData = groupExercisesByWeekAndDay(workoutData);
+
+                    // Create UI elements for each week and day
+                    for (const [week, days] of Object.entries(groupedData)) {
+                        const weekDiv = document.createElement('div');
+                        const weekButton = document.createElement('button');
+                        weekButton.className = 'w-full bg-customOrange text-gray-900 px-4 py-2 font-bold text-left rounded-t-lg ';
+                        weekButton.innerText = `Week ${week}`;
+                        weekButton.onclick = () => toggleVisibility(`week${week}`);
+
+                        const weekContentDiv = document.createElement('div');
+                        weekContentDiv.id = `week${week}`;
+                        weekContentDiv.className = 'hidden p-4 bg-gray-100';
+
+                        for (const [day, exercises] of Object.entries(days)) {
+                            const dayDiv = document.createElement('div');
+                            dayDiv.innerHTML = `<strong>Day ${day}:</strong><br>`;
+
+                            exercises.forEach(exercise => {
+                                const exerciseDetail = document.createElement('p');
+                                exerciseDetail.innerText = `${exercise.exercise_name} - Reps: ${exercise.repetitions}, Sets: ${exercise.sets}`;
+                                dayDiv.appendChild(exerciseDetail);
+                            });
+
+                            weekContentDiv.appendChild(dayDiv);
+                        }
+
+                        weekDiv.appendChild(weekButton);
+                        weekDiv.appendChild(weekContentDiv);
+                        weekAccordion.appendChild(weekDiv);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching workout data:', error);
+            }
+        }
+
+        // Function to group exercises by week and day
+        function groupExercisesByWeekAndDay(data) {
+            return data.reduce((acc, exercise) => {
+                const { week_no, day_no, exercise_name, repetitions, sets } = exercise;
+
+                if (!acc[week_no]) {
+                    acc[week_no] = {};
+                }
+                if (!acc[week_no][day_no]) {
+                    acc[week_no][day_no] = [];
+                }
+                acc[week_no][day_no].push({ exercise_name, repetitions, sets });
+
+                return acc;
+            }, {});
+        }
+
+        // Function to toggle visibility of weeks
+        function toggleVisibility(weekId) {
+            const weekElement = document.getElementById(weekId);
+            if (weekElement) {
+                weekElement.classList.toggle('hidden');
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('TemplateModal').classList.add('hidden');
+        }
     </script>
 </body>
 

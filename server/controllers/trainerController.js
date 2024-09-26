@@ -20,7 +20,6 @@ module.exports = {
     getTemplateId: async (req, res) => {
         try {
             const { template_name } = req.query;
-            console.log("received template nane: " + template_name)
             const data = await getTemplateId(template_name);
             res.json(data);
         } catch (error) {
