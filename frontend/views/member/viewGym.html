@@ -192,7 +192,10 @@
                     </th>
                     <td class="px-6 py-4 text-lg">${trainer.firstname} ${trainer.lastname}</td>
                     <td class="px-6 py-4">
-                        <button id="messageTrainer-${trainer.trainer_id}" class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">Message</button>
+                        <button id="messageTrainer-${trainer.trainer_id}" class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300 ">Message</button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button id="viewTrainer-${trainer.trainer_id}" class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">View trainer</button>
                     </td>
                 </tr>
             `;
@@ -200,11 +203,16 @@
 
                     // Add event listener to the button
                     const messageTrainerButton = document.getElementById(`messageTrainer-${trainer.trainer_id}`);
+                    const viewTrainerButton = document.getElementById(`viewTrainer-${trainer.trainer_id}`);
                     messageTrainerButton.addEventListener('click', () => {
-                        setCookie('trainer_iddd', trainer.trainer_id, 7); // Set cookie for 7 days
-                        setCookie('trainer_name', trainer.firstname, 7); // Set cookie for 7 days
+                        setCookie('trainer_iddd', trainer.trainer_id, 1); // Set cookie for 7 days
+                        setCookie('trainer_name', trainer.firstname, 1); // Set cookie for 7 days
                         console.log(`Cookie set for trainer_id: ${trainer.trainer_id}`);
                         window.location.href = './privateChat.html'; // Redirect to chat.html
+                    });
+                    viewTrainerButton.addEventListener('click', () => {
+                        setCookie('trainer_id', trainer.trainer_id, 1); // Set cookie for 7 days
+                        window.location.href = './trainerProfile.html'; // Redirect to chat.html
                     });
 
                 });

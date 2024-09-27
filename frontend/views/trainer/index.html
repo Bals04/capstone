@@ -85,7 +85,7 @@
                     role="menuitem">Earnings</a>
                 </li>
                 <li>
-                  <a href="#"
+                  <a href="index.html" onclick="removeCookie('accessToken');"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem">Sign out</a>
                 </li>
@@ -209,6 +209,7 @@
     setCookie('trainer_id', trainerid, 1); // Expires in 1 day
     window.location.href = 'trainerWorkoutPlan.html';
   }
+  
   function setCookie(name, value, days) {
     let expires = "";
     if (days) {
@@ -217,6 +218,10 @@
       expires = "; expires=" + date.toUTCString();
     }
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  }
+
+  function removeCookie(name) {
+    document.cookie = name + '=; Max-Age=0; path=/';
   }
 </script>
 

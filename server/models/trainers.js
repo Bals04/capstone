@@ -14,6 +14,13 @@ const getGymTrainers = async (gym_id) => {
     );
     return rows.length > 0 ? rows : null;
 };
+const getGymTrainersById = async (trainer_id) => {
+    const [rows] = await pool.query(
+        'SELECT * FROM trainers WHERE trainer_id = ?',
+        [trainer_id]
+    );
+    return rows.length > 0 ? rows : null;
+};
 const insertGymTrainers = async (gymid, userid, firstname, lastname, bio, experience, rates, trainerType) => {
     const [rows] = await pool.query(
         'INSERT INTO trainers (gym_id, account_id, firstname, lastname, bio, experience, rates, trainer_type) VALUES(?,(SELECT account_id FROM user_accounts ORDER BY account_id desc LIMIT 1),?,?,?,?,?,?)',
@@ -44,5 +51,6 @@ module.exports = {
     insertGymTrainers,
     getAllTrainers,
     getGymTrainers,
-    insertWorkoutTemplates
+    insertWorkoutTemplates,
+    getGymTrainersById
 };

@@ -7,6 +7,7 @@ const trainerSchema = require('../validations/trainerValidations')
 router.get("/getTrainers", trainerController.getAllTrainers); 
 router.get("/getTrainerInfo", trainerController.getTrainerInfo); 
 router.get("/getGymTrainer", trainerController.getGymTrainer); 
+router.get("/getGymTrainerById", trainerController.getGymTrainersById); 
 router.get("/retrieveMemberChatLog", trainerController.retrieveMemberChatLog); 
 router.get("/getTemplates", trainerController.getTemplates); 
 router.get("/getTemplateId", trainerController.getTemplateId); 

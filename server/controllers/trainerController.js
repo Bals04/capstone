@@ -2,7 +2,7 @@ const { getMembers, getExercises,
     AddCustomWorkout, getStudCount,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
-const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates, insertWorkoutTemplateExercise  } = require('../models/trainers');
+const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates, insertWorkoutTemplateExercise, getGymTrainersById  } = require('../models/trainers');
 
 module.exports = {
 
@@ -46,6 +46,17 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching members:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getGymTrainersById: async (req, res) => {
+        try {
+            const {trainer_id} = req.query;
+            console.log("received data: " + trainer_id)
+            const data = await getGymTrainersById(trainer_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching trainer:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },
