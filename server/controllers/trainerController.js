@@ -2,7 +2,8 @@ const { getMembers, getExercises,
     AddCustomWorkout, getStudCount,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
-const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates, insertWorkoutTemplateExercise, getGymTrainersById  } = require('../models/trainers');
+const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
+    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise, removeTemplateExercise } = require('../models/trainers');
 
 module.exports = {
 
@@ -51,7 +52,7 @@ module.exports = {
     },
     getGymTrainersById: async (req, res) => {
         try {
-            const {trainer_id} = req.query;
+            const { trainer_id } = req.query;
             console.log("received data: " + trainer_id)
             const data = await getGymTrainersById(trainer_id);
             res.json(data);
@@ -173,13 +174,38 @@ module.exports = {
     insertWorkoutTemplateExercise: async (req, res) => {
         const { template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no } = req.body;
         try {
-            await insertWorkoutTemplateExercise (template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no);
+            await insertWorkoutTemplateExercise(template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no);
             res.status(200).send("Workout template exercises added successfully");
 
         } catch (error) {
             console.error("Error adding workout template exercises:", error.message);
             res.status(500).send("Internal Server Error");
         }
+    },
+
+    updateWorkoutTemplateExercise: async (req, res) => {
+        const { exercise_name, reps, sets, muscle_group, template_exercise_id } = req.body;
+        try {
+            await updateWorkoutTemplateExercise(exercise_name, reps, sets, muscle_group, template_exercise_id);
+            res.status(200).send("Workout template exercises updated successfully");
+
+        } catch (error) {
+            console.error("Error updating workout template exercises:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    removeTemplateExercise: async (req, res) => {
+        const { template_exercise_id } = req.query; // Change this line
+        console.log("received data", template_exercise_id);
+        try {
+            await removeTemplateExercise(template_exercise_id);
+            res.status(200).send("Workout template exercise deleted successfully");
+        } catch (error) {
+            console.error("Error deleting workout template exercise:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
     }
+
 
 }

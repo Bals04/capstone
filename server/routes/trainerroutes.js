@@ -14,6 +14,8 @@ router.get("/getTemplateId", trainerController.getTemplateId);
 router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 router.post("/createWorkoutTemplate", trainerController.insertWorkoutTemplate); 
 router.post("/createWorkoutTemplateExercises", trainerController.insertWorkoutTemplateExercise); 
+router.put("/ModifyWorkoutTemplateExercises", trainerController.updateWorkoutTemplateExercise); 
+router.delete("/RemoveWorkoutTemplateExercises", trainerController.removeTemplateExercise); 
 
 module.exports = router;
 

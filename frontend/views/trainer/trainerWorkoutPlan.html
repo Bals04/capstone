@@ -31,7 +31,39 @@
         #TemplateModal {
             z-index: 9000;
         }
+
+        /* Style for each exercise item */
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        /* Style for exercise details */
+        .exercise-details {
+            flex: 1;
+            /* Take up remaining space */
+            text-align: left;
+        }
+
+        /* Style for buttons container */
+        .exercise-buttons {
+            display: flex;
+            gap: 8px;
+            /* Space between buttons */
+        }
+
+        /* Ensure buttons are not stretched */
+        .exercise-buttons button {
+            flex-shrink: 0;
+        }
     </style>
+
 </head>
 
 <body class="min-h-screen font-[Poppins] bg-customGray">
@@ -330,8 +362,113 @@
             <button class="bg-red-500 text-white py-2 px-4 rounded-md mt-4" onclick="closeModal()">Close</button>
         </div>
     </div>
+    <!-- Modify Exercise Modal -->
+    <!-- Modify Exercise Modal -->
+    <div id="modifyExerciseModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg text-white">
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold">Modify Exercises to Workout Template</h2>
+                <hr class="mt-4 border-gray-500">
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Exercise Name and API Button -->
+                <div class="flex items-center justify-between">
+                    <div class="flex-1 mr-2">
+                        <label for="exerciseName" class="block mb-2 text-sm font-medium text-gray-300">Exercise
+                            Name</label>
+                        <input type="text" id="exerciseName"
+                            class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg cursor-not-allowed opacity-50"
+                            placeholder="Exercise name" required disabled />
+                    </div>
+                    <button id="addExerciseBtn"
+                        class="mt-6 bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                        Exercises
+                    </button>
+                </div>
+
+                <!-- Reps -->
+                <div>
+                    <label for="reps" class="block mb-2 text-sm font-medium text-gray-300">Reps</label>
+                    <input type="number" id="reps" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                        placeholder="Repetitions" required />
+                </div>
+
+                <!-- Sets -->
+                <div>
+                    <label for="sets" class="block mb-2 text-sm font-medium text-gray-300">Sets</label>
+                    <input type="number" id="sets" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                        placeholder="Sets" required />
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="closeModifyModal()"
+                    class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                    Cancel
+                </button>
+                <button onclick="submitExercise()"
+                    class="bg-green-500 hover:bg-green-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                    Add to Plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="exerciseModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="modal-content w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg overflow-hidden relative">
+
+            <!-- Close Button (X icon) in the Top-Right Corner -->
+            <button id="closeExerciseModal" onclick="closeExerciseModal()"
+                class="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800 focus:outline-none">
+                <!-- X Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Select Exercises</h2>
+
+            <!-- Search by Exercise Name -->
+            <div class="mb-4">
+                <label for="searchExercise" class="block text-gray-700 font-semibold">Search by Exercise Name</label>
+                <input id="searchExercise" type="text" placeholder="Search exercise..."
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Filter by Body Part Dropdown -->
+            <div class="mb-4">
+                <label for="bodyPart" class="block text-gray-700 font-semibold">Filter by Body Part</label>
+                <select id="bodyPart"
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="all">All</option>
+                    <option value="back">Back</option>
+                    <option value="chest">Chest</option>
+                    <option value="legs">Legs</option>
+                    <option value="arms">Arms</option>
+                    <option value="shoulders">Shoulders</option>
+                </select>
+            </div>
+
+            <!-- Exercise Options -->
+            <div id="exerciseOptions"
+                class="grid grid-cols-2 gap-4 h-72 overflow-y-auto border rounded-md p-4 bg-gray-100">
+                <!-- Exercises from API will be populated here -->
+            </div>
+
+        </div>
+    </div>
+
+
+
     <script src="../../scripts/trainer.js"></script>
     <script>
+        let template_exc_id;
+        const apiKey = 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93'; // Replace with your exerciseDB API key
         document.addEventListener('DOMContentLoaded', () => {
             const trainerid = getCookie("trainer_id")
             const templateContainer = document.getElementById('template-container');
@@ -371,9 +508,6 @@
                     </div>
                     <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
                         View template
-                    </a>
-                    <a href="javascript:void(0)" onclick="" class="flex items-center justify-center rounded-md bg-slate-900 mt-1 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                        Modify template
                     </a>
                 </div>
             </div>
@@ -476,6 +610,7 @@
                 // Process the data and create a dynamic structure
                 const weekAccordion = document.getElementById('weekAccordion');
                 weekAccordion.innerHTML = ''; // Clear previous content
+
                 // Check if the response has data
                 if (!workoutData) {
                     // Show message for no exercises available
@@ -491,7 +626,7 @@
                     for (const [week, days] of Object.entries(groupedData)) {
                         const weekDiv = document.createElement('div');
                         const weekButton = document.createElement('button');
-                        weekButton.className = 'w-full bg-customOrange text-gray-900 px-4 py-2 font-bold text-left rounded-t-lg ';
+                        weekButton.className = 'w-full bg-customOrange text-gray-900 px-4 py-2 font-bold text-left rounded-t-lg';
                         weekButton.innerText = `Week ${week}`;
                         weekButton.onclick = () => toggleVisibility(`week${week}`);
 
@@ -503,10 +638,42 @@
                             const dayDiv = document.createElement('div');
                             dayDiv.innerHTML = `<strong>Day ${day}:</strong><br>`;
 
-                            exercises.forEach(exercise => {
-                                const exerciseDetail = document.createElement('p');
-                                exerciseDetail.innerText = `${exercise.exercise_name} - Reps: ${exercise.repetitions}, Sets: ${exercise.sets}`;
-                                dayDiv.appendChild(exerciseDetail);
+                            exercises.forEach((exercise, index) => {
+                                // Create a div to hold exercise details and buttons
+                                const exerciseDiv = document.createElement('div');
+                                exerciseDiv.className = 'exercise-item';
+
+                                // Create a div for exercise details
+                                const exerciseDetailDiv = document.createElement('div');
+                                exerciseDetailDiv.className = 'exercise-details';
+                                exerciseDetailDiv.innerHTML = `${exercise.exercise_name} <br> Reps: ${exercise.repetitions}, Sets: ${exercise.sets}`;
+
+                                // Create a div to hold the buttons
+                                const exerciseButtonsDiv = document.createElement('div');
+                                exerciseButtonsDiv.className = 'exercise-buttons';
+
+                                // Create Modify button
+                                const modifyButton = document.createElement('button');
+                                modifyButton.className = 'bg-orange-600 text-white px-2 py-1 rounded';
+                                modifyButton.innerText = 'Modify';
+                                modifyButton.onclick = () => modifyExercise(week, day, exercise.template_exercise_id);
+
+                                // Create Remove button
+                                const removeButton = document.createElement('button');
+                                removeButton.className = 'bg-red-500 text-white px-2 py-1 rounded';
+                                removeButton.innerText = 'Remove';
+                                removeButton.onclick = () => removeExercise(exercise.template_exercise_id);
+
+                                // Append buttons to the buttons div
+                                exerciseButtonsDiv.appendChild(modifyButton);
+                                exerciseButtonsDiv.appendChild(removeButton);
+
+                                // Append exercise details and buttons div to exercise div
+                                exerciseDiv.appendChild(exerciseDetailDiv);
+                                exerciseDiv.appendChild(exerciseButtonsDiv);
+
+                                // Append exercise div to day div
+                                dayDiv.appendChild(exerciseDiv);
                             });
 
                             weekContentDiv.appendChild(dayDiv);
@@ -525,7 +692,7 @@
         // Function to group exercises by week and day
         function groupExercisesByWeekAndDay(data) {
             return data.reduce((acc, exercise) => {
-                const { week_no, day_no, exercise_name, repetitions, sets } = exercise;
+                const { template_exercise_id, week_no, day_no, exercise_name, repetitions, sets } = exercise;
 
                 if (!acc[week_no]) {
                     acc[week_no] = {};
@@ -533,24 +700,140 @@
                 if (!acc[week_no][day_no]) {
                     acc[week_no][day_no] = [];
                 }
-                acc[week_no][day_no].push({ exercise_name, repetitions, sets });
+                acc[week_no][day_no].push({ template_exercise_id, exercise_name, repetitions, sets });
 
                 return acc;
             }, {});
         }
 
-        // Function to toggle visibility of weeks
+        // Modify exercise handler
+        function modifyExercise(week, day, exercise) {
+            // Handle modify logic here
+            console.log(`Modify Week ${week}, Day ${day}`, exercise);
+            template_exc_id = exercise
+            document.getElementById('TemplateModal').classList.add('hidden')
+            document.getElementById('modifyExerciseModal').classList.remove('hidden')
+            // You can populate a form with existing data and allow the user to modify it.
+        }
+
+        // Remove exercise handler
+        function removeExercise(exercise) {
+            axios.delete(`http://localhost:3000/RemoveWorkoutTemplateExercises?template_exercise_id=${exercise}`)
+                .then(function (response) {
+                    document.getElementById('TemplateModal').classList.add('hidden');
+                    showToast("success", `Exercise removed from this template`);
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                });
+        }
+
+
+        // Toggle visibility of week content
         function toggleVisibility(weekId) {
-            const weekElement = document.getElementById(weekId);
-            if (weekElement) {
-                weekElement.classList.toggle('hidden');
-            }
+            const contentDiv = document.getElementById(weekId);
+            contentDiv.classList.toggle('hidden');
         }
 
         // Function to close the modal
         function closeModal() {
             document.getElementById('TemplateModal').classList.add('hidden');
         }
+        function closeExerciseModal() {
+            document.getElementById('exerciseModal').classList.add('hidden');
+        }
+        function openExerciseModal() {
+            const modal = document.getElementById('exerciseModal');
+            modal.classList.remove('hidden'); // Remove the hidden class to show the modal
+            fetchExercises();
+        }
+
+        // Add event listener to the button to open the modal
+        document.getElementById('addExerciseBtn').addEventListener('click', openExerciseModal);
+        function fetchExercises(query = '', bodyPart = 'all') {
+            let apiUrl;
+            if (query) {
+                apiUrl = `https://exercisedb.p.rapidapi.com/exercises/name/${query}`;
+            } else if (bodyPart !== 'all') {
+                apiUrl = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`;
+            } else {
+                apiUrl = 'https://exercisedb.p.rapidapi.com/exercises';
+            }
+
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+                }
+            };
+
+            fetch(apiUrl, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    displayExercises(data.slice(0, 10)); // Limit to 10 exercises
+                })
+                .catch(error => console.error('Error fetching exercises:', error));
+        }
+        function displayExercises(exercises) {
+            const exerciseOptions = document.getElementById('exerciseOptions');
+            exerciseOptions.innerHTML = '';
+
+            exercises.forEach(exercise => {
+                const exerciseCard = `
+            <div class="exercise-card w-full p-2">
+                <div class="border border-gray-300 rounded-lg shadow-md bg-white p-4">
+                    <img src="${exercise.gifUrl}" alt="${exercise.name}" class="w-full h-32 object-cover rounded-t-lg">
+                    <div class="exercise-details mt-2">
+                        <h3 class="text-lg font-semibold truncate">${exercise.name}</h3>
+                        <p class="text-sm text-gray-600">Target: ${exercise.target}</p>
+                        <button class="bg-blue-500 text-white px-4 py-2 mt-3 rounded hover:bg-blue-400 transition duration-200 ease-in-out" 
+                            onclick="addExercise('${exercise.id}','${exercise.name}', '${exercise.target}', '${exercise.gifUrl}', '${exercise.bodyPart}')">
+                            Add Exercise
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+                exerciseOptions.innerHTML += exerciseCard;
+            });
+        }
+        function addExercise(id, name, target, gifUrl, part) {
+            console.log(id)
+            const reps = document.getElementById('reps').value;
+            const sets = document.getElementById('sets').value;
+            exerciseId = id;
+            bodyPart = part;
+            document.getElementById('exerciseName').value = name
+            // Close the modal
+            document.getElementById('exerciseModal').classList.add('hidden');
+        }
+
+        function submitExercise() {
+            const name = document.getElementById('exerciseName').value;
+            const reps = document.getElementById('reps').value;
+            const sets = document.getElementById('sets').value;
+
+            // Axios POST request
+            axios.put('http://localhost:3000/ModifyWorkoutTemplateExercises', {
+                template_exercise_id: template_exc_id,
+                exercise_id: exerciseId,
+                exercise_name: name,
+                reps: reps,
+                sets: sets,
+                muscle_group: "chest",
+            })
+                .then(function (response) {
+                    showToast("success", `Exercise successfully updated!`);
+                    document.getElementById('modifyExerciseModal').classList.add('hidden');
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                });
+
+        }
+
     </script>
 </body>
 

@@ -42,11 +42,27 @@ const insertWorkoutTemplateExercise = async (template_id, exercise_id, exercise_
     );
     return rows.length > 0 ? rows : null;
 };
+const updateWorkoutTemplateExercise = async (exercise_name, reps, sets, muscle_group, template_exercise_id) => {
+    const [rows] = await pool.query(
+        'UPDATE template_exercises SET exercise_name = ?, repetitions = ?, sets = ?, target_muscle_group = ? WHERE template_exercise_id = ?;',
+        [exercise_name, reps, sets, muscle_group, template_exercise_id]
+    );
+    return rows.length > 0 ? rows : null;
+};
+const removeTemplateExercise = async ( template_exercise_id) => {
+    const [rows] = await pool.query(
+        'DELETE FROM template_exercises WHERE template_exercise_id = ?',
+        [template_exercise_id]
+    );
+    return rows.length > 0 ? rows : null;
+};
 
 
 
 
 module.exports = {
+    removeTemplateExercise,
+    updateWorkoutTemplateExercise,
     insertWorkoutTemplateExercise,
     insertGymTrainers,
     getAllTrainers,
