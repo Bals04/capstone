@@ -20,6 +20,10 @@
       z-index: 9000;
     }
 
+    #error-toast {
+      z-index: 9000;
+    }
+
     #success-message-toast {
       word-break: break-word;
       max-width: 250px;
@@ -370,6 +374,28 @@
       </button>
     </div>
   </div>
+  <div id="error-toast"
+    class="fixed top-5 right-5 bg-white border-l-4 border-orange-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+    <div class="flex items-center">
+      <div class="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+          </path>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h2 class="text-lg font-semibold text-orange-600">Form Error</h2>
+        <p id="error-message-toast" class="text-sm text-gray-600">Your error message here</p>
+      </div>
+      <button id="close-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
 
 </body>
 <script>
@@ -513,7 +539,12 @@
         showToast("success", `Exercise successfully added to this template!`);
       })
       .catch(function (error) {
-        console.error('Error:', error.response ? error.response.data : error.message);
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;  // Access the error message directly
+          showErrorToast(errorMessage)
+        } else {
+          console.error('Error:', error.response ? error.response.data : error.message);
+        }
       });
 
   }
@@ -572,6 +603,23 @@
         toast.classList.add('hidden'); // Hide completely after the transition
       }, 300);  // Wait for the transition to complete before hiding
     }, 2500); // Ensure this is set to 3000 ms (3 seconds) for visibility
+  }
+  function showErrorToast(message) {
+    const toast = document.getElementById('error-toast');
+    const errorMessageElement = document.getElementById('error-message-toast');
+
+    // Set the error message
+    errorMessageElement.textContent = message;
+
+    // Show and slide in the toast
+    toast.classList.remove('hidden', 'translate-x-full'); // Remove the hidden state and the off-screen translation
+    toast.classList.add('translate-x-0'); // Move the toast in view
+
+    // Auto-hide the toast after 3 seconds
+    setTimeout(() => {
+      toast.classList.add('translate-x-full');  // Slide toast out to the right
+      setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+    }, 3000);
   }
 </script>
 
