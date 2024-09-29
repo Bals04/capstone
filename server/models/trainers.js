@@ -49,18 +49,27 @@ const updateWorkoutTemplateExercise = async (exercise_name, reps, sets, muscle_g
     );
     return rows.length > 0 ? rows : null;
 };
-const removeTemplateExercise = async ( template_exercise_id) => {
+const removeTemplateExercise = async (template_exercise_id) => {
     const [rows] = await pool.query(
         'DELETE FROM template_exercises WHERE template_exercise_id = ?',
         [template_exercise_id]
     );
     return rows.length > 0 ? rows : null;
 };
+async function inputFilter(input, trainer_id) {
+    const [result] = await pool.query(`
+        SELECT * FROM workout_plan_templates
+        WHERE template_name LIKE ?
+        AND trainer_id = ?
+    `, [`${input}%`, trainer_id]);
 
+    return [result]
+}
 
 
 
 module.exports = {
+    inputFilter,
     removeTemplateExercise,
     updateWorkoutTemplateExercise,
     insertWorkoutTemplateExercise,

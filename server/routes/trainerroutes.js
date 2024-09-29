@@ -13,6 +13,7 @@ router.get("/getGymTrainerById", trainerController.getGymTrainersById);
 router.get("/retrieveMemberChatLog", trainerController.retrieveMemberChatLog); 
 router.get("/getTemplates", trainerController.getTemplates); 
 router.get("/getTemplateId", trainerController.getTemplateId); 
+router.get("/getByQuery", trainerController.inputFilter); 
 router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 router.post("/createWorkoutTemplate",validation(templateSchema), trainerController.insertWorkoutTemplate); 
 router.post("/createWorkoutTemplateExercises",validation(exerciseSchema), trainerController.insertWorkoutTemplateExercise); 

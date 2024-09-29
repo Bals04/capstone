@@ -31,6 +31,7 @@
         #TemplateModal {
             z-index: 9000;
         }
+
         #error-toast {
             z-index: 1000;
         }
@@ -194,7 +195,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="chat.html"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
                         onclick="setActive(this)">
                         <ion-icon name="chatbubbles-outline"
@@ -461,9 +462,16 @@
 
             <!-- Search by Exercise Name -->
             <div class="mb-4">
-                <label for="searchExercise" class="block text-gray-700 font-semibold">Search by Exercise Name</label>
-                <input id="searchExercise" type="text" placeholder="Search exercise..."
-                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="searchExercise" class="block text-gray-700 font-semibold mb-2">Search by Exercise
+                    Name</label>
+                <div class="flex items-center">
+                    <input id="searchExercise" type="text" placeholder="Search exercise..."
+                        class="w-full p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="searchWorkout"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Search
+                    </button>
+                </div>
             </div>
 
             <!-- Filter by Body Part Dropdown -->
@@ -498,53 +506,60 @@
         document.addEventListener('DOMContentLoaded', () => {
             const trainerid = getCookie("trainer_id")
             const templateContainer = document.getElementById('template-container');
-            // if (status === 'template_added') {
-            //     showToast("success", "Template successfully created! Redirecting you to the exercise page shortly.")
-            //     setTimeout(() =>
-            //      window.location.href = "addExercises.html", 3000);  // Hide completely after transition
+            fetchAndDisplayTemplates(trainerid, '')
+            function fetchAndDisplayTemplates(trainerId, query) {
+                // Determine the endpoint to call based on whether a search query is provided
+                const endpoint = query
+                    ? 'http://localhost:3000/getByQuery'
+                    : 'http://localhost:3000/getTemplates';
 
-            // }
-            axios.get('http://localhost:3000/getTemplates', {
-                params: {
-                    trainer_id: trainerid // Send trainer_id as a query parameter
-                }
-            })
-                .then(response => {
-                    let templates = response.data;
-
-                    // If the response is a single object, wrap it in an array
-                    if (!Array.isArray(templates)) {
-                        templates = [templates];
+                axios.get(endpoint, {
+                    params: {
+                        trainer_id: trainerId, // Send trainer_id as a query parameter
+                        query: query           // Include query parameter if present
                     }
-
-                    // Iterate over the templates array
-                    templates.forEach(template => {
-                        // Create card HTML for each template
-                        const templateCard = `
-            <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                    <img class="object-cover w-full h-40" src="../img/pexels-823sl-2294361.jpg" alt="workout image" />
-                </a>
-                <div class="mt-4 px-5 pb-5">
-                    <a href="#">
-                        <h5 class="text-xl tracking-tight text-slate-900">${template.template_name}</h5>
-                    </a>
-                    <div class="mt-2 mb-5 flex items-center justify-center">
-                        <p>${template.description}</p>
-                    </div>
-                    <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                        View template
-                    </a>
-                </div>
-            </div>
-        `;
-                        // Append card to the container
-                        document.getElementById('templateContainer').innerHTML += templateCard;
-                    });
                 })
-                .catch(error => {
-                    console.error('Error fetching templates:', error);
-                });
+                    .then(response => {
+                        let templates = query ? response.data[0] : response.data; // Handle structure difference
+
+                        // If the response is a single object, wrap it in an array
+                        if (!Array.isArray(templates)) {
+                            templates = [templates];
+                        }
+
+                        // Clear existing templates before rendering
+                        const templateContainer = document.getElementById('templateContainer');
+                        templateContainer.innerHTML = '';
+
+                        // Iterate over the templates array and create cards for each template
+                        templates.forEach(template => {
+                            const templateCard = `
+                <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                    <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                        <img class="object-cover w-full h-40" src="../img/pexels-823sl-2294361.jpg" alt="workout image" />
+                    </a>
+                    <div class="mt-4 px-5 pb-5">
+                        <a href="#">
+                            <h5 class="text-xl tracking-tight text-slate-900">${template.template_name}</h5>
+                        </a>
+                        <div class="mt-2 mb-5 flex items-center justify-center">
+                            <p>${template.description}</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                            View template
+                        </a>
+                    </div>
+                </div>
+            `;
+                            // Append the newly created card to the container
+                            templateContainer.innerHTML += templateCard;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching templates:', error);
+                    });
+            }
+
             function getCookie(name) {
                 const nameEQ = name + "=";
                 const ca = document.cookie.split(';');
@@ -563,6 +578,17 @@
                 }
                 document.cookie = name + "=" + (value || "") + expires + "; path=/";
             }
+            document.getElementById('search-dropdown').addEventListener('keyup', function (event) {
+                const query = event.target.value.trim();  // Get the input value and trim whitespace
+                // Only fetch and populate templates if the input value is not empty
+                if (query.length > 0) {
+                    fetchAndDisplayTemplates(trainerid, query);
+                } else {
+                    // Clear template container if the query is empty
+                    fetchAndDisplayTemplates(trainerid, '')
+                    document.getElementById('templateContainer').innerHTML = '';
+                }
+            });
 
             // Open Modal
             document.getElementById('addTemplateBtn').addEventListener('click', function () {
@@ -797,6 +823,12 @@
             modal.classList.remove('hidden'); // Remove the hidden class to show the modal
             fetchExercises();
         }
+        document.getElementById('searchWorkout').addEventListener('click', function () {
+            const exerciseName = document.getElementById('searchExercise').value;
+            console.log('Searching for exercise:', exerciseName);
+            fetchExercises(exerciseName);
+        });
+
 
         // Add event listener to the button to open the modal
         document.getElementById('addExerciseBtn').addEventListener('click', openExerciseModal);

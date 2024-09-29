@@ -3,7 +3,7 @@ const { getMembers, getExercises,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
-    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise, removeTemplateExercise } = require('../models/trainers');
+    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise, removeTemplateExercise, inputFilter } = require('../models/trainers');
 
 module.exports = {
 
@@ -134,6 +134,16 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching users:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    inputFilter: async (req, res) => {
+        try {
+            const { query, trainer_id } = req.query;
+            const data = await inputFilter(query, trainer_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching templates:", error);
             res.status(500).send("Internal Server Error");
         }
     },

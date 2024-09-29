@@ -50,7 +50,10 @@ io.on("connection", (socket) => {
   socket.on("user_connected", (userId) => {
     users[userId] = socket.id; // Store the userId and socketId
     console.log(`User with ID ${userId} is connected and mapped to socket ${socket.id}`);
-    console.log(users)
+    console.table(users);
+
+    // Notify all connected clients about the updated online users
+    io.emit("update_user_list", users);
   });
 
   // Event for sending a message
@@ -75,12 +78,18 @@ io.on("connection", (socket) => {
     console.log(`User disconnected: ${socket.id}`);
 
     // Find and remove the disconnected user's socketId
+    let disconnectedUserId = null;
     for (const userId in users) {
       if (users[userId] === socket.id) {
+        disconnectedUserId = userId;
         delete users[userId];
         break;
       }
     }
+
+    // Notify all connected clients about the updated online users
+    io.emit("update_user_list", users);
+    console.log(`User with ID ${disconnectedUserId} has been removed.`);
   });
 });
 
