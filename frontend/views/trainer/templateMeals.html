@@ -138,6 +138,7 @@
 
     <script>
         let stepCount = 1;
+        let template_item_id = 0
         const templateName = getCookie("template_name");
         let templateId = null;  // Ensure templateId is accessible globally
 
@@ -158,6 +159,7 @@
         }
 
         // Handle form submission
+        // Handle form submission
         document.getElementById('meal-form').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -175,20 +177,33 @@
             formObject.week_no = formData.get('week_no');
             formObject.day_no = formData.get('day_no');
 
+            // Log the steps values
+            const steps = document.querySelectorAll('input[name="steps[]"]');
+            const stepsArray = [];
+
+            steps.forEach(step => {
+                stepsArray.push(step.value);  // Store each step value in the array
+            });
+
+            // Add steps to formObject
+            formObject.steps = stepsArray;
+
+            console.log("Form Data with Steps: ", formObject);
+
             // Make sure template_id is present
             if (!templateId) {
                 console.error("Template ID not found!");
                 return;
             }
 
-            console.log("Form Data: ", formObject);
-
             // Make POST request to submit data
             axios.post('http://localhost:3000/createMealTemplateItems', formObject)
                 .then(function (response) {
                     console.log('Meal Template Items added successfully!', response);
+                    template_item_id = response.data.mealItemId;
                     // Clear form, reset step count, or close modal if needed
-                    showToast("success", "Meal template items added successfully!");
+                    insertSteps(stepsArray);
+                    showToast("success", "Meal template item added successfully!");
                 })
                 .catch(function (error) {
                     if (error.response && error.response.data.message) {
@@ -199,6 +214,27 @@
                     }
                 });
         });
+
+        // Insert the steps into the database
+        // template_item_id, step_number, instruction
+        function insertSteps(stepsArray) {
+            let stepNumber = 0
+            stepsArray.forEach(step => {
+                stepNumber++
+                const stepObject = {
+                    template_item_id: template_item_id,  // Ensure the templateId is included for each step
+                    step_number: stepNumber,  // Send each individual step
+                    instruction: step,
+                };
+                axios.post('http://localhost:3000/createMealSteps', stepObject)
+                    .then(response => {
+                        console.log('Step added successfully!', response);
+                    })
+                    .catch(error => {
+                        console.error('Error adding step:', error);
+                    });
+            });
+        }
 
         // Fetch the template ID using template name
         function fetchTemplateInfo() {

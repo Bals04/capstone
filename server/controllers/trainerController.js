@@ -3,7 +3,9 @@ const { getMembers, getExercises,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
-    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise, removeTemplateExercise, inputFilter, insertMealTemplates,insertMealTemplatesItems } = require('../models/trainers');
+    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
+    removeTemplateExercise, inputFilter, insertMealTemplates,insertMealTemplatesItems,
+    insertMealTemplatesSteps } = require('../models/trainers');
 
 module.exports = {
 
@@ -209,11 +211,25 @@ module.exports = {
     insertMealTemplateItems: async (req, res) => {
         const { meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no } = req.body;
         try {
-            await insertMealTemplatesItems(meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no);
-            res.status(200).send("Meal template item added successfully!");
+            // Capture the returned insertId
+            const insertedMealItemId = await insertMealTemplatesItems(meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no);
+    
+            // Respond with a success message and the inserted ID
+            res.status(200).json({ message: "Meal template item added successfully!", mealItemId: insertedMealItemId });
+    
+        } catch (error) {
+            console.error("Error adding meal template items:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },    
+    insertMealTemplateSteps: async (req, res) => {
+        const { template_item_id, step_number, instruction } = req.body;
+        try {
+            await insertMealTemplatesSteps(template_item_id, step_number, instruction);
+            res.status(200).send("Meal template item steps added successfully!");
 
         } catch (error) {
-            console.error("Error adding workout template exercises:", error.message);
+            console.error("Error adding steps:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },

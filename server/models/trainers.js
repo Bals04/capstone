@@ -74,9 +74,22 @@ const insertMealTemplates = async (trainer_id, template_name, description) => {
     return rows.length > 0 ? rows : null;
 };
 const insertMealTemplatesItems = async (meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no) => {
-    const [rows] = await pool.query(
+    const [result] = await pool.query(
         'INSERT INTO meal_template_items (meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no) VALUES(?,?,?,?,?,?,?,?)',
         [meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no]
+    );
+
+    // Log the insertId to confirm
+    console.log("Inserted ID:", result.insertId);
+
+    // Return only the insertId
+    return result.insertId;  // This will return the auto-incremented ID
+};
+
+const insertMealTemplatesSteps = async (template_item_id, step_number, instruction) => {
+    const [rows] = await pool.query(
+        'INSERT INTO meal_item_steps (template_item_id, step_number, instruction) VALUES(?,?,?)',
+        [template_item_id, step_number, instruction]
     );
     return rows.length > 0 ? rows : null;
 };
@@ -84,6 +97,7 @@ const insertMealTemplatesItems = async (meal_template_id, meal_name, classificat
 
 
 module.exports = {
+    insertMealTemplatesSteps,
     insertMealTemplatesItems,
     insertMealTemplates,
     inputFilter,

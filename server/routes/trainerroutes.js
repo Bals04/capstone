@@ -18,6 +18,7 @@ router.post("/createGymTrainer",validation(trainerSchema), trainerController.cre
 router.post("/createWorkoutTemplate",validation(templateSchema), trainerController.insertWorkoutTemplate); 
 router.post("/createMealTemplate", trainerController.insertMealTemplate); 
 router.post("/createMealTemplateItems", trainerController.insertMealTemplateItems); 
+router.post("/createMealSteps", trainerController.insertMealTemplateSteps); 
 router.post("/createWorkoutTemplateExercises",validation(exerciseSchema), trainerController.insertWorkoutTemplateExercise); 
 router.put("/ModifyWorkoutTemplateExercises", trainerController.updateWorkoutTemplateExercise); 
 router.delete("/RemoveWorkoutTemplateExercises", trainerController.removeTemplateExercise); 
