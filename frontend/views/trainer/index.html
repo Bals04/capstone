@@ -114,7 +114,7 @@
           </a>
         </li>
         <li>
-          <a onclick="redirectFunction()"
+          <a onclick="redirectFunction(1)"
             class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
             onclick="setActive(this)">
             <ion-icon name="barbell-outline"
@@ -124,7 +124,7 @@
           </a>
         </li>
         <li>
-          <a href="trainerMealPlan.html"
+          <a onclick="redirectFunction(2)"
             class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
             onclick="setActive(this)">
             <ion-icon name="egg-outline"
@@ -205,11 +205,15 @@
         });
     }
   });
-  function redirectFunction() {
-    setCookie('trainer_id', trainerid, 1); // Expires in 1 day
-    window.location.href = 'trainerWorkoutPlan.html';
+  function redirectFunction(path) {
+    if (path == 1) {
+      setCookie('trainer_id', trainerid, 1); // Expires in 1 day
+      window.location.href = 'trainerWorkoutPlan.html';
+    }else{
+      setCookie('trainer_id', trainerid, 1); // Expires in 1 day
+      window.location.href = 'trainerMealPlan.html';
+    }
   }
-  
   function setCookie(name, value, days) {
     let expires = "";
     if (days) {

@@ -10,12 +10,18 @@
         href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/frontend/scripts/auth.js"></script>
+    <style>
+        #templateModal {
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen font-[Poppins] bg-customGray">
@@ -144,14 +150,14 @@
                 </li>
                 <li>
                     <a href="chat.html"
-                      class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
-                      onclick="setActive(this)">
-                      <ion-icon name="chatbubbles-outline"
-                        class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
-                        aria-hidden="true"></ion-icon>
-                      <span class="mt-1 ms-3">Chat</span>
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
                     </a>
-                  </li>
+                </li>
                 <li>
                     <a href="#"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
@@ -258,116 +264,54 @@
                                 </div>
                             </form>
 
-                            <div class="mt-4 md:mt-0">
-                                <button type="button"
-                                    class="text-white bg-gradient-to-r from-customGray via-red-300 to-customOrange hover:text-black hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">Add
-                                    template</button>
+                            <button type="button" id="addTemplateBtn"
+                                class="text-white bg-50 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">
+                                <i class="fas fa-plus"></i> &nbsp Create template
+                            </button>
+                        </div>
+                        <div id="templateModal"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+                                <div class="mb-4">
+                                    <h2 class="text-2xl font-bold text-gray-800">Create meal template</h2>
+                                </div>
+                                <form id="templateForm">
+                                    <!-- Template Name -->
+                                    <div class="mb-4">
+                                        <label for="templateName" class="block text-gray-700 font-semibold">Template
+                                            Name</label>
+                                        <input type="text" id="templateName"
+                                            class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            placeholder="e.g., Strength Training Phase 1">
+                                    </div>
+
+                                    <!-- Template Description -->
+                                    <div class="mb-4">
+                                        <label for="templateDescription"
+                                            class="block text-gray-700 font-semibold">Template
+                                            Description</label>
+                                        <textarea id="templateDescription"
+                                            class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            rows="4"
+                                            placeholder="Brief description of the training program goals"></textarea>
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="flex justify-between mt-6">
+                                        <button type="button" id="closeModalBtn"
+                                            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Cancel</button>
+                                        <button type="submit"
+                                            class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500">Save
+                                            &
+                                            Continue</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
 
                         <!--grid-->
-                        <div
+                        <div id="templateContainer"
                             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Tabemono</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://images.immediate.co.uk/production/volatile/sites/30/2022/03/Sesame-salmon-purple-sprouting-broccoli-sweet-potato-mash-02-8062a36.jpg?quality=90&resize=556,505"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkain</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://i.pinimg.com/736x/df/cc/10/dfcc10d397fc5e40073772e6e15c62dc.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Food</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://static01.nyt.com/images/2023/04/20/multimedia/as-ginger-scallion-fish-fgqk/as-ginger-scallion-fish-fgqk-articleLarge.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkaon</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://media.self.com/photos/5fe36191fa75923c77cd821f/4:3/w_2560%2Cc_limit/GettyImages-1128962609.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Bento</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="about">
@@ -547,6 +491,126 @@
     </div>
 
     <script src="../../scripts/trainer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trainerid = getCookie("trainer_id")
+            fetchAndDisplayTemplates(trainerid, '')
+            document.getElementById('addTemplateBtn').addEventListener('click', function () {
+                document.getElementById('templateModal').classList.remove('hidden');
+            });
+            document.getElementById('templateForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const templateName = document.getElementById('templateName').value;
+                const templateDescription = document.getElementById('templateDescription').value;
+
+                // Axios POST request
+                axios.post('http://localhost:3000/createMealTemplate', {
+                    trainer_id: trainerid,
+                    template_name: templateName,
+                    description: templateDescription
+                })
+                    .then(function (response) {
+                        setCookie('template_name', templateName, 1);
+                        window.location.href = "templateMeals.html"
+                    })
+                    .catch(function (error) {
+                        if (error.response && error.response.data.message) {
+                            const errorMessage = error.response.data.message;  // Access the error message directly
+                            showErrorToast(errorMessage)
+                        } else {
+                            console.error('Error:', error.response ? error.response.data : error.message);
+                        }
+
+                    });
+
+                // Close the modal after submission
+                document.getElementById('templateModal').classList.add('hidden');
+                function getCookie(name) {
+                    const nameEQ = name + "=";
+                    const ca = document.cookie.split(';');
+                    for (let i = 0; i < ca.length; i++) {
+                        let c = ca[i].trim();
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+            })
+
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i].trim();
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+        });
+        function fetchAndDisplayTemplates(trainerId, query) {
+            // Determine the endpoint to call based on whether a search query is provided
+            const endpoint = query
+                ? 'http://localhost:3000/getByQuery'
+                : 'http://localhost:3000/getTemplates';
+
+            axios.get(endpoint, {
+                params: {
+                    trainer_id: trainerId, // Send trainer_id as a query parameter
+                    table: "meal_plan_templates",
+                    query: query           // Include query parameter if present
+                }
+            })
+                .then(response => {
+                    let templates = query ? response.data[0] : response.data; // Handle structure difference
+
+                    // If the response is a single object, wrap it in an array
+                    if (!Array.isArray(templates)) {
+                        templates = [templates];
+                    }
+
+                    // Clear existing templates before rendering
+                    const templateContainer = document.getElementById('templateContainer');
+                    templateContainer.innerHTML = '';
+
+                    // Iterate over the templates array and create cards for each template
+                    templates.forEach(template => {
+                        const templateCard = `
+                        <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                            <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                <img class="object-cover w-full h-40" src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg" alt="workout image" />
+                            </a>
+                            <div class="mt-4 px-5 pb-5" style="height: 230px;"> <!-- Set a fixed height for the card -->
+                                <a href="#">
+                                    <h5 class="text-xl tracking-tight text-slate-900">${template.template_name}</h5>
+                                </a>
+                                <div class="mt-2 mb-5 flex items-center justify-center" style="height: 100px; overflow-y: auto;"> <!-- Set a fixed height for the description area -->
+                                    <p>${template.description}</p>
+                                </div>
+                                <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                    View template
+                                </a>
+                            </div>
+                        </div>
+                    `;
+
+                        // Append the newly created card to the container
+                        templateContainer.innerHTML += templateCard;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching templates:', error);
+                });
+        }
+    </script>
 </body>
 
 </html>

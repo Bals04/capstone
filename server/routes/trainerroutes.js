@@ -16,6 +16,8 @@ router.get("/getTemplateId", trainerController.getTemplateId);
 router.get("/getByQuery", trainerController.inputFilter); 
 router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 router.post("/createWorkoutTemplate",validation(templateSchema), trainerController.insertWorkoutTemplate); 
+router.post("/createMealTemplate", trainerController.insertMealTemplate); 
+router.post("/createMealTemplateItems", trainerController.insertMealTemplateItems); 
 router.post("/createWorkoutTemplateExercises",validation(exerciseSchema), trainerController.insertWorkoutTemplateExercise); 
 router.put("/ModifyWorkoutTemplateExercises", trainerController.updateWorkoutTemplateExercise); 
 router.delete("/RemoveWorkoutTemplateExercises", trainerController.removeTemplateExercise); 

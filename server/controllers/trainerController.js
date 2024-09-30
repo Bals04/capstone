@@ -3,7 +3,7 @@ const { getMembers, getExercises,
     getTrainerCount, getAllMembers,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
-    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise, removeTemplateExercise, inputFilter } = require('../models/trainers');
+    insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise, removeTemplateExercise, inputFilter, insertMealTemplates,insertMealTemplatesItems } = require('../models/trainers');
 
 module.exports = {
 
@@ -20,11 +20,12 @@ module.exports = {
     },
     getTemplateId: async (req, res) => {
         try {
-            const { template_name } = req.query;
-            const data = await getTemplateId(template_name);
+            const { template_name, table } = req.query;
+            console.log(table)
+            const data = await getTemplateId(template_name, table);
             res.json(data);
         } catch (error) {
-            console.error("Error fetching trainer:", error.message);
+            console.error("Error fetching id:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },
@@ -129,8 +130,9 @@ module.exports = {
     },
     getTemplates: async (req, res) => {
         try {
-            const { trainer_id } = req.query;
-            const data = await getTemplates(trainer_id);
+            const { trainer_id,table } = req.query;
+            console.log(`TABLE: " ${table}`)
+            const data = await getTemplates(trainer_id,table);
             res.json(data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -180,12 +182,35 @@ module.exports = {
             res.status(500).send("Internal Server Error");
         }
     },
+    insertMealTemplate: async (req, res) => {
+        const { trainer_id, template_name, description } = req.body;
+        try {
+            await insertMealTemplates(trainer_id, template_name, description);
+            res.status(200).send("Meal template added successfully");
+
+        } catch (error) {
+            console.error("Error adding meal template:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
 
     insertWorkoutTemplateExercise: async (req, res) => {
         const { template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no } = req.body;
         try {
             await insertWorkoutTemplateExercise(template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no);
             res.status(200).send("Workout template exercises added successfully");
+
+        } catch (error) {
+            console.error("Error adding workout template exercises:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    insertMealTemplateItems: async (req, res) => {
+        const { meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no } = req.body;
+        try {
+            await insertMealTemplatesItems(meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no);
+            res.status(200).send("Meal template item added successfully!");
 
         } catch (error) {
             console.error("Error adding workout template exercises:", error.message);

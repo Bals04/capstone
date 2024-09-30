@@ -150,11 +150,20 @@ async function getWorkoutoftheDay(memberId, date) {
         `, [memberId, date])
     return rows
 }
-async function getTemplates(trainer_id) {
-    const [rows] = await pool.query(`SELECT * FROM workout_plan_templates WHERE trainer_id = ?`,
-        [trainer_id])
-    return rows
+async function getTemplates(trainer_id, table) {
+    const allowedTables = ['workout_plan_templates', 'meal_plan_templates']; // Add other table names if needed
+    if (!allowedTables.includes(table)) {
+        throw new Error(`Invalid table name: ${table}`);
+    }
+
+    const query = `
+        SELECT * FROM \`${table}\`
+        WHERE trainer_id = ?
+    `;
+    const [rows] = await pool.query(query, [trainer_id]);
+    return rows;
 }
+
 
 
 async function AddTemplate(trainer_id, name, desc) {
@@ -474,14 +483,23 @@ async function getGymsByID(admin_id) {
     return result
 }
 
-async function getTemplateId(template_name) {
-    const [result] = await pool.query(`
-        SELECT * FROM workout_plan_templates
-        WHERE template_name = ?
-    `, [template_name])
+async function getTemplateId(template_name, table) {
+    // Define a whitelist of allowed table names (to prevent SQL injection)
+    const allowedTables = ['workout_plan_templates', 'meal_plan_templates']; // Add other table names if needed
 
-    return result
+    if (!allowedTables.includes(table)) {
+        throw new Error(`Invalid table name: ${table}`);
+    }
+
+    const query = `
+        SELECT * FROM \`${table}\`
+        WHERE template_name = ?
+    `;
+
+    const [result] = await pool.query(query, [template_name]);
+    return result;
 }
+
 
 
 module.exports = {

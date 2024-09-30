@@ -439,7 +439,8 @@
   function fetchTemplateInfo() {
     axios.get('http://localhost:3000/getTemplateId', {
       params: {
-        template_name: templateName
+        template_name: templateName,
+        table: "workout_plan_templates"
       }
     })
       .then(response => {

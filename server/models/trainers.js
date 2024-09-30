@@ -64,11 +64,28 @@ async function inputFilter(input, trainer_id) {
     `, [`${input}%`, trainer_id]);
 
     return [result]
-}
+};
+
+const insertMealTemplates = async (trainer_id, template_name, description) => {
+    const [rows] = await pool.query(
+        'INSERT INTO meal_plan_templates (trainer_id, template_name, description) VALUES(?,?,?)',
+        [trainer_id, template_name, description]
+    );
+    return rows.length > 0 ? rows : null;
+};
+const insertMealTemplatesItems = async (meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no) => {
+    const [rows] = await pool.query(
+        'INSERT INTO meal_template_items (meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no) VALUES(?,?,?,?,?,?,?,?)',
+        [meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no]
+    );
+    return rows.length > 0 ? rows : null;
+};
 
 
 
 module.exports = {
+    insertMealTemplatesItems,
+    insertMealTemplates,
     inputFilter,
     removeTemplateExercise,
     updateWorkoutTemplateExercise,
