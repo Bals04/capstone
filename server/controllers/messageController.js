@@ -33,6 +33,7 @@ module.exports = {
     getChatHistory: async (req, res) => {
         try {
             const { member_id, trainer_id } = req.query;
+            console.log("data: " + member_id + " " + trainer_id)
             const messages = await getChatHistory(member_id, trainer_id);
             
             res.status(200).json(messages);

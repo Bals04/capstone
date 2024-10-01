@@ -193,22 +193,20 @@
             <!-- Chat Box -->
             <div
                 class="flex-grow p-6 bg-div_color flex flex-col overflow-auto scroll-m-3 scrollbar scrollbar-thumb-transparent">
+                <h1 class="text-left mb-6 text-lg font-bold rounded-xl p-2 bg-div_color text-white">Kachat nimo ron:
+                    <span id="chatWith">wala (sad life :<) </span>
+                </h1>
 
-                <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex flex-col items-center h-full">
-                    <span class="inline-block text-center mb-4 text-lg font-bold rounded-b-lg px-4 py-2 bg-div_color text-white">
-                        Chatting with:
-                        <span id="chatWith" class="font-light"><!--dynamic name of his chatmate--></span>
-                    </span>
-                
+                <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex flex-col h-full">
                     <div id="messageDisplay"
-                        class="w-full flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-auto scrollbar scrollbar-thumb-transparent rounded-t-lg">
+                        class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-auto scrollbar scrollbar-thumb-transparent rounded-t-lg">
                         <div id="loadingPrompt" class="text-center text-white rounded-lg py-4 bg-gray-800 hidden">
                             <p>Fetching messages...</p>
                         </div>
                     </div>
-                
+
                     <div id="inputContainer"
-                        class="w-full flex items-center p-3 bg-white border-t border-gray-300 rounded-b-lg">
+                        class="flex items-center p-3 bg-white border-t border-gray-300 rounded-b-lg">
                         <label id="fileInputLabel" for="fileInput"
                             class="flex items-center justify-center p-2 bg-customGray text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-gray-700 transition-colors">
                             <i class="fas fa-paperclip"></i>
@@ -222,7 +220,6 @@
                         </button>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -338,7 +335,7 @@
                     memberName.textContent = member.member_name;
                     container.appendChild(memberName);
 
-
+                    
                     const onlineIndicator = document.createElement('span');
                     onlineIndicator.classList.add('h-3', 'w-3', 'rounded-full', 'ml-2');
 
@@ -349,10 +346,10 @@
                         onlineIndicator.classList.add('bg-gray-500');
                     }
 
-
+                    
                     container.appendChild(onlineIndicator);
 
-
+                    
                     listItem.addEventListener('click', () => {
                         alert("clicked")
                         clear();  // PARA DILI MAG STACK ANG MESSAGES EVERYTIME WE CLICK A LIST
@@ -459,6 +456,7 @@
 
             // Function to display messages (remains unchanged)
             const displayMessage = (data, type) => {
+                console.log("in here")
                 const messageDisplay = document.getElementById("messageDisplay");
                 const messageElement = document.createElement("div");
                 messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");

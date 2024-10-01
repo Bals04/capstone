@@ -222,7 +222,7 @@
                                 <p class="text-sm text-gray-400">Owner: ${gym.Owner_name}</p>
                                 <p class="text-sm text-gray-400">Email: ${gym.email}</p>
                                 <p class="text-sm text-gray-400">Contact Number: ${gym.contact_no || 'N/A'}</p>
-                                <p class="text-sm text-gray-400">Business Permit: ${gym.document_path ? 'Yes' : 'No'} <button class="text-purple-500" onclick="view_Permit('${gym.document_path}')">[View permit]</button></p>
+                                <p class="text-sm text-gray-400">Business Permit: ${gym.document_path ? 'Yes' : 'No'} <button class="text-purple-500" onclick="view_Permit('http://localhost:3000/uploads/${gym.document_path}')">[View permit]</button></p>
                             </div>
                             <div class="flex space-x-2">
                                 <button

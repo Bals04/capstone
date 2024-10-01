@@ -107,6 +107,9 @@ const initializeRoutes = () => {
   app.use('/', messageRoute);
   app.use('/', paymentRoute);
   app.use('/', workoutRoute);
+  // Serve static files from the uploads folder
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
   // Static file serving
   app.use('/frontend', express.static(path.join(__dirname, '../frontend')));

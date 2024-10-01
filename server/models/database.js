@@ -8,11 +8,7 @@ const pool = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
 }).promise()
-// Log the credentials without the password
-console.log('Database connection details:');
-console.log(`Host: ${process.env.MYSQL_HOST}`);
-console.log(`User: ${process.env.MYSQL_USER}`);
-console.log(`Database: ${process.env.MYSQL_DATABASE}`);
+
 
 async function getGymInfo() {
     const [rows] = await pool.query(

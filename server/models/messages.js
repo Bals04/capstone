@@ -51,7 +51,7 @@ const getChatHistory = async (member_id, trainer_id) => {
     );
 
     // console.log('Query result:', rows); // Debug log
-
+    console.log(rows)
     return rows;
 };
 
