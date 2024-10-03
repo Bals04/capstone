@@ -242,6 +242,36 @@ async function getPendingGyms() {
     )
     return rows
 }
+async function getAllVerifiedGyms() {
+    const [rows] = await pool.query(
+        `SELECT 
+            g.gym_id, 
+            g.gym_name, 
+            CONCAT(a.lastname, ', ', a.firstname) Owner_name,
+            g.contact_no,
+            a.email,
+            g.street_address, 
+            i.img_path,
+            d.document_path
+        FROM 
+            gyms g 
+        LEFT JOIN 
+            gym_images i ON g.gym_id = i.gym_id
+        LEFT JOIN 
+            gym_documents d ON g.gym_id = d.gym_id
+        LEFT JOIN
+        	gym_admin a ON g.admin_id = a.admin_id
+        WHERE g.status = 'Verified'
+        GROUP BY 
+            g.gym_id, 
+            g.gym_name, 
+            g.contact_no, 
+            g.street_address,
+            d.document_path,
+            i.img_path;`
+    )
+    return rows
+}
 
 async function getPendingGymsByID(admin_id) {
     const [rows] = await pool.query(
@@ -499,6 +529,7 @@ async function getTemplateId(template_name, table) {
 
 
 module.exports = {
+    getAllVerifiedGyms,
     getTemplateId,
     getGymsByID,
     retrieveTrainerchatLog,

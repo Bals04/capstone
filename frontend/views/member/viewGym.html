@@ -168,7 +168,7 @@
                     document.querySelector('.contact').textContent = data.contact_no;
                     document.querySelector('.gym-session-rate').textContent = `₱ ${data.daily_rate}`;
                     document.querySelector('.gym-monthly-rate').textContent = `₱ ${data.monthly_rate}`;
-                    document.querySelector('.gym-logo').src = data.img_path;
+                    document.querySelector('.gym-logo').src = "http://localhost:3000/uploads/"+ data.img_path;
                 }
             })
             .catch(error => {

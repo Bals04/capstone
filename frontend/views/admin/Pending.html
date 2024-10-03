@@ -162,12 +162,12 @@
                             <p class="text-sm text-gray-400">Contact number: ${gym.contact_no}</p>
                             <p class="text-sm text-gray-400">Gym address: ${gym.street_address}</p>
                             <p class="text-sm text-gray-400">Business Permit: ${gym.document_path ? 'Yes' : 'No'} 
-                                <button class="text-purple-500" onclick="view_Permit('${gym.document_path}')">[View permit]</button>
+                                <button class="text-purple-500" onclick="view_Permit('http://localhost:3000/uploads/${gym.document_path}')">[View permit]</button>
                             </p>
                         </div>
                         <div class="flex space-x-2">
-                            <button onClick="approve('${gym.gym_id}')" class="bg-transparent border border-50 text-white px-3 py-1 rounded-md hover:bg-green-500">Approve</button>
-                            <button class="bg-transparent border border-50 text-white px-3 py-1 rounded-md hover:bg-red-500">Reject</button>
+                            <button onClick="approve('${gym.gym_id}')" class="bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-500">Approve</button>
+                            <button class="bg-red-700 text-white px-3 py-1 rounded-md hover:bg-red-500">Reject</button>
                         </div>
                     `;
 
@@ -201,7 +201,7 @@
                 showToast("success", `Gym approved!`);
                 setTimeout(() => {
                     window.location.href = '../../views/admin/Pending.html'
-                }, 3000)
+                }, 1500)
             })
             .catch(error => {
                 console.error('Error updating the status:', error.message);

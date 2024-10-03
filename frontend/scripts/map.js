@@ -381,7 +381,7 @@ function showNearby(distances) {
         <button><ion-icon name="close-outline"></ion-icon></button>
     </div>
     <div class="w-full h-40 bg-customGrayBtn rounded-t-lg"
-        style="background-image: url('${gym.img}'); background-size: cover; background-position: center;">
+        style="background-image: url('http://localhost:3000/uploads/${gym.img}'); background-size: cover; background-position: center;">
     </div>
     <div class="p2 mt-2">
         <h3 class="text-lg font-semibold"> ${gym.name}</h3>

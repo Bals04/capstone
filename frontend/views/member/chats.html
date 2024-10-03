@@ -304,6 +304,7 @@
             })
                 .then(response => {
                     const chatList = response.data;
+                    currentChatList = chatList; 
                     populateChatList(chatList);
                 })
                 .catch(error => {
@@ -349,7 +350,6 @@
 
 
                 listItem.addEventListener('click', () => {
-                    alert("clicked")
                     clear();  // PARA DILI MAG STACK ANG MESSAGES EVERYTIME WE CLICK A LIST
                     document.getElementById('chatWith').textContent = trainer.trainer_name;
                     console.log(trainer.trainer_id);

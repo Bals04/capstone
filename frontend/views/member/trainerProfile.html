@@ -275,7 +275,7 @@
 
         // Function to fetch and display workout templates based on trainer ID
         function fetchAndDisplayWorkoutTemplates(trainerId) {
-            axios.get(`http://localhost:3000/getTemplates?trainer_id=${trainerId}`)
+            axios.get(`http://localhost:3000/getTemplates?trainer_id=${trainerId}&table=workout_plan_templates`)
                 .then(response => {
                     // Assuming the response data is an array of templates
                     const templates = response.data;
