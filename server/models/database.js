@@ -529,10 +529,21 @@ async function getTemplateId(template_name, table) {
     const [result] = await pool.query(query, [template_name]);
     return result;
 }
+async function getSales() {
+    const [result] = await pool.query(`
+            SELECT MONTH(payment_date) AS month, YEAR(payment_date) AS year, SUM(amount) AS total_amount, COUNT(gym_id) AS gym_count
+            FROM payments_table
+            GROUP BY YEAR(payment_date), MONTH(payment_date)
+            ORDER BY year, month;`)
+
+    return result
+}
+
 
 
 
 module.exports = {
+    getSales,
     getAllVerifiedGyms,
     getTemplateId,
     getGymsByID,
