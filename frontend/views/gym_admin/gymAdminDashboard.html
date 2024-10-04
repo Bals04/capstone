@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,6 +19,7 @@
     <script src="../../scripts/gymAdmin.js"></script>
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -207,32 +210,35 @@
                 <div class="mt-20 flex flex-col gap-5">
 
                     <div class="flex gap-5">
-                        <div
-                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color  hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">Registered Gym(s)</span><br>
-                            <br>
+                        <div class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
+                            <span class="text-lg font-customFont">
+                                <i class="fas fa-check-double mr-2"></i>Registered Gym(s)
+                            </span><br><br>
                             <span class="font-bold ml-3">1</span>
                         </div>
-                        <div
-                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color  hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">Pending Gym Registration(s)</span><br>
-                            <br>
+                        <div class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
+                            <span class="text-lg font-customFont">
+                                <i class="fas fa-clock mr-2"></i>Pending Gym Registration(s)
+                            </span><br><br>
                             <span class="font-bold ml-3">1</span>
                         </div>
                         <div
                             class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">Registered Trainer(s)</span><br>
-                            <br>
+                            <span class="text-lg font-customFont">
+                                <i class="fas fa-user mr-2"></i>Registered Trainer(s)
+                            </span><br><br>
                             <span class="font-bold ml-3">1</span>
                         </div>
                     </div>
                     <div class="flex justify-between gap-5">
                         <a href="register.html"
-                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
-                            Gym</a>
+                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">
+                            <i class="fas fa-plus-circle mr-2"></i>Register Gym
+                        </a>
                         <a href="registerTrainer.html"
-                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">Register
-                            Trainer</a>
+                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">
+                            <i class="fas fa-user-plus mr-2"></i>Register Trainer
+                        </a>
                     </div>
                 </div>
             </div>

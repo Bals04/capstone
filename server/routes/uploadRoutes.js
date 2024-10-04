@@ -30,7 +30,7 @@ router.post('/uploadSingle', upload.single('file'), (req, res) => {
     req.file.path = req.file.path.replace(/\\/g, '/');
     
     // Return the path to be used by the frontend
-    res.json({ filePath: req.file.path });
+    res.json({ fileName: req.file.filename });
     console.log(req.file);
   } else {
     res.status(400).json({ error: 'File upload failed' });

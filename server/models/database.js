@@ -12,7 +12,7 @@ const pool = mysql.createPool({
 
 async function getGymInfo() {
     const [rows] = await pool.query(
-        `SELECT 
+        `   SELECT 
             g.gym_id, 
             g.gym_name, 
             g.latitude, 
@@ -29,7 +29,11 @@ async function getGymInfo() {
             gym_ratings r ON g.gym_id = r.gym_id
         LEFT JOIN 
             gym_images i ON g.gym_id = i.gym_id
-        WHERE g.status = 'Verified'
+        LEFT JOIN 
+            payments_table p ON p.gym_id = g.gym_id
+        WHERE 
+            g.status = 'Verified' 
+            AND NOW() <= DATE_ADD(p.payment_date, INTERVAL (SELECT duration_months FROM subscriptions WHERE subscription_id = p.subscription_id) MONTH)
         GROUP BY 
             g.gym_id, 
             g.gym_name, 

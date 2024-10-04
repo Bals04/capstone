@@ -4,7 +4,7 @@ const { getMembers, getExercises,
     getTemplates, AddTemplate, GetTrainerInfo, retrieveMemberChatLog, getTemplateId } = require('../models/database');
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
     insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
-    removeTemplateExercise, inputFilter, insertMealTemplates,insertMealTemplatesItems,
+    removeTemplateExercise, inputFilter, insertMealTemplates, insertMealTemplatesItems,
     insertMealTemplatesSteps } = require('../models/trainers');
 
 module.exports = {
@@ -132,9 +132,9 @@ module.exports = {
     },
     getTemplates: async (req, res) => {
         try {
-            const { trainer_id,table } = req.query;
+            const { trainer_id, table } = req.query;
             console.log(`TABLE: " ${table}`)
-            const data = await getTemplates(trainer_id,table);
+            const data = await getTemplates(trainer_id, table);
             res.json(data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -165,8 +165,8 @@ module.exports = {
     createGymTrainer: async (req, res) => {
         const { gymid, firstname, lastname, bio, experience, rates, trainerType } = req.body;
         try {
-            await insertGymTrainers(gymid, firstname, lastname, bio, experience, rates, trainerType);
-            res.status(200).send("Trainer added successfully");
+            const trainerId = await insertGymTrainers(gymid, firstname, lastname, bio, experience, rates, trainerType);
+            res.status(200).json({ message: "Trainer added successfully", trainerId: trainerId });
 
         } catch (error) {
             console.error("Error adding trainer:", error.message);
@@ -213,15 +213,15 @@ module.exports = {
         try {
             // Capture the returned insertId
             const insertedMealItemId = await insertMealTemplatesItems(meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no);
-    
+
             // Respond with a success message and the inserted ID
             res.status(200).json({ message: "Meal template item added successfully!", mealItemId: insertedMealItemId });
-    
+
         } catch (error) {
             console.error("Error adding meal template items:", error.message);
             res.status(500).send("Internal Server Error");
         }
-    },    
+    },
     insertMealTemplateSteps: async (req, res) => {
         const { template_item_id, step_number, instruction } = req.body;
         try {

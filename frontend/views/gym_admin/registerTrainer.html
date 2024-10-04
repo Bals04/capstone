@@ -77,12 +77,12 @@
                     <span class="font-medium text-white-700 text-[13px]">Upload image</span>
                     <span class="material-symbols-outlined">upload</span>
                 </label>
-                <label for="Gym_address" class="font-semibold">Profile image</label> <br>
+                <label for="profile_image" class="font-semibold">Profile image</label> <br>
                 <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload an image for your display
                     profile/avatar.</span>
-                <label for="file-input"
+                <label for="profile_image"
                     class="cursor-pointer flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
-                    <input type="file" id="file-input" ref="fileInputs" class="hidden" />
+                    <input type="file" id="profile_image" class="hidden" />
                     <span class="font-medium text-white-700 text-[13px]">Upload image</span>
                     <span class="material-symbols-outlined">upload</span>
                 </label>
@@ -268,8 +268,11 @@
                 rates: rates,
                 trainerType: "gym trainer"
             };
+            let trainer_id;
             const response = await axios.post('http://localhost:3000/createGymTrainer', formData);
-            console.log('Trainer registration successful:', response.data);
+            console.log('Trainer registration successful:', response.data.trainerId);
+            trainer_id = response.data.trainerId
+            uploadTrainerProfile(trainer_id)
             showToast('success', 'Trainer registration successful');
             setTimeout(() => {
                 window.location.href = "gymAdminDashboard.html";
@@ -282,6 +285,50 @@
             } else {
                 console.error('Error submitting Gym Trainer Registration:', error.message);
             }
+        }
+    }
+
+    async function uploadTrainerProfile(trainer_id) {
+        try {
+            const profileImageFile = document.getElementById("profile_image").files[0];
+
+            if (!profileImageFile) {
+                alert("::Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', profileImageFile);  // 'file' should match the key in multer
+
+            // Upload the file using axios (first request)
+            axios.post('http://localhost:3000/uploadSingle', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then((response) => {
+                    const fileName = response.data.fileName; // Assuming filePath contains the uploaded file name
+                    console.log("Uploaded file name: ", fileName);
+                    alert(`File uploaded successfully: ${fileName}`);
+
+                    // After successful upload, send trainer_id and fileName to the new endpoint
+                    return axios.post('http://localhost:3000/insertTrainerImage', {
+                        trainer_id: trainer_id,
+                        filename: fileName
+                    });
+                })
+                .then((insertResponse) => {
+                    console.log("Trainer image inserted successfully:", insertResponse.data);
+                    alert('Trainer image linked successfully.');
+                })
+                .catch((error) => {
+                    console.error("Error during upload or insertion: ", error);
+                    alert('Error during upload or image insertion.');
+                });
+
+        } catch (error) {
+            console.error("Unexpected error: ", error);
+            alert('Error uploading file.');
         }
     }
 

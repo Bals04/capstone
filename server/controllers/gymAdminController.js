@@ -1,5 +1,5 @@
 const { GetGymAdminInfo } = require('../models/database');
-const { getVerifiedAdmins } = require('../models/gym_admin');
+const { getVerifiedAdmins,AddTrainerProfile } = require('../models/gym_admin');
 
 module.exports = {
     GetGymAdminInfo: async (req, res) => {
@@ -20,6 +20,18 @@ module.exports = {
         } catch (error) {
             console.error("Error fetching data:", error.message);
             res.status(500).send("Internal Server Error");
+        }
+    },
+
+    AddTrainerProfile: async (req, res) => {
+        try {
+            const { trainer_id, filename } = req.body;
+            console.log("Received data on the server[trainer image]:", req.body);
+            const data = await AddTrainerProfile(trainer_id, filename);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).send("Internal Server Error", error.message);
         }
     }
 }

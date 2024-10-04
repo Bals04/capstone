@@ -79,7 +79,7 @@
                                         role="menuitem">Settings</a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="memberDashboard.html" onclick="removeCookie('accessToken');"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Sign out</a>
                                 </li>
@@ -111,8 +111,9 @@
                     <a href="maps.html"
                         class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
                         onclick="setActive(this)">
-                        <ion-icon name="locate-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
-                        aria-hidden="true"></ion-icon>
+                        <ion-icon name="locate-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
                         <span class="mt-1 ms-3">Maps</span>
                     </a>
                 </li>
@@ -338,6 +339,9 @@
                 });
         }
     });
+    function removeCookie(name) {
+        document.cookie = name + '=; Max-Age=0; path=/';
+    }
 </script>
 
 </html>

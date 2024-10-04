@@ -22,6 +22,17 @@ const getVerifiedAdmins = async () => {
 };
 
 
+async function AddTrainerProfile(trainer_id, filename) {
+    const result = await pool.query(`
+    INSERT INTO trainer_images (trainer_id, filename) 
+    VALUES (?, ?)
+    `, [trainer_id, filename])
+
+    return result
+}
+
+
 module.exports = {
-    getVerifiedAdmins
+    getVerifiedAdmins,
+    AddTrainerProfile
 };
