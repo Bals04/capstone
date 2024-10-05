@@ -700,7 +700,7 @@
                                 // Create a div for meal details
                                 const mealDetailDiv = document.createElement('div');
                                 mealDetailDiv.className = 'meal-details mb-2';
-                                mealDetailDiv.innerHTML = `<strong>${meal.meal_name}</strong><br>`;
+                                mealDetailDiv.innerHTML = `<strong>${meal.classification}</strong> - ${meal.meal_name}<br>`;
 
                                 // Create a list of steps for the meal
                                 meal.steps.forEach(step => {
@@ -749,22 +749,22 @@
         // Function to group meals by week and day
         function groupMealsByWeekAndDay(mealData) {
             const groupedData = {};
-
             mealData.forEach(meal => {
-                const { week_no, day_no, meal_name, step_number, instruction } = meal;
+                const { week_no, day_no, meal_name, step_number, instruction, classification } = meal;
 
                 if (!groupedData[week_no]) groupedData[week_no] = {};
                 if (!groupedData[week_no][day_no]) groupedData[week_no][day_no] = [];
 
                 let mealEntry = groupedData[week_no][day_no].find(m => m.meal_name === meal_name);
                 if (!mealEntry) {
-                    mealEntry = { meal_name, steps: [] };
+                    mealEntry = { meal_name, steps: [], classification };
                     groupedData[week_no][day_no].push(mealEntry);
                 }
-
-                mealEntry.steps.push({ step_number, instruction });
+                
+                mealEntry.steps.push({ step_number, instruction});
+                //console.log(mealEntry)
             });
-
+            console.log(groupedData)
             return groupedData;
         }
 
