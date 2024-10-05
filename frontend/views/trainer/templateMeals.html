@@ -140,10 +140,10 @@
         let stepCount = 1;
         let template_item_id = 0
         const templateName = getCookie("template_name");
-        let templateId = null;  // Ensure templateId is accessible globally
+        let templateId = getCookie('template_id');  // Ensure templateId is accessible globally
 
         // Fetch the template information when the page loads
-        fetchTemplateInfo();
+        //fetchTemplateInfo();
 
         // Add dynamic steps with incrementing step numbers
         function addStep() {
@@ -237,21 +237,6 @@
         }
 
         // Fetch the template ID using template name
-        function fetchTemplateInfo() {
-            axios.get('http://localhost:3000/getTemplateId', {
-                params: {
-                    template_name: templateName,
-                    table: "meal_plan_templates"
-                }
-            })
-                .then(response => {
-                    const data = response.data[0];
-                    templateId = data.meal_template_id;  // Store the fetched template ID
-                })
-                .catch(error => {
-                    console.error('Error fetching template info:', error);
-                });
-        }
 
         // Function to get cookie value by name
         function getCookie(name) {

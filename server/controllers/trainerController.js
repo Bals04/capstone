@@ -187,8 +187,8 @@ module.exports = {
     insertMealTemplate: async (req, res) => {
         const { trainer_id, template_name, description } = req.body;
         try {
-            await insertMealTemplates(trainer_id, template_name, description);
-            res.status(200).send("Meal template added successfully");
+            const templateId = await insertMealTemplates(trainer_id, template_name, description);
+            res.status(200).json({ message: "Meal template added successfully", templateId: templateId });
 
         } catch (error) {
             console.error("Error adding meal template:", error.message);

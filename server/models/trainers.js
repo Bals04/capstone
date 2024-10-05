@@ -74,7 +74,8 @@ const insertMealTemplates = async (trainer_id, template_name, description) => {
         'INSERT INTO meal_plan_templates (trainer_id, template_name, description) VALUES(?,?,?)',
         [trainer_id, template_name, description]
     );
-    return rows.length > 0 ? rows : null;
+    // Return only the insertId
+    return rows.insertId;
 };
 const insertMealTemplatesItems = async (meal_template_id, meal_name, classification, protein, carbohydrates, fats, week_no, day_no) => {
     const [result] = await pool.query(

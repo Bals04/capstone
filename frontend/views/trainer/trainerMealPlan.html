@@ -21,6 +21,9 @@
         #templateModal {
             z-index: 9999;
         }
+        #TemplateModal{
+            z-index: 9999;
+        }
     </style>
 </head>
 
@@ -485,7 +488,41 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Modal Container -->
                 </div>
+                <!-- Enhanced Modal Container -->
+                <div id="TemplateModal"
+                    class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden">
+                    <div
+                        class="bg-white rounded-2xl shadow-2xl overflow-hidden w-4/5 max-w-5xl transform transition-transform duration-300 scale-95 hover:scale-100">
+                        <!-- Modal Header -->
+                        <div
+                            class="flex justify-between items-center bg-gradient-to-r from-customOrange to-yellow-500 p-6 rounded-t-2xl">
+                            <h2 class="text-2xl font-semibold text-white tracking-wide">Meal Template Details</h2>
+                            <button class="text-white text-2xl font-bold hover:text-gray-300"
+                                onclick="closeModal()">×</button>
+                        </div>
+
+                        <!-- Modal Content -->
+                        <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
+                            <!-- Accordion for displaying meals by week and day -->
+                            <div id="weekAccordion" class="space-y-4">
+                                <!-- Dynamic content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="bg-gray-200 p-4 flex justify-end gap-4 rounded-b-2xl">
+                            <button
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded transition duration-200"
+                                onclick="saveChanges()">Save Changes</button>
+                            <button
+                                class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded transition duration-200"
+                                onclick="closeModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -510,7 +547,8 @@
                     description: templateDescription
                 })
                     .then(function (response) {
-                        setCookie('template_name', templateName, 1);
+                        alert(response.data.templateId)
+                        setCookie('template_id', response.data.templateId, 1);
                         window.location.href = "templateMeals.html"
                     })
                     .catch(function (error) {
@@ -595,7 +633,7 @@
                                 <div class="mt-2 mb-5 flex items-center justify-center" style="height: 100px; overflow-y: auto;"> <!-- Set a fixed height for the description area -->
                                     <p>${template.description}</p>
                                 </div>
-                                <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                <a href="javascript:void(0)" onclick="openMealModal(${template.meal_template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
                                     View template
                                 </a>
                             </div>
@@ -609,6 +647,149 @@
                 .catch(error => {
                     console.error('Error fetching templates:', error);
                 });
+        }
+
+        // Function to open the meal modal with dynamic content
+        async function openMealModal(templateId) {
+            // Show the modal
+            document.getElementById('TemplateModal').classList.remove('hidden');
+
+            try {
+                // Fetch meal details from the backend
+                const response = await fetch(`http://localhost:3000/getMealsById?template_id=${templateId}`);
+                const mealData = await response.json();
+
+                // Get the accordion container and clear its content
+                const weekAccordion = document.getElementById('weekAccordion');
+                weekAccordion.innerHTML = '';
+
+                // Check if there is meal data to display
+                if (!mealData.length) {
+                    // Display a message if no meals are found
+                    const noMealsMessage = document.createElement('p');
+                    noMealsMessage.className = 'text-center text-gray-500';
+                    noMealsMessage.innerText = 'No meals available yet for this template.';
+                    weekAccordion.appendChild(noMealsMessage);
+                } else {
+                    // Group the meal data by week and day
+                    const groupedMeals = groupMealsByWeekAndDay(mealData);
+
+                    // Create UI elements for each week and day
+                    for (const [week, days] of Object.entries(groupedMeals)) {
+                        const weekDiv = document.createElement('div');
+
+                        // Create a button for each week
+                        const weekButton = document.createElement('button');
+                        weekButton.className = 'w-full bg-customOrange text-white px-4 py-2 font-bold text-left rounded-t-lg';
+                        weekButton.innerText = `Week ${week}`;
+                        weekButton.onclick = () => toggleVisibility(`week${week}`);
+
+                        // Create a div for week content (hidden by default)
+                        const weekContentDiv = document.createElement('div');
+                        weekContentDiv.id = `week${week}`;
+                        weekContentDiv.className = 'hidden p-4 bg-gray-100';
+
+                        for (const [day, meals] of Object.entries(days)) {
+                            const dayDiv = document.createElement('div');
+                            dayDiv.innerHTML = `<strong>Day ${day}:</strong><br>`;
+
+                            meals.forEach(meal => {
+                                const mealDiv = document.createElement('div');
+                                mealDiv.className = 'meal-item mb-4 p-2 bg-white shadow rounded-lg';
+
+                                // Create a div for meal details
+                                const mealDetailDiv = document.createElement('div');
+                                mealDetailDiv.className = 'meal-details mb-2';
+                                mealDetailDiv.innerHTML = `<strong>${meal.meal_name}</strong><br>`;
+
+                                // Create a list of steps for the meal
+                                meal.steps.forEach(step => {
+                                    const stepDiv = document.createElement('div');
+                                    stepDiv.className = 'step-detail pl-4';
+                                    stepDiv.innerText = `Step ${step.step_number}: ${step.instruction}`;
+                                    mealDetailDiv.appendChild(stepDiv);
+                                });
+
+                                // Create buttons to modify or remove a meal
+                                const mealButtonsDiv = document.createElement('div');
+                                mealButtonsDiv.className = 'meal-buttons flex gap-2 mt-2';
+
+                                const modifyButton = document.createElement('button');
+                                modifyButton.className = 'bg-orange-600 text-white px-2 py-1 rounded';
+                                modifyButton.innerText = 'Modify';
+                                modifyButton.onclick = () => modifyMeal(week, day, meal.meal_name);
+
+                                const removeButton = document.createElement('button');
+                                removeButton.className = 'bg-red-500 text-white px-2 py-1 rounded';
+                                removeButton.innerText = 'Remove';
+                                removeButton.onclick = () => removeMeal(meal.meal_name);
+
+                                mealButtonsDiv.appendChild(modifyButton);
+                                mealButtonsDiv.appendChild(removeButton);
+
+                                mealDiv.appendChild(mealDetailDiv);
+                                mealDiv.appendChild(mealButtonsDiv);
+
+                                dayDiv.appendChild(mealDiv);
+                            });
+
+                            weekContentDiv.appendChild(dayDiv);
+                        }
+
+                        weekDiv.appendChild(weekButton);
+                        weekDiv.appendChild(weekContentDiv);
+                        weekAccordion.appendChild(weekDiv);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching meal data:', error);
+            }
+        }
+
+        // Function to group meals by week and day
+        function groupMealsByWeekAndDay(mealData) {
+            const groupedData = {};
+
+            mealData.forEach(meal => {
+                const { week_no, day_no, meal_name, step_number, instruction } = meal;
+
+                if (!groupedData[week_no]) groupedData[week_no] = {};
+                if (!groupedData[week_no][day_no]) groupedData[week_no][day_no] = [];
+
+                let mealEntry = groupedData[week_no][day_no].find(m => m.meal_name === meal_name);
+                if (!mealEntry) {
+                    mealEntry = { meal_name, steps: [] };
+                    groupedData[week_no][day_no].push(mealEntry);
+                }
+
+                mealEntry.steps.push({ step_number, instruction });
+            });
+
+            return groupedData;
+        }
+
+        // Function to toggle week content visibility
+        function toggleVisibility(weekId) {
+            const weekContent = document.getElementById(weekId);
+            if (weekContent.classList.contains('hidden')) {
+                weekContent.classList.remove('hidden');
+            } else {
+                weekContent.classList.add('hidden');
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('TemplateModal').classList.add('hidden');
+        }
+
+        // Placeholder functions for modifying or removing a meal
+        function modifyMeal(week, day, mealName) {
+            console.log(`Modify meal: ${mealName} on Week ${week}, Day ${day}`);
+        }
+
+        function removeMeal(mealName) {
+            console.log(`Remove meal: ${mealName}`);
         }
     </script>
 </body>

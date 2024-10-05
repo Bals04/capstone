@@ -17,6 +17,7 @@ const NavRoutes = require('./routes/navRoutes');
 const messageRoute = require('./routes/messageRoutes');
 const paymentRoute = require('./routes/paymentRoute');
 const workoutRoute = require('./routes/workoutRoutes');
+const mealRoute = require('./routes/mealRoutes');
 
 // Initialize environment variables (.env file)
 dotenv.config();
@@ -107,6 +108,7 @@ const initializeRoutes = () => {
   app.use('/', messageRoute);
   app.use('/', paymentRoute);
   app.use('/', workoutRoute);
+  app.use('/', mealRoute);
   // Serve static files from the uploads folder
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
