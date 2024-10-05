@@ -494,9 +494,10 @@ async function retrieveMemberChatLog(trainer_id) {
 
 async function retrieveTrainerchatLog(member_id) {
     const [result] = await pool.query(`
-        SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS trainer_name, c.trainer_id
+        SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS trainer_name, c.trainer_id, i.filename
         FROM conversation_tbl c
         INNER JOIN trainers m ON c.trainer_id = m.trainer_id
+        INNER JOIN trainer_images i ON c.trainer_id = i.trainer_id
         WHERE member_id = ?
     `, [member_id])
 

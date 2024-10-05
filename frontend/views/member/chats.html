@@ -304,7 +304,7 @@
             })
                 .then(response => {
                     const chatList = response.data;
-                    currentChatList = chatList; 
+                    currentChatList = chatList;
                     populateChatList(chatList);
                 })
                 .catch(error => {
@@ -325,36 +325,42 @@
                 const listItem = document.createElement('li');
                 listItem.classList.add('p-3', 'bg-gray-700', 'rounded-lg', 'hover:bg-gray-600', 'cursor-pointer', 'flex', 'justify-between', 'items-center');
 
-                // Create a container div to hold the text and indicator side by side
+                // Create a container div to hold the image, text, and indicator side by side
                 const container = document.createElement('div');
                 container.classList.add('flex', 'items-center', 'justify-between', 'w-full');
 
-                // Add member name to a text element inside the container
+                // Create an image element for the trainer's avatar
+                const avatar = document.createElement('img');
+                avatar.src = 'http://localhost:3000/uploads/'+trainer.filename || 'default-avatar.jpg'; // Use trainer's avatar or a default one
+                avatar.alt = `${trainer.trainer_name}'s avatar`;
+                avatar.classList.add('h-8', 'w-8', 'rounded-full', 'mr-1'); // Tailwind classes for circular image and spacing
+
+                // Add trainer name to a text element inside the container
                 const trainerName = document.createElement('span');
                 trainerName.textContent = trainer.trainer_name;
-                container.appendChild(trainerName);
 
-
+                // Create the online indicator
                 const onlineIndicator = document.createElement('span');
                 onlineIndicator.classList.add('h-3', 'w-3', 'rounded-full', 'ml-2');
 
-                // Check if the member is online based on their member_id
-                if (onlineUsers[trainer.trainer_id]) { //DIRI ANG LOGIC PARA MABAL.AN IF ONLINE OR DILI ANG USER
+                // Check if the trainer is online based on their trainer_id
+                if (onlineUsers[trainer.trainer_id]) {
                     onlineIndicator.classList.add('bg-green-500');
                 } else {
                     onlineIndicator.classList.add('bg-gray-500');
                 }
 
-
+                // Append the avatar, trainer name, and online indicator to the container
+                container.appendChild(avatar);
+                container.appendChild(trainerName);
                 container.appendChild(onlineIndicator);
 
-
                 listItem.addEventListener('click', () => {
-                    clear();  // PARA DILI MAG STACK ANG MESSAGES EVERYTIME WE CLICK A LIST
+                    clear();  // Clear previous messages
                     document.getElementById('chatWith').textContent = trainer.trainer_name;
                     console.log(trainer.trainer_id);
-                    trainerid = trainer.trainer_id;  // Use this ID to load member-specific chat
-                    loadChatHistory(trainerid);  // Load chat history for the clicked member
+                    trainerid = trainer.trainer_id;  // Use this ID to load trainer-specific chat
+                    loadChatHistory(trainerid);  // Load chat history for the clicked trainer
                     CheckConversation();  // Any additional function to execute
                 });
 
@@ -364,6 +370,7 @@
                 // Append the list item to the chat list container
                 chatListElement.appendChild(listItem);
             });
+
         }
 
         const loadChatHistory = async (trainerid) => {
