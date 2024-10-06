@@ -5,7 +5,7 @@ const { getMembers, getExercises,
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
     insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
     removeTemplateExercise, inputFilter, insertMealTemplates, insertMealTemplatesItems,
-    insertMealTemplatesSteps } = require('../models/trainers');
+    insertMealTemplatesSteps, insertProposal } = require('../models/trainers');
 
 module.exports = {
 
@@ -256,7 +256,18 @@ module.exports = {
             console.error("Error deleting workout template exercise:", error.message);
             res.status(500).send("Internal Server Error");
         }
-    }
+    },
+    insertProposal: async (req, res) => {
+        const { trainer_id, member_id, planType, price, duration, status } = req.body;
+        try {
+            await insertProposal(trainer_id, member_id, planType, price, duration, status);
+            res.status(200).send("Proposal added successfully");
+
+        } catch (error) {
+            console.error("Error adding proposal:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
 
 
 }

@@ -24,6 +24,10 @@
             --custom-blue: #007BFF;
             --custom-light-blue: #E0F7FA;
         }
+
+        #success-toast {
+            z-index: 9999;
+        }
     </style>
 </head>
 
@@ -198,11 +202,6 @@
                 <div id="chatNameOverlay"
                     class="chat-overlay bg-gray-800 py-6 rounded-t-lg flex items-center justify-between px-4">
                     <h2 id="chatWith" class="text-white text-xl">Current Chat Name</h2>
-                    <button id="sendProposalButton"
-                        class="bg-50 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        Send Proposal
-                    </button>
                 </div>
 
 
@@ -216,22 +215,96 @@
 
                     <div id="inputContainer"
                         class="flex items-center p-3 bg-white border-t border-gray-300 rounded-b-lg">
+                        <button id="sendProposalButton"
+                            class="w-10 h-10 bg-customGray text-white rounded-full mr-2 hover:bg-orange-600 transition-colors flex items-center justify-center">
+                            <i class="fas fa-clipboard-list"></i>
+                        </button>
                         <label id="fileInputLabel" for="fileInput"
-                            class="flex items-center justify-center p-2 bg-customGray text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-gray-700 transition-colors">
+                            class="w-10 h-10 flex items-center justify-center p-2 bg-customGray text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-orange-600 transition-colors">
                             <i class="fas fa-paperclip"></i>
                         </label>
                         <input type="file" id="fileInput" class="hidden">
                         <input placeholder="Type a message..." type="text" id="messageInput"
                             class="flex-grow p-2 border border-gray-300 rounded-full text-base mr-2 outline-none bg-gray-50 shadow-inner">
                         <button id="sendButton" onclick="sendMessage()"
-                            class="p-2 bg-customGray text-white rounded-full cursor-pointer text-xl flex items-center justify-center mr-2 hover:bg-gray-700 transition-colors">
+                            class="w-10 h-10 p-2 bg-customGray text-white rounded-full cursor-pointer text-xl flex items-center justify-center mr-2 hover:bg-orange-600 transition-colors">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
                 </div>
 
+                <!-- Modal Background Overlay (Initially Hidden) -->
+                <div id="proposalModalBackground"
+                    class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+                    <!-- Modal Container -->
+                    <div class="bg-white rounded-lg shadow-lg w-1/2">
+                        <!-- Modal Header -->
+                        <div class="flex justify-between items-center p-4 border-b">
+                            <h2 class="text-lg font-bold">Send Proposal</h2>
+                            <button id="closeModalButton" class="text-gray-500 hover:text-gray-800">
+                                &times; <!-- Close Button -->
+                            </button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="p-4">
+                            <!-- Proposal Form -->
+                            <form id="sendProposalForm">
+                                <!-- Plan Type -->
+                                <div class="mb-4">
+                                    <label for="planType" class="block text-gray-700">Plan Type</label>
+                                    <select id="planType" class="w-full p-2 border border-gray-300 rounded">
+                                        <option value="Workout Plan">Workout Plan</option>
+                                        <option value="Meal Plan">Meal Plan</option>
+                                        <option value="Comprehensive Plan">Comprehensive Plan</option>
+                                    </select>
+                                </div>
+                                <!-- Price -->
+                                <div class="mb-4">
+                                    <label for="price" class="block text-gray-700">Price</label>
+                                    <input type="number" id="price" class="w-full p-2 border border-gray-300 rounded"
+                                        placeholder="Enter price in pesos" step="1000">
+                                </div>
+                                <!-- Duration -->
+                                <div class="mb-4">
+                                    <label for="duration" class="block text-gray-700">Duration</label>
+                                    <input type="text" id="duration" class="w-full p-2 border border-gray-300 rounded"
+                                        placeholder="e.g., 4 weeks, 3 months">
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="flex justify-end p-4 border-t">
+                            <button id="submitProposalButton"
+                                class="bg-customGray text-white px-4 py-2 rounded hover:bg-orange-600 transition-colors">
+                                Submit Proposal
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+        </div>
+    </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -502,14 +575,85 @@
                 messageDisplay.scrollTop = messageDisplay.scrollHeight;
             };
 
-            document.getElementById('sendProposalButton').addEventListener('click', function () {
-                const studentName = document.getElementById('chatWith').textContent;
+            // Get elements
+            const sendProposalButton = document.getElementById('sendProposalButton');
+            const proposalModalBackground = document.getElementById('proposalModalBackground');
+            const closeModalButton = document.getElementById('closeModalButton');
+            const submitProposalButton = document.getElementById('submitProposalButton');
 
-                // Send a coaching proposal using an API request or any other logic
-                console.log(`Sending coaching proposal to ${studentName}...`);
+            // Open the modal when the "Send Proposal" button is clicked
+            sendProposalButton.addEventListener('click', () => {
+                proposalModalBackground.classList.remove('hidden');
+            });
 
-                // Example: Display an alert or trigger a modal
-                //alert(`Coaching proposal sent to ${studentName}`);
+            // Close the modal when the close button is clicked
+            closeModalButton.addEventListener('click', () => {
+                proposalModalBackground.classList.add('hidden');
+            });
+
+            // Close the modal when clicking outside the modal container
+            proposalModalBackground.addEventListener('click', (event) => {
+                if (event.target === proposalModalBackground) {
+                    proposalModalBackground.classList.add('hidden');
+                }
+            });
+
+            // Handle form submission (e.g., you can add your API call here)
+            submitProposalButton.addEventListener('click', () => {
+                // Retrieve form data
+                const planType = document.getElementById('planType').value;
+                const price = document.getElementById('price').value;
+                const duration = document.getElementById('duration').value;
+                const status = "Pending"; // Set status to "Pending"
+
+                // Replace with actual member ID and trainer ID values
+
+                // Create the data object to send in the request body
+                const proposalData = {
+                    trainer_id: trainerid,
+                    member_id: memberid,
+                    planType: planType,
+                    price: parseFloat(price), // Ensure price is a number
+                    duration: parseInt(duration), // Ensure duration is a number
+                    status: status
+                };
+
+                // Send POST request using Axios
+                axios.post('http://localhost:3000/insertProposal', proposalData)
+                    .then(response => {
+                        console.log('Proposal submitted successfully:', response.data);
+
+                        // Close the modal after submission
+                        proposalModalBackground.classList.add('hidden');
+                        showToast("success", "Proposal sent! Awaiting client response.")
+                    })
+                    .catch(error => {
+                        console.error('Error submitting proposal:', error);
+                        alert('Failed to submit proposal. Please try again.');
+                    });
+            });
+
+            function showToast(type, message) {
+                const toast = type === 'success' ? document.getElementById('success-toast') : document.getElementById('error-toast');
+                const messageElement = type === 'success' ? document.getElementById('success-message-toast') : document.getElementById('error-message-toast');
+
+                // Set the message
+                messageElement.textContent = message;
+
+                // Show and slide in the toast
+                toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+                toast.classList.add('translate-x-0'); // Move the toast in view
+
+                // Auto-hide the toast after 3 seconds
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full');  // Slide toast out to the right
+                    setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+                }, 3000);
+            }
+            document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+                const toast = document.getElementById('success-toast');
+                toast.classList.add('translate-x-full');  // Slide out
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
             });
             // window.addEventListener('beforeunload', () => {
             //     socket.off("receive_message");

@@ -97,10 +97,19 @@ const insertMealTemplatesSteps = async (template_item_id, step_number, instructi
     );
     return rows.length > 0 ? rows : null;
 };
+const insertProposal = async (trainer_id, member_id, planType, price, duration, status) => {
+    const [rows] = await pool.query(
+        'INSERT INTO proposals (trainer_id, member_id, plan_type, price, duration, status) VALUES(?,?,?,?,?,?)',
+        [trainer_id, member_id, planType, price, duration, status]
+    );
+    // Return only the insertId
+    return rows.insertId;
+};
 
 
 
 module.exports = {
+    insertProposal,
     insertMealTemplatesSteps,
     insertMealTemplatesItems,
     insertMealTemplates,
