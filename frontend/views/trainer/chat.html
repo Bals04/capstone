@@ -193,16 +193,25 @@
             <!-- Chat Box -->
             <div
                 class="flex-grow p-6 bg-div_color flex flex-col overflow-auto scroll-m-3 scrollbar scrollbar-thumb-transparent">
-                <h1 class="text-left mb-6 text-lg font-bold rounded-xl p-2 bg-div_color text-white">Kachat nimo ron:
-                    <span id="chatWith">wala (sad life :<) </span>
-                </h1>
 
-                <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex flex-col h-full">
+                <!-- Chat Name Overlay -->
+                <div id="chatNameOverlay"
+                    class="chat-overlay bg-gray-800 py-6 rounded-t-lg flex items-center justify-between px-4">
+                    <h2 id="chatWith" class="text-white text-xl">Current Chat Name</h2>
+                    <button id="sendProposalButton"
+                        class="bg-50 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center">
+                        <i class="fas fa-clipboard-list mr-2"></i>
+                        Send Proposal
+                    </button>
+                </div>
+
+
+
+
+                <div id="chatContainer" class="bg-white shadow-lg flex flex-col h-[1100px]"> <!-- Fixed height -->
                     <div id="messageDisplay"
-                        class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-auto scrollbar scrollbar-thumb-transparent rounded-t-lg">
-                        <div id="loadingPrompt" class="text-center text-white rounded-lg py-4 bg-gray-800 hidden">
-                            <p>Fetching messages...</p>
-                        </div>
+                        class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-scroll scrollbar scrollbar-thumb-transparent rounded-t-lg h-[400px]">
+                        <!-- Scrollable area -->
                     </div>
 
                     <div id="inputContainer"
@@ -220,7 +229,9 @@
                         </button>
                     </div>
                 </div>
+
             </div>
+
         </div>
     </div>
 
@@ -257,7 +268,6 @@
                     });
                     if (response.status === 200) {
                         conversationId = response.data.id
-                        alert(conversationId)
                     } else {
                         console.error('Failed to load messages:', response.statusText);
                     }
@@ -305,6 +315,10 @@
                         const chatList = response.data;  // Assign the response data (chat members list) to chatList
                         currentChatList = chatList;      // Store the chat list in the global variable `currentChatList`
                         populateChatList(currentChatList);  // Populate the chat list with fetched data
+                        loadChatHistory(currentChatList[0].member_id);
+                        memberid = currentChatList[0].member_id;
+                        CheckConversation();
+                        document.getElementById('chatWith').textContent = currentChatList[0].member_name;
                     })
                     .catch(error => {
                         console.error('Error fetching member chat log:', error);
@@ -335,7 +349,7 @@
                     memberName.textContent = member.member_name;
                     container.appendChild(memberName);
 
-                    
+
                     const onlineIndicator = document.createElement('span');
                     onlineIndicator.classList.add('h-3', 'w-3', 'rounded-full', 'ml-2');
 
@@ -346,12 +360,11 @@
                         onlineIndicator.classList.add('bg-gray-500');
                     }
 
-                    
+
                     container.appendChild(onlineIndicator);
 
-                    
+
                     listItem.addEventListener('click', () => {
-                        alert("clicked")
                         clear();  // PARA DILI MAG STACK ANG MESSAGES EVERYTIME WE CLICK A LIST
                         document.getElementById('chatWith').textContent = member.member_name;
                         console.log(member.member_id);
@@ -380,7 +393,6 @@
                     if (response.status === 200) {
                         const messages = response.data;
                         messages.forEach((message) => {
-                            console.log(message.sender)
                             const type = (message.sender === 'Trainer') ? 'sent' : 'received';
                             displayMessage(message, type);
                         });
@@ -406,7 +418,6 @@
                     formData.append('file', file);
 
                     try {
-                        console.log("jejejeje")
                         const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
@@ -440,6 +451,14 @@
                 // fileInput.value = "";
             };
 
+            document.getElementById("messageInput").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") { // Check if the Enter key is pressed
+                    event.preventDefault();  // Prevent the default behavior (form submission or new line)
+                    sendMessage();           // Call the sendMessage function
+                    document.getElementById("messageInput").value = "";
+                }
+            });
+
 
             function sendSocketMessage(data) {
                 socket.emit("send_message", data);
@@ -456,7 +475,6 @@
 
             // Function to display messages (remains unchanged)
             const displayMessage = (data, type) => {
-                console.log("in here")
                 const messageDisplay = document.getElementById("messageDisplay");
                 const messageElement = document.createElement("div");
                 messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
@@ -484,6 +502,15 @@
                 messageDisplay.scrollTop = messageDisplay.scrollHeight;
             };
 
+            document.getElementById('sendProposalButton').addEventListener('click', function () {
+                const studentName = document.getElementById('chatWith').textContent;
+
+                // Send a coaching proposal using an API request or any other logic
+                console.log(`Sending coaching proposal to ${studentName}...`);
+
+                // Example: Display an alert or trigger a modal
+                //alert(`Coaching proposal sent to ${studentName}`);
+            });
             // window.addEventListener('beforeunload', () => {
             //     socket.off("receive_message");
             // });

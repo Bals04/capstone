@@ -331,7 +331,7 @@
 
                 // Create an image element for the trainer's avatar
                 const avatar = document.createElement('img');
-                avatar.src = 'http://localhost:3000/uploads/'+trainer.filename || 'default-avatar.jpg'; // Use trainer's avatar or a default one
+                avatar.src = 'http://localhost:3000/uploads/' + trainer.filename || 'default-avatar.jpg'; // Use trainer's avatar or a default one
                 avatar.alt = `${trainer.trainer_name}'s avatar`;
                 avatar.classList.add('h-8', 'w-8', 'rounded-full', 'mr-1'); // Tailwind classes for circular image and spacing
 
@@ -441,6 +441,14 @@
             document.getElementById("messageInput").value = "";
             fileInput.value = "";
         };
+
+        document.getElementById("messageInput").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") { // Check if the Enter key is pressed
+                event.preventDefault();  // Prevent the default behavior (form submission or new line)
+                sendMessage();           // Call the sendMessage function
+                document.getElementById("messageInput").value = "";
+            }
+        });
 
 
         function sendSocketMessage(data) {
