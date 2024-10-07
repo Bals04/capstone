@@ -323,6 +323,8 @@
             let conversationId;
             let onlineUsers = {};        // Initialize an empty object to keep track of online users
             let currentChatList = [];    // Initialize an empty array to store the current chat list
+            let proposal_id = 0;
+            let trainer_name;
 
 
             id = window.userId;
@@ -361,6 +363,7 @@
                         console.log(response.data[0]);
                         const trainerData = response.data[0];
                         trainerid = trainerData.trainer_id;
+                        trainer_name = trainerData.firstname
 
                         // Fetch and populate the chat list after trainer info is fetched
                         fetchMemberChatLog(trainerid);
@@ -621,9 +624,12 @@
                 // Send POST request using Axios
                 axios.post('http://localhost:3000/insertProposal', proposalData)
                     .then(response => {
-                        console.log('Proposal submitted successfully:', response.data);
-
+                        console.log('Proposal submitted successfully:', response.data.proposal_id);
+                        proposal_id = response.data.proposal_id;
                         // Close the modal after submission
+                        setTimeout(() => {
+                            insertNotification();
+                        }, 1000);
                         proposalModalBackground.classList.add('hidden');
                         showToast("success", "Proposal sent! Awaiting client response.")
                     })
@@ -658,7 +664,27 @@
             // window.addEventListener('beforeunload', () => {
             //     socket.off("receive_message");
             // });
+            function insertNotification() {
+                // Axios POST request
+                axios.post('http://localhost:3000/insertNotification', {
+                    member_id: memberid,
+                    proposal_id: proposal_id,
+                    message: `Trainer ${trainer_name} sent you a new proposal.`,
+                })
+                    .then(function (response) {
+                        console.log(memberid)
+                        console.log(proposal_id)
+                        console.log(trainer_name)
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error.response ? error.response.data : error.message);
+                    });
+
+            }
         });
+
+
+
     </script>
 
 </body>

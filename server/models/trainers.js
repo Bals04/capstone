@@ -105,10 +105,19 @@ const insertProposal = async (trainer_id, member_id, planType, price, duration, 
     // Return only the insertId
     return rows.insertId;
 };
+const insertNotification = async (member_id, proposal_id, message) => {
+    const [rows] = await pool.query(
+        'INSERT INTO notifications (member_id, proposal_id, message) VALUES(?,?,?)',
+        [member_id, proposal_id, message]
+    );
+    // Return only the insertId
+    return rows.insertId;
+};
 
 
 
 module.exports = {
+    insertNotification,
     insertProposal,
     insertMealTemplatesSteps,
     insertMealTemplatesItems,

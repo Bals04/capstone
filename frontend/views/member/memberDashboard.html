@@ -44,10 +44,21 @@
                 </div>
                 <div class="flex items-center">
                     <div class="flex items-center ms-3">
-                        <div class="mr-6 mt-1">
-                            <button>
+                        <div class="relative mr-6 mt-1">
+                            <button id="notificationButton">
                                 <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
                             </button>
+
+                            <!-- Notification Dropdown -->
+                            <div id="notificationDropdown"
+                                class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50 border border-gray-200">
+                                <div class="py-2 px-4 bg-gray-100 border-b border-gray-200 text-gray-700 font-bold">
+                                    Notifications
+                                </div>
+                                <div id="notificationList" class="max-h-80 overflow-y-auto">
+                                    <!-- Notification Items will be dynamically populated here -->
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <button type="button" id="userDropdownToggle"
@@ -310,6 +321,7 @@
         let weight = null;
         let bodytype = null;
         const uid = userId;
+        let member_id = 0
 
         // Fetch and assign member information when the page loads
         fetchMemberInfo();
@@ -327,21 +339,98 @@
                     lastname = memberData.lastname;
                     weight = memberData.weight;
                     bodytype = memberData.bodytype;
-                    id = memberData.member_id
+                    member_id = memberData.member_id
 
 
                     // Optionally, update the DOM with the fetched data
                     document.querySelector('.nameChange').textContent = `${firstname} ${lastname}`;
-                    console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${id}`);
+                    console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${member_id}`);
                 })
                 .catch(error => {
                     console.error('Error fetching member info:', error);
                 });
         }
+
+        const notificationButton = document.getElementById('notificationButton');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationList = document.getElementById('notificationList');
+
+        function fetchNotifications() {
+            axios.get(`http://localhost:3000/retrieveNotifications?member_id=${member_id}`)
+                .then(response => {
+                    const notifications = response.data[0];
+                    notificationList.innerHTML = ''; // Clear existing notifications
+
+                    notifications.forEach(notification => {
+                        const notificationItem = document.createElement('div');
+                        notificationItem.classList.add('py-2', 'px-4', 'hover:bg-gray-100', 'cursor-pointer', 'border-b', 'border-gray-200');
+
+                        notificationItem.innerHTML = `
+                            <div class="text-sm font-medium text-gray-800">${notification.message}</div>
+                            <div class="text-xs text-gray-500">${formatDate(notification.created_at)}</div>
+                        `;
+
+                        // Optional: Mark the notification as read on click
+                        notificationItem.addEventListener('click', () => {
+                            markNotificationAsRead(notification.notification_id);
+                        });
+
+                        notificationList.appendChild(notificationItem);
+                    });
+
+                    // Display message if no notifications are available
+                    if (notifications.length === 0) {
+                        notificationList.innerHTML = '<div class="py-2 px-4 text-sm text-gray-500">No new notifications</div>';
+                    }
+                })
+                .catch(error => console.error('Error fetching notifications:', error));
+        }
+        // Function to format the date as "Month Day, Year - Time"
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+
+            // Format the date part
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = date.toLocaleDateString(undefined, options);
+
+            // Format the time part
+            const formattedTime = date.toLocaleTimeString(undefined, {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            return `${formattedDate} - ${formattedTime}`;
+        }
+        // Optional: Mark a notification as read
+        function markNotificationAsRead(notificationId) {
+            axios.post('http://localhost:3000/markNotificationAsRead', { notification_id: notificationId })
+                .then(response => {
+                    console.log('Notification marked as read:', response.data);
+                    // Optional: Remove or update the notification item in the list
+                })
+                .catch(error => console.error('Error marking notification as read:', error));
+        }
+
+        notificationButton.addEventListener('click', () => {
+            notificationDropdown.classList.toggle('hidden');
+            // Only fetch notifications when the dropdown is opened
+            if (!notificationDropdown.classList.contains('hidden')) {
+                fetchNotifications();
+            }
+        });
+
+
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', (event) => {
+            if (!notificationDropdown.contains(event.target) && !notificationButton.contains(event.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+        });
+        function removeCookie(name) {
+            document.cookie = name + '=; Max-Age=0; path=/';
+        }
     });
-    function removeCookie(name) {
-        document.cookie = name + '=; Max-Age=0; path=/';
-    }
+
 </script>
 
 </html>

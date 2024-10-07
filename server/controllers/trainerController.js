@@ -5,7 +5,7 @@ const { getMembers, getExercises,
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
     insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
     removeTemplateExercise, inputFilter, insertMealTemplates, insertMealTemplatesItems,
-    insertMealTemplatesSteps, insertProposal } = require('../models/trainers');
+    insertMealTemplatesSteps, insertProposal, insertNotification } = require('../models/trainers');
 
 module.exports = {
 
@@ -260,11 +260,22 @@ module.exports = {
     insertProposal: async (req, res) => {
         const { trainer_id, member_id, planType, price, duration, status } = req.body;
         try {
-            await insertProposal(trainer_id, member_id, planType, price, duration, status);
-            res.status(200).send("Proposal added successfully");
+            const proposal_id = await insertProposal(trainer_id, member_id, planType, price, duration, status);
+            res.status(200).json({ message: "Proposal added successfully", proposal_id:  proposal_id  });
 
         } catch (error) {
             console.error("Error adding proposal:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    insertNotification: async (req, res) => {
+        const { member_id, proposal_id, message } = req.body;
+        try {
+            const notification_id = await insertNotification(member_id, proposal_id, message);
+            res.status(200).json({ message: "Notification added successfully", notif_id:  notification_id  });
+
+        } catch (error) {
+            console.error("Error adding notification:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },
