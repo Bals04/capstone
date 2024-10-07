@@ -29,7 +29,7 @@ const port = process.env.PORT || 3000;
 // Setup middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const allowedOrigins = ['http://127.0.0.1:5500', 'https://capstone-alpha-five.vercel.app'];
+const allowedOrigins = ['http://127.0.0.1:5500', 'https://capstone-alpha-five.vercel.app', 'https://capstone-vd92qz289-bals04s-projects.vercel.app'];
 
 app.use(cors({
   origin: allowedOrigins,
