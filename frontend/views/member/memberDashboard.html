@@ -17,6 +17,28 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/frontend/scripts/auth.js"></script>
+    <style>
+        /* Additional modal styles for enhanced UI/UX */
+        #proposalModal .rounded-full {
+            border-radius: 9999px;
+        }
+
+        #proposalModal .shadow-md {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #proposalModal .transform {
+            transform: translateY(0);
+        }
+
+        #proposalModal .transition-all {
+            transition: all 0.2s ease-in-out;
+        }
+
+        #proposalModal .hover\\:scale-105:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
 <body class="min-h-screen font-[Poppins] bg-customGray text-white">
@@ -51,8 +73,8 @@
 
                             <!-- Notification Dropdown -->
                             <div id="notificationDropdown"
-                                class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50 border border-gray-200">
-                                <div class="py-2 px-4 bg-gray-100 border-b border-gray-200 text-gray-700 font-bold">
+                                class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+                                <div class="py-2 px-4 bg-gray-300 border-b border-gray-200 text-gray-700 font-bold">
                                     Notifications
                                 </div>
                                 <div id="notificationList" class="max-h-80 overflow-y-auto">
@@ -311,10 +333,67 @@
             </div>
         </div>
 
+
         <!-- Workout Section -->
         <div class="m-4 p-4 bg-div_color max-w-screen-xl">
             <div class="py-4 px-2">Workout</div>
         </div>
+
+        <!-- Proposal Modal -->
+        <!-- Enhanced Proposal Modal -->
+        <!-- Enhanced Proposal Modal -->
+        <div id="proposalModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            <div
+                class="relative bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl max-w-lg w-full border border-gray-200 dark:border-gray-700">
+                <!-- Modal Content -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-extrabold text-gray-900 dark:text-gray-100 mb-2">Proposal Details</h2>
+                    <p id="proposalPlanType" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
+                    <p id="proposalPrice" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
+                    <p id="proposalDuration" class="text-sm text-gray-700 dark:text-gray-300"></p>
+                </div>
+                <!-- Divider -->
+                <div class="border-t border-gray-300 dark:border-gray-700 my-4"></div>
+                <!-- Accept/Decline Buttons -->
+                <div class="flex justify-between items-center">
+                    <!-- Accept Button with Revised Text -->
+                    <button id="acceptProposalBtn"
+                        class="px-5 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-3-3a1 1 0 011.414-1.414L9 11.586l6.293-6.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Accept & Proceed to Payment
+                    </button>
+                    <!-- Decline Button -->
+                    <button id="declineProposalBtn"
+                        class="px-5 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Decline
+                    </button>
+                </div>
+                <!-- Close Modal Button -->
+                <button id="closeProposalModal"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 transition ease-in-out duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+
+
     </div>
 
 
@@ -377,7 +456,7 @@
 
                         notifications.forEach(notification => {
                             const notificationItem = document.createElement('div');
-                            notificationItem.classList.add('py-2', 'px-4', 'hover:bg-gray-100', 'cursor-pointer', 'border-b', 'border-gray-200');
+                            notificationItem.classList.add('py-2', 'px-4', 'hover:bg-orange-300', 'cursor-pointer', 'border-b', 'border-gray-200');
 
                             notificationItem.innerHTML = `
                     <div class="text-sm font-medium text-gray-800">${notification.message}</div>
@@ -386,7 +465,7 @@
 
                             // Optional: Mark the notification as read on click
                             notificationItem.addEventListener('click', () => {
-                                markNotificationAsRead(notification.notification_id);
+                                markNotificationAsRead(notification.proposal_id);
                             });
 
                             notificationList.appendChild(notificationItem);
@@ -411,15 +490,34 @@
 
             return `${formattedDate} - ${formattedTime}`;
         }
-        // Optional: Mark a notification as read
-        function markNotificationAsRead(notificationId) {
-            axios.post('http://localhost:3000/markNotificationAsRead', { notification_id: notificationId })
-                .then(response => {
-                    console.log('Notification marked as read:', response.data);
-                    // Optional: Remove or update the notification item in the list
-                })
-                .catch(error => console.error('Error marking notification as read:', error));
+        // Function to mark notification as read and show proposal details in a modal
+        async function markNotificationAsRead(proposalId) {
+            try {
+                // Fetch the proposal data using the member_id from the notification
+                const response = await fetch(`http://localhost:3000/retrieveProposals?member_id=${member_id}&proposal_id=${proposalId}`);
+
+                const data = await response.json();
+
+                if (data && data.length > 0 && data[0].length > 0) {
+                    const proposal = data[0][0]; // Access the first proposal in the array
+
+                    // Populate the modal with relevant proposal details
+                    document.getElementById('proposalPlanType').textContent = `Plan Type: ${proposal.plan_type}`;
+                    document.getElementById('proposalPrice').textContent = `Price: ${proposal.price} PHP`;
+                    document.getElementById('proposalDuration').textContent = `Duration: ${proposal.duration} weeks`;
+
+                    // Show the modal
+                    document.getElementById('proposalModal').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error retrieving proposal:', error);
+            }
         }
+
+        // Event listener to close the proposal modal
+        document.getElementById('closeProposalModal').addEventListener('click', () => {
+            document.getElementById('proposalModal').classList.add('hidden');
+        });
 
         notificationButton.addEventListener('click', () => {
             notificationDropdown.classList.toggle('hidden');

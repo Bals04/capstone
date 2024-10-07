@@ -8,6 +8,7 @@ router.get("/WorkoutOftheDay", memberController.GetTodaysWorkout);
 router.get("/getMemberInfo", memberController.getMemberInfo); 
 router.get("/retrieveTrainerChatLog", memberController.retrieveTrainerchatLog); 
 router.get("/retrieveNotifications", memberController.getNotifications); 
+router.get("/retrieveProposals", memberController.getProposals); 
 
 module.exports = router;
 
