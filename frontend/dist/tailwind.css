@@ -948,6 +948,9 @@ video {
 .h-\[100vh\] {
   height: 100vh;
 }
+.h-\[1100px\] {
+  height: 1100px;
+}
 .h-\[150px\] {
   height: 150px;
 }
@@ -959,6 +962,9 @@ video {
 }
 .h-\[30px\] {
   height: 30px;
+}
+.h-\[400px\] {
+  height: 400px;
 }
 .h-\[55px\] {
   height: 55px;
@@ -990,20 +996,11 @@ video {
 .h-screen {
   height: 100vh;
 }
-.h-\[400px\] {
-  height: 400px;
-}
-.h-\[500px\] {
-  height: 500px;
-}
-.h-\[1000px\] {
-  height: 1000px;
-}
-.h-\[1100px\] {
-  height: 1100px;
-}
 .max-h-60 {
   max-height: 15rem;
+}
+.max-h-80 {
+  max-height: 20rem;
 }
 .max-h-96 {
   max-height: 24rem;
@@ -1704,22 +1701,11 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
-.bg-orange-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 237 213 / var(--tw-bg-opacity));
-}
-.bg-orange-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
-}
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
 .bg-opacity-80 {
   --tw-bg-opacity: 0.8;
-}
-.bg-opacity-70 {
-  --tw-bg-opacity: 0.7;
 }
 .bg-gradient-to-l {
   background-image: linear-gradient(to left, var(--tw-gradient-stops));
@@ -1881,13 +1867,13 @@ video {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
 }
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 .pb-10 {
   padding-bottom: 2.5rem;
