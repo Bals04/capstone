@@ -2,7 +2,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const { handleAddPaymentRecord, addSubscriptionRecord } = require('../controllers/orderController');
+const { handleAddPaymentRecord, addSubscriptionRecord, handleClientPayment } = require('../controllers/orderController');
 const { VerifyGym } = require('../controllers/gymController');
 const paypal = require('../services/paypal');
 
@@ -56,6 +56,47 @@ router.get('/complete-order', async (req, res) => {
         }
     } catch (error) {
         console.error("Error completing the order:", error.message);
+        // Ensure headers are sent only once
+        if (!res.headersSent) {
+            res.status(500).send("Error: " + error.message);
+        }
+    }
+});
+router.get('/complete-client-payment', async (req, res) => {
+    try {
+        const token = req.query.token;
+        const contract_id = req.query.contract_id;
+        const price = req.query.price;
+
+        // Capture the payment using the token from PayPal
+        const captureResponse = await paypal.captureClientPayment(token);
+
+        if (captureResponse && captureResponse.status === 'COMPLETED') {
+            // Payment was successful, proceed to add payment record to the database
+            const paymentData = {
+                contract_id:contract_id,
+                amount: price,
+            };
+
+            // Call the controller to add the payment record
+            const result = await handleClientPayment(paymentData.contract_id, paymentData.amount);
+
+            if (result.success) {
+                // Call VerifyGym if payment record was added successfully
+                // await VerifyGym(gym_id); // Directly pass gym_id here
+                // await addSubscriptionRecord(admin_id, gym_id, subscription_id, day)
+                console.log("SUCCESS")
+                // Redirect to the success page
+                return res.redirect('/gym_admin/success');
+            } else {
+                console.log("ERROR")
+                throw new Error(result.message);
+            }
+        } else {
+            throw new Error('Payment capture was not successful.');
+        }
+    } catch (error) {
+        console.error("Error completing the client order:", error.message);
         // Ensure headers are sent only once
         if (!res.headersSent) {
             res.status(500).send("Error: " + error.message);

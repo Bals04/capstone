@@ -405,12 +405,15 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const uid = userId;
         let firstname = null;
         let lastname = null;
         let weight = null;
         let bodytype = null;
-        const uid = userId;
         let member_id = 0
+        let Duration;
+        let plan_type;
+        let Price;
 
         // Fetch and assign member information when the page loads
         fetchMemberInfo();
@@ -505,6 +508,9 @@
                     document.getElementById('proposalPlanType').textContent = `Plan Type: ${proposal.plan_type}`;
                     document.getElementById('proposalPrice').textContent = `Price: ${proposal.price} PHP`;
                     document.getElementById('proposalDuration').textContent = `Duration: ${proposal.duration} weeks`;
+                    Duration = proposal.duration
+                    plan_type = proposal.plan_type
+                    Price = proposal.price
 
                     // Show the modal
                     document.getElementById('proposalModal').classList.remove('hidden');
@@ -537,6 +543,33 @@
         function removeCookie(name) {
             document.cookie = name + '=; Max-Age=0; path=/';
         }
+
+        document.getElementById('acceptProposalBtn').addEventListener('click', async() => {
+            try {
+
+                const contract_id = '12345'; // Replace with actual contract ID
+                const price = Price;
+                const planType = plan_type
+                const duration = Duration
+                console.log(price)
+                console.log(planType)
+                console.log(duration)
+
+                const response = await axios.post('http://localhost:3000/clientPayment', {
+                    contract_id: 1,
+                    price: price,
+                    planType: planType,
+                    duration: duration
+                });
+
+                const result = response.data;
+                window.location.href = result; // Redirect to PayPal
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                alert('There was an error processing your payment. Please try again.');
+            }
+        })
+
     });
 
 </script>
