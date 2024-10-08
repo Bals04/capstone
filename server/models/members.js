@@ -15,8 +15,18 @@ const getProposals = async (member_id, proposal_id) => {
     );
     return rows.length > 0 ? [rows] : null;
 };
+const insertContract = async (proposal_id, weeks, status) => {
+    const [response] = await pool.query(
+        `INSERT INTO contracts_table (proposal_id, start_date, end_date, status) 
+         VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL ${weeks} WEEK), ?);`,
+        [proposal_id, status]
+    );
+    return response.insertId;  // This will return the auto-incremented ID
+};
+
 
 module.exports = {
     getNotifications,
-    getProposals
+    getProposals,
+    insertContract
 };

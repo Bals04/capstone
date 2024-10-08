@@ -414,6 +414,7 @@
         let Duration;
         let plan_type;
         let Price;
+        let Proposal_id;
 
         // Fetch and assign member information when the page loads
         fetchMemberInfo();
@@ -468,6 +469,7 @@
 
                             // Optional: Mark the notification as read on click
                             notificationItem.addEventListener('click', () => {
+                                Proposal_id = notification.proposal_id;
                                 markNotificationAsRead(notification.proposal_id);
                             });
 
@@ -544,10 +546,38 @@
             document.cookie = name + '=; Max-Age=0; path=/';
         }
 
-        document.getElementById('acceptProposalBtn').addEventListener('click', async() => {
+        document.getElementById('acceptProposalBtn').addEventListener('click', async () => {
             try {
+                const price = Price;
+                const planType = plan_type;
+                const duration = Duration;
 
-                const contract_id = '12345'; // Replace with actual contract ID
+                console.log(price);
+                console.log(planType);
+                console.log(duration);
+
+                // Insert the contract and wait for the response
+                const response = await axios.post('http://localhost:3000/insertContracts', {
+                    proposal_id: Proposal_id,
+                    weeks: duration,
+                    status: 'On going'
+                });
+
+                const contract_id = response.data.contract_id;
+
+                // After the contract is successfully inserted, call the insertClientPayment function
+                await insertClientPayment(contract_id);
+
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                alert('There was an error processing your payment. Please try again.');
+            }
+        });
+
+
+        async function insertClientPayment(Contract_id) {
+            try {
+                const contract_id = Contract_id; // Replace with actual contract ID
                 const price = Price;
                 const planType = plan_type
                 const duration = Duration
@@ -556,7 +586,7 @@
                 console.log(duration)
 
                 const response = await axios.post('http://localhost:3000/clientPayment', {
-                    contract_id: 1,
+                    contract_id: contract_id,
                     price: price,
                     planType: planType,
                     duration: duration
@@ -568,7 +598,7 @@
                 console.error('Error processing payment:', error);
                 alert('There was an error processing your payment. Please try again.');
             }
-        })
+        }
 
     });
 

@@ -1,5 +1,5 @@
 const { getWorkoutOftheWeek, getWorkoutoftheDay, GetMemberInfo, retrieveTrainerchatLog} = require('../models/database');
-const { getNotifications,getProposals } = require('../models/members');
+const { getNotifications,getProposals,insertContract } = require('../models/members');
 
 module.exports = {
     GetTodaysMeal: async (req, res) => {
@@ -65,6 +65,17 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching members proposals:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    insertContract: async (req, res) => {
+        try {
+            const { proposal_id, weeks, status } = req.body;
+            const data = await insertContract(proposal_id, weeks, status);
+            res.status(200).json({ message: "Contract added successfully", contract_id:  data  });
+        } catch (error) {
+            console.error("Error adding contracts:", error.message);
             res.status(500).send("Internal Server Error");
         }
     }
