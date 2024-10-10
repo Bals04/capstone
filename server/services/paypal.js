@@ -25,57 +25,54 @@ async function generateAccessToken2() {
     });
 
     return response.data.access_token;
-}
+};
 
-exports.createOrder = async (admin_id, gym_id, subscriptionID, price, subscriptionName, days) => {
+exports.createSubscription = async (admin_id, gym_id, planID, subscriptionID, subscriptionName, days, price) => {
     const access_token = await generateAccessToken();
 
+    // Send request to create subscription
     const response = await axios({
-        url: process.env.PAYPAL_BASE_URL + '/v2/checkout/orders',
+        url: process.env.PAYPAL_BASE_URL + '/v1/billing/subscriptions',
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + access_token
         },
-        data: JSON.stringify({
-            intent: 'CAPTURE',
-            purchase_units: [
-                {
-                    items: [
-                        {
-                            name: subscriptionName,
-                            description: 'Subscription to list your gym on our map',
-                            quantity: '1',
-                            unit_amount: {
-                                currency_code: 'PHP',
-                                value: price
-                            }
-                        }
-                    ],
-                    amount: {
-                        currency_code: 'PHP',
-                        value: price,
-                        breakdown: {
-                            item_total: {
-                                currency_code: 'PHP',
-                                value: price
-                            }
-                        }
-                    }
-                }
-            ],
+        data: {
+            plan_id: planID, // Use the planID here
+            subscriber: {
+                name: {
+                    given_name: 'John', // Replace with dynamic values as necessary
+                    surname: 'Doe'
+                },
+                email_address: 'customer@example.com' // Replace with the customer's email
+            },
             application_context: {
-                return_url: `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&subscriptionID=${subscriptionID}&price=${price}&day=${days}`,
+                return_url: `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&price=${price}&subscriptionID=${subscriptionID}&subscriptionName=${encodeURIComponent(subscriptionName)}&days=${days}&planID=${planID}`,
                 cancel_url: process.env.BASE_URL + '/cancel-order',
-                shipping_preference: 'NO_SHIPPING',
-                user_action: 'PAY_NOW',
-                brand_name: 'FLEXPERIENCE PAGE'
             }
-        })
+        }
     });
 
-    return response.data.links.find(link => link.rel == 'approve').href;
+    // Get the subscription ID and approval link from the response
+    const paypalsubscriptionId = response.data.id; // Subscription ID
+    const approvalLink = response.data.links.find(link => link.rel === 'approve').href; // Get the approval link
+
+    // Here you can construct a URL with the subscription ID for the return URL
+    const completeOrderUrl = `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&paypalsubscriptionID=${paypalsubscriptionId}&subscriptionID=${subscriptionID}&subscriptionName=${encodeURIComponent(subscriptionName)}&days=${days}&planID=${planID}`;
+
+    // Return the Subscription ID along with the approval link and constructed complete order URL
+    return {
+        paypalsubscriptionId: paypalsubscriptionId, // Subscription ID
+        approvalLink: approvalLink, // Get the approval link
+        completeOrderUrl: completeOrderUrl // Constructed URL to be used in the return_url
+    };
 };
+
+
+
+
+
 
 // para sa client to trainer payment shet wako kasabot unsay sunod
 exports.createClientToTrainerPayment = async (contract_id, price, planType, duration) => {
@@ -156,3 +153,27 @@ exports.captureClientPayment = async (orderId) => {
 
     return response.data;
 };
+
+
+exports.getSubscriptionDetails = async (subscriptionID) => {
+    console.log("Received subscription ID: ", subscriptionID);
+
+    const accessToken = await generateAccessToken();
+
+    try {
+        const response = await axios({
+            url: `${process.env.PAYPAL_BASE_URL}/v1/billing/subscriptions/${subscriptionID}`,
+            method: 'get',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        console.log("RESPONSE: ", response.data);
+        return response.data; // This will contain subscription details
+    } catch (error) {
+        console.error("Error fetching subscription details:", error.response ? error.response.data : error.message);
+        throw error; // Rethrow to handle in the calling function
+    }
+};
+

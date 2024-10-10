@@ -10,6 +10,9 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../../dist/tailwind.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AcgDhdIWi3JVdqNmheeRAHoZ-xc3ideiWGRnLcd0scGIpALNWYQ1xPmp6WE62DFFfsUV6EFSXEKzjhOI&vault=true&intent=subscription"
+        data-sdk-integration-source="button-factory"></script> <!-- PayPal SDK -->
     <style>
         .selection-box {
             width: 250px;
@@ -148,7 +151,6 @@
             <button id="proceedButton" class="proceed-btn" onclick="proceed()" disabled>Proceed</button>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
 
@@ -203,28 +205,38 @@
             if (selectedOption === '') return;
 
             const subscriptions = {
-                monthly: { name: 'Monthly Gym Spotlight', price: 500, id: 1, days: 30 },
-                quarterly: { name: 'Quarterly Gym Boost', price: 1200, id: 2, days: 90 },
-                yearly: { name: 'Elite Yearly Presence', price: 3500, id: 3, days: 365 }
+                monthly: { name: 'Monthly Gym Spotlight', price: 500, planid: 'P-4AB27409S1315904VM4DVKHI', days: 30, id: 1 },
+                quarterly: { name: 'Quarterly Gym Boost', price: 1200, planid: 'P-0EU3120592591691WM4DVNTI', days: 90, id: 2 }, // Replace with actual ID
+                yearly: { name: 'Eliteeee Yearly Presence', price: 3500, planid: 'P-3R482222AN6344158M4DVORI', days: 365, id: 3 } // Replace with actual ID
             };
 
-            const { name, price, id, days } = subscriptions[selectedOption];
+
+            const { name, price, id, days, planid } = subscriptions[selectedOption];
 
             const adminId = getCookie('admin_id');
 
-            // Send price and name to the backend
+            // Send price and name to the backend   
+            // Send subscription details to the backend
             try {
-                const response = await axios.post('http://localhost:3000/pay', {
+                axios.post('http://localhost:3000/pay', {
                     admin_id: adminId,
                     gym_id: getCookie('gymId'),
+                    planID: planid, // Pass the planID to the backend
                     subscriptionID: id,
-                    price: price,
                     subscriptionName: name,
-                    days: days
-                });
+                    days: days,
+                    price: price
+                })
+                    .then(response => {
+                        // Get the PayPal approval link from the response
+                        const approvalLink = response.data.approvalLink; // Use the approvalLink instead
+                        console.log('Redirecting to PayPal:', approvalLink);
 
-                const result = response.data;
-                window.location.href = result; // Redirect to PayPal
+                        // Redirect to PayPal subscription approval
+                        window.location.href = approvalLink; // Redirect to PayPal first
+
+                        // After the user completes the payment on PayPal, they will be redirected to completeOrderUrl automatically
+                    })
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -235,6 +247,10 @@
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
+
+
+
+
     </script>
 
 
