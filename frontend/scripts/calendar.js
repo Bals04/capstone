@@ -1,4 +1,3 @@
-
 const monthYearElement = document.getElementById('monthYear');
 const calendarBody = document.getElementById('calendarBody');
 const prevButton = document.getElementById('prevButton');
@@ -11,12 +10,13 @@ let currentYear = currentDate.getFullYear();
 
 function renderCalendar(month, year) {
     monthYearElement.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(year, month));
-    const firstDay = new Date(year, month, 1).getDay();
+    const firstDay = new Date(year, month, 1).getDay(); // Get the day of the week for the 1st day of the month
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     calendarBody.innerHTML = '';
 
     let row = '<tr>';
-    for (let i = 0; i < firstDay; i++) {
+    // Adjust for correct starting position (if firstDay is 0, it means Sunday)
+    for (let i = 0; i < (firstDay + 6) % 7; i++) { // Move to correct start of the week
         row += '<td></td>'; // Empty cells for days before the first day of the month
     }
     for (let day = 1; day <= daysInMonth; day++) {
@@ -27,7 +27,7 @@ function renderCalendar(month, year) {
                         <p class="text-base font-semibold">${day}</p>
                     </div>
                  </td>`;
-        if ((day + firstDay) % 7 === 0) {
+        if ((day + firstDay + 6) % 7 === 0) {
             row += '</tr><tr>'; // New row after every week
         }
     }
