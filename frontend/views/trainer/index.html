@@ -1,133 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trainer Portal</title>
-    <link rel="stylesheet" href="../../dist/tailwind.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainer Portal</title>
+  <link rel="stylesheet" href="../../dist/tailwind.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/frontend/scripts/auth.js"></script>
 </head>
+
 <body class="min-h-screen font-[Poppins] bg-customGray">
 
-    <!--Header-->
-    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
-        <div class="px-3 py-3 lg:px-5 lg:pl-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center justify-start rtl:justify-end">
-                <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
-                  <span class="sr-only">Open sidebar</span>
-                  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                     <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-                  </svg>
-                </button>
-                <a href="#" class="flex ms-2 md:me-24">
-                    <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
-                </a>
+  <!--Header-->
+  <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+            aria-controls="logo-sidebar" type="button"
+            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+              </path>
+            </svg>
+          </button>
+          <a href="#" class="flex ms-2 md:me-24">
+            <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+            <span
+              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <div class="flex items-center ms-3">
+            <div class="mr-6 mt-1">
+              <button>
+                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+              </button>
             </div>
-            <div class="flex items-center">
-                <div class="flex items-center ms-3">
-                    <div class="mr-6 mt-1">
-                        <button>
-                            <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
-                        </button>
-                    </div>
-                    <div>
-                        <button type="button" id="userDropdownToggle" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                          <span class="sr-only">Open user menu</span>
-                          <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
-                        </button>
-                    </div>
-                    <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600" id="dropdown-user">
-                        <div class="px-4 py-3" role="none">
-                          <p class="text-sm text-gray-900 dark:text-white" role="none">
-                            Heinz Padilla
-                          </p>
-                          <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                            heinzpadilla2024@flexperience.com
-                          </p>
-                        </div>
-                    <ul class="py-1" role="none">
-                      <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
-                      </li>
-                      <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
-                      </li>
-                      <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Earnings</a>
-                      </li>
-                      <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+            <div>
+              <button type="button" id="userDropdownToggle"
+                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false"
+                data-dropdown-toggle="dropdown-user">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+              </button>
+            </div>
+            <div
+              class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+              id="dropdown-user">
+              <div class="px-4 py-3" role="none">
+                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                  Heinz Padilla
+                </p>
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                  heinzpadilla2024@flexperience.com
+                </p>
               </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Dashboard</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Earnings</a>
+                </li>
+                <li>
+                  <a href="index.html" onclick="removeCookie('accessToken');"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Sign out</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-    </nav>
-    
-    <!--Sidebar-->
-    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="Sidebar">
-        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
-           <ul class="space-y-2 font-medium">
-              <li>
-                <a href="#" class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
-                    <ion-icon name="home-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
-                    <span class="mt-1 ms-3">Dashboard</span>
-                </a>
-              </li>
-              <li>
-                <a href="trainerWorkoutPlan.html" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
-                    <ion-icon name="barbell-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
-                    <span class="mt-1 ms-3">Workout Plan</span>
-                </a>
-              </li>
-              <li>
-                <a href="trainerMealPlan.html" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
-                    <ion-icon name="egg-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
-                    <span class="mt-1 ms-3">Meal Plan</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
-                    <ion-icon name="people-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
-                    <span class="mt-1 ms-3">Students</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
-                    <ion-icon name="chatbubbles-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
-                    <span class="mt-1 ms-3">Chat</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group" onclick="setActive(this)">
-                    <ion-icon name="settings-outline" class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white" aria-hidden="true"></ion-icon>
-                    <span class="mt-1 ms-3">Settings</span>
-                </a>
-            </li>
-           </ul>
-        </div>
-    </aside>
-
-    <!--Dashboard Content-->
-    <div class="sm:ml-64">
-        <div class="m-4 p-4 border-dashed border-gray-200 dark:border-gray-700 border-2 rounded-lg mt-20">
-           <p class="dark:text-white text-gray-800">Main content area, pending sa ni kay idk what to put</p>
-           <p></p>
-        </div>
+      </div>
     </div>
+  </nav>
 
-<script src="../../scripts/trainer.js"></script>
+  <!--Sidebar-->
+  <aside id="logo-sidebar"
+    class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+    Sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+      <ul class="space-y-2 font-medium">
+        <li>
+          <a href="#"
+            class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="home-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a onclick="redirectFunction(1)"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="barbell-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Workout Plan</span>
+          </a>
+        </li>
+        <li>
+          <a onclick="redirectFunction(2)"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="egg-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Meal Plan</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="people-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Students</span>
+          </a>
+        </li>
+        <li>
+          <a href="chat.html"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="chatbubbles-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Chat</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="settings-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!--Dashboard Content-->
+  <div class="sm:ml-64">
+    <div class="m-4 p-6 border-dashed border-gray-200 dark:border-gray-700 border-2 rounded-lg mt-20 dark:bg-gray-800">
+      <h1 class="text-4xl font-bold text-orange-400 dark:text-orange-400 mb-2">Good day, <span id="user-name"></span>!
+      </h1>
+      <p class="dark:text-gray-300 text-gray-700">Welcome to your dashboard. Here's where your main content will go.</p>
+    </div>
+  </div>
+
+
+  <script src="../../scripts/trainer.js"></script>
 </body>
+<script>
+  let trainerid;
+  document.addEventListener('DOMContentLoaded', () => {
+    id = window.userId;
+
+    // Fetch and assign member information when the page loads
+    fetchTrainerInfo();
+    function fetchTrainerInfo() {
+      console.log(id)
+      axios.get('http://localhost:3000/getTrainerInfo', {
+        params: {
+          user_id: id
+        }
+      })
+        .then(response => {
+          const trainerData = response.data[0];
+          trainerid = trainerData.trainer_id;
+          console.log(response.data[0])
+          console.log(trainerid)
+          document.getElementById("user-name").textContent = response.data[0].firstname
+        })
+        .catch(error => {
+          console.error('Error fetching trainer info:', error);
+        });
+    }
+  });
+  function redirectFunction(path) {
+    if (path == 1) {
+      setCookie('trainer_id', trainerid, 1); // Expires in 1 day
+      window.location.href = 'trainerWorkoutPlan.html';
+    }else{
+      setCookie('trainer_id', trainerid, 1); // Expires in 1 day
+      window.location.href = 'trainerMealPlan.html';
+    }
+  }
+  function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  }
+
+  function removeCookie(name) {
+    console.log("clicked")
+    document.cookie = name + '=; Max-Age=0; path=/';
+  }
+</script>
+
 </html>

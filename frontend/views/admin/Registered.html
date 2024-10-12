@@ -1,1 +1,231 @@
-WALA PA SIR SORRY KAAYO SA TANAN :<
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Pending Registrations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="../../dist/tailwind.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+    .page_title {
+        border-bottom: 2px solid;
+        border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
+    }
+
+    .sidebar,
+    .sidebar-links {
+        overflow-x: hidden;
+    }
+
+    .sidebar:hover .Menu {
+        opacity: 1;
+    }
+
+    .sidebar:hover .menu-separator {
+        transition-delay: 0s;
+        transform: scaleX(0);
+    }
+</style>
+
+<body class="min-h-screen bg-[#343639] font-customFont ">
+    <div id="content_container" class="">
+        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
+            <div class="flex items-center justify-center">
+                <a href="#" class="list-none">
+                    <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
+                </a>
+            </div>
+
+            <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
+                <!--Home-->
+                <li>
+                    <a href="adminDashboard.html" class="btn active flex items-center justify-center text-2xl">
+                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color:#ffffff"></i>
+                    </a>
+                    <span class="tooltip-home absolute text-lg">Home</span>
+                </li>
+
+                <!--Pending Gym Registration-->
+                <li class="mt-6">
+                    <a href="Pending.html" class="btn flex items-center justify-center text-2xl">
+                        <i class='bx bx-time' style="color:white"></i> <!-- Changed to a clock icon -->
+                    </a>
+                    <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
+                </li>
+
+                <!--Registered Gym-->
+                <li class="mt-6">
+                    <a href="Registered.html" class="btn flex items-center justify-center text-2xl">
+                        <i class='bx bx-list-check' style="color:white"></i>
+                    </a>
+                    <span class="tooltip-workout absolute text-lg">Registered Gym</span>
+                </li>
+
+                <!-- Settings -->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class='bx bx-cog' style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-workout absolute text-lg">Settings</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="title_div">
+            <h1
+                class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
+                <span class="page_title font-normal text-xl">
+                    Verified Gyms
+                </span>
+            </h1>
+        </div>
+
+        <div class="bg-[#323538] border border-50 shadow-black shadow-md rounded-lg p-6 ml-32 mr-10">
+            <h2 class="text-xl font-bold mb-4 text-white">Verified Gyms</h2>
+            <div class="space-y-4" id="gym-registration-cards">
+                <!-- Cards will be dynamically inserted here -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Popup for viewing the permit -->
+    <div id="view_permit" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white hidden">
+        <div class="popup-content">
+            <button onclick="close_Img()" class="text-right text-4xl text-white hover:text-gray-400">x</button>
+            <img id="permit_image" src="" class="w-96 mt-4" alt="permit_image">
+        </div>
+    </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <!-- Ensures the circle stays round even if the text is long -->
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full flex-shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>
+<!-- <script src="../../scripts/registration.js"></script> -->
+<script>
+    // Function to fetch pending gym registrations
+    function fetchPendingGyms() {
+        axios.get('http://localhost:3000/getAllVerifiedGyms')
+            .then(response => {
+                const gyms = response.data;
+                const gymContainer = document.getElementById('gym-registration-cards');
+
+                // Clear any existing content
+                gymContainer.innerHTML = '';
+
+                // Loop through each gym data and create HTML elements
+                gyms.forEach(gym => {
+                    const gymCard = document.createElement('div');
+                    gymCard.className = 'bg-gray-600 p-4 rounded-lg flex justify-between items-center shadow-sm';
+
+                    gymCard.innerHTML = `
+                        <div>
+                            <h3 class="font-semibold text-white">${gym.gym_name}</h3>
+                            <p class="text-sm text-gray-400">Owner: ${gym.Owner_name}</p>
+                            <p class="text-sm text-gray-400">Email: ${gym.email}</p>
+                            <p class="text-sm text-gray-400">Contact number: ${gym.contact_no}</p>
+                            <p class="text-sm text-gray-400">Gym address: ${gym.street_address}</p>
+                            <p class="text-sm text-gray-400">Business Permit: ${gym.document_path ? 'Yes' : 'No'} 
+                                <button class="text-purple-500" onclick="view_Permit('http://localhost:3000/uploads/${gym.document_path}')">[View permit]</button>
+                            </p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bg-50 text-white px-3 py-1 rounded-md hover:bg-orange-600">View gym</button>
+                        </div>
+                    `;
+
+                    gymContainer.appendChild(gymCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching gyms:', error);
+            });
+    }
+
+    function view_Permit(imagePath) {
+        const permitImage = document.getElementById('permit_image');
+        permitImage.src = imagePath; // Set the source of the image to the path
+        const viewPermit = document.getElementById('view_permit');
+        viewPermit.classList.remove('hidden'); // Show the popup
+    }
+
+    // Function to close the image popup
+    function close_Img() {
+        const viewPermit = document.getElementById('view_permit');
+        viewPermit.classList.add('hidden'); // Hide the popup
+    }
+
+    function approve(id) {
+        const formData = {
+            gym_id: id
+        };
+        axios.put('http://localhost:3000/ApproveGym', formData)
+            .then(response => {
+                showToast("success", `Gym approved!`);
+                setTimeout(() => {
+                    window.location.href = '../../views/admin/Pending.html'
+                }, 1500)
+            })
+            .catch(error => {
+                console.error('Error updating the status:', error.message);
+            });
+    }
+
+    function showToast(type, message) {
+        const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
+        const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error
+
+        // Set the message
+        messageElement.textContent = message;
+
+        // Show and slide in the toast
+        toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+        toast.classList.add('translate-x-0'); // Move the toast in view
+
+        // Auto-hide the toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');  // Slide toast out to the right
+            setTimeout(() => {
+                toast.classList.add('hidden'); // Hide completely after the transition
+            }, 300);  // Wait for the transition to complete before hiding
+        }, 2500); // Ensure this is set to 3000 ms (3 seconds) for visibility
+    }
+    // Fetch gyms when the page loads
+    window.onload = fetchPendingGyms;
+</script>

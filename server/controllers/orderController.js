@@ -1,4 +1,5 @@
 const { addPaymentRecord: addPaymentRecordToDb, addSubscriptionRecord } = require('../models/database');
+const { insertClientPayment } = require('../models/payment');
 
 module.exports = {
     handleAddPaymentRecord: async (admin_id, gym_id, subscription_id, amount, payment_status) => {
@@ -15,6 +16,23 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error adding payment record:", error);
+            throw new Error("Internal Server Error");
+        }
+    },
+    handleClientPayment: async (contract_id, amount) => {
+        try {
+            const result = await insertClientPayment(contract_id, amount);
+
+            console.log("Database result:", result); // Log the result
+
+            // Check if result is in expected format
+            if (result && result.affectedRows > 0) {
+                return { success: true, message: "Client Payment record added successfully" };
+            } else {
+                return { success: false, message: "Failed to add client payment record" };
+            }
+        } catch (error) {
+            console.error("Error adding client payment record:", error);
             throw new Error("Internal Server Error");
         }
     },

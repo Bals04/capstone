@@ -14,7 +14,7 @@ module.exports = {
                     password: hash,
                     usertype: usertype
                 }).then(() => {
-                    res.json("USER REGISTERED");
+                    res.json("USER REGISTERED"); 
                 }).catch((err) => {
                     if (err) {
                         res.status(400).json({ error: err.message });

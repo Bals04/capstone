@@ -8,15 +8,11 @@ const pool = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
 }).promise()
-// Log the credentials without the password
-console.log('Database connection details:');
-console.log(`Host: ${process.env.MYSQL_HOST}`);
-console.log(`User: ${process.env.MYSQL_USER}`);
-console.log(`Database: ${process.env.MYSQL_DATABASE}`);
+
 
 async function getGymInfo() {
     const [rows] = await pool.query(
-        `SELECT 
+        `   SELECT 
             g.gym_id, 
             g.gym_name, 
             g.latitude, 
@@ -33,7 +29,11 @@ async function getGymInfo() {
             gym_ratings r ON g.gym_id = r.gym_id
         LEFT JOIN 
             gym_images i ON g.gym_id = i.gym_id
-        WHERE g.status = 'Verified'
+        LEFT JOIN 
+            payments_table p ON p.gym_id = g.gym_id
+        WHERE 
+            g.status = 'Verified' 
+            AND NOW() <= DATE_ADD(p.payment_date, INTERVAL (SELECT duration_months FROM subscriptions WHERE subscription_id = p.subscription_id) MONTH)
         GROUP BY 
             g.gym_id, 
             g.gym_name, 
@@ -150,10 +150,21 @@ async function getWorkoutoftheDay(memberId, date) {
         `, [memberId, date])
     return rows
 }
-async function getTemplates() {
-    const [rows] = await pool.query(`SELECT * FROM workout_plan_templates`)
-    return rows
+async function getTemplates(trainer_id, table) {
+    const allowedTables = ['workout_plan_templates', 'meal_plan_templates']; // Add other table names if needed
+    if (!allowedTables.includes(table)) {
+        throw new Error(`Invalid table name: ${table}`);
+    }
+
+    const query = `
+        SELECT * FROM \`${table}\`
+        WHERE trainer_id = ?
+    `;
+    const [rows] = await pool.query(query, [trainer_id]);
+    return rows;
 }
+
+
 
 async function AddTemplate(trainer_id, name, desc) {
     const result = await pool.query(`
@@ -225,6 +236,36 @@ async function getPendingGyms() {
         LEFT JOIN
         	gym_admin a ON g.admin_id = a.admin_id
         WHERE g.status = 'Pending'
+        GROUP BY 
+            g.gym_id, 
+            g.gym_name, 
+            g.contact_no, 
+            g.street_address,
+            d.document_path,
+            i.img_path;`
+    )
+    return rows
+}
+async function getAllVerifiedGyms() {
+    const [rows] = await pool.query(
+        `SELECT 
+            g.gym_id, 
+            g.gym_name, 
+            CONCAT(a.lastname, ', ', a.firstname) Owner_name,
+            g.contact_no,
+            a.email,
+            g.street_address, 
+            i.img_path,
+            d.document_path
+        FROM 
+            gyms g 
+        LEFT JOIN 
+            gym_images i ON g.gym_id = i.gym_id
+        LEFT JOIN 
+            gym_documents d ON g.gym_id = d.gym_id
+        LEFT JOIN
+        	gym_admin a ON g.admin_id = a.admin_id
+        WHERE g.status = 'Verified'
         GROUP BY 
             g.gym_id, 
             g.gym_name, 
@@ -453,9 +494,10 @@ async function retrieveMemberChatLog(trainer_id) {
 
 async function retrieveTrainerchatLog(member_id) {
     const [result] = await pool.query(`
-        SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS trainer_name, c.trainer_id
+        SELECT c.id, CONCAT(m.lastname,', ',m.firstname) AS trainer_name, c.trainer_id, i.filename
         FROM conversation_tbl c
         INNER JOIN trainers m ON c.trainer_id = m.trainer_id
+        INNER JOIN trainer_images i ON c.trainer_id = i.trainer_id
         WHERE member_id = ?
     `, [member_id])
 
@@ -472,8 +514,39 @@ async function getGymsByID(admin_id) {
     return result
 }
 
+async function getTemplateId(template_name, table) {
+    // Define a whitelist of allowed table names (to prevent SQL injection)
+    const allowedTables = ['workout_plan_templates', 'meal_plan_templates']; // Add other table names if needed
+
+    if (!allowedTables.includes(table)) {
+        throw new Error(`Invalid table name: ${table}`);
+    }
+
+    const query = `
+        SELECT * FROM \`${table}\`
+        WHERE template_name = ?
+    `;
+
+    const [result] = await pool.query(query, [template_name]);
+    return result;
+}
+async function getSales() {
+    const [result] = await pool.query(`
+            SELECT MONTH(payment_date) AS month, YEAR(payment_date) AS year, SUM(amount) AS total_amount, COUNT(gym_id) AS gym_count
+            FROM payments_table
+            GROUP BY YEAR(payment_date), MONTH(payment_date)
+            ORDER BY year, month;`)
+
+    return result
+}
+
+
+
 
 module.exports = {
+    getSales,
+    getAllVerifiedGyms,
+    getTemplateId,
     getGymsByID,
     retrieveTrainerchatLog,
     retrieveMemberChatLog,

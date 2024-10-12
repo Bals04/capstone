@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userType === 'Member') {
             window.location.href = '/frontend/views/member/memberDashboard.html';
         } else if (userType === 'Trainer') {
-            window.location.href = '/frontend/views/trainer/chat.html';
+            window.location.href = '/frontend/views/trainer/index.html';
         } else if (userType === 'Admin') {
             window.location.href = '/frontend/views/admin/adminDashboard.html';
         } else if (userType === 'Gym admin') {

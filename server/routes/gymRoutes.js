@@ -16,6 +16,7 @@ router.get("/getPendingGyms", GymController.getPendingGyms);
 router.get("/getPendingGymsByID", GymController.getPendingGymsByID); 
 router.get("/getPaymentPendingGyms", GymController.getPaymentPendingGyms); 
 router.get("/getVerifiedGyms", GymController.getVerifiedGyms); 
+router.get("/getAllVerifiedGyms", GymController.getAllVerifiedGyms); 
 router.post("/RegisterGym",validation(gymSchema), GymController.RegisterGym); 
 router.post("/AddGymDocuments", GymController.AddGymDocuments); 
 router.post("/AddGymLogo", GymController.AddGymLogo); 

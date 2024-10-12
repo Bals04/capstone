@@ -18,10 +18,12 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="/frontend/scripts/auth.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <style>
-            @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
-            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
         .page_title {
             border-bottom: 2px solid;
             border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
@@ -142,7 +144,7 @@
                 <!--Pending Gym Registration-->
                 <li class="mt-6">
                     <a href="Pending.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-dots-horizontal-rounded' aria-hidden="true" style="color:#ffffff"></i>
+                        <i class='bx bx-time' style="color:white"></i> <!-- Changed to a clock icon -->
                     </a>
                     <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
@@ -168,7 +170,7 @@
         <div
             class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
             <h1 class="">
-                <span class="page_title font-normal">
+                <span class="page_title font-normal text-xl">
                     Dashboard
                 </span>
             </h1>
@@ -210,7 +212,7 @@
                         class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300 flex items-center gap-3">
                         <i class="fas fa-check-circle text-3xl"></i> <!-- Registered Icon -->
                         <div>
-                            <span class="text-lg">Registered Gym(s)</span><br>
+                            <span class="text-lg">Verified Gym(s)</span><br>
                             <span class="font-bold ml-3">1</span>
                         </div>
                     </a>
@@ -254,12 +256,12 @@
             </div>
         </div>
     </div>
-    <div class="container p-4 pl-[120px] shadow-lg">
+    <div class="container w-full p-4 pl-[120px] shadow-lg">
         <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
-        <div class="bg-div_color p-6 shadow-xl max-w-3xl border-border_color border-2 rounded-lg">
+        <div class="bg-div_color p-6 shadow-xl w-full border-border_color border-2 rounded-lg">
             <table class="w-full text-white table-auto border-collapse rounded-sm">
                 <thead>
-                    <tr class="bg-orange-600">
+                    <tr class="bg-50">
                         <th class="p-3 border-b-2 border-border_color text-center">Gym Admin</th>
                         <th class="p-3 border-b-2 border-border_color text-center">Gym Name</th>
                         <th class="p-3 border-b-2 border-border_color text-center">Street Address</th>
@@ -267,23 +269,20 @@
                         <th class="p-3 border-b-2 border-border_color text-center">Subscription Status</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Example Row -->
-                    <tr class="bg-gray-800 hover:bg-gray-600">
-                        <td class="p-3 border-b border-border_color text-center align-middle">John Doe</td>
-                        <td class="p-3 border-b border-border_color text-center align-middle">Fitness Pro Gym</td>
-                        <td class="p-3 border-b border-border_color text-center align-middle">123 Street Name</td>
-                        <td class="p-3 border-b border-border_color text-center align-middle">Monthly</td>
-                        <td class="p-3 border-b border-border_color text-center align-middle">
-                            <span class="bg-50 text-white px-2 py-1 rounded-full">Active</span>
-                        </td>
-                    </tr>
-                    <!-- Repeat for each registered gym -->
+                <tbody id="gym-data">
+                    <!-- Dynamic data will be inserted here -->
                 </tbody>
             </table>
         </div>
-
     </div>
+    <div class="container p-4 pl-[120px] shadow-lg ">
+        <h2 class="text-white text-2xl font-bold mb-4 mt-10">Monthly Revenue</h2>
+        <div class="bg-div_color p-6 w-full rounded-lg shadow-xl border-border_color border-2">
+            <canvas id="myChart" class="bg-div_color w-full "></canvas>
+        </div>
+    </div>
+
+
 
 
 </body>
@@ -351,4 +350,151 @@
             renderCalendar();
         });
     });
+
+    // Function to dynamically populate the table
+    function populateTable(data) {
+        const tbody = document.getElementById('gym-data');
+        tbody.innerHTML = ''; // Clear the table before appending new data
+
+        data.forEach(item => {
+            // Create a table row
+            const tr = document.createElement('tr');
+            tr.classList.add('bg-gray-800', 'hover:bg-gray-600');
+
+            // Insert table data cells with the response data
+            tr.innerHTML = `
+                <td class="p-3 border-b border-border_color text-center align-middle">${item.gym_admin}</td>
+                <td class="p-3 border-b border-border_color text-center align-middle">${item.gym_name}</td>
+                <td class="p-3 border-b border-border_color text-center align-middle">${item.street_address}</td>
+                <td class="p-3 border-b border-border_color text-center align-middle">${item.Subscription}</td>
+                <td class="p-3 border-b border-border_color text-center align-middle">
+                    <span class="bg-50 text-white px-2 py-1 rounded-full ${item.membership_status === 'Active' ? 'bg-green-600' : 'bg-gray-500'}">
+                        ${item.membership_status}
+                    </span>
+                </td>
+            `;
+            // Append the row to the table body
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Function to fetch data using Axios
+    function fetchGymData() {
+        axios.get('http://localhost:3000/getVerifiedAdmins')
+            .then(response => {
+                // Populate the table with data from the response
+                populateTable(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the gym data!', error);
+            });
+    }
+
+    // Fetch the data when the page loads
+
+    // --------------------For the Chart----------------
+
+    // --------------------For the Chart----------------
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label: 'Sales Amount',
+                    data: [/* your sales data */],
+                    backgroundColor: 'rgba(245, 127, 39, 0.5)',
+                    borderColor: 'rgba(285, 147, 49, 0.5)',
+                    borderWidth: 1,
+                    yAxisID: 'y' // Associate this dataset with the first y-axis
+                },
+                {
+                    label: 'Registered Gyms',
+                    data: [/* your gym data */],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y1' // Associate this dataset with the second y-axis
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'left', // The first y-axis for sales
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right', // The second y-axis for gyms
+                    grid: {
+                        drawOnChartArea: false, // Prevent grid lines from overlapping
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            }
+        }
+    });
+
+    // Fetch data using Axios
+    axios.get('http://localhost:3000/getSales')
+        .then(response => {
+            const salesData = response.data;
+
+            // Initialize arrays for monthly sales and registered gyms with 12 slots (one for each month)
+            const monthlySales = Array(12).fill(0);  // For sales amounts
+            const GymsRegistered = Array(12).fill(0);  // For gym registrations
+
+            // Iterate over the API response to populate the respective months
+            salesData.forEach(sale => {
+                monthlySales[sale.month - 1] = parseFloat(sale.total_amount); // Assign total amount to correct month
+                GymsRegistered[sale.month - 1] = sale.gym_count; // Assign gym count to correct month
+            });
+
+
+
+            // Ensure chart is updated after data fetch
+            myChart.data.datasets[0].data = monthlySales;  // First bar: Sales amounts
+            myChart.data.datasets[1].data = GymsRegistered;  // Second bar: Gym registrations
+
+            // Debugging: Check if the chart dataset is being updated correctly
+            console.log("Updated Dataset for Gyms Registered: ", myChart.data.datasets[1].data);
+
+            myChart.update();  // Refresh the chart with new data
+        })
+        .catch(error => {
+            console.error("Error fetching sales data: ", error);
+        });
+
+
+
+    window.onload = fetchGymData;
 </script>

@@ -1,4 +1,5 @@
 const { getWorkoutOftheWeek, getWorkoutoftheDay, GetMemberInfo, retrieveTrainerchatLog} = require('../models/database');
+const { getNotifications,getProposals,insertContract } = require('../models/members');
 
 module.exports = {
     GetTodaysMeal: async (req, res) => {
@@ -41,6 +42,40 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching members chatlog:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    getNotifications: async (req, res) => {
+        try {
+            const { member_id } = req.query;
+            console.log("received data: ", member_id)
+            const data = await getNotifications(member_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching members notifications:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    getProposals: async (req, res) => {
+        try {
+            const { member_id, proposal_id } = req.query;
+            const data = await getProposals(member_id, proposal_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching members proposals:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+
+    insertContract: async (req, res) => {
+        try {
+            const { proposal_id, weeks, status } = req.body;
+            const data = await insertContract(proposal_id, weeks, status);
+            res.status(200).json({ message: "Contract added successfully", contract_id:  data  });
+        } catch (error) {
+            console.error("Error adding contracts:", error.message);
             res.status(500).send("Internal Server Error");
         }
     }

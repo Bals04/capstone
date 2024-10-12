@@ -1,3 +1,4 @@
+
 const monthYearElement = document.getElementById('monthYear');
 const calendarBody = document.getElementById('calendarBody');
 const prevButton = document.getElementById('prevButton');

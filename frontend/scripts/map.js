@@ -111,7 +111,7 @@ async function fetchGyms() {
                 // Create your popup content dynamically
                 const popupContent = `
         <div>
-            <img src="${gym.img}" alt="Gym Image" style="max-width: 100%; height: auto;">
+            <img src="http://localhost:3000/uploads/${gym.img}" alt="Gym Image" style="max-width: 100%; height: auto;">
             <h3>${gym.name}</h3>
             <p><strong>Daily rates:</strong> ${gym.dailyRates}</p>
             <p><strong>Monthly rates:</strong> ${gym.monthlyRates}</p>
@@ -381,7 +381,7 @@ function showNearby(distances) {
         <button><ion-icon name="close-outline"></ion-icon></button>
     </div>
     <div class="w-full h-40 bg-customGrayBtn rounded-t-lg"
-        style="background-image: url('${gym.img}'); background-size: cover; background-position: center;">
+        style="background-image: url('http://localhost:3000/uploads/${gym.img}'); background-size: cover; background-position: center;">
     </div>
     <div class="p2 mt-2">
         <h3 class="text-lg font-semibold"> ${gym.name}</h3>
@@ -603,6 +603,8 @@ function populateAllGymsList() {
     gymsList.innerHTML = "";
     // Add new list items - ITEMS PARA SA GYMS AROUND THE CITY
     gyms.forEach(function (g, index) {
+        console.table(g.img)
+        
         var listItem = document.createElement("div");
         listItem.classList.add(
             "gym-item",
@@ -623,7 +625,7 @@ function populateAllGymsList() {
             "text-white"
         );
         var content = ` 
-        <img src="${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
+        <img src="http://localhost:3000/uploads/${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
         <div class="flex flex-col">
             <div class="al-gym-name text-lg font-bold">${g.name}</div>
             <div class="text-sm mb-1">  

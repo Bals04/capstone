@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Meal to Template</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+    <div class="max-w-4xl w-full p-6 bg-white rounded-md shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">Add Meal to Template</h2>
+
+        <!-- Scrollable Form Container -->
+        <div class="overflow-y-auto h-96 p-4 border rounded-md bg-gray-50">
+            <!-- Meal Template Form -->
+            <form id="meal-form">
+                <!-- Meal Name -->
+                <div class="mb-4">
+                    <label for="meal_name" class="block text-sm font-semibold text-gray-600">Meal Name</label>
+                    <input type="text" id="meal_name" name="meal_name" class="block w-full mt-1 p-2 border rounded-md"
+                        required>
+                </div>
+
+                <!-- Classification -->
+                <div class="mb-4">
+                    <label for="classification" class="block text-sm font-semibold text-gray-600">Classification</label>
+                    <input type="text" id="classification" name="classification"
+                        class="block w-full mt-1 p-2 border rounded-md" required>
+                </div>
+
+                <!-- Macros (Protein, Carbohydrates, Fats) -->
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="protein" class="block text-sm font-semibold text-gray-600">Protein (g)</label>
+                        <input type="number" step="0.01" id="protein" name="protein"
+                            class="block w-full mt-1 p-2 border rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="carbohydrates" class="block text-sm font-semibold text-gray-600">Carbohydrates
+                            (g)</label>
+                        <input type="number" step="0.01" id="carbohydrates" name="carbohydrates"
+                            class="block w-full mt-1 p-2 border rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="fats" class="block text-sm font-semibold text-gray-600">Fats (g)</label>
+                        <input type="number" step="0.01" id="fats" name="fats"
+                            class="block w-full mt-1 p-2 border rounded-md" required>
+                    </div>
+                </div>
+
+                <!-- Week No -->
+                <div class="mb-4">
+                    <label for="week_no" class="block text-sm font-semibold text-gray-600">Week Number</label>
+                    <input type="number" id="week_no" name="week_no" class="block w-full mt-1 p-2 border rounded-md"
+                        required>
+                </div>
+
+                <!-- Day No -->
+                <div class="mb-4">
+                    <label for="day_no" class="block text-sm font-semibold text-gray-600">Day Number</label>
+                    <input type="number" id="day_no" name="day_no" class="block w-full mt-1 p-2 border rounded-md"
+                        required>
+                </div>
+
+                <!-- Steps Section -->
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Steps for Preparing the Meal</h3>
+
+                <div id="steps">
+                    <div class="mb-4 step-item">
+                        <label for="step_1" class="block text-sm font-semibold text-gray-600">Step 1</label>
+                        <input type="hidden" name="step_numbers[]" value="1">
+                        <input type="text" id="step_1" name="steps[]" class="block w-full mt-1 p-2 border rounded-md"
+                            required>
+                    </div>
+                </div>
+
+                <!-- Add Step Button -->
+                <button type="button" onclick="addStep()" class="bg-blue-500 text-white px-4 py-2 rounded">Add Another
+                    Step</button>
+
+                <!-- Submit Button -->
+                <div class="mt-6">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit Meal
+                        Template</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <!-- Ensures the circle stays round even if the text is long -->
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full flex-shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div id="error-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-orange-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-orange-600">Form Error</h2>
+                <p id="error-message-toast" class="text-sm text-gray-600">Your error message here</p>
+            </div>
+            <button id="close-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let stepCount = 1;
+        let template_item_id = 0
+        const templateName = getCookie("template_name");
+        let templateId = getCookie('template_id');  // Ensure templateId is accessible globally
+
+        // Fetch the template information when the page loads
+        //fetchTemplateInfo();
+
+        // Add dynamic steps with incrementing step numbers
+        function addStep() {
+            stepCount++;
+            const stepContainer = document.createElement('div');
+            stepContainer.classList.add('mb-4', 'step-item');
+            stepContainer.innerHTML = `
+                <label for="step_${stepCount}" class="block text-sm font-semibold text-gray-600">Step ${stepCount}</label>
+                <input type="hidden" name="step_numbers[]" value="${stepCount}">
+                <input type="text" id="step_${stepCount}" name="steps[]" class="block w-full mt-1 p-2 border rounded-md" required>
+            `;
+            document.getElementById('steps').appendChild(stepContainer);
+        }
+
+        // Handle form submission
+        // Handle form submission
+        document.getElementById('meal-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this); // Get all form data
+            const formObject = {
+                meal_template_id: templateId, // Ensure this is included
+            };
+
+            // Map relevant form fields to formObject
+            formObject.meal_name = formData.get('meal_name');
+            formObject.classification = formData.get('classification');
+            formObject.protein = formData.get('protein');
+            formObject.carbohydrates = formData.get('carbohydrates');
+            formObject.fats = formData.get('fats');
+            formObject.week_no = formData.get('week_no');
+            formObject.day_no = formData.get('day_no');
+
+            // Log the steps values
+            const steps = document.querySelectorAll('input[name="steps[]"]');
+            const stepsArray = [];
+
+            steps.forEach(step => {
+                stepsArray.push(step.value);  // Store each step value in the array
+            });
+
+            // Add steps to formObject
+            formObject.steps = stepsArray;
+
+            console.log("Form Data with Steps: ", formObject);
+
+            // Make sure template_id is present
+            if (!templateId) {
+                console.error("Template ID not found!");
+                return;
+            }
+
+            // Make POST request to submit data
+            axios.post('http://localhost:3000/createMealTemplateItems', formObject)
+                .then(function (response) {
+                    console.log('Meal Template Items added successfully!', response);
+                    template_item_id = response.data.mealItemId;
+                    // Clear form, reset step count, or close modal if needed
+                    insertSteps(stepsArray);
+                    showToast("success", "Meal template item added successfully!");
+                })
+                .catch(function (error) {
+                    if (error.response && error.response.data.message) {
+                        const errorMessage = error.response.data.message;  // Access the error message directly
+                        showErrorToast(errorMessage);
+                    } else {
+                        console.error('Error:', error.response ? error.response.data : error.message);
+                    }
+                });
+        });
+
+        // Insert the steps into the database
+        // template_item_id, step_number, instruction
+        function insertSteps(stepsArray) {
+            let stepNumber = 0
+            stepsArray.forEach(step => {
+                stepNumber++
+                const stepObject = {
+                    template_item_id: template_item_id,  // Ensure the templateId is included for each step
+                    step_number: stepNumber,  // Send each individual step
+                    instruction: step,
+                };
+                axios.post('http://localhost:3000/createMealSteps', stepObject)
+                    .then(response => {
+                        console.log('Step added successfully!', response);
+                    })
+                    .catch(error => {
+                        console.error('Error adding step:', error);
+                    });
+            });
+        }
+
+        // Fetch the template ID using template name
+
+        // Function to get cookie value by name
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function showToast(type, message) {
+            const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
+            const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error
+
+            // Set the message
+            messageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => {
+                    toast.classList.add('hidden'); // Hide completely after the transition
+                }, 300);  // Wait for the transition to complete before hiding
+            }, 2500); // Ensure this is set to 3000 ms (3 seconds) for visibility
+        }
+        function showErrorToast(message) {
+            const toast = document.getElementById('error-toast');
+            const errorMessageElement = document.getElementById('error-message-toast');
+
+            // Set the error message
+            errorMessageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove the hidden state and the off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+            }, 3000);
+        }
+
+    </script>
+
+
+</body>
+
+</html>
