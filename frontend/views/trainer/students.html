@@ -1,114 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Students</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link href="../../dist/tailwind.css" rel="stylesheet">
-  <style>
-    #view_students th {
-      padding-top: 12px;
-      padding-bottom: 12px;
-      background-color: #EC7E4A;
-      color: white;
-    }
-    #view_students tr:nth-child(even){background-color: #5F6163;}
-    #view_students td, #view_students th {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-  /*Custom CSS for Sidebar hover*/
-    .sidebar:hover .Menu {
-      opacity: 1;
-    }
-    .sidebar:hover .menu-separator {
-      transition-delay: 0s;
-      transform: scaleX(0);
-    }
-    .sidebar, .sidebar-links{
-      overflow-x: hidden;
-    }
-    .page_title {
-      border-bottom: 2px solid;
-      border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainer Portal</title>
+  <link rel="stylesheet" href="../../dist/tailwind.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/frontend/scripts/auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="min-h-screen bg-[#343639] font-customFont">
-  <aside class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col overflow-y-hidden p-[25px_20px] transition-all duration-400 ease hover:w-[260px] bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
-    <div class="sidebar-header flex items-center">
-      <img class="w-[42px] rounded-full" src="../img/Flexperience logo.png" alt="logo" />
-      <h2 class="text-white text-xl font-semibold whitespace-nowrap ml-[23px]">Flexperience</h2>
+
+<body class="min-h-screen font-[Poppins] bg-customGray">
+
+  <!--Header-->
+  <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+            aria-controls="logo-sidebar" type="button"
+            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+              </path>
+            </svg>
+          </button>
+          <a href="#" class="flex ms-2 md:me-24">
+            <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+            <span
+              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <div class="flex items-center ms-3">
+            <div class="mr-6 mt-1">
+              <button>
+                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+              </button>
+            </div>
+            <div>
+              <button type="button" id="userDropdownToggle"
+                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false"
+                data-dropdown-toggle="dropdown-user">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+              </button>
+            </div>
+            <div
+              class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+              id="dropdown-user">
+              <div class="px-4 py-3" role="none">
+                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                  Heinz Padilla
+                </p>
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                  heinzpadilla2024@flexperience.com
+                </p>
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Dashboard</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Earnings</a>
+                </li>
+                <li>
+                  <a href="index.html" onclick="removeCookie('accessToken');"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Sign out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </nav>
 
-    <ul class="sidebar-links list-none mt-[20px] h-[80%] overflow-y-auto scrollbar-none">
-      <h4  class="text-white font-medium whitespace-nowrap my-[10px] relative">
-        <span class="Menu opacity-0 delay-0">Main Menu</span>
-        <div class="menu-separator absolute left-0 top-1/2 w-full h-[1px] bg-black transform scale-x-100 -translate-y-1/2 origin-right transition-transform"></div>
-      </h4>
-
-      <li>
-        <a href="index.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
-      </li>
-      <li>
-        <a href="workoutplans.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined"> fitness_center </span>Workout Plans</a>
-      </li>
-      <li>
-        <a href="mealplans.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined">restaurant</span>Meal Plans</a>
-      </li>
-      <li>
-        <a href="students.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined">groups</span>Members</a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF] hover:rounded-[4px]"><span class="material-symbols-outlined">settings</span>Settings</a>
-      </li>
+  <!--Sidebar-->
+  <aside id="logo-sidebar"
+    class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+    Sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+      <ul class="space-y-2 font-medium">
+        <li>
+          <a href="index.html"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="home-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a onclick="redirectFunction(1)"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="barbell-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Workout Plan</span>
+          </a>
+        </li>
+        <li>
+          <a onclick="redirectFunction(2)"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="egg-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Meal Plan</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 bg-customGray text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="people-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Students</span>
+          </a>
+        </li>
+        <li>
+          <a href="chat.html"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="chatbubbles-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Chat</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="settings-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </aside>
 
+  <!--Dashboard Content-->
+  <div class="sm:ml-64 text-white">
+    <div class="m-4 p-6 border-dashed mt-20 ">
+      <h1 class="font-bold text-2xl">
+        Student Lists
+      </h1>
+    </div>
 
-  <div class="title_div">
-    <h1 class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
-        <span class="page_title font-normal">
-            Students
-        </span>
-    </h1>
+    <div class="m-4 p-6">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <div class="inline-block text-left">
+            <div class="flex gap-3 items-center">
+              <h3>Show</h3>
+              <select class=" w-auto px-2 py-0 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" name="numbers" id="number-dropdown">
+                  <!-- Dropdown Options -->
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10" selected>10</option> <!-- Default selected value -->
+              </select>
+              <h3>entries</h3>
+            </div>
+          </div>
+          <form class="mx-3">   
+            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="search" id="default-search" class=" p-2 ps-10 text-sm text-gray-900 border rounded-lg focus:ring-white focus:border-white bg-transparent border-white dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white" placeholder="Search..." required />
+            </div>
+          </form>
+        </div>
+        <button class="flex items-center mx-5 bg-50 p-2 rounded-lg font-semibold hover:bg-white hover:shadow-lg hover:text-black transition duration-300">
+          <ion-icon name="add-outline"></ion-icon>
+          <span class="mx-3">Add Student</span>
+        </button>
+      </div>
+      
+      <div class="relative overflow-x-auto py-8"><div class="container mx-auto">
+        <!-- Table container -->
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-sm text-left rtl:text-right text-white ">
+                <thead class="text-xs uppercase bg-transparent border-b border-gray-500">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">NAME</th>
+                        <th scope="col" class="px-6 py-3">PLAN TYPE</th>
+                        <th scope="col" class="px-6 py-3">START DATE</th>
+                        <th scope="col" class="px-6 py-3">END DATE</th>
+                        <th scope="col" class="px-6 py-3">DAYS REMAINING</th>
+                        <th scope="col" class="px-6 py-3">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Rows will be dynamically injected via JavaScript -->
+                </tbody>
+            </table>
+            <!-- Pagination controls -->
+            <div id="pagination" class="flex justify-center items-center space-x-2 mt-4">
+                <!-- Pagination buttons will be dynamically generated -->
+            </div>
+        </div>
+
+    </div>
+      </div>
+
+    </div>
   </div>
 
-  <div id="view_students" class="mr-auto ml-auto mt-[50px] w-fit p-[20px] shadow-lg bg-[#323538] rounded-[10px] border border-[#EC7E4A]">
-    <div class="title_and_button flex justify-between mb-[20px]"> 
-        <h1 class="text-4xl text-white">Student Details</h1>
-        <!-- <button class="material-symbols-outlined" onclick="add_Student()">add <span>Add Workout</span></button> -->
-    </div>
-    <div>
-        <table class="w-[1000px] text-white">
-            <tr class="text-center">
-                <th>Name</th>
-                <th>Weight</th>
-                <th>Body Type</th>
-                <th>Actions</th>
-            </tr>
-            <tr class="text-center">
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td><button onclick="modify_Workout()" class="text-white p-[10px] bg-[#373D41] shadow-[1px_2px_4px_black] border border-[#EC7E4A] rounded-[10px] hover:text-white hover:bg-[#EC7E4A] hover:p-[10px] hover:rounded-[10px] hover:w-fit">Modify</button></td>
-            </tr>
-            <tr class="text-center">
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td><button onclick="modify_Workout()" class="text-white p-[10px] bg-[#373D41] shadow-[1px_2px_4px_black] border border-[#EC7E4A] rounded-[10px] hover:text-white hover:bg-[#EC7E4A] hover:p-[10px] hover:rounded-[10px] hover:w-fit">Modify</button></td>
-            </tr>
-            <tr class="text-center">
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td><button onclick="modify_Workout()" class="text-white p-[10px] bg-[#373D41] shadow-[1px_2px_4px_black] border border-[#EC7E4A] rounded-[10px] hover:text-white hover:bg-[#EC7E4A] hover:p-[10px] hover:rounded-[10px] hover:w-fit">Modify</button></td>
-            </tr>
-        </table>
-    </div>
-  </div>
 </body>
+<script src="../../scripts/trainer.js"></script>
+<script>
+  // Example data
+  const tableData = [
+      { name: 'Atlas Fox', planType: 'Comprehensive Plan', startDate: '2024-10-08', endDate: '2024-11-05', daysRemaining: 26 },
+      { name: 'Luna Sky', planType: 'Basic Plan', startDate: '2024-09-20', endDate: '2024-10-20', daysRemaining: 12 },
+      { name: 'Nova Star', planType: 'Premium Plan', startDate: '2024-09-15', endDate: '2024-12-15', daysRemaining: 63 },
+      { name: 'Artemis Ray', planType: 'Basic Plan', startDate: '2024-08-01', endDate: '2024-09-01', daysRemaining: -5 },
+      { name: 'Orion Pulse', planType: 'Comprehensive Plan', startDate: '2024-07-22', endDate: '2024-08-22', daysRemaining: -14 },
+      { name: 'Sirius Wave', planType: 'Premium Plan', startDate: '2024-06-10', endDate: '2024-07-10', daysRemaining: -60 },
+      { name: 'Phoenix Rise', planType: 'Comprehensive Plan', startDate: '2024-05-15', endDate: '2024-06-15', daysRemaining: -80 },
+      { name: 'Celeste Beam', planType: 'Basic Plan', startDate: '2024-04-01', endDate: '2024-05-01', daysRemaining: -150 },
+      { name: 'Vega Shield', planType: 'Comprehensive Plan', startDate: '2024-03-22', endDate: '2024-04-22', daysRemaining: -190 },
+      { name: 'Draco Wind', planType: 'Premium Plan', startDate: '2024-02-15', endDate: '2024-03-15', daysRemaining: -220 },
+      { name: 'Andromeda Drift', planType: 'Comprehensive Plan', startDate: '2024-01-10', endDate: '2024-02-10', daysRemaining: -250 },
+      { name: 'Nova Star', planType: 'Comprehensive Plan', startDate: '2024-01-10', endDate: '2024-02-10', daysRemaining: -250 },
+  ];
+
+  // Pagination variables
+  let currentPage = 1;
+  const rowsPerPage = 10;
+  const totalRows = tableData.length;
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+  // Function to render the table rows
+  function renderTable(page) {
+      const tableBody = document.getElementById('table-body');
+      tableBody.innerHTML = '';
+
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const pageData = tableData.slice(start, end);
+
+      pageData.forEach(row => {
+          const tableRow = `
+              <tr class="bg-transparent">
+                  <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                      ${row.name}
+                  </th>
+                  <td class="px-6 py-4">${row.planType}</td>
+                  <td class="px-6 py-4">${row.startDate}</td>
+                  <td class="px-6 py-4">${row.endDate}</td>
+                  <td class="px-6 py-4">${row.daysRemaining}</td>
+                  <td class="px-6 py-4">
+                      <button class="flex items-center gap-2 bg-div_color border border-white p-2 rounded-lg text-white hover:bg-white hover:text-black transition duration-300">
+                          <ion-icon name="eye-outline"></ion-icon>
+                          <span>View Profile</span>
+                      </button>
+                  </td>
+              </tr>
+          `;
+          tableBody.innerHTML += tableRow;
+      });
+  }
+
+  // Function to render pagination controls
+  function renderPagination() {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.innerText = i;
+          pageButton.classList.add('px-4', 'py-2', 'rounded-lg', 'bg-gray-500', 'hover:bg-gray-700', 'hover:text-white', 'transition', 'duration-300');
+          if (i === currentPage) {
+              pageButton.classList.add('bg-white', 'text-black');
+          }
+          pageButton.addEventListener('click', () => {
+              currentPage = i;
+              renderTable(currentPage);
+              renderPagination();
+          });
+          pagination.appendChild(pageButton);
+      }
+  }
+
+  // Initial render
+  renderTable(currentPage);
+  renderPagination();
+</script>
 </html>
-<script src="../../scripts/trainerScript.js"></script>
