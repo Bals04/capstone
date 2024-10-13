@@ -536,14 +536,30 @@ async function getSales() {
             FROM payments_table
             GROUP BY YEAR(payment_date), MONTH(payment_date)
             ORDER BY year, month;`)
-
+        console.log(result)
     return result
+}
+async function getTrainerSales() {
+    const [result] = await pool.query(`
+        SELECT p.trainer_id AS trainer_id, MONTH(m.payment_date) AS month, YEAR(m.payment_date) AS year, SUM(m.amount) AS total_amount, COUNT(m.payment_id) AS member_count
+        FROM member_payments m
+        LEFT JOIN contracts_table c ON c.contract_id = m.contract_id
+        LEFT JOIN proposals p ON p.proposal_id = c.proposal_id
+        WHERE p.trainer_id = 6
+        GROUP BY YEAR(m.payment_date), MONTH(m.payment_date)
+        ORDER BY year, month;
+    `);
+
+    console.log(result); // Log raw data
+    return result;
 }
 
 
 
 
+
 module.exports = {
+    getTrainerSales,
     getSales,
     getAllVerifiedGyms,
     getTemplateId,

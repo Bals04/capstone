@@ -5,7 +5,7 @@ const { getMembers, getExercises,
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
     insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
     removeTemplateExercise, inputFilter, insertMealTemplates, insertMealTemplatesItems,
-    insertMealTemplatesSteps, insertProposal, insertNotification } = require('../models/trainers');
+    insertMealTemplatesSteps, insertProposal, insertNotification,getStudents,assignWorkoutPlan } = require('../models/trainers');
 
 module.exports = {
 
@@ -17,6 +17,16 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching trainer:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getStudents: async (req, res) => {
+        try {
+            const { trainer_id } = req.query;
+            const data = await getStudents(trainer_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching trainer students:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },
@@ -159,6 +169,17 @@ module.exports = {
 
         } catch (error) {
             console.error("Error adding user:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    assignWorkoutPlan: async (req, res) => {
+        const { trainer_id, member_id, template_id, status } = req.body;
+        try {
+            await assignWorkoutPlan(trainer_id, member_id, template_id, status);
+            res.status(200).send("Template assigned successfully");
+
+        } catch (error) {
+            console.error("Error assigning student:", error);
             res.status(500).send("Internal Server Error");
         }
     },

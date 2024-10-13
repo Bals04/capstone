@@ -14,6 +14,7 @@ router.get("/retrieveMemberChatLog", trainerController.retrieveMemberChatLog);
 router.get("/getTemplates", trainerController.getTemplates); 
 router.get("/getTemplateId", trainerController.getTemplateId); 
 router.get("/getByQuery", trainerController.inputFilter); 
+router.get("/getTrainerStudents", trainerController.getStudents); 
 router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 router.post("/createWorkoutTemplate",validation(templateSchema), trainerController.insertWorkoutTemplate); 
 router.post("/createMealTemplate", trainerController.insertMealTemplate); 
@@ -22,6 +23,7 @@ router.post("/createMealSteps", trainerController.insertMealTemplateSteps);
 router.post("/insertProposal", trainerController.insertProposal); 
 router.post("/insertNotification", trainerController.insertNotification); 
 router.post("/createWorkoutTemplateExercises",validation(exerciseSchema), trainerController.insertWorkoutTemplateExercise); 
+router.post("/assignWorkoutPlan", trainerController.assignWorkoutPlan); 
 router.put("/ModifyWorkoutTemplateExercises", trainerController.updateWorkoutTemplateExercise); 
 router.delete("/RemoveWorkoutTemplateExercises", trainerController.removeTemplateExercise); 
 

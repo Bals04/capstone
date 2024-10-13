@@ -38,6 +38,14 @@
         #proposalModal .hover\\:scale-105:hover {
             transform: scale(1.05);
         }
+
+        .shadow-custom {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 4px #464646;
+        }
+
+        .shadow-inner-custom {
+            box-shadow: inset 0 1px 4px #464646;
+        }
     </style>
 </head>
 
@@ -213,13 +221,214 @@
                 <span class="greetChange text-[12px]">You've done a great job today!</span>
             </h1>
         </div>
+        <div class="flex flex-col gap-4 md:flex-row  m-4 p-4">
+            <div class="flex flex-col md:flex-row">
+                <div class="flex flex-col md:flex-col">
+                    <!--Progress Bar-->
+                    <div
+                        class="flex flex-row gap-4 justify-between md:gap-4 md:justify-center bg-[#373D41] p-6 rounded-tl-lg shadow-custom text-center border border-[#464646]">
+                        <div class="flex flex-col text-left justify-center">
+                            <h2 class="text-md font-semibold">Today's Plan</h2>
+                            <h3 class="text-[10px] font-light mt-1">Let's be productive!</h3>
+                            <h3 class="text-[10px] font-light mt-1"><span>5/10</span> completed</h3>
+                        </div>
 
-        <div class="flex flex-col md:flex-row gap-4 m-4 p-4">
+                        <!-- Gauge Component -->
+                        <div class="relative w-24 h-24">
+                            <svg class="rotate-[135deg] w-full h-full" viewBox="0 0 36 36"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <!-- Background Circle (Gauge) -->
+                                <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-[#343639]"
+                                    stroke-width="1.5" stroke-dasharray="75 100" stroke-linecap="round"></circle>
+
+                                <!-- Gauge Progress -->
+                                <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-orange-600"
+                                    stroke-width="1.5" stroke-dasharray="37.5 100" stroke-linecap="round"></circle>
+                            </svg>
+
+                            <!-- Value Text -->
+                            <div
+                                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                                <span class="text-2xl font-bold text-white">50%</span>
+                            </div>
+                        </div>
+                        <!-- End Gauge Component -->
+                    </div>
+
+                    <!-- Daily Tasks -->
+                    <div class="bg-[#373D41] rounded-bl-lg p-5 shadow-inner">
+                        <div class="max-w-lg mx-auto">
+                            <div class="flex flex-row md:flex-row justify-between items-center">
+                                <div>
+                                    <h1 class="text-md font-medium">Tasks list</h1>
+                                </div>
+                                <div class="inline-flex space-x-2 items-center">
+                                    <div class="inline-flex space-x-1 items-center text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-sm font-normal md:block">Date karon</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--tasks-->
+                            <div id="tasks" class="my-6 md:my-6 lg:my-6 xl:my-10">
+                                <div id="task"
+                                    class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-4  border-l-transparent">
+                                    <div class="inline-flex items-center space-x-2">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-slate-500">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4.5 12.75l6 6 9-13.5" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-slate-500 line-through">Task</div>
+                                    </div>
+                                </div>
+                                <div id="task"
+                                    class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-4  border-l-transparent">
+                                    <div class="inline-flex items-center space-x-2">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-slate-500">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4.5 12.75l6 6 9-13.5" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-slate-500 line-through">Task</div>
+                                    </div>
+                                </div>
+                                <div id="task"
+                                    class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-slate-400 bg-gradient-to-r from-slate-600 to-transparent hover:from-slate-500 transition ease-linear duration-150">
+                                    <div class="inline-flex items-center space-x-2">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6 text-green-500 hover:text-green-600 hover:cursor-pointer">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div>Task</div>
+                                    </div>
+                                </div>
+                                <div id="task"
+                                    class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-4 border-l-transparent">
+                                    <div class="inline-flex items-center space-x-2">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6 text-green-500 hover:text-green-600 hover:cursor-pointer">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+
+                                        </div>
+                                        <div>Task</div>
+                                    </div>
+                                </div>
+                                <div id="task"
+                                    class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-4  border-l-transparent">
+                                    <div class="inline-flex items-center space-x-2">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6 text-green-500 hover:text-green-600 hover:cursor-pointer">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+
+                                        </div>
+                                        <div>Task</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 text-center">Last updated 12 minutes ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#373D41] md:rounded-tr-lg md:rounded-br-lg shadow-custom flex flex-col">
+                    <div class="mt-5 ml-2 p-2 text-xl font-medium">
+                        <h1>Today's workout</h1>
+                    </div>
+                    <!-- Workouts Section -->
+                    <div class="p-2 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-auto">
+                        <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">
+                            <img src="https://cdn.shopify.com/s/files/1/1497/9682/files/1.What_Are_Diamond_Push-Ups_How_to_Do_It.jpg?v=1673013889"
+                                alt="Push-up" class="rounded-t-lg w-full h-auto object-cover border-t border-[#464646]">
+                            <div class="flex flex-col text-left justify-center py-2 text-[13px] ml-3">
+                                <h2>Push-up</h2>
+                                <div class="flex flex-row gap-1">
+                                    <div>
+                                        <span class="text-[10px] md:text-[15px] text-green-600">
+                                            <ion-icon name="timer-outline"></ion-icon>
+                                        </span>
+                                        <span class="text-[8px] md:text-[11px] font-light text-slate-400">30 min</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] md:text-[15px] text-red-600">
+                                            <ion-icon name="flame-outline"></ion-icon>
+                                        </span>
+                                        <span class="text-[8px] md:text-[11px] font-light text-slate-400">100 kkal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">
+                            <img src="https://cdn.shopify.com/s/files/1/1497/9682/files/1.What_Are_Diamond_Push-Ups_How_to_Do_It.jpg?v=1673013889"
+                                alt="Push-up" class="rounded-t-lg w-full h-auto object-cover border-t border-[#464646]">
+                            <div class="flex flex-col text-left justify-center py-2 text-[10px] ml-3">
+                                <h2>Push-up</h2>
+                                <div class="flex flex-row gap-1">
+                                    <div>
+                                        <span class="text-[10px] md:text-[15px] text-green-600">
+                                            <ion-icon name="timer-outline"></ion-icon>
+                                        </span>
+                                        <span class="text-[8px] md:text-[11px] font-light text-slate-400">30 min</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] md:text-[15px] text-red-600">
+                                            <ion-icon name="flame-outline"></ion-icon>
+                                        </span>
+                                        <span class="text-[8px] md:text-[11px] font-light text-slate-400">100 kkal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">
+                            <img src="https://cdn.shopify.com/s/files/1/1497/9682/files/1.What_Are_Diamond_Push-Ups_How_to_Do_It.jpg?v=1673013889"
+                                alt="Push-up" class="rounded-t-lg w-full h-auto object-cover border-t border-[#464646]">
+                            <div class="flex flex-col md:flex-col text-left justify-center py-2 text-[10px] ml-3">
+                                <h2>Push-up</h2>
+                                <div class="flex flex-row md:flex-row gap-1">
+                                    <div>
+                                        <span class="text-[10px] md:text-[15px] text-green-600">
+                                            <ion-icon name="timer-outline"></ion-icon>
+                                        </span>
+                                        <span class="text-[8px] md:text-[11px] font-light text-slate-400">30 min</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] md:text-[15px] text-red-600">
+                                            <ion-icon name="flame-outline"></ion-icon>
+                                        </span>
+                                        <span class="text-[8px] md:text-[11px] font-light text-slate-400">100 kkal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Calendar Component -->
-            <div class="flex-1 md:w-1/2 shadow-lg bg-white dark:bg-gray-800 rounded-md">
+            <div class="flex-1 md:w-1/2 bg-[#373D41] shadow-custom border border-[#464646] rounded-md">
                 <div class="p-3">
                     <div class="px-2 flex items-center justify-between">
-                        <span tabindex="0" class="focus:outline-none text-sm font-bold dark:text-gray-100 text-gray-800"
+                        <span tabindex="0" class="focus:outline-none text-sm font-bold text-white"
                             id="monthYear">October 2020</span>
                         <div class="flex items-center">
                             <button aria-label="calendar backward" id="prevButton"
@@ -250,43 +459,43 @@
                                 <tr>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-white">
                                                 Mo</p>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-whie">
                                                 Tu</p>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-white">
                                                 We</p>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-white">
                                                 Th</p>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-white">
                                                 Fr</p>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-white">
                                                 Sa</p>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="w-full flex justify-center">
-                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                            <p class="text-sm font-medium text-center text-white">
                                                 Su</p>
                                         </div>
                                     </th>
@@ -298,14 +507,17 @@
                         </table>
                     </div>
                 </div>
-                <div id="eventDetails" class="py-3 md:px-8 px-4 dark:bg-gray-700 bg-gray-50 rounded-b">
+                <div id="eventDetails" class="py-3 md:px-4 px-4 bg-[#373D41] border-t border-[#464646] rounded-b">
                     <div class="px-2">
                         <!-- Example Events -->
+                        <div class="border-b pb-2 border-gray-400">
+                            <p class="text-xl font-semibold pt-1 leading-4 text-gray-600 dark:text-gray-300">Workouts for this day</p>
+                        </div><br>
                         <div class="border-b pb-2 border-gray-400">
                             <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
                             <a tabindex="0"
                                 class="focus:outline-none text-sm font-medium leading-5 text-gray-800 dark:text-gray-100 mt-1">Test</a>
-                            <p class="text-xs pt-1 leading-4 leading-none text-gray-600 dark:text-gray-300">Test details
+                            <p class="text-xs pt-1 leading-4 text-gray-600 dark:text-gray-300">Test details
                             </p>
                         </div>
                         <div class="border-b pb-2 border-gray-400 pt-3">
@@ -313,90 +525,74 @@
                             <a tabindex="0"
                                 class="focus:outline-none text-sm font-medium leading-5 text-gray-800 dark:text-gray-100 mt-1">Lorem
                                 Ipsum</a>
-                            <p class="text-xs pt-1 leading-4 leading-none text-gray-600 dark:text-gray-300">Details
+                            <p class="text-xs pt-1 leading-4 text-gray-600 dark:text-gray-300">Details
+                                about Lorem Ipsum</p>
+                        </div>
+                        <div class="border-b pb-2 border-gray-400 pt-3">
+                            <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
+                            <a tabindex="0"
+                                class="focus:outline-none text-sm font-medium leading-5 text-gray-800 dark:text-gray-100 mt-1">Lorem
+                                Ipsum</a>
+                            <p class="text-xs pt-1 leading-4 text-gray-600 dark:text-gray-300">Details
                                 about Lorem Ipsum</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Notifications Component -->
-            <div class="flex-1 md:w-1/2 shadow-lg bg-white dark:bg-gray-800 rounded-md p-4">
-                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Notifications</h2>
-                <div id="notificationList" class="mt-4 space-y-2">
-                    <!-- Notifications will be dynamically added here -->
-                    <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-md shadow">
-                        <div class="text-sm font-medium text-gray-800 dark:text-gray-100">Sample Notification</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-300">Just now</div>
-                    </div>
-                </div>
-            </div>
         </div>
-
-
-        <!-- Workout Section -->
-        <div class="m-4 p-4 bg-div_color max-w-screen-xl">
-            <div class="py-4 px-2">Workout</div>
-        </div>
-
-        <!-- Proposal Modal -->
-        <!-- Enhanced Proposal Modal -->
-        <!-- Enhanced Proposal Modal -->
-        <div id="proposalModal"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-            <div
-                class="relative bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl max-w-lg w-full border border-gray-200 dark:border-gray-700">
-                <!-- Modal Content -->
-                <div class="mb-6">
-                    <h2 class="text-xl font-extrabold text-gray-900 dark:text-gray-100 mb-2">Proposal Details</h2>
-                    <p id="proposalPlanType" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
-                    <p id="proposalPrice" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
-                    <p id="proposalDuration" class="text-sm text-gray-700 dark:text-gray-300"></p>
-                </div>
-                <!-- Divider -->
-                <div class="border-t border-gray-300 dark:border-gray-700 my-4"></div>
-                <!-- Accept/Decline Buttons -->
-                <div class="flex justify-between items-center">
-                    <!-- Accept Button with Revised Text -->
-                    <button id="acceptProposalBtn"
-                        class="px-5 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-3-3a1 1 0 011.414-1.414L9 11.586l6.293-6.293a1 1 0 011.414 0z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Accept & Proceed to Payment
-                    </button>
-                    <!-- Decline Button -->
-                    <button id="declineProposalBtn"
-                        class="px-5 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Decline
-                    </button>
-                </div>
-                <!-- Close Modal Button -->
-                <button id="closeProposalModal"
-                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 transition ease-in-out duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-
-
     </div>
 
-
+    <!-- Proposal Modal -->
+    <!-- Enhanced Proposal Modal -->
+    <!-- Enhanced Proposal Modal -->
+    <div id="proposalModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div
+            class="relative bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl max-w-lg w-full border border-gray-200 dark:border-gray-700">
+            <!-- Modal Content -->
+            <div class="mb-6">
+                <h2 class="text-xl font-extrabold text-gray-900 dark:text-gray-100 mb-2">Proposal Details</h2>
+                <p id="proposalPlanType" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
+                <p id="proposalPrice" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
+                <p id="proposalDuration" class="text-sm text-gray-700 dark:text-gray-300"></p>
+            </div>
+            <!-- Divider -->
+            <div class="border-t border-gray-300 dark:border-gray-700 my-4"></div>
+            <!-- Accept/Decline Buttons -->
+            <div class="flex justify-between items-center">
+                <!-- Accept Button with Revised Text -->
+                <button id="acceptProposalBtn"
+                    class="px-5 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-3-3a1 1 0 011.414-1.414L9 11.586l6.293-6.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Accept & Proceed to Payment
+                </button>
+                <!-- Decline Button -->
+                <button id="declineProposalBtn"
+                    class="px-5 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Decline
+                </button>
+            </div>
+            <!-- Close Modal Button -->
+            <button id="closeProposalModal"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 transition ease-in-out duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    </div>
 </body>
 
 <script src="../../scripts/calendar.js"></script>

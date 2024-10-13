@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/frontend/scripts/auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="min-h-screen font-[Poppins] bg-customGray">
@@ -51,7 +51,7 @@
             </div>
             <div>
               <button type="button" id="userDropdownToggle"
-                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false"
+                class="flex text-sm bg-div_color rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false"
                 data-dropdown-toggle="dropdown-user">
                 <span class="sr-only">Open user menu</span>
                 <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
@@ -134,7 +134,7 @@
           </a>
         </li>
         <li>
-          <a href="#"
+          <a href="students.html"
             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
             onclick="setActive(this)">
             <ion-icon name="people-outline"
@@ -169,16 +169,187 @@
 
   <!--Dashboard Content-->
   <div class="sm:ml-64">
-    <div class="m-4 p-6 border-dashed border-gray-200 dark:border-gray-700 border-2 rounded-lg mt-20 dark:bg-gray-800">
+    <div class="m-4 p-6 border-dashed mt-20 ">
       <h1 class="text-4xl font-bold text-orange-400 dark:text-orange-400 mb-2">Good day, <span id="user-name"></span>!
       </h1>
       <p class="dark:text-gray-300 text-gray-700">Welcome to your dashboard. Here's where your main content will go.</p>
     </div>
+
+    <div class="flex justify-around gap-10 text-white w-auto h-auto m-4">
+      <div class="w-full h-full shadow-lg">
+        <div class="dark:bg-div_color text-sm h-64 overflow-y-auto rounded-t-lg">
+          <h1 class="px-10 py-5 font-bold text-lg">
+            Student Progress
+          </h1>
+          <div class="mt-5 flex-col">
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+              <div class="w-full">
+                <h2 id="student-name">
+                  Eric Ramones Jr.
+                </h2>
+              </div>
+              <div class="w-full">
+                <div class="w-auto bg-50 bg-opacity-50 rounded-full h-6 text-center">
+                  <div class="bg-50 rounded-full h-6" style="width: 50%">
+                    <span class="text-sm font-medium">50%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+              <div class="w-full">
+                <h2 id="student-name">
+                  Robert Jems
+                </h2>
+              </div>
+              <div class="w-full">
+                <div class="w-auto bg-50 bg-opacity-50 rounded-full h-6 text-center">
+                  <div class="bg-50 rounded-full h-6" style="width: 50%">
+                    <span class="text-sm font-medium">50%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+              <div class="w-full">
+                <h2 id="student-name">
+                  Heinztai Horakol
+                </h2>
+              </div>
+              <div class="w-full">
+                <div class="w-auto bg-50 bg-opacity-50 rounded-full h-6 text-center">
+                  <div class="bg-50 rounded-full h-6" style="width: 50%">
+                    <span class="text-sm font-medium">50%</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="w-full dark:bg-div_color rounded-b-lg">
+          <h1 class="text-center p-3">
+            <span id="student-name-show">
+              
+            </span>
+          </h1>
+
+          <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+            <ul class="flex text-center" id="default-tab" role="tablist">
+              <!-- Workout Tab -->
+              <li class="w-full" role="presentation">
+                <button
+                  class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300"
+                  id="workout-tab"
+                  data-tabs-target="#workout"
+                  type="button"
+                  role="tab"
+                  aria-controls="workout"
+                  aria-selected="true">
+                  Workout
+                </button>
+              </li>
+              <!-- Meal Tab -->
+              <li class="w-full" role="presentation">
+                <button
+                  class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                  id="meal-tab"
+                  data-tabs-target="#meal"
+                  type="button"
+                  role="tab"
+                  aria-controls="meal"
+                  aria-selected="false"
+                >
+                  Meal
+                </button>
+              </li>
+            </ul>
+          </div>
+          
+          <div id="default-tab-content">
+            <!-- Workout Tab Content -->
+            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color h-64 overflow-y-auto" id="workout" role="tabpanel" aria-labelledby="workout-tab">
+              <span>
+                <div>mm/dd/yyyy</div>
+                <!-- <div id="date-display" class="mb-3 text-md font-medium text-divcbg-div_color dark:text-white"></div> -->
+              </span>
+              <div class="font-thin flex-col">
+                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
+                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
+                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
+                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+              </div>
+            </div>
+          
+            <!-- Meal Tab Content -->
+            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color" id="meal" role="tabpanel" aria-labelledby="meal-tab">
+              <span>
+                <div>mm/dd/yyyy</div>
+              </span>
+              <div class="font-thin flex-col">
+                <div class="border-b-[1px] mb-2 py-2">Chicharon</div>
+                <div class="border-b-[1px] mb-2 py-2">Yipyap</div>
+                <div class="border-b-[1px] mb-2 py-2">Chippy</div>
+                <div class="border-b-[1px] mb-2 py-2">Sting</div>
+                <div class="border-b-[1px] mb-2 py-2">Cobra</div>
+                <div class="border-b-[1px] mb-2 py-2">Tubig canal</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full h-96 overflow-y-auto dark:bg-div_color rounded-lg shadow-lg">
+        <h1 class="px-10 py-5 font-bold text-lg">
+          Student Activity
+        </h1>
+        <div>
+          <span>
+            <div class="px-10 pt-5 text-lg">mm/dd/yyyy</div>
+          </span>
+          <div class="font-thin flex-col px-10 py-5 text-lg">
+            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+              <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
+              <div class="font-semibold">Eric Ramuniz</div>
+              <div>completed Jakol workout</div>
+            </div>
+            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+              <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
+              <div class="font-semibold">Eric Ramuniz</div>
+              <div>completed Jakol workout</div>
+            </div>
+            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+              <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
+              <div class="font-semibold">Eric Ramuniz</div>
+              <div>completed Jakol workout</div>
+            </div>
+            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+              <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
+              <div class="font-semibold">Eric Ramuniz</div>
+              <div>completed Jakol workout</div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="container p-4 shadow-lg">
+    <h2 class="text-white text-2xl font-bold mb-4 mt-10">Overview</h2>
+    <div class="bg-div_color p-6 rounded-lg shadow-xl w-full border-gray-500 border">
+      <canvas id="myChart" class="bg-div_color"></canvas>
+    </div>
   </div>
 
 
-  <script src="../../scripts/trainer.js"></script>
+
 </body>
+
+<script src="../../scripts/trainer.js"></script>
 <script>
   let trainerid;
   document.addEventListener('DOMContentLoaded', () => {
@@ -228,6 +399,41 @@
     console.log("clicked")
     document.cookie = name + '=; Max-Age=0; path=/';
   }
+
+
+  // Get all tab buttons
+  const tabs = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function () {
+      const target = document.querySelector(this.getAttribute('data-tabs-target'));
+
+      // Deactivate all tabs and hide all content
+      tabs.forEach(t => {
+        t.classList.remove(
+          'bg-[#5F6163]'
+        );
+      });
+
+      tabContents.forEach(content => content.classList.add('hidden'));
+
+      // Activate the clicked tab, change background to white, and show the corresponding content
+      this.classList.add(
+        'bg-[#5F6163]'
+      );
+      target.classList.remove('hidden');
+    });
+  });
+
+
+function studentProgress(){
+  var get_name = document.getElementById("student-name")
+  var show_name = document.getElementById("student-name-show")
+
+  show_name.innerText = get_name.innerText + " progress"
+}
+
 </script>
 
 </html>

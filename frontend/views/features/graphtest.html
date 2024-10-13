@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900">
+    <div class="container mx-auto p-8">
+        <h2 class="text-white text-3xl font-bold mb-6">Monthly insights</h2>
+        <div class="bg-gray-800 p-6 w-full rounded-lg shadow-xl border border-gray-700">
+            <canvas id="myChart" class="w-full"></canvas>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [
+                    {
+                        label: 'Sales Amount',
+                        data: [/* your sales data */],
+                        backgroundColor: 'rgba(245, 127, 39, 0.5)',
+                        borderColor: 'rgba(245, 127, 39, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y' // Associate this dataset with the first y-axis
+                    },
+                    {
+                        label: 'Registered Members',
+                        data: [/* your gym data */],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y1' // Associate this dataset with the second y-axis
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        position: 'left', // The first y-axis for sales
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right', // The second y-axis for gyms
+                        grid: {
+                            drawOnChartArea: false, // Prevent grid lines from overlapping
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Fetch data using Axios
+        axios.get('http://localhost:3000/getTrainerSales')
+            .then(response => {
+                const salesData = response.data;
+
+                // Initialize arrays for monthly sales and registered gyms with 12 slots (one for each month)
+                const monthlySales = Array(12).fill(0);  // For sales amounts
+                const membersRegistered = Array(12).fill(0);  // For gym registrations
+
+                // Iterate over the API response to populate the respective months
+                salesData.forEach(sale => {
+                    monthlySales[sale.month - 1] = parseFloat(sale.total_amount); // Assign total amount to correct month
+                    membersRegistered[sale.month - 1] = sale.member_count; // Assign gym count to correct month
+                });
+
+                // Ensure chart is updated after data fetch
+                myChart.data.datasets[0].data = monthlySales;  // First bar: Sales amounts
+                myChart.data.datasets[1].data = membersRegistered;  // Second bar: Gym registrations
+
+                // Debugging: Check if the chart dataset is being updated correctly
+                console.log("Updated Dataset for Gyms Registered: ", myChart.data.datasets[1].data);
+
+                myChart.update();  // Refresh the chart with new data
+            })
+            .catch(error => {
+                console.error("Error fetching sales data: ", error);
+            });
+
+        window.onload = fetchGymData;
+    </script>
+</body>
+
+</html>

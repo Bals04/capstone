@@ -45,7 +45,7 @@ exports.createSubscription = async (admin_id, gym_id, planID, subscriptionID, su
                     given_name: 'John', // Replace with dynamic values as necessary
                     surname: 'Doe'
                 },
-                email_address: 'customer@example.com' // Replace with the customer's email
+                email_address: 'customer@example.com'
             },
             application_context: {
                 return_url: `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&price=${price}&subscriptionID=${subscriptionID}&subscriptionName=${encodeURIComponent(subscriptionName)}&days=${days}&planID=${planID}`,
@@ -54,27 +54,17 @@ exports.createSubscription = async (admin_id, gym_id, planID, subscriptionID, su
         }
     });
 
-    // Get the subscription ID and approval link from the response
-    const paypalsubscriptionId = response.data.id; // Subscription ID
-    const approvalLink = response.data.links.find(link => link.rel === 'approve').href; // Get the approval link
-
-    // Here you can construct a URL with the subscription ID for the return URL
+    const paypalsubscriptionId = response.data.id;
+    const approvalLink = response.data.links.find(link => link.rel === 'approve').href;
     const completeOrderUrl = `${process.env.BASE_URL}/complete-order?admin_id=${admin_id}&gym_id=${gym_id}&paypalsubscriptionID=${paypalsubscriptionId}&subscriptionID=${subscriptionID}&subscriptionName=${encodeURIComponent(subscriptionName)}&days=${days}&planID=${planID}`;
 
-    // Return the Subscription ID along with the approval link and constructed complete order URL
     return {
-        paypalsubscriptionId: paypalsubscriptionId, // Subscription ID
-        approvalLink: approvalLink, // Get the approval link
-        completeOrderUrl: completeOrderUrl // Constructed URL to be used in the return_url
+        paypalsubscriptionId: paypalsubscriptionId,
+        approvalLink: approvalLink,
+        completeOrderUrl: completeOrderUrl
     };
 };
-
-
-
-
-
-
-// para sa client to trainer payment shet wako kasabot unsay sunod
+// para sa client to trainer payment
 exports.createClientToTrainerPayment = async (contract_id, price, planType, duration) => {
     const access_token = await generateAccessToken2();
     console.log("GENERATED V2 TOKEN: ", access_token)
