@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .calendar-day:hover {
+            background-color: #f3f4f6;
+        }
+
+        .today {
+            background-color: #d1fae5;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="container mx-auto p-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Calendar Section -->
+            <div class="md:col-span-1 bg-white p-4 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold mb-4" id="current-month"></h2>
+                <div class="grid grid-cols-7 gap-2 text-center">
+                    <!-- Days of the week -->
+                    <div class="font-semibold">Sun</div>
+                    <div class="font-semibold">Mon</div>
+                    <div class="font-semibold">Tue</div>
+                    <div class="font-semibold">Wed</div>
+                    <div class="font-semibold">Thu</div>
+                    <div class="font-semibold">Fri</div>
+                    <div class="font-semibold">Sat</div>
+                    <!-- Days of the month (dynamically generated) -->
+                    <div id="calendar-days" class="col-span-7 grid grid-cols-7 gap-2"></div>
+                </div>
+            </div>
+
+            <!-- Content Space -->
+            <div class="md:col-span-2 bg-white p-4 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold mb-4">Content popup</h2>
+                <div id="content" class="p-4 border rounded-lg h-64 overflow-hidden overflow-y-scroll">
+                    Click on a day to see details here.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to generate days dynamically
+        function generateCalendarDays() {
+            const daysContainer = document.getElementById('calendar-days');
+            daysContainer.innerHTML = ''; // Clear any existing days
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const today = now.getDate();
+
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+
+            // Add empty slots for the first day of the month
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptySlot = document.createElement('div');
+                daysContainer.appendChild(emptySlot);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day', 'p-2', 'border', 'rounded', 'cursor-pointer');
+                dayElement.textContent = day;
+                if (day === today) {
+                    dayElement.classList.add('today');
+                }
+                dayElement.addEventListener('click', async () => {
+                    const fullDate = new Date(currentYear, currentMonth, day);
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const formattedDate = fullDate.toLocaleDateString(undefined, options);
+
+                    try {
+                        const response = await axios.get('http://localhost:3000/WorkoutOftheDay', {
+                            params: {
+                                memberId: 1,
+                                week: formattedDate
+                            }
+                        });
+
+                        const data = response.data;
+                        const contentElement = document.getElementById('content');
+                        contentElement.innerHTML = `<strong>Details for: ${formattedDate}</strong><br>`; // Clear previous content and add the date
+
+                        // Check if there is any data
+                        if (data.length === 0) {
+                            contentElement.innerHTML += 'No assigned workouts for this date.';
+                            return;
+                        }
+
+                        // Create a container for the workout details
+                        const workoutContainer = document.createElement('div');
+                        workoutContainer.classList.add('workout-container'); // Add some styling class if needed
+
+                        // Iterate over the data and create elements for each workout
+                        data.forEach(item => {
+                            const workoutDiv = document.createElement('div');
+                            workoutDiv.classList.add('workout-item'); // Add some styling class if needed
+
+                            workoutDiv.innerHTML = `
+                                <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                                    <h3 class="text-lg font-semibold">${item.exercise}</h3>
+                                    <p class="text-sm text-gray-600">Repetitions: ${item.repititions}</p>
+                                    <p class="text-sm text-gray-600">Sets: ${item.sets}</p>
+                                </div>
+                            `;
+                            workoutContainer.appendChild(workoutDiv);
+                        });
+
+                        contentElement.appendChild(workoutContainer);
+                    } catch (error) {
+                        console.error('Error fetching workout details:', error);
+                        document.getElementById('content').textContent = 'An error occurred while fetching the workout details.';
+                    }
+                });
+                daysContainer.appendChild(dayElement);
+            }
+
+            // Set the current month and year
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        }
+
+        // Generate the calendar days on page load
+        generateCalendarDays();
+    </script>
+</body>
+
+</html>

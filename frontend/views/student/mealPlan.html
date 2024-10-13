@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student | Meal Plan</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="../../dist/tailwind.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<style>
+    .page_title {
+        border-bottom: 2px solid;
+        border-image: linear-gradient(to right, #EC7E4A 50%, transparent 50%) 1;
+    }
+    .sidebar, .sidebar-links{
+        overflow-x: hidden;
+    }
+    .sidebar:hover .Menu {
+      opacity: 1;
+    }
+    .sidebar:hover .menu-separator {
+      transition-delay: 0s;
+      transform: scaleX(0);
+    }
+
+</style>
+<body class="min-h-screen bg-[#343639] font-customFont ">
+    <div id="content_container" class="flex flex-col">
+        <!-- <aside class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col overflow-y-hidden p-[25px_20px] transition-all duration-400 ease hover:w-[260px] bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
+            <div class="sidebar-header flex items-center">
+            <img class="w-[42px] rounded-full" src="../img/Flexperience logo.png" alt="logo" />
+            <h2 class="text-white text-xl font-semibold whitespace-nowrap ml-[23px]">Flexperience</h2>
+            </div>
+    
+            <ul class="sidebar-links list-none mt-[20px] h-[80%] overflow-y-auto scrollbar-none">
+            <h4 class="text-white font-medium whitespace-nowrap my-[10px] relative">
+                <span class="Menu opacity-0 delay-0">Main Menu</span>
+                <div class="menu-separator transition absolute left-0 top-1/2 w-full h-[1px] bg-black transform translate-y-[-50%] menu-separator delay-100"></div>
+            </h4>
+    
+            <li>
+                <a href="gymAdminDashboard.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
+            </li>
+            <li>
+                <a href="pendingGym.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined">pending</span>Pending Gym<br> Rrgistrations</a>
+            </li>
+            <li>
+                <a href="registeredGym.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined">select_check_box</span>Registered Gym</a>
+            </li>
+            <li>
+                <a href="registeredTrainer.html" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF]  hover:rounded-[4px]"><span class="material-symbols-outlined">groups</span>Registered Trainer</a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center gap-x-[20px] text-white font-medium whitespace-nowrap py-[15px] px-[10px] no-underline transition ease-in-out duration-200 hover:text-[#161a2d] hover:bg-[#FFFFFF] hover:rounded-[4px]"><span class="material-symbols-outlined">settings</span>Settings</a>
+            </li>
+        </aside> -->
+    
+        <div class="sidebar bg-customOrange fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-gradient-to-b from-50 via-[#1e1e1e] to-[#1e1e1e]">
+            <div class="flex items-center justify-center">
+                <a href="#" class="list-none">
+                    <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
+                </a>
+            </div>
+
+            <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
+                <!--Home-->
+                <li>
+                    <a href="studentDashboard.html" class="btn active flex items-center justify-center text-2xl">
+                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color: white;"></i> 
+                    </a>
+                    <span class="tooltip-home absolute text-lg">Home</span> 
+                </li>
+                <!--Maps-->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-map" aria-hidden="true" style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-maps absolute text-lg">Maps</span> 
+                </li>
+                <!--WorkoutPlan-->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-dumbbell" aria-hidden="true" style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-workout absolute text-lg">Workout</span> 
+                </li>
+                <!--MealPlan-->
+                <li class="mt-6">
+                    <a href="mealPlan.html" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-bowl-rice" aria-hidden="true" style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-meal absolute text-lg">Meal</span> 
+                </li>
+                <!--Chat-->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-message-square-dots" aria-hidden="true" style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-chat absolute text-lg">Chat</span> 
+                </li>
+                <!--Trainers-->
+                <li class="mt-6">
+                    <a href="#" class="btn flex items-center justify-center text-2xl">
+                        <i class="bx bx-user-pin" aria-hidden="true" style="color: white;"></i>
+                    </a>
+                    <span class="tooltip-trainers absolute text-lg">Trainers</span> 
+                </li>
+            </ul>
+        </div>
+
+        <div class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639] ">
+            <h1 class="w-32">
+                <span class="page_title font-normal">
+                    Meal Plan
+                </span>
+            </h1>
+
+            <div class="topbar bg-transparent top-0 w-full flex flex-row-reverse gap-2">
+                <!--profile-->
+                <div class="flex items-center justify-center mt-0">
+                    <button>
+                        <img class="w-10 h-[35px] rounded-full" src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
+                    </button>
+                </div>
+                <!--notif-->
+                <div class="mr-4">
+                    <button>
+                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
+                    </button>
+                </div>
+                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <div class="mr-4">
+                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
+                        <input type="checkbox" class="mode">
+                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
+                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
+                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
+                        <span class="animateBG top-0 w-full h-[100vh]"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        
+        <div>
+            <div class="sticky text-center text-white bg-transparent bg-cover" style="background-image: url('../../views/img/mealplan_bg.png'); height: 330px">
+                <div class="pt-28">
+                    <span class="font-bold text-7xl">Meal Plan</span>
+                    <br>
+                    <span class="text-sm">Fuel your body for success with a personalized plan that nourishes and energizes.</span>
+                </div>
+            </div>
+        </div>
+        <div class=" bg-[#1E1E1E] text-white pt-5 flex flex-col items-center pb-12 invisible">
+            <div>
+                <div id="date-time-container" class="flex flex-col items-center p-4 font-semibold rounded-md shadow-md">
+                    <div id="current-date" class="text-lg font-semibold"></div>
+                    <div id="current-time" class="text-4xl mt-2 border border-50 text-center p-5 rounded-lg"></div>
+                </div>
+            </div>
+            <div class="flex flex-row gap-12 text-black mt-12">
+                <div class="bg-white rounded-lg pb-5">
+                    <img class="rounded-lg" src="../../views/img/breakfast_bg.png" alt="breakfast_bg">
+                    <div class="flex flex-col ml-5 gap-5">
+                        <span class="font-bold text-2xl">Breakfast</span>
+                        <span class="text-sm">Sagbot sa P.park</span>
+                        <a href="#" class="text-xs text-gray-500 text-right mr-5">Full Details<i class='bx bx-right-arrow-alt' style='color:gray' ></i></a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg pb-5">
+                    <img class="rounded-lg" src="../../views/img/lunch_bg.png" alt="breakfast_bg">
+                    <div class="flex flex-col ml-5 gap-5">
+                        <span class="font-bold text-2xl">Lunch</span>
+                        <span class="text-sm">Summer Roll Noodle Bowl</span>
+                        <a href="#" class="text-xs text-gray-500 text-right mr-5">Full Details<i class='bx bx-right-arrow-alt' style='color:gray' ></i></a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg pb-5">
+                    <img class="rounded-lg" src="../../views/img/dinner_bg.png" alt="breakfast_bg">
+                    <div class="flex flex-col ml-5 gap-5">
+                        <span class="font-bold text-2xl">Dinner</span>
+                        <span class="text-sm">Chicken Caprese</span>
+                        <a href="#" class="text-xs text-gray-500 text-right mr-5">Full Details<i class='bx bx-right-arrow-alt' style='color:gray' ></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="../../scripts/registration.js"></script>
+<script src="../../scripts/student.js" ></script>
+<script>
+     // Function to update date and time
+  function updateDateTime() {
+    const dateElement = document.getElementById('current-date');
+    const timeElement = document.getElementById('current-time');
+
+    // Create a new Date object
+    const currentDate = new Date();
+
+    // Get the current day and date
+    const dayName = currentDate.toLocaleString('default', { weekday: 'long' });
+    const date = currentDate.toLocaleDateString('default', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+
+    // Get the current time
+    const time = currentDate.toLocaleTimeString('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    // Set the content of the date and time divs
+    dateElement.textContent = `${dayName}, ${date}`;
+    timeElement.textContent = time;
+  }
+
+  // Update time every second
+  setInterval(updateDateTime, 1000);
+
+  // Initialize date and time on page load
+  updateDateTime();
+</script>

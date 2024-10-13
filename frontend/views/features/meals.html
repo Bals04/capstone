@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Filter</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/cardio.js"></script>
+
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: 15rem;
+        }
+
+        .filter-container {
+            flex: 1;
+            min-width: 300px;
+            max-width: 350px;
+            height: 28rem;
+        }
+
+        .meals-container {
+            flex: 2;
+            min-width: 400px;
+            max-width: 700px;
+            margin-left: 20px;
+            padding: 2rem;
+            background: white;
+            border-radius: 7px;
+        }
+    </style>
+    </head>
+
+    <body class="bg-gray-300">
+
+        <div class="container mx-auto mt-10 p-4">
+            <!-- Filter Container -->
+            <div class="filter-container bg-white shadow-md rounded-lg p-6">
+                <form id="mealFilterForm" class="space-y-4 mb-6 bg-teal-100 rounded-lg p-5">
+                    <h2 class="text-2xl font-semibold mb-6 text-teal-500">Filter Meals</h2>
+                    <!-- Minimum Carbs -->
+                    <div class="flex items-center space-x-4">
+                        <label for="minCarbs" class="block text-gray-700 font-semibold">Carbs (g)</label>
+                        <input type="range" id="minCarbs" name="minCarbs" min="0" max="100" class="w-1/2" value="0">
+                        <span id="minCarbsValue" class="block text-gray-500 w-12 text-right">0g</span>
+                    </div>
+
+                    <!-- Minimum Protein -->
+                    <div class="flex items-center space-x-4">
+                        <label for="minProtein" class="block text-gray-700 font-semibold">Protein (g)</label>
+                        <input type="range" id="minProtein" name="minProtein" min="0" max="100" class="w-1/2" value="0">
+                        <span id="minProteinValue" class="block text-gray-500 w-12 text-right">0g</span>
+                    </div>
+
+                    <!-- Minimum Calories -->
+                    <div class="flex items-center space-x-4">
+                        <label for="minCalories" class="block text-gray-700 font-semibold">Calories (kcal)</label>
+                        <input type="range" id="minCalories" name="minCalories" min="0" max="1000" class="w-1/2"
+                            value="0">
+                        <span id="minCaloriesValue" class="block text-gray-500 w-16 text-right">0 kcal</span>
+                    </div>
+
+                    <!-- Meal Type -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Type</label>
+                        <div class="flex items-center space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="typeOption" value="Chicken" class="form-radio text-teal-500">
+                                <span class="ml-2">Chicken</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="typeOption" value="Beef" class="form-radio text-teal-500">
+                                <span class="ml-2">Beef</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="typeOption" value="Fish" class="form-radio text-teal-500">
+                                <span class="ml-2">Fish</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="typeOption" value="Cat" class="form-radio text-teal-500">
+                                <span class="ml-2">Cat</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Filter Button -->
+                    <div>
+                        <button type="submit"
+                            class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 focus:outline-none">
+                            Apply Filters
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Meals Container -->
+            <div class="meals-container">
+                <h2 class="text-2xl font-semibold mb-6 text-teal-500">Meals List</h2>
+                <div id="mealsList" class="space-y-4">
+
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            document.getElementById('minCarbs').addEventListener('input', function () {
+                //var mealsList = document.getElementById('mealsList');
+                // mealsList.innerHTML = '<strong>👏👏👏Ana ba tuo jud👏👏👏</strong>';
+                document.getElementById('minCarbsValue').textContent = this.value + 'g';
+            });
+
+            document.getElementById('minProtein').addEventListener('input', function () {
+                document.getElementById('minProteinValue').textContent = this.value + 'g';
+            });
+
+            document.getElementById('minCalories').addEventListener('input', function () {
+                document.getElementById('minCaloriesValue').textContent = this.value + ' kcal';
+            });
+
+            // Placeholder for handling form submission and filtering meals
+            document.getElementById('mealFilterForm').addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const carbs = parseInt(document.getElementById('minCarbsValue').textContent.match(/\d+(\.\d+)?/)[0]);
+                const protein = parseInt(document.getElementById('minProteinValue').textContent.match(/\d+(\.\d+)?/)[0]);
+                const calories = parseInt(document.getElementById('minCaloriesValue').textContent.match(/\d+(\.\d+)?/)[0]);
+
+
+                const checkedRadioButton = document.querySelector('input[name="typeOption"]:checked').value;
+                if (checkedRadioButton) {
+                    console.log(checkedRadioButton.value); // This will log the value of the checked radio button
+                } else {
+                    console.log('No option selected');
+                }
+
+                const apiKey = '90abb8830ca74b088c98f08b0ce16777';
+                const endpoint = 'https://api.spoonacular.com/recipes/complexSearch';
+                const params = {
+                    query: checkedRadioButton,
+                    number: 3,
+                    minProtein: protein,
+                    minCarbs: carbs,
+                    minCalories: calories,
+                    apiKey: apiKey
+                };
+
+                try {
+                    const mealContainer = document.getElementById('mealsList');
+                    mealContainer.innerHTML = '';
+
+                    // Create a new div element
+                    const fetchingDataDiv = document.createElement('div');
+                    // Set the ID of the div
+                    fetchingDataDiv.id = 'fetchingData';
+                    // Add the classes to the div
+                    fetchingDataDiv.className = 'p-4 text-center text-teal-700 font-semibold mt-28 hidden';
+                    // Set the content of the div
+                    fetchingDataDiv.innerHTML = ' <l-cardio size="50" stroke="4" speed="1"color="teal" ></l-cardio>';
+                    // Append the div to the body of the document
+                    mealContainer.appendChild(fetchingDataDiv);
+
+                    const loading = document.getElementById('fetchingData');
+                    loading.classList.remove("hidden")
+
+                    // Construct the URL with query parameters
+                    const url = new URL(endpoint);
+                    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+                    // Make the GET request using axios
+                    const response = await axios.get(url.toString());
+                    const data = response.data;
+                    console.table(data)
+
+                    // Extract recipes and get meal container element
+                    const recipes = data.results;
+
+                    // Create and insert meal cards
+                    recipes.forEach(recipe => {
+                        // Extract nutrients data
+                        const nutrients = recipe.nutrition?.nutrients || [];
+                        const protein = nutrients.find(n => n.name === 'Protein')?.amount || 'N/A';
+                        const carbs = nutrients.find(n => n.name === 'Carbohydrates')?.amount || 'N/A';
+                        const Cal = nutrients.find(n => n.name === 'Calories')?.amount || 'N/A';
+
+                        // Create and insert the meal card HTML
+                        const cardHTML = `
+                            <div class="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4">
+                                <img src="${recipe.image}" alt="${recipe.title}" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-700">${recipe.title}</h3>
+                                    <p class="text-gray-500">Carbs: ${carbs}g, Protein: ${protein}g, Calories: ${Cal}</p>
+                                </div>
+                            </div>
+                        `;
+                        mealContainer.insertAdjacentHTML('beforeend', cardHTML);
+                    });
+                    loading.classList.add("hidden")
+                } catch (error) {
+                    console.error('Error fetching meals:', error);
+                }
+
+            });
+
+
+        </script>
+    </body>
+
+</html>
