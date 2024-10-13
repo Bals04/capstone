@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<style>
+    input{
+        opacity: 1;
+    }
+</style>
+<body class="bg-[#1E1E1E] ml-[14%] mr-[14%] mt-7 text-white">
+    <div class="">
+        <div class="text-center border border-gray-50 rounded-sm text-2xl font-bold py-2 mb-10">
+            REGISTER GYM
+        </div>
+        <div class="mb-7">
+            <span class="font-bold text-2xl">Profile</span><br>
+            <span class="text-s font-extralight">Some of the information will be displayed publicly so be careful what you share.</span>
+        </div>
+        <div class="flex gap-0">
+            <div>
+                <label for="Gym_name" class="font-semibold">Gym name</label> <br>
+                <input type="text" form="Gym_name" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <br>
+                <label for="Owner_name" class="font-semibold">Owner name</label> <br>
+                <input type="text" form="Owner_name" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <br>
+                <label for="Email" class="font-semibold">Email</label> <br>
+                <input type="text" form="Email" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <br>
+                <label for="Contact_num" class="font-semibold">Contact number <span class="text-gray-500">(Optional)</span></label> <br>
+                <input type="text" form="Contact_num" class="w-80 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <br>
+                <span class="font-semibold">Business Permit</span><br>
+                <span class="font-thin text-xs text-justify opacity-50 w-auto">Upload a copy of your business permit. This is required to verify
+                    the legality of your gym. Ensure it includes the following information:
+                    Business name, permit number, issuance date, expiration date.</span>
+                <label for="file-input" class="cursor-pointer flex items-center gap-x-2 border border-52 shadow-black shadow-md w-36 p-2 rounded-md hover:bg-white hover:text-black duration-300 mt-3">
+                    <input type="file" id="file-input" ref="fileInputs" class="hidden" />
+                    <span class="font-medium text-white-700 text-[14px]">Upload image</span>
+                    <span class="material-symbols-outlined">upload</span>
+                </label>
+            </div>
+            <div>
+                <label for="Gym_address" class="font-semibold">Gym address</label> <br>
+                <input type="text" form="Gym_address" class="w-72 h-10 rounded-lg  shadow-51 shadow-inner text-black"> <br>
+                <br>
+                <div class="w-96 h-56 border border-white bg-white text-black">
+                    map
+                </div>
+                <br>
+                <div class="w-96 h-56 border border-white bg-white text-black">
+                    Image sa permit
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 w-full border border-white">
+        </div>
+        <div class="float-right font-extralight mt-2 mb-10 text-base">
+            <button class="pr-5 pl-5 p-1 border border-white rounded-lg hover:bg-black">Cancel</button>
+            <button class="bg-[#aa99ff] rounded-lg pr-5 pl-5 p-1 hover:bg-white hover:text-black duration-200">Submit</button>
+        </div>
+        <span class="font-thin text-xs text-justify opacity-50">For more information on trainer certification requirements, please refer to the [www.burat.com]</span>
+    </div>
+</body>
+</html>

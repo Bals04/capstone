@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
     html{
         overflow-x: hidden;
         scroll-behavior: smooth;
@@ -47,502 +49,185 @@
         z-index: 2;
         box-shadow: 1px 1px 20px 6px #EC7E4A;
     }
-
-
-    .body2_container, .body2_container2{
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        height: 100vh;
-    }
-    .body2,.body2_2{
-        padding: 0;
-        width: 80vw;
-        height: 80vh;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-size: cover;
-        background-position: center center;
-        background-image: var(--img);
-        transition: background 0.5s ease 0s;
-        font-family: 'Londrina Solid', cursive;
-        background-color: transparent;
-    }
-
-    body:before {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-    }
-
-    .content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-size: cover;
-        background-position: center center;
-        transition: background 0.5s ease 0s;
-    }
-
-    .content:before {
-        position: absolute;
-        width: 100%;
-        text-align: center;
-        margin-bottom: -55vmin;
-        text-shadow: -1px -1px 0 #0007;
-        color: #fff4;
-        font-size: 18px;
-    }
-
-    /* CONTROLS */
-    .controls {
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
-        justify-content: flex-end;
-        flex-direction: row;
-        flex-wrap: wrap;
-        position: absolute;
-    }
-
-    input[type=radio] {
-        display: none;
-    }		
-
-    label {
-        width: 50vw;
-        height: 100vh;
-        position: relative;
-        cursor: pointer;
-        opacity: 0.15;
-    }
-
-    label:hover {
-        opacity: 1;
-    }
-
-    input:first-child:checked ~ .content .controls label:first-child,
-    input:last-of-type:checked ~ .content .controls label:last-of-type {
-        cursor: default;
-        opacity: 0.025;
-    }
-
-
-    /* HIDE LABELS */
-    #b2:checked ~ .content .controls label[for=b2], 
-    #b3:checked ~ .content .controls label[for=b3], 
-    #b4:checked ~ .content .controls label[for=b4], 
-    #b5:checked ~ .content .controls label[for=b5], 
-    #b6:checked ~ .content .controls label[for=b6], 
-    #b7:checked ~ .content .controls label[for=b7], 
-    #b8:checked ~ .content .controls label[for=b8], 
-    #b9:checked ~ .content .controls label[for=b9], 
-
-    #b3:checked ~ .content .controls label[for=b1],
-    #b4:checked ~ .content .controls label[for=b1],
-    #b4:checked ~ .content .controls label[for=b2],
-    #b5:checked ~ .content .controls label[for=b1],
-    #b5:checked ~ .content .controls label[for=b2],
-    #b5:checked ~ .content .controls label[for=b3],
-    #b6:checked ~ .content .controls label[for=b1],
-    #b6:checked ~ .content .controls label[for=b2],
-    #b6:checked ~ .content .controls label[for=b3],
-    #b6:checked ~ .content .controls label[for=b4],
-    #b7:checked ~ .content .controls label[for=b1],
-    #b7:checked ~ .content .controls label[for=b2],
-    #b7:checked ~ .content .controls label[for=b3],
-    #b7:checked ~ .content .controls label[for=b4],
-    #b7:checked ~ .content .controls label[for=b5],
-    #b8:checked ~ .content .controls label[for=b1],
-    #b8:checked ~ .content .controls label[for=b2],
-    #b8:checked ~ .content .controls label[for=b3],
-    #b8:checked ~ .content .controls label[for=b4],
-    #b8:checked ~ .content .controls label[for=b5],
-    #b8:checked ~ .content .controls label[for=b6],
-    #b9:checked ~ .content .controls label[for=b1],
-    #b9:checked ~ .content .controls label[for=b2],
-    #b9:checked ~ .content .controls label[for=b3],
-    #b9:checked ~ .content .controls label[for=b4],
-    #b9:checked ~ .content .controls label[for=b5],
-    #b9:checked ~ .content .controls label[for=b6],
-    #b9:checked ~ .content .controls label[for=b7],
-    #b10:checked ~ .content .controls label[for=b1] ,
-    #b10:checked ~ .content .controls label[for=b2] ,
-    #b10:checked ~ .content .controls label[for=b3] ,
-    #b10:checked ~ .content .controls label[for=b4] ,
-    #b10:checked ~ .content .controls label[for=b5] ,
-    #b10:checked ~ .content .controls label[for=b6] ,
-    #b10:checked ~ .content .controls label[for=b7] ,
-    #b10:checked ~ .content .controls label[for=b8] {
-        display: none;
-    }
-
-
-    /* ARROWS */
-    label:before {
-        content: "";
-        position: absolute;
-        background: 
-            linear-gradient(30deg, #fff0 60%, #fff calc(60% + 1px)), 
-            linear-gradient(-30deg, #fff 40%, #fff0 calc(40% + 1px)), 
-            linear-gradient(-90deg, #fff0 70%, #fff calc(70% + 1px));
-        width: 6vmin;
-        height: 6vmin;
-        border-radius: 5px;
-        right: 7vmin;
-        top: calc(50% - 3vmin);
-    }
-
-    /* LEFT ARROW */
-    #b1:checked ~ .content .controls label[for=b1]:before,
-    #b2:checked ~ .content .controls label[for=b1]:before,
-    #b3:checked ~ .content .controls label[for=b2]:before,
-    #b4:checked ~ .content .controls label[for=b3]:before,
-    #b5:checked ~ .content .controls label[for=b4]:before,
-    #b6:checked ~ .content .controls label[for=b5]:before,
-    #b7:checked ~ .content .controls label[for=b6]:before,
-    #b8:checked ~ .content .controls label[for=b7]:before,
-    #b9:checked ~ .content .controls label[for=b8]:before,
-    #b10:checked ~ .content .controls label[for=b9]:before {
-        left: 7vmin;
-        transform: rotate(180deg);
-    }
-
-
-
-
-    /* TITLES  */
-    body:after {
-        position: absolute;
-        top: 2vh;
-        color: #fff;
-        font-size: 35px;
-        line-height: 45px;
-        transition: all 0.5s ease 0s;
-        text-shadow: 0px 1px 0 #000000d9;
-        white-space: pre-wrap;
-        text-align: center;
-        width: 100vw;
-        padding: 1vmin;
-        background: #ffffff05;
-        font-weight: 300;
-    }
-
-    /*** THUMBNAILS ***/
-    .thumbnails {
-        position: absolute;
-        background: rgba(0, 0, 0, 0.5);
-        width: 100vw;
-        bottom: 3vh;
-        text-align: center;
-        padding: 1vmin;
-    }
-
-    .thumbnails label {
-        background-color: #0008;
-        position: relative;
-        width: 8vmin;
-        height: 8vmin;
-        display: inline-block;
-        margin-left: 1vw;
-        background-image: var(--img);
-        background-size: cover;
-        background-position: center;
-        opacity: 0.5;
-        border-radius: 2px;
-    }
-
-    /* IMAGES / THUMBNAILS */
-    body:has(input#b1:checked), .thumbnails label[for=b1] {
-        --img: url(../../views/img/ActiveStudents_UI.png);
-    }
-
-    body:has(input#b2:checked), .thumbnails label[for=b2] {
-        --img: url(../../views/img/mealplan_UI.png);
-    }
-
-    body:has(input#b3:checked), .thumbnails label[for=b3] {
-        --img: url(../../views/img/workoutplan_UI.png);
-    }
-
-    /* body:has(input#b4:checked), .thumbnails label[for=b4] {
-        --img: url(https://cdn.josetxu.com/img/gp-perros-salvajes-gran-molondrio.jpg);
-    }
-
-    body:has(input#b5:checked), .thumbnails label[for=b5] {
-        --img: url(https://cdn.josetxu.com/img/gp-tonin-rocodromo.jpg);
-    }
-
-    body:has(input#b6:checked), .thumbnails label[for=b6] {
-        --img: url(https://cdn.josetxu.com/img/gp-clan-de-los-osos-pandemonium.jpg);
-    }
-
-    body:has(input#b7:checked), .thumbnails label[for=b7] {
-        --img: url(https://cdn.josetxu.com/img/gp-oscar-raul-hueco-hoces2.jpg);
-    }
-
-    body:has(input#b8:checked), .thumbnails label[for=b8] {
-        --img: url(https://cdn.josetxu.com/img/gp-me-pesa-hasta-el-aire-dehesilla.jpg);
-    }
-
-    body:has(input#b9:checked), .thumbnails label[for=b9] {
-        --img: url(https://cdn.josetxu.com/img/gp-diedro-mezquita.jpg);
-    }
-
-    body:has(input#b10:checked), .thumbnails label[for=b10] {
-        --img: url(https://cdn.josetxu.com/img/gp-biafra-hueso.jpg);
-    } */
-
-    .thumbnails label:before { display: none; }
-    .thumbnails label:hover { opacity: 1; }
-    .thumbnails label:first-child { margin-left: 0; }
-
-    #b1:checked ~ .content .thumbnails label[for=b1],
-    #b2:checked ~ .content .thumbnails label[for=b2],
-    #b3:checked ~ .content .thumbnails label[for=b3],
-    #b4:checked ~ .content .thumbnails label[for=b4],
-    #b5:checked ~ .content .thumbnails label[for=b5],
-    #b6:checked ~ .content .thumbnails label[for=b6],
-    #b7:checked ~ .content .thumbnails label[for=b7],
-    #b8:checked ~ .content .thumbnails label[for=b8],
-    #b9:checked ~ .content .thumbnails label[for=b9],
-    #b10:checked ~ .content .thumbnails label[for=b10] {
-        opacity: 1;
-        box-shadow: 0 0 0.01vmin 0.5vmin #fff;
-    }
-
-
-
-    /* MEDIA QUERIES */
-    @media only screen and (max-width:767px) {
-        body:after {
-            top: 2vh;
-            font-size: 20px;
-            white-space: initial;
-        }
-    }
-
-    @media only screen and (max-width:580px) {
-        body:after {
-            font-size: 25px;
-            white-space: pre-wrap;
-        }
-    }
-
-    /* BROWSER SUPPORT */
-    .firefox {
-        background: #0008;
-        color: #fff;
-        position: absolute;
-        top: 45vh;
-        width: 45vmin;
-        padding: 2vmin 3vmin;
-        border-radius: 5px;
-        text-align: center;
-        font-size: 24px;
-    }
-
-    .firefox span code {
-        font-size: 24px;
-        background: #0008;
-        padding: 0 10px;
-        border-radius: 25px;
-    }
-
-    @supports (-webkit-font-smoothing: antialiased) {
-        .firefox {
-            display: none;
-        }
-    }
 </style>
 <body class="bg-[#1E1E1E] font-customFont">
-    <div class="">
-        <img class="absolute top-0 left-0 w-full h-full object-cover opacity-20" src="../../views/img/Black and White Modern Minimalist Creative Portfolio Our Service Page Website Design Prototype 2.png" alt="cannot load">
-        <header class="fixed h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg">
-            <div class="relative">
-                <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+    <img class="absolute top-0 left-0 w-full h-full object-cover opacity-20" src="../../views/img/Black and White Modern Minimalist Creative Portfolio Our Service Page Website Design Prototype 2.png" alt="cannot load">
+    <header class="fixed h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg">
+        <div class="relative">
+            <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+        </div>
+        <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
+            <b class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+        </div>
+        <div class="text-white pt-5">
+            <ul class="ml-[21% pl-">
+                <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section2" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Member</a></li>
+                <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section3" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Trainer</a></li>
+                <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section4" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">About</a></li>
+            </ul>
+        </div>
+        <div class="pl-5 pr-10 text-50 pt-5 ">
+            <button onclick = "window.location.href='../../views/Landing page/signup.html'" class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
+                Register Now
+            </button>
+        </div>
+    </header>
+    <div  class="w-auto h-auto flex items-center justify-between min-h-screen mb-[200px]">
+        <div>
+            <div class="text-white text-4xl ml-[200px]" data-aos="fade-right">
+                <b>Your workout, <br>
+                your way, <br>
+                your location.</b>
             </div>
-            <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
-                <b class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
-            </div>
-            <div class="text-white pt-5">
-                <ul class="ml-[21% pl-">
-                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section1" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Member</a></li>
-                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section2" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Member</a></li>
-                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section3" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">Trainer</a></li>
-                    <li class="relative mt-[10px] list-none inline-block pl-3 pr-3"><a href="#section4" class=" no-underline text-[15px] tracking-[0.5px] p-[0_30px]">About</a></li>
-                </ul>
-            </div>
-            <div class="pl-5 pr-10 text-50 pt-5 ">
-                <button class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
-                    Register Now
-                </button>
-            </div>
-        </header>
-        <div  class="w-auto h-auto flex items-center justify-between min-h-screen mb-[200px]">
-            <div>
-                <div class="text-white text-4xl ml-[200px]" data-aos="fade-right">
-                    <b>Your workout, <br>
-                    your way, <br>
-                    your location.</b>
-                </div>
-                <div class="flex ml-[200px] mt-4 bg-white border border-[#343639] rounded-full px-2 py-0.5 hover:bg-50 hover:text-white" data-aos="fade-right">
-                    <lord-icon
-                    class="w-auto"
-                        src="https://cdn.lordicon.com/iikoxwld.json" trigger="loop" colors="primary:#e83a30" style="width:20px;height:20px">
-                    </lord-icon>
-                    Discover Davao's fitness havens
-                </div>
-                <div>
-                    <img class="absolute opacity-20 w-auto h-[260px]" src="../../views/img/map2.png" alt="cannot load">
-                </div>
+            <div onclick = "window.location.href='../../views/maps/index.html'"  class="flex ml-[200px] mt-4 bg-white border border-[#343639] rounded-full px-2 py-0.5 hover:bg-50 hover:text-white" data-aos="fade-right">
+                <lord-icon
+                class="w-auto"
+                    src="https://cdn.lordicon.com/iikoxwld.json" trigger="loop" colors="primary:#e83a30" style="width:20px;height:20px">
+                </lord-icon>
+                Discover Davao's fitness havens
             </div>
             <div>
-                <img class="h-5/6 w-5/6 pt-40 opacity-80" src="../../views/img/map.png" alt="cannot load" data-aos="fade-left">
-            </div>
-        </div>
-    
-        <div id="section1" class="flex mb-[130px]">
-            <div class="mt-10" data-aos="fade-right">
-                <img class="w-[80%] h-[90%]" src="../../views/img/bench-press.png" alt="cannot load">
-            </div>
-            <div class="text-white mt-40" data-aos="fade-left">
-                <div>
-                    <span class="text-4xl font-semibold">Want to see your gym thrive?</span> 
-                    <br> 
-                    <br>
-                    <span class="text-2xl font-thin">
-                        Transform Your Gym's Future.<br>
-                        <span class="text-50"> <a href="../../views/gym admin/registerGym.html">Register </a></span>Today!
-                    </span>
-                    <div class="w-[80%] h-auto flex shadow-xl rounded-md bg-[#222121] mt-16" data-aos="fade-up">
-                        <div class="p-12 text-4xl">
-                            99999+
-                            <br>
-                            <span class="text-2xl">Total Gym Registered</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div id="section2" class="flex mb-[130px]">
-            <div class="flex" data-aos="fade-right">
-                <div class="relative">
-                    <img src="../../views/img/paint.png" alt="cannot load">
-                </div>
-                <div class="absolute ml-40">
-                    <div class="text-white mt-56 text-5xl">
-                        Transform your <br>
-                        fitness into <br>
-                        shape.
-                    </div>
-                    <div class="mt-5 text-left" data-aos="fade-up">
-                        <span class="text-white">
-                            Your fitness journey starts now. <br>
-                        </span>
-                        <span class="text-50"> <a href="#">Log in</a></span> 
-                        <span class="text-white">
-                            to explore.
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="pt-16" data-aos="fade-left">
-                <img src="../../views/img/push-up.png" alt="cannot load">
+                <img class="absolute opacity-20 w-auto h-[260px]" src="../../views/img/map2.png" alt="cannot load">
             </div>
         </div>
         <div>
-            <img class="w-44 h-44 opacity-20" src="../../views/img/design-shape.png" alt="">
+            <img class="h-5/6 w-5/6 pt-40 opacity-80" src="../../views/img/map.png" alt="cannot load" data-aos="fade-left">
         </div>
-    
-        <div id="section3" class="flex mb-[130px]">
-            <div class="mt-10" data-aos="fade-right">
-                <img class="w-[80%] h-[90%]" src="../../views/img/bench-press.png" alt="cannot load">
-            </div>
-            <div class="text-white mt-40" data-aos="fade-left">
-                <div>
-                    <span class="text-4xl font-semibold">Are you a trainer?</span> 
-                    <br> 
-                    <br>
-                    <span class="text-2xl font-thin">
-                        Grow your client base and unleash your <br>
-                        training potential on Flexperience! <br>
-                        <span class="text-50"> <a href="#">Join here.</a></span>
-                    </span>
-                    <div class="w-auto h-auto flex shadow-xl rounded-md bg-[#222121] mt-16" data-aos="fade-up">
-                        <div class="p-12 text-4xl">
-                            50+
-                            <br>
-                            <span class="text-2xl">Total Members</span>
-                        </div>
-                        <div class="p-12 text-4xl">
-                            50+
-                            <br>
-                            <span class="text-2xl">Trainers</span>
-                        </div>
+    </div>
+
+    <div id="section1" class="flex mb-[130px]">
+        <div class="mt-10" data-aos="fade-right">
+            <img class="w-[80%] h-[90%]" src="../../views/img/bench-press.png" alt="cannot load">
+        </div>
+        <div class="text-white mt-40" data-aos="fade-left">
+            <div>
+                <span class="text-4xl font-semibold">Want to see your gym thrive?</span> 
+                <br> 
+                <br>
+                <span class="text-2xl font-thin">
+                    Transform Your Gym's Future.<br>
+                    <span class="text-50"> <a href="register.html">Register </a></span>Today!
+                </span>
+                <div class="w-[80%] h-auto flex shadow-xl rounded-md bg-[#222121] mt-16" data-aos="fade-up">
+                    <div class="p-12 text-4xl">
+                        99999+
+                        <br>
+                        <span class="text-2xl">Total Gym Registered</span>
                     </div>
                 </div>
             </div>
         </div>
-    
-        <div id="section4" class="flex">
-            <img class="relative w-2/4 h-2/4 items-start justify-start mt-10" src="../../views/img/paint2.png" alt="cannot load">
-            <div class="absolute text-white table-column justify-center items-center w-screen mt-28 text-center">
-                <div data-aos="fade-down">
-                    <span class="font-bold text-4xl">
-                        Why Flexperience?
+    </div>
+
+    <div id="section2" class="flex mb-[130px]">
+        <div class="flex" data-aos="fade-right">
+            <div class="relative">
+                <img src="../../views/img/paint.png" alt="cannot load">
+            </div>
+            <div class="absolute ml-40">
+                <div class="text-white mt-56 text-5xl">
+                    Transform your <br>
+                    fitness into <br>
+                    shape.
+                </div>
+                <div class="mt-5 text-left" data-aos="fade-up">
+                    <span class="text-white">
+                        Your fitness journey starts now. <br>
                     </span>
-                    <br>
-                    <br>
-                    <span class="font-extralight">
-                        It is your all-in-one fitness companion. <br>
-                            Find gyms, create routines, and fuel your body.
-                    </span>
-                    <br>
-                    <br>
-                    <br>
-                    <span>
-                        Separated UI’s for members and trainers.
+                    <span class="text-50"> <a href="#">Log in</a></span> 
+                    <span class="text-white">
+                        to explore.
                     </span>
                 </div>
-                <div class=" flex gap-16 w-screen h-screen mt-2 justify-center">
-                    <div data-aos="fade-right">
-                        <div class="box">
-                            <button onclick="view_studentUI()">
-                                <img src="../../views/img/student-ui.png" alt="">
-                            </button>
-                        </div>
+            </div>
+        </div>
+        <div class="pt-16" data-aos="fade-left">
+            <img src="../../views/img/push-up.png" alt="cannot load">
+        </div>
+    </div>
+    <div>
+        <img class="w-44 h-44 opacity-20" src="../../views/img/design-shape.png" alt="">
+    </div>
+
+    <div id="section3" class="flex mb-[130px]">
+        <div class="mt-10" data-aos="fade-right">
+            <img class="w-[80%] h-[90%]" src="../../views/img/bench-press.png" alt="cannot load">
+        </div>
+        <div class="text-white mt-40" data-aos="fade-left">
+            <div>
+                <span class="text-4xl font-semibold">Are you a trainer?</span> 
+                <br> 
+                <br>
+                <span class="text-2xl font-thin">
+                    Grow your client base and unleash your <br>
+                    training potential on Flexperience! <br>
+                    <span class="text-50"> <a href="#">Join here.</a></span>
+                </span>
+                <div class="w-auto h-auto flex shadow-xl rounded-md bg-[#222121] mt-16" data-aos="fade-up">
+                    <div class="p-12 text-4xl">
+                        50+
+                        <br>
+                        <span class="text-2xl">Total Members</span>
                     </div>
-                    <div data-aos="fade-left">
-                        <div class="box">
-                            <button onclick="view_trainerUI()">
-                                <img class="w-82 h-72 hover:w-96 duration-500" src="../../views/img/trainer-ui.png" alt="">
-                            </button>
-                        </div>
+                    <div class="p-12 text-4xl">
+                        50+
+                        <br>
+                        <span class="text-2xl">Trainers</span>
                     </div>
                 </div>
             </div>
         </div>
-    
-        <div class=" flex text-white relative">
-            <img class="w-auto h-auto opacity-25" src="../../views/img/paint3.png" alt="cannot load">
-            <div class="absolute mr-44 top-24 left-48 text-5xl font-bold" data-aos="fade-right">
-                What <br> 
-                Flexperience <br> 
-                offers
+    </div>
+
+    <div id="section4" class="flex">
+        <img class="relative w-2/4 h-2/4 items-start justify-start mt-10" src="../../views/img/paint2.png" alt="cannot load">
+        <div class="absolute text-white table-column justify-center items-center w-screen mt-28 text-center">
+            <div data-aos="fade-down">
+                <span class="font-bold text-4xl">
+                    Why Flexperience?
+                </span>
+                <br>
+                <br>
+                <span class="font-extralight">
+                    It is your all-in-one fitness companion. <br>
+                        Find gyms, create routines, and fuel your body.
+                </span>
+                <br>
+                <br>
+                <br>
+                <span>
+                    Separated UI’s for members and trainers.
+                </span>
             </div>
-            <div class="pt-32" data-aos="fade-left">
-                <div>
-                    We are consistently improving our offering of services, and pride ourselves on creating connections with the members and trainers and delivering the most personalized fitness experience possible.
+            <div class=" flex gap-16 w-screen h-screen mt-2 justify-center">
+                <div data-aos="fade-right">
+                    <div class="box">
+                        <button>
+                            <img src="../../views/img/student-ui.png" alt="">
+                        </button>
+                    </div>
                 </div>
+                <div data-aos="fade-left">
+                    <div class="box">
+                        <button>
+                            <img class="w-82 h-72 hover:w-96 duration-500" src="../../views/img/trainer-ui.png" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class=" flex text-white relative">
+        <img class="w-auto h-auto opacity-25" src="../../views/img/paint3.png" alt="cannot load">
+        <div class="absolute mr-44 top-24 left-48 text-5xl font-bold" data-aos="fade-right">
+            What <br> 
+            Flexperience <br> 
+            offers
+        </div>
+        <div class="pt-32" data-aos="fade-left">
+            <div>
+                We are consistently improving our offering of services, and pride ourselves on creating connections with the members and trainers and delivering the most personalized fitness experience possible.
             </div>
         </div>
     </div>
@@ -613,66 +298,6 @@
                 Flexperience offers meal plans and even more better with customized meal plans that is only for you.
             </p>
         </div>
-    </div>
-
-    <div id="trainerUI_showcase" class="body2_container fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 invisible">
-        <div class="body2">
-            <input type="radio" name="control" id="b1" checked>
-            <input type="radio" name="control" id="b2">
-            <input type="radio" name="control" id="b3">
-            <!-- <input type="radio" name="control" id="b4">
-            <input type="radio" name="control" id="b5">
-            <input type="radio" name="control" id="b6">
-            <input type="radio" name="control" id="b7">
-            <input type="radio" name="control" id="b8">
-            <input type="radio" name="control" id="b9">
-            <input type="radio" name="control" id="b10"> -->
-            <div class="content">
-                <div class="thumbnails">
-                    <label for="b1"></label>
-                    <label for="b2"></label>
-                    <label for="b3"></label>
-                    <!-- <label for="b4"></label>
-                    <label for="b5"></label>
-                    <label for="b6"></label>
-                    <label for="b7"></label>
-                    <label for="b8"></label>
-                    <label for="b9"></label>
-                    <label for="b10"></label> -->
-                </div>
-            </div>
-        </div>
-        <button class="text-white" onclick="closePopup('trainerUI_showcase')"></button>
-    </div>
-
-    <div id="studentUI_showcase" class="body2_container2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black backdrop-blur-sm bg-opacity-50 invisible">
-        <div class="body2_2">
-            <input type="radio" name="control" id="b1" checked>
-            <input type="radio" name="control" id="b2">
-            <input type="radio" name="control" id="b3">
-            <!-- <input type="radio" name="control" id="b4">
-            <input type="radio" name="control" id="b5">
-            <input type="radio" name="control" id="b6">
-            <input type="radio" name="control" id="b7">
-            <input type="radio" name="control" id="b8">
-            <input type="radio" name="control" id="b9">
-            <input type="radio" name="control" id="b10"> -->
-            <div class="content">
-                <div class="thumbnails">
-                    <label for="b1"></label>
-                    <label for="b2"></label>
-                    <label for="b3"></label>
-                    <!-- <label for="b4"></label>
-                    <label for="b5"></label>
-                    <label for="b6"></label>
-                    <label for="b7"></label>
-                    <label for="b8"></label>
-                    <label for="b9"></label>
-                    <label for="b10"></label> -->
-                </div>
-            </div>
-        </div>
-        <button class="text-white" onclick="closePopup('studentUI_showcase')"></button>
     </div>
 </body>
 
@@ -791,7 +416,6 @@
 </footer>
 </html>
 
-<script src="../../scripts/landingpage.js"></script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>

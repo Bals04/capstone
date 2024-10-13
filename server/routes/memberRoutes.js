@@ -5,6 +5,11 @@ const memberController = require('../controllers/memberController');
 
 router.get("/getWorkoutOftheWeek", memberController.GetTodaysMeal); 
 router.get("/WorkoutOftheDay", memberController.GetTodaysWorkout); 
+router.get("/getMemberInfo", memberController.getMemberInfo); 
+router.get("/retrieveTrainerChatLog", memberController.retrieveTrainerchatLog); 
+router.get("/retrieveNotifications", memberController.getNotifications); 
+router.get("/retrieveProposals", memberController.getProposals); 
+router.post("/insertContracts", memberController.insertContract); 
 
 module.exports = router;
 

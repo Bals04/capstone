@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Workout Plan</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <style>
+        #success-toast {
+            z-index: 9000;
+        }
+
+        #success-message-toast {
+            word-break: break-word;
+            max-width: 250px;
+            /* Adjust this width as needed */
+        }
+
+        #TemplateModal {
+            z-index: 9000;
+        }
+
+        #error-toast {
+            z-index: 1000;
+        }
+
+        /* Style for each exercise item */
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        /* Style for exercise details */
+        .exercise-details {
+            flex: 1;
+            /* Take up remaining space */
+            text-align: left;
+        }
+
+        /* Style for buttons container */
+        .exercise-buttons {
+            display: flex;
+            gap: 8px;
+            /* Space between buttons */
+        }
+
+        /* Ensure buttons are not stretched */
+        .exercise-buttons button {
+            flex-shrink: 0;
+        }
+    </style>
+
+</head>
+
+<body class="min-h-screen font-[Poppins] bg-customGray">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium" id="forActive">
+                <li>
+                    <a href="index.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="barbell-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Workout Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerMealPlan.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="egg-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Meal Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="people-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="chat.html"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!--Dashboard Content-->
+    <div class="sm:ml-64">
+        <div class="m-4 p-4 mt-20">
+            <div class="text-white text-2xl font-semibold">
+                <h1>Workout Plan Templates</h1>
+            </div>
+            <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
+                <form class="max-w-lg w-full">
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <label for="search-dropdown"
+                            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                        <div class="flex w-full relative">
+                            <button id="dropdown-button" type="button"
+                                class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                All categories
+                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 4 4 4-4" />
+                                </svg>
+                            </button>
+                            <div id="dropdown"
+                                class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropdown-button">
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Name
+                                            Workout Plan</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full">
+                                <input type="search" id="search-dropdown"
+                                    class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                    placeholder="Search workout plan" required />
+                                <button type="submit"
+                                    class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                    <span class="sr-only">Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <button type="button" id="addTemplateBtn"
+                    class="text-white bg-50 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">
+                    <i class="fas fa-plus"></i> &nbsp Create template
+                </button>
+
+
+                
+            </div>
+
+            <!--grid-->
+            <div id="templateContainer"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
+            </div>
+        </div>
+    </div>
+    <div id="templateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Create Workout Template</h2>
+            </div>
+            <form id="templateForm">
+                <!-- Template Name -->
+                <div class="mb-4">
+                    <label for="templateName" class="block text-gray-700 font-semibold">Template Name</label>
+                    <input type="text" id="templateName"
+                        class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="e.g., Strength Training Phase 1">
+                </div>
+
+                <!-- Template Description -->
+                <div class="mb-4">
+                    <label for="templateDescription" class="block text-gray-700 font-semibold">Template
+                        Description</label>
+                    <textarea id="templateDescription"
+                        class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        rows="4" placeholder="Brief description of the training program goals"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-between mt-6">
+                    <button type="button" id="closeModalBtn"
+                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Cancel</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500">Save &
+                        Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <!-- Ensures the circle stays round even if the text is long -->
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full flex-shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div id="error-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-orange-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-orange-600">Form Error</h2>
+                <p id="error-message-toast" class="text-sm text-gray-600">Your error message here</p>
+            </div>
+            <button id="close-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <!-- Modal HTML -->
+    <div id="TemplateModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Workout Template Details</h2>
+            <!-- Accordion for Weeks -->
+            <div id="weekAccordion" class="space-y-4">
+                <!-- Dynamic content will be injected here -->
+            </div>
+            <!-- Close Modal -->
+            <button class="bg-red-500 text-white py-2 px-4 rounded-md mt-4" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    <!-- Modify Exercise Modal -->
+    <!-- Modify Exercise Modal -->
+    <div id="modifyExerciseModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg text-white">
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold">Modify Exercises to Workout Template</h2>
+                <hr class="mt-4 border-gray-500">
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Exercise Name and API Button -->
+                <div class="flex items-center justify-between">
+                    <div class="flex-1 mr-2">
+                        <label for="exerciseName" class="block mb-2 text-sm font-medium text-gray-300">Exercise
+                            Name</label>
+                        <input type="text" id="exerciseName"
+                            class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg cursor-not-allowed opacity-50"
+                            placeholder="Exercise name" required disabled />
+                    </div>
+                    <button id="addExerciseBtn"
+                        class="mt-6 bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                        Exercises
+                    </button>
+                </div>
+
+                <!-- Reps -->
+                <div>
+                    <label for="reps" class="block mb-2 text-sm font-medium text-gray-300">Reps</label>
+                    <input type="number" id="reps" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                        placeholder="Repetitions" required />
+                </div>
+
+                <!-- Sets -->
+                <div>
+                    <label for="sets" class="block mb-2 text-sm font-medium text-gray-300">Sets</label>
+                    <input type="number" id="sets" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                        placeholder="Sets" required />
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="closeModifyModal()"
+                    class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                    Cancel
+                </button>
+                <button onclick="submitExercise()"
+                    class="bg-green-500 hover:bg-green-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                    Add to Plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="exerciseModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="modal-content w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg overflow-hidden relative">
+
+            <!-- Close Button (X icon) in the Top-Right Corner -->
+            <button id="closeExerciseModal" onclick="closeExerciseModal()"
+                class="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800 focus:outline-none">
+                <!-- X Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Select Exercises</h2>
+
+            <!-- Search by Exercise Name -->
+            <div class="mb-4">
+                <label for="searchExercise" class="block text-gray-700 font-semibold mb-2">Search by Exercise
+                    Name</label>
+                <div class="flex items-center">
+                    <input id="searchExercise" type="text" placeholder="Search exercise..."
+                        class="w-full p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="searchWorkout"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter by Body Part Dropdown -->
+            <div class="mb-4">
+                <label for="bodyPart" class="block text-gray-700 font-semibold">Filter by Body Part</label>
+                <select id="bodyPart"
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="all">All</option>
+                    <option value="back">Back</option>
+                    <option value="chest">Chest</option>
+                    <option value="legs">Legs</option>
+                    <option value="arms">Arms</option>
+                    <option value="shoulders">Shoulders</option>
+                </select>
+            </div>
+
+            <!-- Exercise Options -->
+            <div id="exerciseOptions"
+                class="grid grid-cols-2 gap-4 h-72 overflow-y-auto border rounded-md p-4 bg-gray-100">
+                <!-- Exercises from API will be populated here -->
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <script src="../../scripts/trainer.js"></script>
+    <script>
+        let template_exc_id;
+        const apiKey = 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93'; // Replace with your exerciseDB API key
+        document.addEventListener('DOMContentLoaded', () => {
+            const trainerid = getCookie("trainer_id")
+            const templateContainer = document.getElementById('template-container');
+            fetchAndDisplayTemplates(trainerid, '')
+            function fetchAndDisplayTemplates(trainerId, query) {
+                // Determine the endpoint to call based on whether a search query is provided
+                const endpoint = query
+                    ? 'http://localhost:3000/getByQuery'
+                    : 'http://localhost:3000/getTemplates';
+
+                axios.get(endpoint, {
+                    params: {
+                        trainer_id: trainerId, // Send trainer_id as a query parameter
+                        table: "workout_plan_templates",
+                        query: query           // Include query parameter if present
+                    }
+                })
+                    .then(response => {
+                        let templates = query ? response.data[0] : response.data; // Handle structure difference
+
+                        // If the response is a single object, wrap it in an array
+                        if (!Array.isArray(templates)) {
+                            templates = [templates];
+                        }
+
+                        // Clear existing templates before rendering
+                        const templateContainer = document.getElementById('templateContainer');
+                        templateContainer.innerHTML = '';
+
+                        // Iterate over the templates array and create cards for each template
+                        templates.forEach(template => {
+                            const templateCard = `
+                <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                    <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                        <img class="object-cover w-full h-40" src="../img/pexels-823sl-2294361.jpg" alt="workout image" />
+                    </a>
+                    <div class="mt-4 px-5 pb-5">
+                        <a href="#">
+                            <h5 class="text-xl tracking-tight text-slate-900">${template.template_name}</h5>
+                        </a>
+                        <div class="mt-2 mb-5 flex items-center justify-center">
+                            <p>${template.description}</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="openModal(${template.template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                            View template
+                        </a>
+                    </div>
+                </div>
+            `;
+                            // Append the newly created card to the container
+                            templateContainer.innerHTML += templateCard;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching templates:', error);
+                    });
+            }
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i].trim();
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+            document.getElementById('search-dropdown').addEventListener('keyup', function (event) {
+                const query = event.target.value.trim();  // Get the input value and trim whitespace
+                // Only fetch and populate templates if the input value is not empty
+                if (query.length > 0) {
+                    fetchAndDisplayTemplates(trainerid, query);
+                } else {
+                    // Clear template container if the query is empty
+                    fetchAndDisplayTemplates(trainerid, '')
+                    document.getElementById('templateContainer').innerHTML = '';
+                }
+            });
+
+            // Open Modal
+            document.getElementById('addTemplateBtn').addEventListener('click', function () {
+                document.getElementById('templateModal').classList.remove('hidden');
+            });
+
+            // Close Modal
+            document.getElementById('closeModalBtn').addEventListener('click', function () {
+                document.getElementById('templateModal').classList.add('hidden');
+            });
+
+            // Handle form submission (for example purposes, you can customize the logic)
+            document.getElementById('templateForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const templateName = document.getElementById('templateName').value;
+                const templateDescription = document.getElementById('templateDescription').value;
+
+                // Axios POST request
+                axios.post('http://localhost:3000/createWorkoutTemplate', {
+                    trainer_id: trainerid,
+                    template_name: templateName,
+                    description: templateDescription
+                })
+                    .then(function (response) {
+                        setCookie('template_name', templateName, 1);
+                        window.location.href = "TemplateExercises.html"
+                    })
+                    .catch(function (error) {
+                        if (error.response && error.response.data.message) {
+                            const errorMessage = error.response.data.message;  // Access the error message directly
+                            showErrorToast(errorMessage)
+                        } else {
+                            console.error('Error:', error.response ? error.response.data : error.message);
+                        }
+
+                    });
+
+
+                // Close the modal after submission
+                document.getElementById('templateModal').classList.add('hidden');
+            });
+        })
+        function showToast(type, message) {
+            const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
+            const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error
+
+            // Set the message
+            messageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => {
+                    toast.classList.add('hidden'); // Hide completely after the transition
+                }, 300);  // Wait for the transition to complete before hiding
+            }, 3000); // Ensure this is set to 3000 ms (3 seconds) for visibility
+        }
+        function showErrorToast(message) {
+            const toast = document.getElementById('error-toast');
+            const errorMessageElement = document.getElementById('error-message-toast');
+
+            // Set the error message
+            errorMessageElement.textContent = message;
+
+            // Show and slide in the toast
+            toast.classList.remove('hidden', 'translate-x-full'); // Remove the hidden state and the off-screen translation
+            toast.classList.add('translate-x-0'); // Move the toast in view
+
+            // Auto-hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');  // Slide toast out to the right
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+            }, 3000);
+        }
+
+        document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+            const toast = document.getElementById('success-toast');
+            console.log("clicked")
+            toast.classList.add('translate-x-full');  // Slide out
+            setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+        });
+        async function openModal(templateId) {
+            // Show the modal
+            document.getElementById('TemplateModal').classList.remove('hidden');
+
+            try {
+                // Fetch workout details from the backend
+                const response = await fetch(`http://localhost:3000/getWorkoutsById?template_id=${templateId}`);
+                const workoutData = await response.json();
+
+                // Process the data and create a dynamic structure
+                const weekAccordion = document.getElementById('weekAccordion');
+                weekAccordion.innerHTML = ''; // Clear previous content
+
+                // Check if the response has data
+                if (!workoutData) {
+                    // Show message for no exercises available
+                    const noExercisesMessage = document.createElement('p');
+                    noExercisesMessage.className = 'text-center text-gray-500';
+                    noExercisesMessage.innerText = 'No exercises made yet for this template.';
+                    weekAccordion.appendChild(noExercisesMessage);
+                } else {
+                    // Group exercises by week and day
+                    const groupedData = groupExercisesByWeekAndDay(workoutData);
+
+                    // Create UI elements for each week and day
+                    for (const [week, days] of Object.entries(groupedData)) {
+                        const weekDiv = document.createElement('div');
+                        const weekButton = document.createElement('button');
+                        weekButton.className = 'w-full bg-customOrange text-gray-900 px-4 py-2 font-bold text-left rounded-t-lg';
+                        weekButton.innerText = `Week ${week}`;
+                        weekButton.onclick = () => toggleVisibility(`week${week}`);
+
+                        const weekContentDiv = document.createElement('div');
+                        weekContentDiv.id = `week${week}`;
+                        weekContentDiv.className = 'hidden p-4 bg-gray-100';
+
+                        for (const [day, exercises] of Object.entries(days)) {
+                            const dayDiv = document.createElement('div');
+                            dayDiv.innerHTML = `<strong>Day ${day}:</strong><br>`;
+
+                            exercises.forEach((exercise, index) => {
+                                // Create a div to hold exercise details and buttons
+                                const exerciseDiv = document.createElement('div');
+                                exerciseDiv.className = 'exercise-item';
+
+                                // Create a div for exercise details
+                                const exerciseDetailDiv = document.createElement('div');
+                                exerciseDetailDiv.className = 'exercise-details';
+                                exerciseDetailDiv.innerHTML = `${exercise.exercise_name} <br> Reps: ${exercise.repetitions}, Sets: ${exercise.sets}`;
+
+                                // Create a div to hold the buttons
+                                const exerciseButtonsDiv = document.createElement('div');
+                                exerciseButtonsDiv.className = 'exercise-buttons';
+
+                                // Create Modify button
+                                const modifyButton = document.createElement('button');
+                                modifyButton.className = 'bg-orange-600 text-white px-2 py-1 rounded';
+                                modifyButton.innerText = 'Modify';
+                                modifyButton.onclick = () => modifyExercise(week, day, exercise.template_exercise_id);
+
+                                // Create Remove button
+                                const removeButton = document.createElement('button');
+                                removeButton.className = 'bg-red-500 text-white px-2 py-1 rounded';
+                                removeButton.innerText = 'Remove';
+                                removeButton.onclick = () => removeExercise(exercise.template_exercise_id);
+
+                                // Append buttons to the buttons div
+                                exerciseButtonsDiv.appendChild(modifyButton);
+                                exerciseButtonsDiv.appendChild(removeButton);
+
+                                // Append exercise details and buttons div to exercise div
+                                exerciseDiv.appendChild(exerciseDetailDiv);
+                                exerciseDiv.appendChild(exerciseButtonsDiv);
+
+                                // Append exercise div to day div
+                                dayDiv.appendChild(exerciseDiv);
+                            });
+
+                            weekContentDiv.appendChild(dayDiv);
+                        }
+
+                        weekDiv.appendChild(weekButton);
+                        weekDiv.appendChild(weekContentDiv);
+                        weekAccordion.appendChild(weekDiv);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching workout data:', error);
+            }
+        }
+
+        // Function to group exercises by week and day
+        function groupExercisesByWeekAndDay(data) {
+            return data.reduce((acc, exercise) => {
+                const { template_exercise_id, week_no, day_no, exercise_name, repetitions, sets } = exercise;
+
+                if (!acc[week_no]) {
+                    acc[week_no] = {};
+                }
+                if (!acc[week_no][day_no]) {
+                    acc[week_no][day_no] = [];
+                }
+                acc[week_no][day_no].push({ template_exercise_id, exercise_name, repetitions, sets });
+
+                return acc;
+            }, {});
+        }
+
+        // Modify exercise handler
+        function modifyExercise(week, day, exercise) {
+            // Handle modify logic here
+            console.log(`Modify Week ${week}, Day ${day}`, exercise);
+            template_exc_id = exercise
+            document.getElementById('TemplateModal').classList.add('hidden')
+            document.getElementById('modifyExerciseModal').classList.remove('hidden')
+            // You can populate a form with existing data and allow the user to modify it.
+        }
+
+        // Remove exercise handler
+        function removeExercise(exercise) {
+            axios.delete(`http://localhost:3000/RemoveWorkoutTemplateExercises?template_exercise_id=${exercise}`)
+                .then(function (response) {
+                    document.getElementById('TemplateModal').classList.add('hidden');
+                    showToast("success", `Exercise removed from this template`);
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                });
+        }
+
+
+        // Toggle visibility of week content
+        function toggleVisibility(weekId) {
+            const contentDiv = document.getElementById(weekId);
+            contentDiv.classList.toggle('hidden');
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('TemplateModal').classList.add('hidden');
+        }
+        function closeExerciseModal() {
+            document.getElementById('exerciseModal').classList.add('hidden');
+        }
+        function openExerciseModal() {
+            const modal = document.getElementById('exerciseModal');
+            modal.classList.remove('hidden'); // Remove the hidden class to show the modal
+            fetchExercises();
+        }
+        document.getElementById('searchWorkout').addEventListener('click', function () {
+            const exerciseName = document.getElementById('searchExercise').value;
+            console.log('Searching for exercise:', exerciseName);
+            fetchExercises(exerciseName);
+        });
+
+
+        // Add event listener to the button to open the modal
+        document.getElementById('addExerciseBtn').addEventListener('click', openExerciseModal);
+        function fetchExercises(query = '', bodyPart = 'all') {
+            let apiUrl;
+            if (query) {
+                apiUrl = `https://exercisedb.p.rapidapi.com/exercises/name/${query}`;
+            } else if (bodyPart !== 'all') {
+                apiUrl = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`;
+            } else {
+                apiUrl = 'https://exercisedb.p.rapidapi.com/exercises';
+            }
+
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+                }
+            };
+
+            fetch(apiUrl, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    displayExercises(data.slice(0, 10)); // Limit to 10 exercises
+                })
+                .catch(error => console.error('Error fetching exercises:', error));
+        }
+        function displayExercises(exercises) {
+            const exerciseOptions = document.getElementById('exerciseOptions');
+            exerciseOptions.innerHTML = '';
+
+            exercises.forEach(exercise => {
+                const exerciseCard = `
+            <div class="exercise-card w-full p-2">
+                <div class="border border-gray-300 rounded-lg shadow-md bg-white p-4">
+                    <img src="${exercise.gifUrl}" alt="${exercise.name}" class="w-full h-32 object-cover rounded-t-lg">
+                    <div class="exercise-details mt-2">
+                        <h3 class="text-lg font-semibold truncate">${exercise.name}</h3>
+                        <p class="text-sm text-gray-600">Target: ${exercise.target}</p>
+                        <button class="bg-blue-500 text-white px-4 py-2 mt-3 rounded hover:bg-blue-400 transition duration-200 ease-in-out" 
+                            onclick="addExercise('${exercise.id}','${exercise.name}', '${exercise.target}', '${exercise.gifUrl}', '${exercise.bodyPart}')">
+                            Add Exercise
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+                exerciseOptions.innerHTML += exerciseCard;
+            });
+        }
+        function addExercise(id, name, target, gifUrl, part) {
+            console.log(id)
+            const reps = document.getElementById('reps').value;
+            const sets = document.getElementById('sets').value;
+            exerciseId = id;
+            bodyPart = part;
+            document.getElementById('exerciseName').value = name
+            // Close the modal
+            document.getElementById('exerciseModal').classList.add('hidden');
+        }
+
+        function submitExercise() {
+            const name = document.getElementById('exerciseName').value;
+            const reps = document.getElementById('reps').value;
+            const sets = document.getElementById('sets').value;
+
+            // Axios POST request
+            axios.put('http://localhost:3000/ModifyWorkoutTemplateExercises', {
+                template_exercise_id: template_exc_id,
+                exercise_id: exerciseId,
+                exercise_name: name,
+                reps: reps,
+                sets: sets,
+                muscle_group: "chest",
+            })
+                .then(function (response) {
+                    showToast("success", `Exercise successfully updated!`);
+                    document.getElementById('modifyExerciseModal').classList.add('hidden');
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                });
+
+        }
+
+    </script>
+</body>
+
+</html>

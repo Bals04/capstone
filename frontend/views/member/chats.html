@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        :root {
+            --custom-gray: #343639;
+            --custom-orange: #EC7E4A;
+            --custom-blue: #007BFF;
+            --custom-light-blue: #E0F7FA;
+        }
+    </style>
+    <script src="/frontend/scripts/auth.js"></script>
+</head>
+
+<body class="font-[Poppins] bg-customGray min-h-screen flex items-center justify-center">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium">
+                <li>
+                    <a href="memberDashboard.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="locate-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Maps</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="barbell-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Workout Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="egg-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Meal Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerlist.html"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="people-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Trainers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="chats.html"
+                        class="flex items-center p-2 text-gray-900 rounded-lg bg-customGray dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!--Content-->
+    <div class="flex-grow mt-16 sm:ml-64 sm:mt-11 -mb-[10.10px]"> <!-- Added mt-16 for mobile spacing -->
+        <div class="w-full max-w-6xl bg-div_color shadow-lg flex flex-col sm:flex-row h-[calc(100vh-4rem)]">
+            <!-- Adjust height -->
+
+            <!-- Sidebar: Chat List -->
+            <div class="w-full sm:w-1/4 bg-div_color text-white p-4 flex flex-col border-r border-gray-600">
+                <h2 class="text-lg font-bold mb-6">
+                    <ion-icon class="text-2xl" name="chatbubbles-outline"></ion-icon><span class="ml-2">Chat</span>
+                </h2>
+                <ul id="chatList" class="space-y-4 overflow-y-auto flex-grow">
+                    <li class="p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">Gym Member 1</li>
+                    <li class="p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">Gym Member 2</li>
+                    <li class="p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">Gym Member 3</li>
+                </ul>
+            </div>
+
+            <!-- Chat Box -->
+            <div
+                class="flex-grow p-6 bg-div_color flex flex-col overflow-auto scroll-m-3 scrollbar scrollbar-thumb-transparent">
+                <h1 class="text-left mb-6 text-lg font-bold rounded-xl p-2 bg-div_color text-white">Kachat nimo ron:
+                    <span id="chatWith">wala (sad life :<) </span>
+                </h1>
+
+                <div id="chatContainer" class="bg-white rounded-lg shadow-lg flex flex-col h-full">
+                    <div id="messageDisplay"
+                        class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-auto scrollbar scrollbar-thumb-transparent rounded-t-lg">
+                        <div id="loadingPrompt" class="text-center text-white rounded-lg py-4 bg-gray-800 hidden">
+                            <p>Fetching messages...</p>
+                        </div>
+                    </div>
+
+                    <div id="inputContainer"
+                        class="flex items-center p-3 bg-white border-t border-gray-300 rounded-b-lg">
+                        <label id="fileInputLabel" for="fileInput"
+                            class="flex items-center justify-center p-2 bg-customGray text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-paperclip"></i>
+                        </label>
+                        <input type="file" id="fileInput" class="hidden">
+                        <input placeholder="Type a message..." type="text" id="messageInput"
+                            class="flex-grow p-2 border border-gray-300 rounded-full text-base mr-2 outline-none bg-gray-50 shadow-inner">
+                        <button id="sendButton" onclick="sendMessage()"
+                            class="p-2 bg-customGray text-white rounded-full cursor-pointer text-xl flex items-center justify-center mr-2 hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="../../scripts/trainer.js">//para sa responsive both sidebar og header haha</script>
+
+<!-- Include Socket.IO -->
+<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let socket;
+        let memberid;
+        let trainerid;
+        let conversationId;
+
+        let onlineUsers = {};        // Initialize an empty object to keep track of online users
+        let currentChatList = [];
+        id = window.userId;
+
+        fetchMemberInfo();
+
+        // 1. Connect to the Socket.IO server
+        socket = io.connect("http://localhost:3000");
+
+        const CheckConversation = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/checkConvo', {
+                    params: {
+                        member_id: memberid,
+                        trainer_id: trainerid
+                    }
+                });
+                if (response.status === 200) {
+                    conversationId = response.data.id
+                } else {
+                    console.error('Failed to load messages:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error loading chat history:', error);
+            }
+        };
+
+        function fetchMemberInfo() {
+            axios.get('http://localhost:3000/getMemberInfo', {
+                params: {
+                    account_id: id
+                }
+            })
+                .then(response => {
+                    const memberData = response.data[0];
+                    memberid = memberData.member_id;
+                    // Fetch the Trainer Chat Log for the member
+                    fetchTrainerChatLog(memberid);
+
+                    // 2. Emit trainerId to the server to identify the trainer
+                    socket.emit("user_connected", memberid);
+
+                    // 3. Listen for incoming messages
+                    socket.on("receive_message", (data) => {
+                        displayMessage(data, "received");
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching member info:', error);
+                });
+        }
+
+        function fetchTrainerChatLog(memberid) {
+            axios.get('http://localhost:3000/retrieveTrainerChatLog', {
+                params: {
+                    member_id: memberid
+                }
+            })
+                .then(response => {
+                    const chatList = response.data;
+                    currentChatList = chatList;
+                    populateChatList(chatList);
+                })
+                .catch(error => {
+                    console.error('Error fetching member chat log:', error);
+                });
+        }
+
+        socket.on("update_user_list", (users) => {
+            onlineUsers = users;  // Update the local online users object with the latest data from the server
+            populateChatList(currentChatList);  // Re-populate the chat list with the latest online statuses
+        });
+
+        function populateChatList(chatList) {
+            const chatListElement = document.getElementById('chatList');
+            chatListElement.innerHTML = ''; // Clear any existing content
+
+            chatList.forEach(trainer => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('p-3', 'bg-gray-700', 'rounded-lg', 'hover:bg-gray-600', 'cursor-pointer', 'flex', 'justify-between', 'items-center');
+
+                // Create a container div to hold the image, text, and indicator side by side
+                const container = document.createElement('div');
+                container.classList.add('flex', 'items-center', 'justify-between', 'w-full');
+
+                // Create an image element for the trainer's avatar
+                const avatar = document.createElement('img');
+                avatar.src = 'http://localhost:3000/uploads/' + trainer.filename || 'default-avatar.jpg'; // Use trainer's avatar or a default one
+                avatar.alt = `${trainer.trainer_name}'s avatar`;
+                avatar.classList.add('h-8', 'w-8', 'rounded-full', 'mr-1'); // Tailwind classes for circular image and spacing
+
+                // Add trainer name to a text element inside the container
+                const trainerName = document.createElement('span');
+                trainerName.textContent = trainer.trainer_name;
+
+                // Create the online indicator
+                const onlineIndicator = document.createElement('span');
+                onlineIndicator.classList.add('h-3', 'w-3', 'rounded-full', 'ml-2');
+
+                // Check if the trainer is online based on their trainer_id
+                if (onlineUsers[trainer.trainer_id]) {
+                    onlineIndicator.classList.add('bg-green-500');
+                } else {
+                    onlineIndicator.classList.add('bg-gray-500');
+                }
+
+                // Append the avatar, trainer name, and online indicator to the container
+                container.appendChild(avatar);
+                container.appendChild(trainerName);
+                container.appendChild(onlineIndicator);
+
+                listItem.addEventListener('click', () => {
+                    clear();  // Clear previous messages
+                    document.getElementById('chatWith').textContent = trainer.trainer_name;
+                    console.log(trainer.trainer_id);
+                    trainerid = trainer.trainer_id;  // Use this ID to load trainer-specific chat
+                    loadChatHistory(trainerid);  // Load chat history for the clicked trainer
+                    CheckConversation();  // Any additional function to execute
+                });
+
+                // Append the container to the list item
+                listItem.appendChild(container);
+
+                // Append the list item to the chat list container
+                chatListElement.appendChild(listItem);
+            });
+
+        }
+
+        const loadChatHistory = async (trainerid) => {
+            try {
+                const response = await axios.get('http://localhost:3000/messages', {
+                    params: {
+                        member_id: memberid,
+                        trainer_id: trainerid
+                    }
+                });
+                if (response.status === 200) {
+                    const messages = response.data;
+                    messages.forEach((message) => {
+                        const type = (message.sender === 'Member') ? 'sent' : 'received';
+                        displayMessage(message, type);
+                    });
+                } else {
+                    console.error('Failed to load messages:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error loading chat history:', error);
+            }
+        };
+
+        window.sendMessage = async () => {
+            const messageContent = document.getElementById("messageInput").value.trim();
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+
+            let imgPath = "";
+
+            if (file) {
+                // Upload the file first
+                const path = "/server/";
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    imgPath = path + uploadResponse.data.filePath; // Store the file path from the response
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    alert("Image upload failed.");
+                    return;
+                }
+            }
+
+            if (!messageContent && !imgPath) {
+                alert("Please enter a message or select a file to send.");
+                return;
+            }
+
+            const messageData = {
+                conversation_id: conversationId,
+                sender_id: memberid,
+                recipientId: trainerid,
+                message: messageContent || "",
+                img_path: imgPath || "" // Include the image path if present
+            };
+
+            sendSocketMessage(messageData);
+
+            // Clear inputs
+            document.getElementById("messageInput").value = "";
+            fileInput.value = "";
+        };
+
+        document.getElementById("messageInput").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") { // Check if the Enter key is pressed
+                event.preventDefault();  // Prevent the default behavior (form submission or new line)
+                sendMessage();           // Call the sendMessage function
+                document.getElementById("messageInput").value = "";
+            }
+        });
+
+
+        function sendSocketMessage(data) {
+            socket.emit("send_message", data);
+            displayMessage(data, "sent");
+
+            axios.post('http://localhost:3000/send', data)
+                .catch(error => console.error('Error sending message:', error));
+        }
+
+        const displayMessage = (data, type) => {
+            const messageDisplay = document.getElementById("messageDisplay");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
+
+            if (type === "sent") {
+                messageElement.classList.add("bg-gray-800", "ml-auto", "text-white");
+            } else {
+                messageElement.classList.add("bg-gray-200", "mr-auto");
+            }
+
+            if (data.img_path) {
+                const imgElement = document.createElement("img");
+                imgElement.src = data.img_path;
+                imgElement.classList.add("w-full", "rounded-md", "mb-2");
+                messageElement.appendChild(imgElement);
+            }
+
+            if (data.message) {
+                const textElement = document.createElement("p");
+                textElement.textContent = data.message;
+                messageElement.appendChild(textElement);
+            }
+
+            messageDisplay.appendChild(messageElement);
+            messageDisplay.scrollTop = messageDisplay.scrollHeight;
+        };
+
+        function clear() {
+            const chatBox = document.getElementById('messageDisplay');
+            chatBox.innerHTML = '';
+        }
+    });
+</script>
+
+</html>

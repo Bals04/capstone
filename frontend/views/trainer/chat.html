@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        :root {
+            --custom-gray: #343639;
+            --custom-orange: #EC7E4A;
+            --custom-blue: #007BFF;
+            --custom-light-blue: #E0F7FA;
+        }
+
+        #success-toast {
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body class="font-[Poppins] bg-customGray min-h-screen flex items-center justify-center">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium">
+                <li>
+                    <a href="index.html"
+                        class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerWorkoutPlan.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="barbell-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Workout Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerMealPlan.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="egg-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Meal Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="people-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!--Content-->
+    <div class="flex-grow mt-16 sm:ml-64 sm:mt-11 -mb-[10.10px]"> <!-- Added mt-16 for mobile spacing -->
+        <div class="w-full max-w-6xl bg-div_color shadow-lg flex flex-col sm:flex-row h-[calc(100vh-4rem)]">
+            <!-- Adjust height -->
+
+            <!-- Sidebar: Chat List -->
+            <div class="w-full sm:w-1/4 bg-div_color text-white p-4 flex flex-col border-r border-gray-600">
+                <h2 class="text-lg font-bold mb-6">
+                    <ion-icon class="text-2xl" name="chatbubbles-outline"></ion-icon><span class="ml-2">Chat</span>
+                </h2>
+                <ul id="chatList" class="space-y-4 overflow-y-auto flex-grow">
+                    <!-- I already have dynamic data here that shows who she/he chats with -->
+                </ul>
+            </div>
+
+            <!-- Chat Box -->
+            <div
+                class="flex-grow p-6 bg-div_color flex flex-col overflow-auto scroll-m-3 scrollbar scrollbar-thumb-transparent">
+
+                <!-- Chat Name Overlay -->
+                <div id="chatNameOverlay"
+                    class="chat-overlay bg-gray-800 py-6 rounded-t-lg flex items-center justify-between px-4">
+                    <h2 id="chatWith" class="text-white text-xl">Current Chat Name</h2>
+                </div>
+
+
+
+
+                <div id="chatContainer" class="bg-white shadow-lg flex flex-col h-[1100px]"> <!-- Fixed height -->
+                    <div id="messageDisplay"
+                        class="flex-grow p-4 border-b border-gray-300 bg-gray-100 overflow-y-scroll scrollbar scrollbar-thumb-transparent rounded-t-lg h-[400px]">
+                        <!-- Scrollable area -->
+                    </div>
+
+                    <div id="inputContainer"
+                        class="flex items-center p-3 bg-white border-t border-gray-300 rounded-b-lg">
+                        <button id="sendProposalButton"
+                            class="w-10 h-10 bg-customGray text-white rounded-full mr-2 hover:bg-orange-600 transition-colors flex items-center justify-center">
+                            <i class="fas fa-clipboard-list"></i>
+                        </button>
+                        <label id="fileInputLabel" for="fileInput"
+                            class="w-10 h-10 flex items-center justify-center p-2 bg-customGray text-white rounded-full cursor-pointer text-xl mr-2 hover:bg-orange-600 transition-colors">
+                            <i class="fas fa-paperclip"></i>
+                        </label>
+                        <input type="file" id="fileInput" class="hidden">
+                        <input placeholder="Type a message..." type="text" id="messageInput"
+                            class="flex-grow p-2 border border-gray-300 rounded-full text-base mr-2 outline-none bg-gray-50 shadow-inner">
+                        <button id="sendButton" onclick="sendMessage()"
+                            class="w-10 h-10 p-2 bg-customGray text-white rounded-full cursor-pointer text-xl flex items-center justify-center mr-2 hover:bg-orange-600 transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Background Overlay (Initially Hidden) -->
+                <div id="proposalModalBackground"
+                    class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+                    <!-- Modal Container -->
+                    <div class="bg-white rounded-lg shadow-lg w-1/2">
+                        <!-- Modal Header -->
+                        <div class="flex justify-between items-center p-4 border-b">
+                            <h2 class="text-lg font-bold">Send Proposal</h2>
+                            <button id="closeModalButton" class="text-gray-500 hover:text-gray-800">
+                                &times; <!-- Close Button -->
+                            </button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="p-4">
+                            <!-- Proposal Form -->
+                            <form id="sendProposalForm">
+                                <!-- Plan Type -->
+                                <div class="mb-4">
+                                    <label for="planType" class="block text-gray-700">Plan Type</label>
+                                    <select id="planType" class="w-full p-2 border border-gray-300 rounded">
+                                        <option value="Workout Plan">Workout Plan</option>
+                                        <option value="Meal Plan">Meal Plan</option>
+                                        <option value="Comprehensive Plan">Comprehensive Plan</option>
+                                    </select>
+                                </div>
+                                <!-- Price -->
+                                <div class="mb-4">
+                                    <label for="price" class="block text-gray-700">Price</label>
+                                    <input type="number" id="price" class="w-full p-2 border border-gray-300 rounded"
+                                        placeholder="Enter price in pesos" step="1000">
+                                </div>
+                                <!-- Duration -->
+                                <div class="mb-4">
+                                    <label for="duration" class="block text-gray-700">Duration</label>
+                                    <input type="text" id="duration" class="w-full p-2 border border-gray-300 rounded"
+                                        placeholder="e.g., 4 weeks, 3 months">
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="flex justify-end p-4 border-t">
+                            <button id="submitProposalButton"
+                                class="bg-customGray text-white px-4 py-2 rounded hover:bg-orange-600 transition-colors">
+                                Submit Proposal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="success-toast"
+        class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+        <div class="flex items-center">
+            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+            </div>
+            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+
+
+    <script src="../../scripts/trainer.js"></script>
+
+    <!-- Include Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let socket;
+            let memberid;
+            let trainerid;
+            let conversationId;
+            let onlineUsers = {};        // Initialize an empty object to keep track of online users
+            let currentChatList = [];    // Initialize an empty array to store the current chat list
+            let proposal_id = 0;
+            let trainer_name;
+
+
+            id = window.userId;
+
+            fetchTrainerInfo();
+
+            // 1. Connect to the Socket.IO server
+            socket = io.connect("http://localhost:3000");
+            const CheckConversation = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3000/checkConvo', {
+                        params: {
+                            member_id: memberid,
+                            trainer_id: trainerid
+                        }
+                    });
+                    if (response.status === 200) {
+                        conversationId = response.data.id
+                    } else {
+                        console.error('Failed to load messages:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            };
+
+            function fetchTrainerInfo() {
+                console.log(id)
+                axios.get('http://localhost:3000/getTrainerInfo', {
+                    params: {
+                        user_id: id
+                    }
+                })
+                    .then(response => {
+                        console.log("--", id)
+                        console.log(response.data[0]);
+                        const trainerData = response.data[0];
+                        trainerid = trainerData.trainer_id;
+                        trainer_name = trainerData.firstname
+
+                        // Fetch and populate the chat list after trainer info is fetched
+                        fetchMemberChatLog(trainerid);
+
+                        // 2. Emit trainerId to the server to identify the trainer
+                        socket.emit("user_connected", trainerid);
+
+                        // 3. Listen for incoming messages
+                        socket.on("receive_message", (data) => {
+                            displayMessage(data, "received");
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching trainer info:', error);
+                    });
+            }
+
+            function fetchMemberChatLog(trainerId) {
+                axios.get('http://localhost:3000/retrieveMemberChatLog', {
+                    params: {
+                        trainer_id: trainerId
+                    }
+                })
+                    .then(response => {
+                        const chatList = response.data;  // Assign the response data (chat members list) to chatList
+                        currentChatList = chatList;      // Store the chat list in the global variable `currentChatList`
+                        populateChatList(currentChatList);  // Populate the chat list with fetched data
+                        loadChatHistory(currentChatList[0].member_id);
+                        memberid = currentChatList[0].member_id;
+                        CheckConversation();
+                        document.getElementById('chatWith').textContent = currentChatList[0].member_name;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching member chat log:', error);
+                    });
+            }
+
+            // Listen for the "update_user_list" event from the server
+            socket.on("update_user_list", (users) => {
+                onlineUsers = users;  // Update the local online users object with the latest data from the server
+                populateChatList(currentChatList);  // Re-populate the chat list with the latest online statuses
+            });
+
+            // Function to populate chat list with online indicator
+            function populateChatList(chatList) {
+                const chatListElement = document.getElementById('chatList');
+                chatListElement.innerHTML = ''; // Clear any existing content
+
+                chatList.forEach(member => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('p-3', 'bg-gray-700', 'rounded-lg', 'hover:bg-gray-600', 'cursor-pointer', 'flex', 'justify-between', 'items-center');
+
+                    // Create a container div to hold the text and indicator side by side
+                    const container = document.createElement('div');
+                    container.classList.add('flex', 'items-center', 'justify-between', 'w-full');
+
+                    // Add member name to a text element inside the container
+                    const memberName = document.createElement('span');
+                    memberName.textContent = member.member_name;
+                    container.appendChild(memberName);
+
+
+                    const onlineIndicator = document.createElement('span');
+                    onlineIndicator.classList.add('h-3', 'w-3', 'rounded-full', 'ml-2');
+
+                    // Check if the member is online based on their member_id
+                    if (onlineUsers[member.member_id]) { //DIRI ANG LOGIC PARA MABAL.AN IF ONLINE OR DILI ANG USER
+                        onlineIndicator.classList.add('bg-green-500');
+                    } else {
+                        onlineIndicator.classList.add('bg-gray-500');
+                    }
+
+
+                    container.appendChild(onlineIndicator);
+
+
+                    listItem.addEventListener('click', () => {
+                        clear();  // PARA DILI MAG STACK ANG MESSAGES EVERYTIME WE CLICK A LIST
+                        document.getElementById('chatWith').textContent = member.member_name;
+                        console.log(member.member_id);
+                        memberid = member.member_id;  // Use this ID to load member-specific chat
+                        loadChatHistory(memberid);  // Load chat history for the clicked member
+                        CheckConversation();  // Any additional function to execute
+                    });
+
+                    // Append the container to the list item
+                    listItem.appendChild(container);
+
+                    // Append the list item to the chat list container
+                    chatListElement.appendChild(listItem);
+                });
+            }
+
+            const loadChatHistory = async (memberId) => {
+                try {
+                    const response = await axios.get('http://localhost:3000/messages', {
+                        params: {
+                            member_id: memberId,
+                            trainer_id: trainerid
+                        }
+                    });
+
+                    if (response.status === 200) {
+                        const messages = response.data;
+                        messages.forEach((message) => {
+                            const type = (message.sender === 'Trainer') ? 'sent' : 'received';
+                            displayMessage(message, type);
+                        });
+                    } else {
+                        console.error('Failed to load messages:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            };
+
+            window.sendMessage = async () => {
+                const messageContent = document.getElementById("messageInput").value.trim();
+                const fileInput = document.getElementById("fileInput");
+                const file = fileInput.files[0];
+
+                let imgPath = "";
+
+                if (file) {
+                    // Upload the file first
+                    const path = "/server/";
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        const uploadResponse = await axios.post('http://localhost:3000/uploadSingle', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                        imgPath = path + uploadResponse.data.filePath; // Store the file path from the response
+                    } catch (error) {
+                        console.error("Error uploading image:", error);
+                        alert("Image upload failed.");
+                        return;
+                    }
+                }
+
+                if (!messageContent && !imgPath) {
+                    alert("Please enter a message or select a file to send.");
+                    return;
+                }
+
+                const messageData = {
+                    conversation_id: conversationId,
+                    sender_id: trainerid,
+                    recipientId: memberid,
+                    message: messageContent || "",
+                    img_path: imgPath || "" // Include the image path if present
+                };
+
+                sendSocketMessage(messageData);
+
+                // Clear inputs
+                // document.getElementById("messageInput").value = "";
+                // fileInput.value = "";
+            };
+
+            document.getElementById("messageInput").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") { // Check if the Enter key is pressed
+                    event.preventDefault();  // Prevent the default behavior (form submission or new line)
+                    sendMessage();           // Call the sendMessage function
+                    document.getElementById("messageInput").value = "";
+                }
+            });
+
+
+            function sendSocketMessage(data) {
+                socket.emit("send_message", data);
+                displayMessage(data, "sent");
+                axios.post('http://localhost:3000/send', data)
+                    .catch(error => console.error('Error sending message:', error.message));
+            }
+
+            const clear = () => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                messageDisplay.innerHTML = '';
+
+            }
+
+            // Function to display messages (remains unchanged)
+            const displayMessage = (data, type) => {
+                const messageDisplay = document.getElementById("messageDisplay");
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("message", "p-3", "rounded-lg", "shadow-md", "mb-2", "max-w-xs");
+
+                if (type === "sent") {
+                    messageElement.classList.add("bg-customOrange", "ml-auto", "text-white");
+                } else {
+                    messageElement.classList.add("bg-div_color", "mr-auto", "text-white");
+                }
+
+                if (data.img_path) {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = data.img_path;
+                    imgElement.classList.add("w-full", "rounded-md", "mb-2");
+                    messageElement.appendChild(imgElement);
+                }
+
+                if (data.message) {
+                    const textElement = document.createElement("p");
+                    textElement.textContent = data.message;
+                    messageElement.appendChild(textElement);
+                }
+
+                messageDisplay.appendChild(messageElement);
+                messageDisplay.scrollTop = messageDisplay.scrollHeight;
+            };
+
+            // Get elements
+            const sendProposalButton = document.getElementById('sendProposalButton');
+            const proposalModalBackground = document.getElementById('proposalModalBackground');
+            const closeModalButton = document.getElementById('closeModalButton');
+            const submitProposalButton = document.getElementById('submitProposalButton');
+
+            // Open the modal when the "Send Proposal" button is clicked
+            sendProposalButton.addEventListener('click', () => {
+                proposalModalBackground.classList.remove('hidden');
+            });
+
+            // Close the modal when the close button is clicked
+            closeModalButton.addEventListener('click', () => {
+                proposalModalBackground.classList.add('hidden');
+            });
+
+            // Close the modal when clicking outside the modal container
+            proposalModalBackground.addEventListener('click', (event) => {
+                if (event.target === proposalModalBackground) {
+                    proposalModalBackground.classList.add('hidden');
+                }
+            });
+
+            // Handle form submission (e.g., you can add your API call here)
+            submitProposalButton.addEventListener('click', () => {
+                // Retrieve form data
+                const planType = document.getElementById('planType').value;
+                const price = document.getElementById('price').value;
+                const duration = document.getElementById('duration').value;
+                const status = "Pending"; // Set status to "Pending"
+
+                // Replace with actual member ID and trainer ID values
+
+                // Create the data object to send in the request body
+                const proposalData = {
+                    trainer_id: trainerid,
+                    member_id: memberid,
+                    planType: planType,
+                    price: parseFloat(price), // Ensure price is a number
+                    duration: parseInt(duration), // Ensure duration is a number
+                    status: status
+                };
+
+                // Send POST request using Axios
+                axios.post('http://localhost:3000/insertProposal', proposalData)
+                    .then(response => {
+                        console.log('Proposal submitted successfully:', response.data.proposal_id);
+                        proposal_id = response.data.proposal_id;
+                        // Close the modal after submission
+                        setTimeout(() => {
+                            insertNotification();
+                        }, 1000);
+                        proposalModalBackground.classList.add('hidden');
+                        showToast("success", "Proposal sent! Awaiting client response.")
+                    })
+                    .catch(error => {
+                        console.error('Error submitting proposal:', error);
+                        alert('Failed to submit proposal. Please try again.');
+                    });
+            });
+
+            function showToast(type, message) {
+                const toast = type === 'success' ? document.getElementById('success-toast') : document.getElementById('error-toast');
+                const messageElement = type === 'success' ? document.getElementById('success-message-toast') : document.getElementById('error-message-toast');
+
+                // Set the message
+                messageElement.textContent = message;
+
+                // Show and slide in the toast
+                toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+                toast.classList.add('translate-x-0'); // Move the toast in view
+
+                // Auto-hide the toast after 3 seconds
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full');  // Slide toast out to the right
+                    setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after the transition
+                }, 3000);
+            }
+            document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+                const toast = document.getElementById('success-toast');
+                toast.classList.add('translate-x-full');  // Slide out
+                setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+            });
+            // window.addEventListener('beforeunload', () => {
+            //     socket.off("receive_message");
+            // });
+            function insertNotification() {
+                // Axios POST request
+                axios.post('http://localhost:3000/insertNotification', {
+                    member_id: memberid,
+                    proposal_id: proposal_id,
+                    message: `Trainer ${trainer_name} sent you a new proposal.`,
+                })
+                    .then(function (response) {
+                        console.log(memberid)
+                        console.log(proposal_id)
+                        console.log(trainer_name)
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error.response ? error.response.data : error.message);
+                    });
+
+            }
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

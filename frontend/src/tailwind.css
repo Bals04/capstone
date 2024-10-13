@@ -8,8 +8,9 @@
 * {
     margin: 0;
     padding: 0;
-    box-shadow: border-box;
+    box-sizing: border-box; /* Corrected */
 }
+
 
 .sidebar {
     z-index: 2;
@@ -153,12 +154,12 @@
     transition: all 200ms ease;
 }
 
-label {
+.mode-label {
     border-radius: 50%;
     cursor: pointer;
 }
 
-input {
+.mode {
     position: absolute;
     opacity: 0;
 }

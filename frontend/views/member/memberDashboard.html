@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Portal</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script> -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <style>
+        /* Additional modal styles for enhanced UI/UX */
+        #proposalModal .rounded-full {
+            border-radius: 9999px;
+        }
+
+        #proposalModal .shadow-md {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #proposalModal .transform {
+            transform: translateY(0);
+        }
+
+        #proposalModal .transition-all {
+            transition: all 0.2s ease-in-out;
+        }
+
+        #proposalModal .hover\\:scale-105:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-[Poppins] bg-customGray text-white">
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="relative mr-6 mt-1">
+                            <button id="notificationButton">
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+
+                            <!-- Notification Dropdown -->
+                            <div id="notificationDropdown"
+                                class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+                                <div class="py-2 px-4 bg-gray-300 border-b border-gray-200 text-gray-700 font-bold">
+                                    Notifications
+                                </div>
+                                <div id="notificationList" class="max-h-80 overflow-y-auto">
+                                    <!-- Notification Items will be dynamically populated here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="memberDashboard.html" onclick="removeCookie('accessToken');"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium">
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="maps.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="locate-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Maps</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="barbell-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Workout Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="egg-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Meal Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerlist.html"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="people-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Trainers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="chats.html"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Dashboard Content -->
+    <div class="sm:ml-64">
+        <div class="m-4 p-4 mt-20">
+            <h1 class="text-[15px]">Good evening,</h1>
+            <span class="nameChange text-[18px] font-bold">Member Full Name</span>
+            <h1>
+                <span class="greetChange text-[12px]">You've done a great job today!</span>
+            </h1>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 m-4 p-4">
+            <!-- Calendar Component -->
+            <div class="flex-1 md:w-1/2 shadow-lg bg-white dark:bg-gray-800 rounded-md">
+                <div class="p-3">
+                    <div class="px-2 flex items-center justify-between">
+                        <span tabindex="0" class="focus:outline-none text-sm font-bold dark:text-gray-100 text-gray-800"
+                            id="monthYear">October 2020</span>
+                        <div class="flex items-center">
+                            <button aria-label="calendar backward" id="prevButton"
+                                class="focus:text-gray-400 hover:text-gray-400 text-gray-800 dark:text-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-chevron-left" width="20" height="20"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <polyline points="15 6 9 12 15 18" />
+                                </svg>
+                            </button>
+                            <button aria-label="calendar forward" id="nextButton"
+                                class="focus:text-gray-400 hover:text-gray-400 ml-2 text-gray-800 dark:text-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-chevron-right" width="20" height="20"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <polyline points="9 6 15 12 9 18" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-8 overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                Mo</p>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                Tu</p>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                We</p>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                Th</p>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                Fr</p>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                Sa</p>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="w-full flex justify-center">
+                                            <p class="text-sm font-medium text-center text-gray-800 dark:text-gray-100">
+                                                Su</p>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendarBody">
+                                <!-- Days will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="eventDetails" class="py-3 md:px-8 px-4 dark:bg-gray-700 bg-gray-50 rounded-b">
+                    <div class="px-2">
+                        <!-- Example Events -->
+                        <div class="border-b pb-2 border-gray-400">
+                            <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
+                            <a tabindex="0"
+                                class="focus:outline-none text-sm font-medium leading-5 text-gray-800 dark:text-gray-100 mt-1">Test</a>
+                            <p class="text-xs pt-1 leading-4 leading-none text-gray-600 dark:text-gray-300">Test details
+                            </p>
+                        </div>
+                        <div class="border-b pb-2 border-gray-400 pt-3">
+                            <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
+                            <a tabindex="0"
+                                class="focus:outline-none text-sm font-medium leading-5 text-gray-800 dark:text-gray-100 mt-1">Lorem
+                                Ipsum</a>
+                            <p class="text-xs pt-1 leading-4 leading-none text-gray-600 dark:text-gray-300">Details
+                                about Lorem Ipsum</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Component -->
+            <div class="flex-1 md:w-1/2 shadow-lg bg-white dark:bg-gray-800 rounded-md p-4">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Notifications</h2>
+                <div id="notificationList" class="mt-4 space-y-2">
+                    <!-- Notifications will be dynamically added here -->
+                    <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-md shadow">
+                        <div class="text-sm font-medium text-gray-800 dark:text-gray-100">Sample Notification</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-300">Just now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Workout Section -->
+        <div class="m-4 p-4 bg-div_color max-w-screen-xl">
+            <div class="py-4 px-2">Workout</div>
+        </div>
+
+        <!-- Proposal Modal -->
+        <!-- Enhanced Proposal Modal -->
+        <!-- Enhanced Proposal Modal -->
+        <div id="proposalModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            <div
+                class="relative bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl max-w-lg w-full border border-gray-200 dark:border-gray-700">
+                <!-- Modal Content -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-extrabold text-gray-900 dark:text-gray-100 mb-2">Proposal Details</h2>
+                    <p id="proposalPlanType" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
+                    <p id="proposalPrice" class="text-sm text-gray-700 dark:text-gray-300 mb-1"></p>
+                    <p id="proposalDuration" class="text-sm text-gray-700 dark:text-gray-300"></p>
+                </div>
+                <!-- Divider -->
+                <div class="border-t border-gray-300 dark:border-gray-700 my-4"></div>
+                <!-- Accept/Decline Buttons -->
+                <div class="flex justify-between items-center">
+                    <!-- Accept Button with Revised Text -->
+                    <button id="acceptProposalBtn"
+                        class="px-5 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-3-3a1 1 0 011.414-1.414L9 11.586l6.293-6.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Accept & Proceed to Payment
+                    </button>
+                    <!-- Decline Button -->
+                    <button id="declineProposalBtn"
+                        class="px-5 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-full shadow-md transform transition-all duration-200 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Decline
+                    </button>
+                </div>
+                <!-- Close Modal Button -->
+                <button id="closeProposalModal"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 transition ease-in-out duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+</body>
+
+<script src="../../scripts/calendar.js"></script>
+<script src="../../scripts/member.js"></script>
+<script src="../../scripts/trainer.js">//paras responsive sa sidebar og header</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const uid = userId;
+        let firstname = null;
+        let lastname = null;
+        let weight = null;
+        let bodytype = null;
+        let member_id = 0
+        let Duration;
+        let plan_type;
+        let Price;
+        let Proposal_id;
+
+        // Fetch and assign member information when the page loads
+        fetchMemberInfo();
+        function fetchMemberInfo() {
+            axios.get('http://localhost:3000/getMemberInfo', {
+                params: {
+                    account_id: uid
+                }
+            })
+                .then(response => {
+                    const memberData = response.data[0]; // Assuming the response data contains the member info
+                    console.log(memberData)
+                    // Assign the data to variables
+                    firstname = memberData.firstname;
+                    lastname = memberData.lastname;
+                    weight = memberData.weight;
+                    bodytype = memberData.bodytype;
+                    member_id = memberData.member_id
+
+
+                    // Optionally, update the DOM with the fetched data
+                    document.querySelector('.nameChange').textContent = `${firstname} ${lastname}`;
+                    console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${member_id}`);
+                })
+                .catch(error => {
+                    console.error('Error fetching member info:', error);
+                });
+        }
+
+        const notificationButton = document.getElementById('notificationButton');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationList = document.getElementById('notificationList');
+
+        function fetchNotifications() {
+            axios.get(`http://localhost:3000/retrieveNotifications?member_id=${member_id}`)
+                .then(response => {
+                    // Display message if no notifications are available
+                    if (!response.data || response.data === "null" || (Array.isArray(response.data) && response.data.length === 0)) {
+                        notificationList.innerHTML = '<div class="py-2 px-4 text-sm text-gray-500">No new notifications</div>';
+                    } else {
+                        const notifications = response.data[0];
+                        notificationList.innerHTML = ''; // Clear existing notifications
+
+                        notifications.forEach(notification => {
+                            const notificationItem = document.createElement('div');
+                            notificationItem.classList.add('py-2', 'px-4', 'hover:bg-orange-300', 'cursor-pointer', 'border-b', 'border-gray-200');
+
+                            notificationItem.innerHTML = `
+                    <div class="text-sm font-medium text-gray-800">${notification.message}</div>
+                    <div class="text-xs text-gray-500">${formatDate(notification.created_at)}</div>
+                `;
+
+                            // Optional: Mark the notification as read on click
+                            notificationItem.addEventListener('click', () => {
+                                Proposal_id = notification.proposal_id;
+                                markNotificationAsRead(notification.proposal_id);
+                            });
+
+                            notificationList.appendChild(notificationItem);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching notifications:', error));
+        }
+        // Function to format the date as "Month Day, Year - Time"
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+
+            // Format the date part
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = date.toLocaleDateString(undefined, options);
+
+            // Format the time part
+            const formattedTime = date.toLocaleTimeString(undefined, {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            return `${formattedDate} - ${formattedTime}`;
+        }
+        // Function to mark notification as read and show proposal details in a modal
+        async function markNotificationAsRead(proposalId) {
+            try {
+                // Fetch the proposal data using the member_id from the notification
+                const response = await fetch(`http://localhost:3000/retrieveProposals?member_id=${member_id}&proposal_id=${proposalId}`);
+
+                const data = await response.json();
+
+                if (data && data.length > 0 && data[0].length > 0) {
+                    const proposal = data[0][0]; // Access the first proposal in the array
+
+                    // Populate the modal with relevant proposal details
+                    document.getElementById('proposalPlanType').textContent = `Plan Type: ${proposal.plan_type}`;
+                    document.getElementById('proposalPrice').textContent = `Price: ${proposal.price} PHP`;
+                    document.getElementById('proposalDuration').textContent = `Duration: ${proposal.duration} weeks`;
+                    Duration = proposal.duration
+                    plan_type = proposal.plan_type
+                    Price = proposal.price
+
+                    // Show the modal
+                    document.getElementById('proposalModal').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error retrieving proposal:', error);
+            }
+        }
+
+        // Event listener to close the proposal modal
+        document.getElementById('closeProposalModal').addEventListener('click', () => {
+            document.getElementById('proposalModal').classList.add('hidden');
+        });
+
+        notificationButton.addEventListener('click', () => {
+            notificationDropdown.classList.toggle('hidden');
+            // Only fetch notifications when the dropdown is opened
+            if (!notificationDropdown.classList.contains('hidden')) {
+                fetchNotifications();
+            }
+        });
+
+
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', (event) => {
+            if (!notificationDropdown.contains(event.target) && !notificationButton.contains(event.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+        });
+        function removeCookie(name) {
+            document.cookie = name + '=; Max-Age=0; path=/';
+        }
+
+        document.getElementById('acceptProposalBtn').addEventListener('click', async () => {
+            try {
+                const price = Price;
+                const planType = plan_type;
+                const duration = Duration;
+
+                console.log(price);
+                console.log(planType);
+                console.log(duration);
+
+                // Insert the contract and wait for the response
+                const response = await axios.post('http://localhost:3000/insertContracts', {
+                    proposal_id: Proposal_id,
+                    weeks: duration,
+                    status: 'On going'
+                });
+
+                const contract_id = response.data.contract_id;
+
+                // After the contract is successfully inserted, call the insertClientPayment function
+                await insertClientPayment(contract_id);
+
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                alert('There was an error processing your payment. Please try again.');
+            }
+        });
+
+
+        async function insertClientPayment(Contract_id) {
+            try {
+                const contract_id = Contract_id; // Replace with actual contract ID
+                const price = Price;
+                const planType = plan_type
+                const duration = Duration
+                console.log(price)
+                console.log(planType)
+                console.log(duration)
+
+                const response = await axios.post('http://localhost:3000/clientPayment', {
+                    contract_id: contract_id,
+                    price: price,
+                    planType: planType,
+                    duration: duration
+                });
+
+                const result = response.data;
+                window.location.href = result; // Redirect to PayPal
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                alert('There was an error processing your payment. Please try again.');
+            }
+        }
+
+    });
+
+</script>
+
+</html>

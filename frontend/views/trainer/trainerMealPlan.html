@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Meal Plan</title>
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+    <style>
+        #templateModal {
+            z-index: 9999;
+        }
+
+        #TemplateModal {
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-[Poppins] bg-customGray">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium" id="forActive">
+                <li>
+                    <a href="index.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainerWorkoutPlan.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="barbell-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Workout Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="egg-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Meal Plan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="people-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="chat.html"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="chatbubbles-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Chat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!--Dashboard Content-->
+    <div class="sm:ml-64">
+        <div class="m-4 p-4 mt-20">
+            <div
+                class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-div_color dark:border-gray-700">
+                <div class="sm:hidden">
+                    <label for="tabs" class="sr-only">Select tab</label>
+                    <select id="tabs"
+                        class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg block w-full p-2.5 dark:bg-div_color dark:border-gray-600 dark:placeholder-white dark:text-white">
+                        <option>Custom Meal</option>
+                        <option>Premade Meal</option>
+                    </select>
+                </div>
+                <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-white rtl:divide-x-reverse"
+                    id="fullWidthTab" role="tablist">
+                    <li class="w-full">
+                        <button id="stats-tab" onclick="toggleTab('stats', this)" type="button"
+                            class="inline-block w-full p-4 rounded-ss-lg bg-customGray hover:bg-customGray focus:outline-none dark:bg-customGray dark:hover:border-gray-700">Custom
+                            Meal</button>
+                    </li>
+                    <li class="w-full">
+                        <button id="about-tab" onclick="toggleTab('about', this)" type="button"
+                            class="inline-block w-full p-4 bg-customGray hover:bg-customGray focus:outline-none dark:bg-div_color dark:hover:border-gray-700">Premade
+                            Meal</button>
+                    </li>
+                </ul>
+                <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+                    <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="stats">
+                        <!-- Content for Custom Meal -->
+                        <div class="text-white text-2xl font-semibold">
+                            <h1>Meal Plan Templates</h1>
+                        </div>
+                        <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
+                            <form class="max-w-lg w-full">
+                                <div class="flex flex-col md:flex-row md:items-center">
+                                    <label for="search-dropdown"
+                                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                    <div class="flex w-full relative">
+                                        <button id="dropdown-button" type="button"
+                                            class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                            All categories
+                                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                                            </svg>
+                                        </button>
+                                        <div id="dropdown"
+                                            class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-div_color">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                                aria-labelledby="dropdown-button">
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="relative w-full">
+                                            <input type="search" id="search-dropdown"
+                                                class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-div_color dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                                placeholder="Search workout plan" required />
+                                            <button type="submit"
+                                                class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                                                <svg class="w-4 h-4" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                                </svg>
+                                                <span class="sr-only">Search</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <button type="button" id="addTemplateBtn"
+                                class="text-white bg-50 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-4 py-2.5 text-center shadow-md">
+                                <i class="fas fa-plus"></i> &nbsp Create template
+                            </button>
+                        </div>
+                        <div id="templateModal"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+                                <div class="mb-4">
+                                    <h2 class="text-2xl font-bold text-gray-800">Create meal template</h2>
+                                </div>
+                                <form id="templateForm">
+                                    <!-- Template Name -->
+                                    <div class="mb-4">
+                                        <label for="templateName" class="block text-gray-700 font-semibold">Template
+                                            Name</label>
+                                        <input type="text" id="templateName"
+                                            class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            placeholder="e.g., Strength Training Phase 1">
+                                    </div>
+
+                                    <!-- Template Description -->
+                                    <div class="mb-4">
+                                        <label for="templateDescription"
+                                            class="block text-gray-700 font-semibold">Template
+                                            Description</label>
+                                        <textarea id="templateDescription"
+                                            class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            rows="4"
+                                            placeholder="Brief description of the training program goals"></textarea>
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="flex justify-between mt-6">
+                                        <button type="button" id="closeModalBtn"
+                                            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Cancel</button>
+                                        <button type="submit"
+                                            class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500">Save
+                                            &
+                                            Continue</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!--grid-->
+                        <div id="templateContainer"
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
+                        </div>
+                    </div>
+                    <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="about">
+                        <!-- Content for Premade Meal -->
+                        <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
+                            <div class="text-white text-2xl font-semibold">
+                                <h1>Meal Plan Templates</h1>
+                            </div>
+                            <form class="max-w-lg w-full">
+                                <div class="flex flex-col md:flex-row md:items-center">
+                                    <label for="search-dropdown"
+                                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                    <div class="flex w-full relative">
+                                        <button id="dropdown-button" type="button"
+                                            class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                            All categories
+                                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                                            </svg>
+                                        </button>
+                                        <div id="dropdown"
+                                            class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-div_color">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                                aria-labelledby="dropdown-button">
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
+                                                        Meal Plan</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="relative w-full">
+                                            <input type="search" id="search-dropdown"
+                                                class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-div_color dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                                placeholder="Search workout plan" required />
+                                            <button type="submit"
+                                                class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                                                <svg class="w-4 h-4" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                                </svg>
+                                                <span class="sr-only">Search</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!--grid-->
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
+                            <div
+                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40"
+                                        src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg"
+                                        alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Tabemono</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#"
+                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div
+                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40"
+                                        src="https://images.immediate.co.uk/production/volatile/sites/30/2022/03/Sesame-salmon-purple-sprouting-broccoli-sweet-potato-mash-02-8062a36.jpg?quality=90&resize=556,505"
+                                        alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkain</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#"
+                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div
+                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40"
+                                        src="https://i.pinimg.com/736x/df/cc/10/dfcc10d397fc5e40073772e6e15c62dc.jpg"
+                                        alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Food</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#"
+                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div
+                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40"
+                                        src="https://static01.nyt.com/images/2023/04/20/multimedia/as-ginger-scallion-fish-fgqk/as-ginger-scallion-fish-fgqk-articleLarge.jpg"
+                                        alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkaon</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#"
+                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                            <div
+                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                    <img class="object-cover w-full h-40"
+                                        src="https://media.self.com/photos/5fe36191fa75923c77cd821f/4:3/w_2560%2Cc_limit/GettyImages-1128962609.jpg"
+                                        alt="mealplan image" />
+                                </a>
+                                <div class="mt-4 px-5 pb-5">
+                                    <a href="#">
+                                        <h5 class="text-xl tracking-tight text-slate-900">Bento</h5>
+                                    </a>
+                                    <div class="mt-2 mb-5 flex items-center justify-center">
+                                        <p>Meal Plan</p>
+                                    </div>
+                                    <a href="#"
+                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        View template
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Container -->
+                </div>
+                <!-- Enhanced Modal Container -->
+                <div id="TemplateModal"
+                    class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden">
+                    <div
+                        class="bg-white rounded-2xl shadow-2xl overflow-hidden w-4/5 max-w-5xl transform transition-transform duration-300 scale-95 hover:scale-100">
+                        <!-- Modal Header -->
+                        <div
+                            class="flex justify-between items-center bg-gradient-to-r from-customOrange to-yellow-500 p-6 rounded-t-2xl">
+                            <h2 class="text-2xl font-semibold text-white tracking-wide">Meal Template Details</h2>
+                            <button class="text-white text-2xl font-bold hover:text-gray-300"
+                                onclick="closeModal()">×</button>
+                        </div>
+
+                        <!-- Modal Content -->
+                        <div class="p-6 space-y-6 max-h-96 overflow-y-auto">
+                            <!-- Accordion for displaying meals by week and day -->
+                            <div id="weekAccordion" class="space-y-4">
+                                <!-- Dynamic content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="bg-gray-200 p-4 flex justify-end gap-4 rounded-b-2xl">
+                            <button
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded transition duration-200"
+                                onclick="saveChanges()">Save Changes</button>
+                            <button
+                                class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded transition duration-200"
+                                onclick="closeModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="modifyMealModal"
+                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg text-white">
+                        <div class="mb-4">
+                            <h2 class="text-2xl font-semibold">Modify Meals to Meal Template</h2>
+                            <hr class="mt-4 border-gray-500">
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <!-- Meal Name -->
+                            <div>
+                                <label for="mealName" class="block mb-2 text-sm font-medium text-gray-300">Meal
+                                    Name</label>
+                                <input type="text" id="mealName"
+                                    class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                                    placeholder="Enter meal name" required />
+                            </div>
+
+                            <!-- Classification -->
+                            <!-- Classification Dropdown -->
+                            <div>
+                                <label for="classification"
+                                    class="block mb-2 text-sm font-medium text-gray-300">Classification</label>
+                                <select id="classification"
+                                    class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg">
+                                    <option value="" disabled selected>Select classification</option>
+                                    <option value="breakfast">Breakfast</option>
+                                    <option value="lunch">Lunch</option>
+                                    <option value="dinner">Dinner</option>
+                                </select>
+                            </div>
+
+                            <!-- Protein -->
+                            <div>
+                                <label for="protein" class="block mb-2 text-sm font-medium text-gray-300">Protein
+                                    (grams)</label>
+                                <input type="number" id="protein"
+                                    class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                                    placeholder="Protein content" required />
+                            </div>
+
+                            <!-- Carbohydrates -->
+                            <div>
+                                <label for="carbohydrates"
+                                    class="block mb-2 text-sm font-medium text-gray-300">Carbohydrates (grams)</label>
+                                <input type="number" id="carbohydrates"
+                                    class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                                    placeholder="Carbohydrate content" required />
+                            </div>
+
+                            <!-- Fats -->
+                            <div>
+                                <label for="fats" class="block mb-2 text-sm font-medium text-gray-300">Fats
+                                    (grams)</label>
+                                <input type="number" id="fats"
+                                    class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg"
+                                    placeholder="Fat content" required />
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="mt-8 flex justify-end space-x-4">
+                            <button onclick="closeModifyModal()"
+                                class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                                Cancel
+                            </button>
+                            <button onclick="submit()"
+                                class="bg-green-500 hover:bg-green-400 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                                Add to Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../../scripts/trainer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let template_item_id;
+            const trainerid = getCookie("trainer_id")
+            fetchAndDisplayTemplates(trainerid, '')
+            document.getElementById('addTemplateBtn').addEventListener('click', function () {
+                document.getElementById('templateModal').classList.remove('hidden');
+            });
+            document.getElementById('templateForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const templateName = document.getElementById('templateName').value;
+                const templateDescription = document.getElementById('templateDescription').value;
+
+                // Axios POST request
+                axios.post('http://localhost:3000/createMealTemplate', {
+                    trainer_id: trainerid,
+                    template_name: templateName,
+                    description: templateDescription
+                })
+                    .then(function (response) {
+                        alert(response.data.templateId)
+                        setCookie('template_id', response.data.templateId, 1);
+                        window.location.href = "templateMeals.html"
+                    })
+                    .catch(function (error) {
+                        if (error.response && error.response.data.message) {
+                            const errorMessage = error.response.data.message;  // Access the error message directly
+                            showErrorToast(errorMessage)
+                        } else {
+                            console.error('Error:', error.response ? error.response.data : error.message);
+                        }
+
+                    });
+
+                // Close the modal after submission
+                document.getElementById('templateModal').classList.add('hidden');
+                function getCookie(name) {
+                    const nameEQ = name + "=";
+                    const ca = document.cookie.split(';');
+                    for (let i = 0; i < ca.length; i++) {
+                        let c = ca[i].trim();
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+            })
+
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i].trim();
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+        });
+        function fetchAndDisplayTemplates(trainerId, query) {
+            // Determine the endpoint to call based on whether a search query is provided
+            const endpoint = query
+                ? 'http://localhost:3000/getByQuery'
+                : 'http://localhost:3000/getTemplates';
+
+            axios.get(endpoint, {
+                params: {
+                    trainer_id: trainerId, // Send trainer_id as a query parameter
+                    table: "meal_plan_templates",
+                    query: query           // Include query parameter if present
+                }
+            })
+                .then(response => {
+                    let templates = query ? response.data[0] : response.data; // Handle structure difference
+
+                    // If the response is a single object, wrap it in an array
+                    if (!Array.isArray(templates)) {
+                        templates = [templates];
+                    }
+
+                    // Clear existing templates before rendering
+                    const templateContainer = document.getElementById('templateContainer');
+                    templateContainer.innerHTML = '';
+
+                    // Iterate over the templates array and create cards for each template
+                    templates.forEach(template => {
+                        const templateCard = `
+                        <div class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                            <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
+                                <img class="object-cover w-full h-40" src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg" alt="workout image" />
+                            </a>
+                            <div class="mt-4 px-5 pb-5" style="height: 230px;"> <!-- Set a fixed height for the card -->
+                                <a href="#">
+                                    <h5 class="text-xl tracking-tight text-slate-900">${template.template_name}</h5>
+                                </a>
+                                <div class="mt-2 mb-5 flex items-center justify-center" style="height: 100px; overflow-y: auto;"> <!-- Set a fixed height for the description area -->
+                                    <p>${template.description}</p>
+                                </div>
+                                <a href="javascript:void(0)" onclick="openMealModal(${template.meal_template_id})" class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                    View template
+                                </a>
+                            </div>
+                        </div>
+                    `;
+
+                        // Append the newly created card to the container
+                        templateContainer.innerHTML += templateCard;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching templates:', error);
+                });
+        }
+
+        // Function to open the meal modal with dynamic content
+        async function openMealModal(templateId) {
+            // Show the modal
+            document.getElementById('TemplateModal').classList.remove('hidden');
+
+            try {
+                // Fetch meal details from the backend
+                const response = await fetch(`http://localhost:3000/getMealsById?template_id=${templateId}`);
+                const mealData = await response.json();
+
+                // Get the accordion container and clear its content
+                const weekAccordion = document.getElementById('weekAccordion');
+                weekAccordion.innerHTML = '';
+
+                // Check if there is meal data to display
+                if (!mealData.length) {
+                    // Display a message if no meals are found
+                    const noMealsMessage = document.createElement('p');
+                    noMealsMessage.className = 'text-center text-gray-500';
+                    noMealsMessage.innerText = 'No meals available yet for this template.';
+                    weekAccordion.appendChild(noMealsMessage);
+                } else {
+                    // Group the meal data by week and day
+                    const groupedMeals = groupMealsByWeekAndDay(mealData);
+
+                    // Create UI elements for each week and day
+                    for (const [week, days] of Object.entries(groupedMeals)) {
+                        const weekDiv = document.createElement('div');
+
+                        // Create a button for each week
+                        const weekButton = document.createElement('button');
+                        weekButton.className = 'w-full bg-customOrange text-white px-4 py-2 font-bold text-left rounded-t-lg';
+                        weekButton.innerText = `Week ${week}`;
+                        weekButton.onclick = () => toggleVisibility(`week${week}`);
+
+                        // Create a div for week content (hidden by default)
+                        const weekContentDiv = document.createElement('div');
+                        weekContentDiv.id = `week${week}`;
+                        weekContentDiv.className = 'hidden p-4 bg-gray-100';
+
+                        for (const [day, meals] of Object.entries(days)) {
+                            const dayDiv = document.createElement('div');
+                            dayDiv.innerHTML = `<strong>Day ${day}:</strong><br>`;
+
+                            meals.forEach(meal => {
+                                const mealDiv = document.createElement('div');
+                                mealDiv.className = 'meal-item mb-4 p-2 bg-white shadow rounded-lg';
+
+                                // Create a div for meal details
+                                const mealDetailDiv = document.createElement('div');
+                                mealDetailDiv.className = 'meal-details mb-2';
+                                mealDetailDiv.innerHTML = `<strong>${meal.classification}</strong> - ${meal.meal_name}<br>`;
+
+                                // Create a list of steps for the meal
+                                meal.steps.forEach(step => {
+                                    const stepDiv = document.createElement('div');
+                                    stepDiv.className = 'step-detail pl-4';
+                                    stepDiv.innerText = `Step ${step.step_number}: ${step.instruction}`;
+                                    mealDetailDiv.appendChild(stepDiv);
+                                });
+
+                                // Create buttons to modify or remove a meal
+                                const mealButtonsDiv = document.createElement('div');
+                                mealButtonsDiv.className = 'meal-buttons flex gap-2 mt-2';
+
+                                const modifyButton = document.createElement('button');
+                                modifyButton.className = 'bg-orange-600 text-white px-2 py-1 rounded';
+                                modifyButton.innerText = 'Modify';
+                                modifyButton.onclick = () => modifyMeal(week, day, meal.meal_name, meal.template_item_id);
+
+                                const removeButton = document.createElement('button');
+                                removeButton.className = 'bg-red-500 text-white px-2 py-1 rounded';
+                                removeButton.innerText = 'Remove';
+                                removeButton.onclick = () => removeMeal(meal.meal_name);
+
+                                mealButtonsDiv.appendChild(modifyButton);
+                                mealButtonsDiv.appendChild(removeButton);
+
+                                mealDiv.appendChild(mealDetailDiv);
+                                mealDiv.appendChild(mealButtonsDiv);
+
+                                dayDiv.appendChild(mealDiv);
+                            });
+
+                            weekContentDiv.appendChild(dayDiv);
+                        }
+
+                        weekDiv.appendChild(weekButton);
+                        weekDiv.appendChild(weekContentDiv);
+                        weekAccordion.appendChild(weekDiv);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching meal data:', error);
+            }
+        }
+
+        // Function to group meals by week and day
+        function groupMealsByWeekAndDay(mealData) {
+            const groupedData = {};
+            mealData.forEach(meal => {
+                const { template_item_id, week_no, day_no, meal_name, step_number, instruction, classification } = meal;
+
+                if (!groupedData[week_no]) groupedData[week_no] = {};
+                if (!groupedData[week_no][day_no]) groupedData[week_no][day_no] = [];
+
+                let mealEntry = groupedData[week_no][day_no].find(m => m.meal_name === meal_name);
+                if (!mealEntry) {
+                    mealEntry = { template_item_id, meal_name, steps: [], classification };
+                    groupedData[week_no][day_no].push(mealEntry);
+                }
+
+                mealEntry.steps.push({ step_number, instruction });
+                //console.log(mealEntry)
+            });
+            console.log(groupedData)
+            return groupedData;
+        }
+
+        // Function to toggle week content visibility
+        function toggleVisibility(weekId) {
+            const weekContent = document.getElementById(weekId);
+            if (weekContent.classList.contains('hidden')) {
+                weekContent.classList.remove('hidden');
+            } else {
+                weekContent.classList.add('hidden');
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('TemplateModal').classList.add('hidden');
+        }
+
+        // Placeholder functions for modifying or removing a meal
+        function modifyMeal(week, day, mealName, id) {
+            // Store the template item ID to use for the API call
+            template_item_id = id;
+
+            // Hide the main template modal and show the modify modal
+            document.getElementById('TemplateModal').classList.add('hidden');
+            document.getElementById('modifyMealModal').classList.remove('hidden');
+
+            // Fetch meal details based on template_item_id using Axios
+            axios.get(`http://localhost:3000/getMealDetails?template_item_id=${template_item_id}`)
+                .then(response => {
+                    // Check if the response contains data
+                    if (response.data.length > 0) {
+                        const mealDetails = response.data[0]; // Since it's a single object, access the first element
+
+                        // Autofill the form fields with the data from the response
+                        document.getElementById('mealName').value = mealDetails.meal_name;
+                        document.getElementById('classification').value = mealDetails.classification;
+                        document.getElementById('protein').value = mealDetails.protein;
+                        document.getElementById('carbohydrates').value = mealDetails.carbohydrates;
+                        document.getElementById('fats').value = mealDetails.fats;
+                    } else {
+                        console.error('No meal details found for the given template item ID.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching meal details:', error);
+                });
+        }
+        function submit() {
+            const mealName = document.getElementById('mealName').value;
+            const classification = document.getElementById('classification').value;
+            const protein = document.getElementById('protein').value;
+            const carbohydrates = document.getElementById('carbohydrates').value;
+            const fats = document.getElementById('fats').value;
+
+            // Log the field values to the console
+            console.log("template item id:", template_item_id);
+            console.log('Meal Name:', mealName);
+            console.log('Classification:', classification);
+            console.log('Protein:', protein);
+            console.log('Carbohydrates:', carbohydrates);
+            console.log('Fats:', fats);
+
+            // Modify the Axios PUT request to send data as query parameters
+            axios.put(`http://localhost:3000/updateMealDetails`, null, {
+                params: {
+                    Template_item_id: template_item_id,
+                    meal_name: mealName,
+                    classification: classification,
+                    protein: protein,
+                    carbohydrates: carbohydrates,
+                    fats: fats,
+                }
+            })
+                .then(function (response) {
+                    // Show success message and hide the modal
+                    alert("Successfully updated!");
+                    document.getElementById('modifyMealModal').classList.add('hidden');
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                });
+        }
+
+
+
+
+        function removeMeal(mealName) {
+            console.log(`Remove meal: ${mealName}`);
+        }
+    </script>
+</body>
+
+</html>

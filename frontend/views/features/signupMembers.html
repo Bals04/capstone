@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<style>
+    html {
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    li {
+        text-decoration: none;
+        color: white;
+        letter-spacing: 0.5px;
+    }
+
+    li:after {
+        content: "";
+        position: absolute;
+        background-color: white;
+        height: 3px;
+        width: 0;
+        left: 0;
+        bottom: -10px;
+        transition: 0.3s;
+    }
+
+    li:hover {
+        color: white;
+    }
+
+    li:hover:after {
+        width: 100%;
+    }
+
+    .box {
+        width: 250px;
+        height: 280px;
+        margin: 0px 5px;
+        transition: 1s;
+        border-radius: 10px;
+    }
+
+    .box:hover {
+        transform: scale(1.1);
+        z-index: 2;
+        box-shadow: 1px 1px 20px 6px #EC7E4A;
+    }
+</style>
+
+<body class="bg-[#1E1E1E] font-customFont">
+    <header class="fixed h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg">
+        <div class="relative">
+            <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+        </div>
+        <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
+            <b
+                class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+        </div>
+
+        <div class="pl-5 pr-10 text-50 pt-5">
+            <button
+                class="inline-block border border-[#343639] rounded-full px-5 py-2 hover:bg-50 hover:text-white duration-300">
+                Log in
+            </button>
+        </div>
+    </header>
+    <br><br>
+    <main class="flex justify-center items-center h-screen">
+        <form class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mt-12">
+            <h2 class="text-2xl text-gray-700 font-bold text-center mb-6">Member fucking signup</h2>
+            <div class="mb-4">
+                <input type="text" id="firstName" placeholder="First name"
+                    class="w-full p-3 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+                <input type="text" id="lastName" placeholder="Last name"
+                    class="w-full p-3 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+                <input type="number" id="weight" placeholder="Weight"
+                    class="w-full p-3 border border-gray-300 rounded" required>
+            </div>
+
+            <div class="mb-4">
+                <input type="text" id="bodytype" placeholder="Bodytype"
+                    class="w-full p-3 border border-gray-300 rounded" required>
+            </div>
+            
+            <div class="mb-4">
+                <input type="text" id="username" placeholder="Username"
+                    class="w-full p-3 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+                <input type="password" id="password" placeholder="Password (8 or more characters)"
+                    class="w-full p-3 border border-gray-300 rounded" required>
+            </div>
+
+            <button id="signup"
+                class="transition-transform transform bg-50 text-white py-2 px-4 rounded w-full hover:bg-orange-600 hover:scale-105">
+                Sign Up
+            </button>
+
+        </form>
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg text-center w-11/12 max-w-md">
+                <span class="text-xl font-semibold text-white">Registration Successful!</span>
+                <p class="text-gray-400 mt-2">Your gym has been registered successfully.</p>
+                <button class="bg-customOrange mt-4 py-2 px-4 rounded hover:bg-orange-800 text-white"
+                    onclick="closeModal()" id="Continue">OK</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        AOS.init({
+            duration: 2000,
+        });
+
+        document.getElementById("signup").addEventListener("click", async function (event) {
+            event.preventDefault();
+
+
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const weight = document.getElementById("weight").value;
+            const bodytype = document.getElementById("bodytype").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                // Wait for AddToAccounts to complete before proceeding
+                await AddToAccounts(username, password);
+
+                // Now call RegisterGymAdmin
+                await RegisterMember(firstName, lastName, weight, bodytype);
+
+                showModal();
+
+            } catch (error) {
+                console.error('Error submitting form:', error);
+            }
+        });
+
+        async function AddToAccounts(Username, Password) {
+            try {
+                const formData = {
+                    username: Username,
+                    password: Password,
+                    usertype: "Member"
+                };
+                const response = await axios.post('http://localhost:3000/auth/Register', formData);
+            } catch (error) {
+                console.error('Error submitting registration:', error);
+            }
+        }
+
+        async function RegisterMember(firstname, lastname, weight, bodytype) {
+            try {
+                const formData = {
+                    firstname: firstname,
+                    lastname: lastname,
+                    weight: weight,
+                    bodytype: bodytype
+                };
+                const response = await axios.post('http://localhost:3000/auth/RegisterMember', formData);
+            } catch (error) {
+                console.error('Error submitting registration:', error.message);
+            }
+        }
+        function showModal() {
+            const modal = document.getElementById("successModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeModal() {
+            // Get input values (if needed for other purposes)
+            const firstName = document.getElementById("firstName");
+            const lastName = document.getElementById("lastName");
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+            const bodytype= document.getElementById("bodytype");
+
+            // Get the modal element
+            const modal = document.getElementById("successModal");
+
+            // Hide the modal
+            modal.classList.remove("flex");
+            modal.classList.add("hidden");
+
+            // Clear the input fields
+            firstName.value = "";
+            lastName.value = "";
+            weight.value = "";
+            username.value = "";
+            password.value = "";
+            bodytype.value = "";
+        }
+
+    </script>
+</body>
+
+</html>

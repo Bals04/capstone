@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Exercises</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    /* Modal styling */
+    #exerciseModal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .scrollable-exercises {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* Additional styling */
+    .exercise-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .exercise-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .exercise-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .exercise-details {
+      flex: 1;
+    }
+
+    .exercise-details h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .exercise-details p {
+      font-size: 0.875rem;
+      color: #4a5568;
+    }
+
+    .filter-button {
+      transition: background-color 0.3s ease;
+    }
+
+    .filter-button:hover {
+      background-color: #38bdf8;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 p-8">
+  <!-- Header -->
+  <header class="mb-6 text-center">
+    <h1 class="text-4xl font-bold text-gray-800">Add Exercises to Workout Template</h1>
+    <p class="text-gray-600 mt-2">Template: <strong>Strength Training Phase 1</strong></p>
+  </header>
+
+  <!-- Exercise Form -->
+  <section class="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
+    <form id="exerciseForm">
+      <!-- Week Selector -->
+      <div class="mb-4">
+        <label for="week" class="block text-gray-700 font-semibold">Week</label>
+        <select id="week" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option>Week 1</option>
+          <option>Week 2</option>
+          <option>Week 3</option>
+          <option>Week 4</option>
+        </select>
+      </div>
+
+      <!-- Day Selector -->
+      <div class="mb-4">
+        <label for="day" class="block text-gray-700 font-semibold">Day</label>
+        <select id="day" class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option>Day 1</option>
+          <option>Day 2</option>
+          <option>Day 3</option>
+          <option>Day 4</option>
+          <option>Day 5</option>
+          <option>Day 6</option>
+          <option>Day 7</option>
+        </select>
+      </div>
+      <div>
+        <label for="exerciseName" class="block text-sm font-medium text-gray-700">Exercise Name</label>
+        <input type="text" id="exerciseName" name="exerciseName"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md" disabled>
+      </div>
+      <div class="mt-6">
+        <button type="button" id="addExerciseBtn"
+          class="w-full bg-orange-600 text-white p-3 rounded-lg font-semibold hover:bg-orange-700 transition-all duration-200 ease-in-out">
+          Select Exercise from API
+        </button><br> <br>
+      </div>
+      <!-- Input for Reps -->
+      <div>
+        <label for="reps" class="block text-sm font-medium text-gray-700">Reps</label>
+        <input type="number" id="reps" name="reps" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          required>
+      </div>
+      <!-- Input for Sets -->
+      <div>
+        <label for="sets" class="block text-sm font-medium text-gray-700">Sets</label>
+        <input type="number" id="sets" name="sets" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          required>
+      </div>
+      <!-- Add Exercise Button -->
+      <div class="mt-6">
+        <!-- Add Button -->
+        <button type="button"
+          class="w-full bg-orange-600 text-white p-3 rounded-lg font-semibold hover:bg-orange-700 transition-all duration-200 ease-in-out"
+          onclick="submitExercise()">
+          Add to Plan
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Added Exercises List -->
+  <section class="mt-8 max-w-lg mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Added Exercises</h2>
+    <div id="exerciseList" class="bg-white p-4 rounded-lg shadow-md">
+      <!-- Exercises will be dynamically appended here -->
+    </div>
+  </section>
+
+  <!-- Exercise Selection Modal -->
+  <div id="exerciseModal" class="flex">
+    <div class="modal-content">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Select Exercises</h2>
+
+      <!-- Search by Exercise Name -->
+      <div class="mb-4">
+        <label for="searchExercise" class="block text-gray-700 font-semibold">Search by Exercise Name</label>
+        <input id="searchExercise" type="text" placeholder="Search exercise..."
+          class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Filter by Body Part Dropdown -->
+      <div class="mb-4">
+        <label for="bodyPart" class="block text-gray-700 font-semibold">Filter by Body Part</label>
+        <select id="bodyPart"
+          class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="all">All</option>
+          <option value="back">Back</option>
+          <option value="chest">Chest</option>
+          <option value="legs">Legs</option>
+          <option value="arms">Arms</option>
+          <option value="shoulders">Shoulders</option>
+        </select>
+      </div>
+
+      <!-- Exercise Options -->
+      <div id="exerciseOptions" class="space-y-2 scrollable-exercises">
+        <!-- Exercises from API will be populated here -->
+      </div>
+
+      <!-- Close Button -->
+      <div class="mt-4">
+        <button id="closeModal"
+          class="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600 transition-all duration-200 ease-in-out">Close</button>
+      </div>
+    </div>
+  </div>
+  <div id="success-toast"
+    class="fixed top-5 right-5 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+    <div class="flex items-center">
+      <!-- Ensures the circle stays round even if the text is long -->
+      <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full flex-shrink-0">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h2 class="text-lg font-semibold text-green-600">Success</h2>
+        <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+      </div>
+      <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const apiKey = 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93'; // Replace with your exerciseDB API key
+    let selectedExercises = [];
+    let templateId = 0;
+    const templateName = getCookie("template_name")
+    showToast("success", `Template ${templateName} successfully created!`)
+    fetchTemplateInfo()
+    // Open the modal
+    document.getElementById('addExerciseBtn').addEventListener('click', function () {
+      document.getElementById('exerciseModal').style.display = 'flex';
+      fetchExercises(); // Fetch exercises when modal opens
+    });
+
+    // Close the modal
+    document.getElementById('closeModal').addEventListener('click', function () {
+      document.getElementById('exerciseModal').style.display = 'none';
+    });
+
+    // Fetch exercises from the exerciseDB API
+    function fetchExercises(query = '', bodyPart = 'all') {
+      let apiUrl;
+      if (query) {
+        apiUrl = `https://exercisedb.p.rapidapi.com/exercises/name/${query}`;
+      } else if (bodyPart !== 'all') {
+        apiUrl = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`;
+      } else {
+        apiUrl = 'https://exercisedb.p.rapidapi.com/exercises';
+      }
+
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+        }
+      };
+
+      fetch(apiUrl, options)
+        .then(response => response.json())
+        .then(data => {
+          displayExercises(data.slice(0, 10)); // Limit to 10 exercises
+        })
+        .catch(error => console.error('Error fetching exercises:', error));
+    }
+
+    function fetchTemplateInfo() {
+      axios.get('http://localhost:3000/getTemplateId', {
+        params: {
+          template_name: templateName
+        }
+      })
+        .then(response => {
+          const data = response.data[0];
+          templateId = data.template_id;
+        })
+        .catch(error => {
+          console.error('Error fetching trainer info:', error);
+        });
+    }
+
+    // Display exercises in the modal
+    function displayExercises(exercises) {
+      const exerciseOptions = document.getElementById('exerciseOptions');
+      exerciseOptions.innerHTML = '';
+
+      exercises.forEach(exercise => {
+        const exerciseCard = `
+          <div class="exercise-card">
+            <img src="${exercise.gifUrl}" alt="${exercise.name}">
+            <div class="exercise-details">
+              <h3>${exercise.name}</h3>
+              <p>Target: ${exercise.target}</p>
+              <button class="bg-blue-500 text-white p-2 mt-2 rounded filter-button" onclick="addExercise('${exercise.name}', '${exercise.target}', '${exercise.gifUrl}')">
+                Add Exercise
+              </button>
+            </div>
+          </div>
+        `;
+        exerciseOptions.innerHTML += exerciseCard;
+      });
+    }
+
+    // Add selected exercise to the list and close modal
+    function addExercise(name, target, gifUrl) {
+      const week = document.getElementById('week').value;
+      const day = document.getElementById('day').value;
+      const reps = document.getElementById('reps').value;
+      const sets = document.getElementById('sets').value;
+      document.getElementById('exerciseName').value = name
+      // Close the modal
+      document.getElementById('exerciseModal').style.display = 'none';
+    }
+
+    // Handle search input
+    document.getElementById('searchExercise').addEventListener('input', function () {
+      const query = this.value;
+      fetchExercises(query);
+    });
+
+    // Handle body part filter change
+    document.getElementById('bodyPart').addEventListener('change', function () {
+      const bodyPart = this.value;
+      fetchExercises('', bodyPart);
+    });
+    function submitExercise() {
+      const name = document.getElementById('exerciseName').value;
+      const reps = document.getElementById('reps').value;
+      const sets = document.getElementById('sets').value;
+      const week = document.getElementById('week').value || 'N/A'; // Example of additional fields
+      const day = document.getElementById('day').value || 'N/A';  // Example of additional fields
+
+      const exerciseItem = `
+        <div class="exercise-card">
+          <div class="exercise-details">
+            <h3>${name}</h3>
+            <p>Reps: ${reps}, Sets: ${sets}</p>
+            <p>Week: ${week}, Day: ${day}</p>
+          </div>
+        </div>
+      `;
+
+      selectedExercises.push({ name, reps, sets, week, day });
+      document.getElementById('exerciseList').innerHTML += exerciseItem;
+
+      // Close modal and clear the form
+      document.getElementById('addExerciseForm').reset();
+      document.getElementById('exerciseModal').style.display = 'none';
+    }
+
+    function showToast(type, message) {
+      const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
+      const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error
+
+      // Set the message
+      messageElement.textContent = message;
+
+      // Show and slide in the toast
+      toast.classList.remove('hidden', 'translate-x-full'); // Remove hidden and off-screen translation
+      toast.classList.add('translate-x-0'); // Move the toast in view
+
+      // Auto-hide the toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');  // Slide toast out to the right
+        setTimeout(() => {
+          toast.classList.add('hidden'); // Hide completely after the transition
+        }, 300);  // Wait for the transition to complete before hiding
+      }, 3000); // Ensure this is set to 3000 ms (3 seconds) for visibility
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    document.getElementById('close-success-toast-btn').addEventListener('click', () => {
+      const toast = document.getElementById('success-toast');
+      console.log("clicked")
+      toast.classList.add('translate-x-full');  // Slide out
+      setTimeout(() => toast.classList.add('hidden'), 300);  // Hide completely after transition
+    });
+  </script>
+</body>
+
+</html>

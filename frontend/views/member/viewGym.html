@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexperience</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../dist/tailwind.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="/frontend/scripts/auth.js"></script>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+    html {
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    li {
+        text-decoration: none;
+        color: white;
+        letter-spacing: 0.5px;
+    }
+
+    li:after {
+        content: "";
+        position: absolute;
+        background-color: white;
+        height: 3px;
+        width: 0;
+        left: 0;
+        bottom: -10px;
+        transition: 0.3s;
+    }
+
+    li:hover {
+        color: white;
+    }
+
+    li:hover:after {
+        width: 100%;
+    }
+
+    .box {
+        width: auto;
+        height: auto;
+        margin: 0px 5px;
+        transition: 1s;
+        border-radius: 10px;
+    }
+
+    .box:hover {
+        transform: scale(2.0);
+        z-index: 2;
+        box-shadow: 1px 1px 20px 6px gray;
+    }
+
+    .checked {
+        color: orange;
+    }
+
+    .rating {
+        background-color: #2b3032;
+    }
+</style>
+
+<body class="font-customFont"
+    style="background: linear-gradient(90deg, rgba(55,61,65,1) 55%, rgba(141,157,167,1) 100%);">
+    <header class="h-[100px] w-full flex bg-guestNavbar justify-between drop-shadow-lg">
+        <div class="relative">
+            <img class="w-[450px] mix-blend-overlay" src="../../views/img/nav_img.png" alt="">
+        </div>
+        <div class="absolute left-20 top-4 h-16 w-16 text-xl pt-5">
+            <b
+                class="text-2xl bg-gradient-to-r from-white to-forGradientWhite text-transparent bg-clip-text">FLEXPERIENCE</b>
+        </div>
+    </header>
+
+    <div class="flex flex-col justify-between px-20 w-auto text-white">
+        <div class="flex flex-row items-center justify-start">
+            <div>
+                <img class="gym-logo w-32 h-32 rounded-full object-cover border border-gray-400" src="" alt="gym logo">
+            </div>
+            <div class="my-20 pl-10 pr-10 flex flex-col justify-center items-start">
+                <span class="gym-name text-4xl font-bold">Elevation Fitness Gym</span><br>
+                <span class="gym-location"></span>
+            </div>
+        </div>
+
+        <div class="flex justify-between">
+            <div class="rating my-28 pl-10 flex items-center rounded-lg">
+                <div class="flex flex-col gap-2 pr-10">
+                    <div>Rating: </div>
+                    <div>Contact: </div>
+                    <div>Session: </div>
+                    <div>Monthly: </div>
+                </div>
+                <div class="flex flex-col gap-2 pr-20">
+                    <span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </span>
+                    <span class="contact"></span>
+                    <span class="gym-session-rate"></span>
+                    <span class="gym-monthly-rate"></span>
+                </div>
+            </div>
+
+            <div class="rounded-lg py-1 text-white mb-10 flex flex-col mt-5 w-7/12 shadow-lg"
+                style="background: linear-gradient(0deg, rgba(55,61,65,1) 0%, rgba(141,157,167,1) 100%);">
+                <div class="py-10 pl-10 border-gray-500 border-b-2 text-left shadow-lg drop-shadow-lg shadow-gray-600">
+                    <span class="font-bold tracking-widest text-2xl">Trainers</span>
+                </div>
+
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-center text-white">
+                        <thead class="text-xs text-white uppercase bg-transparent">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Profile</th>
+                                <th scope="col" class="px-6 py-3">Name</th>
+                                <th scope="col" class="px-6 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trainers-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-10 bg-transparent rounded-lg text-white mx-10 mb-10 text-left">
+        <h2 class="p-10 font-semibold text-2xl">Photos</h2>
+        <div class="flex justify-around py-5">
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
+            </div>
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
+            </div>
+            <div class="box w-auto">
+                <img class="max-h-60" src="../../views/img/gymImage_sample.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const gymId = urlParams.get('gymid');
+
+        // Fetch gym data
+        axios.get(`http://localhost:3000/gymdata?gymid=${gymId}`)
+            .then(response => {
+                const data = response.data[0]; // Assuming the gym data is the first item
+                if (data) {
+                    document.querySelector('.gym-name').textContent = data.gym_name;
+                    document.querySelector('.gym-location').textContent = data.street_address;
+                    document.querySelector('.contact').textContent = data.contact_no;
+                    document.querySelector('.gym-session-rate').textContent = `₱ ${data.daily_rate}`;
+                    document.querySelector('.gym-monthly-rate').textContent = `₱ ${data.monthly_rate}`;
+                    document.querySelector('.gym-logo').src = "http://localhost:3000/uploads/"+ data.img_path;
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching gym data:", error);
+            });
+
+        // Fetch trainers data and dynamically populate the table
+        axios.get(`http://localhost:3000/getGymTrainer?gymid=${gymId}`)
+            .then(response => {
+                console.log(gymId);
+                const trainers = response.data; // Response contains the list of trainers
+                console.log(trainers);
+                const trainersBody = document.getElementById('trainers-body');
+                trainersBody.innerHTML = ''; // Clear existing rows
+
+                trainers.forEach(trainer => {
+                    const row = `
+                <tr class="bg-transparent">
+                    <th scope="row" class="px-6 py-4 flex justify-center items-center">
+                        <img class="w-16 h-16 rounded-full border border-white" src="http://localhost:3000/uploads/${trainer.filename}" alt="trainer_profile">
+                    </th>
+                    <td class="px-6 py-4 text-lg">${trainer.firstname} ${trainer.lastname}</td>
+                    <td class="px-6 py-4">
+                        <button id="messageTrainer-${trainer.trainer_id}" class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300 ">Message</button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button id="viewTrainer-${trainer.trainer_id}" class="bg-[#373D41] rounded-lg py-1 px-4 hover:bg-white hover:text-black duration-300">View trainer</button>
+                    </td>
+                </tr>
+            `;
+                    trainersBody.insertAdjacentHTML('beforeend', row);
+
+                    // Add event listener to the button
+                    const messageTrainerButton = document.getElementById(`messageTrainer-${trainer.trainer_id}`);
+                    const viewTrainerButton = document.getElementById(`viewTrainer-${trainer.trainer_id}`);
+                    messageTrainerButton.addEventListener('click', () => {
+                        setCookie('trainer_iddd', trainer.trainer_id, 1); // Set cookie for 7 days
+                        setCookie('trainer_name', trainer.firstname, 1); // Set cookie for 7 days
+                        console.log(`Cookie set for trainer_id: ${trainer.trainer_id}`);
+                        window.location.href = './privateChat.html'; // Redirect to chat.html
+                    });
+                    viewTrainerButton.addEventListener('click', () => {
+                        setCookie('trainer_id', trainer.trainer_id, 1); // Set cookie for 7 days
+                        window.location.href = './trainerProfile.html'; // Redirect to chat.html
+                    });
+
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching trainers:", error);
+            });
+
+        // Helper function to set cookies
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Helper function to retrieve cookies (if needed)
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+    </script>
+
+</body>
+</body>

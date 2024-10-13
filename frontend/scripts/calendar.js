@@ -1,57 +1,57 @@
-//calendar
 
-const currentDate = document.querySelector(".current-date"),
-daysTag = document.querySelector(".days"),
-prevNextIcon = document.querySelectorAll(".icons span");
+const monthYearElement = document.getElementById('monthYear');
+const calendarBody = document.getElementById('calendarBody');
+const prevButton = document.getElementById('prevButton');
+const nextButton = document.getElementById('nextButton');
 
-//getting new date, current year and month
-let date = new Date(),
-currYear = date.getFullYear(),
-currMonth = date.getMonth();
+let currentDate = new Date();
+let currentDay = currentDate.getDate(); // Get the current day of the month
+let currentMonth = currentDate.getMonth();
+let currentYear = currentDate.getFullYear();
 
-const months = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
+function renderCalendar(month, year) {
+    monthYearElement.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(year, month));
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    calendarBody.innerHTML = '';
 
-const renderCalendar = () => {
-    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), //first day
-    lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), //last date sa month
-    lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), //last day sa month
-    lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); //last date previous month
-    let liTag = "";
-
-    for (let i = firstDayofMonth; i > 0; i--) { //previous month last days
-        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+    let row = '<tr>';
+    for (let i = 0; i < firstDay; i++) {
+        row += '<td></td>'; // Empty cells for days before the first day of the month
     }
-
-    for (let i = 1; i <= lastDateofMonth; i++) { // all days of current month
-
-        //current day,month, year active
-        let isToday = i === date.getDate() && currMonth === new Date().getMonth()
-                        && currYear === new Date().getFullYear() ? "active" : "";
-        liTag += `<li class="${isToday}">${i}</li>`;
-    }
-
-    for (let i = lastDayofMonth; i < 6; i++) { //next month first days
-        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
-    }
-
-    currentDate.innerText = `${months[currMonth]} ${currYear}`;
-    daysTag.innerHTML = liTag;
-}
-renderCalendar();
-
-//click event sa icons
-prevNextIcon.forEach(icon => {
-    icon.addEventListener("click", () => {
-        currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
-
-        if(currMonth < 0 || currMonth > 11) {
-            date = new Date(currYear, currMonth);
-            currYear = date.getFullYear(); //updates current year with new date year
-            currMonth = date.getMonth(); //updates current month with new date month
-        }else { //pass new date as date value
-            date = new Date();
+    for (let day = 1; day <= daysInMonth; day++) {
+        // Check if the day is the current day
+        const isToday = day === currentDay && month === currentMonth && year === currentYear;
+        row += `<td class="pt-6">
+                    <div class="px-2 py-2 cursor-pointer flex w-full justify-center ${isToday ? 'bg-customOrange text-white rounded-full' : ''}">
+                        <p class="text-base font-semibold">${day}</p>
+                    </div>
+                 </td>`;
+        if ((day + firstDay) % 7 === 0) {
+            row += '</tr><tr>'; // New row after every week
         }
-        renderCalendar();
-    });
+    }
+    row += '</tr>'; // Closing the last row
+    calendarBody.innerHTML = row;
+}
+
+prevButton.addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    renderCalendar(currentMonth, currentYear);
 });
+
+nextButton.addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    renderCalendar(currentMonth, currentYear);
+});
+
+// Initial render
+renderCalendar(currentMonth, currentYear);
