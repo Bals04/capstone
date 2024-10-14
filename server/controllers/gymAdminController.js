@@ -1,4 +1,4 @@
-const { GetGymAdminInfo, getSales } = require('../models/database');
+const { GetGymAdminInfo, getSales, getTrainerSales } = require('../models/database');
 const { getVerifiedAdmins,AddTrainerProfile } = require('../models/gym_admin');
 
 module.exports = {
@@ -18,6 +18,15 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching data:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getTrainerSales: async (req, res) => {
+        try {
+            const data = await getTrainerSales();
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching trainer sales data:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },

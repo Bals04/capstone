@@ -114,9 +114,58 @@ const insertNotification = async (member_id, proposal_id, message) => {
     return rows.insertId;
 };
 
+const getStudents = async (trainer_id) => {
+    const [rows] = await pool.query(
+       `SELECT
+        m.member_id, 
+        CONCAT(m.lastname, ',', m.firstname) AS Name,
+        p.plan_type, 
+        mp.amount AS amount_paid,
+        DATE(c.start_date) AS start_date, 
+        DATE(c.end_date) AS end_date,  
+        DATEDIFF(c.end_date, NOW()) AS days_remaining,
+        COALESCE(mw.status, "Not assigned yet") AS status
+        FROM 
+            members m
+        LEFT JOIN 
+            proposals p ON m.member_id = p.member_id
+        LEFT JOIN 
+            contracts_table c ON c.proposal_id = p.proposal_id
+        LEFT JOIN 
+            member_payments mp ON mp.contract_id = c.contract_id
+        LEFT JOIN
+        	member_workout_plan mw ON mw.member_id = p.member_id
+        WHERE 
+            c.status = 'On going' AND p.trainer_id = ?`,
+        [trainer_id]
+    );
+    return rows.length > 0 ? rows : null;
+};
+const assignWorkoutPlan = async (trainer_id, member_id, template_id, status) => {
+    const [rows] = await pool.query(
+        'INSERT INTO member_workout_plan (trainer_id, member_id, template_id, status) VALUES(?,?,?,?)',
+        [trainer_id, member_id, template_id, status]
+    );
+    // Return only the insertId
+    return rows.insertId;
+};
+const insertStudentWorkouts = async (plan_id, template_id) => {
+    const [rows] = await pool.query(
+       `INSERT INTO member_workout_plan_status (plan_id, template_exercise_id, status)
+        SELECT ?, template_exercise_id, 'not started'
+        FROM template_exercises
+        WHERE template_id = ?`,
+        [plan_id, template_id]
+    );
+    // Return only the insertId
+    return rows.insertId;
+};
 
 
 module.exports = {
+    insertStudentWorkouts,
+    assignWorkoutPlan,
+    getStudents,
     insertNotification,
     insertProposal,
     insertMealTemplatesSteps,

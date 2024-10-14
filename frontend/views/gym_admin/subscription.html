@@ -146,6 +146,16 @@
                     <h2 class="text-lg font-semibold text-white mt-4">Elite Yearly Presence</h2>
                     <p class="text-gray-300 mt-1">3500 PHP - A year-long subscription for maximum map exposure</p>
                 </div>
+                <div id="customBox" class="selection-box flex flex-col items-start" onclick="selectBox('custom')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="material-symbols-outlined text-3xl text-white">
+                            calendar_month
+                        </span>
+                        <div id="customCheck" class="check-circle"></div>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mt-4">custom plan</h2>
+                    <p class="text-gray-300 mt-1">1008 PHP - custom only</p>
+                </div>
             </div>
             <!-- Proceed Button -->
             <button id="proceedButton" class="proceed-btn" onclick="proceed()" disabled>Proceed</button>
@@ -181,6 +191,13 @@
                 selectedOption = 'yearly';
 
             }
+            else if (type === 'custom') {
+                document.getElementById('customBox').classList.add('selected');
+                document.getElementById('customCheck').classList.add('selected');
+                btn.innerHTML = 'Subscribe Custom';
+                selectedOption = 'custom';
+
+            }
 
             // Enable the proceed button
             document.getElementById('proceedButton').disabled = false;
@@ -207,7 +224,8 @@
             const subscriptions = {
                 monthly: { name: 'Monthly Gym Spotlight', price: 500, planid: 'P-4AB27409S1315904VM4DVKHI', days: 30, id: 1 },
                 quarterly: { name: 'Quarterly Gym Boost', price: 1200, planid: 'P-0EU3120592591691WM4DVNTI', days: 90, id: 2 }, // Replace with actual ID
-                yearly: { name: 'Eliteeee Yearly Presence', price: 3500, planid: 'P-3R482222AN6344158M4DVORI', days: 365, id: 3 } // Replace with actual ID
+                yearly: { name: 'Eliteeee Yearly Presence', price: 3500, planid: 'P-3R482222AN6344158M4DVORI', days: 365, id: 3 }, // Replace with actual ID
+                custom: { name: 'custom', price: 1000, planid: 'P-0E9354180K258050AM4D2QOY', days: 1, id: 4 } // Replace with actual ID
             };
 
 
