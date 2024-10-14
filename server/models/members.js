@@ -87,8 +87,17 @@ const insertContract = async (proposal_id, weeks, status) => {
     return response.insertId;  // This will return the auto-incremented ID
 };
 
+const updateExerciseStatus = async (status, status_id) => {
+    const [rows] = await pool.query(
+        'UPDATE member_workout_plan_status SET status = ? WHERE status_id = ?;',
+        [status, status_id]
+    );
+    return rows.length > 0 ? rows : null;
+};
+
 
 module.exports = {
+    updateExerciseStatus,
     getPlan,
     getWorkoutoftheDay,
     getNotifications,

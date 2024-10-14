@@ -1,5 +1,5 @@
 const { getWorkoutOftheWeek, GetMemberInfo, retrieveTrainerchatLog} = require('../models/database');
-const { getNotifications,getProposals,insertContract,getWorkoutoftheDay,getPlan } = require('../models/members');
+const { getNotifications,getProposals,insertContract,getWorkoutoftheDay,getPlan, updateExerciseStatus } = require('../models/members');
 
 module.exports = {
     GetTodaysMeal: async (req, res) => {
@@ -30,6 +30,17 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching members:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    updateExerciseStatus: async (req, res) => {
+        const { status_id, status } = req.body;
+        try {
+            await updateExerciseStatus(status, status_id);
+            res.status(200).send("Workout exercise updated successfully");
+
+        } catch (error) {
+            console.error("Error updating workout template exercises:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },
