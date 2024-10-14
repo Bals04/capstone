@@ -178,6 +178,4 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error fetching sales data: ", error);
         });
 
-    window.onload = fetchGymData;
-  
 })

@@ -5,7 +5,7 @@ const { getMembers, getExercises,
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
     insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
     removeTemplateExercise, inputFilter, insertMealTemplates, insertMealTemplatesItems,
-    insertMealTemplatesSteps, insertProposal, insertNotification,getStudents,assignWorkoutPlan } = require('../models/trainers');
+    insertMealTemplatesSteps, insertProposal, insertNotification,getStudents,assignWorkoutPlan,insertStudentWorkouts } = require('../models/trainers');
 
 module.exports = {
 
@@ -175,8 +175,19 @@ module.exports = {
     assignWorkoutPlan: async (req, res) => {
         const { trainer_id, member_id, template_id, status } = req.body;
         try {
-            await assignWorkoutPlan(trainer_id, member_id, template_id, status);
-            res.status(200).send("Template assigned successfully");
+            const plan_id = await assignWorkoutPlan(trainer_id, member_id, template_id, status);
+            res.status(200).json({ message: "Template assigned successfully!", plan_id: plan_id });
+
+        } catch (error) {
+            console.error("Error assigning student:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    insertStudentWorkouts: async (req, res) => {
+        const { plan_id, template_id } = req.body;
+        try {
+            const id = await insertStudentWorkouts(plan_id, template_id);
+            res.status(200).json({ message: "Student workouts assigned successfully!", plan_id: id });
 
         } catch (error) {
             console.error("Error assigning student:", error);

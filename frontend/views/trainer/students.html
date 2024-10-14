@@ -306,9 +306,9 @@
     </div>
 
 </body>
-<script src="../../scripts/trainer.js"></script>
 <script>
     let trainerid;
+    let plan_id;
     document.addEventListener('DOMContentLoaded', function () {
 
         id = window.userId;
@@ -434,26 +434,55 @@
             status: "On going"
         })
             .then(function (response) {
-                showToast("success", "The workout plan has been assigned successfully")
-                console.log(response.data)
+                showToast("success", "The workout plan has been assigned successfully");
+
+                const plan_id = response.data.plan_id; // get the plan_id from the response
+
+                // Now insert student workouts using the plan_id and template_id
+                return insertStudentWorkouts(plan_id, templateId);
+            })
+            .then(function (insertResponse) {
+                // Student workouts inserted successfully
+                console.log('Student workouts inserted:', insertResponse);
+                showToast("success", "Student workouts have been inserted successfully");
+
+                // Redirect to students.html after a delay
                 setTimeout(() => {
-                    window.location.href = "students.html"
+                    window.location.href = "students.html";
                 }, 4000);
             })
             .catch(function (error) {
                 if (error.response && error.response.data.message) {
                     const errorMessage = error.response.data.message;  // Access the error message directly
-                    showErrorToast(errorMessage)
+                    showErrorToast(errorMessage);
                 } else {
                     console.error('Error:', error.response ? error.response.data : error.message);
                 }
-
             });
-
 
         // Close the modal after submission
         document.getElementById('templateModal').classList.add('hidden');
     }
+
+
+    const insertStudentWorkouts = async (plan_id, template_id) => {
+        try {
+            const response = await axios.post('http://localhost:3000/insertStudentWorkouts', {
+                plan_id,        // sending plan_id in the request body
+                template_id     // sending template_id in the request body
+            });
+
+            // handle the success response
+            console.log('Student workouts inserted successfully:', response.data);
+            return response.data;  // return the response if needed
+        } catch (error) {
+            // handle error cases
+            console.error('Error inserting student workouts:', error.response ? error.response.data : error.message);
+            throw error;  // re-throw the error for further handling
+        }
+    };
+
+
     function showToast(type, message) {
         const toast = document.getElementById('success-toast'); // You seem to be using only success toast for both types
         const messageElement = document.getElementById('success-message-toast'); // Adjust accordingly for error

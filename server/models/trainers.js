@@ -149,9 +149,21 @@ const assignWorkoutPlan = async (trainer_id, member_id, template_id, status) => 
     // Return only the insertId
     return rows.insertId;
 };
+const insertStudentWorkouts = async (plan_id, template_id) => {
+    const [rows] = await pool.query(
+       `INSERT INTO member_workout_plan_status (plan_id, template_exercise_id, status)
+        SELECT ?, template_exercise_id, 'not started'
+        FROM template_exercises
+        WHERE template_id = ?`,
+        [plan_id, template_id]
+    );
+    // Return only the insertId
+    return rows.insertId;
+};
 
 
 module.exports = {
+    insertStudentWorkouts,
     assignWorkoutPlan,
     getStudents,
     insertNotification,
