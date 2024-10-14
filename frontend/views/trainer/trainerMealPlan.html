@@ -186,22 +186,28 @@
                     <select id="tabs"
                         class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg block w-full p-2.5 dark:bg-div_color dark:border-gray-600 dark:placeholder-white dark:text-white">
                         <option>Custom Meal</option>
-                        <option>Premade Meal</option>
+                        <!--<option>Premade Meal</option>-->
                     </select>
                 </div>
                 <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-white rtl:divide-x-reverse"
                     id="fullWidthTab" role="tablist">
                     <li class="w-full">
-                        <button id="stats-tab" onclick="toggleTab('stats', this)" type="button"
-                            class="inline-block w-full p-4 rounded-ss-lg bg-customGray hover:bg-customGray focus:outline-none dark:bg-customGray dark:hover:border-gray-700">Custom
-                            Meal</button>
+                        <div id="stats-tab" onclick="toggleTab('stats', this)"
+                            class="inline-block w-full p-4 rounded-ss-lg bg-customGray hover:bg-customGray focus:outline-none dark:bg-customGray dark:hover:border-gray-700">
+                            Custom
+                            Meal
+                        </div>
                     </li>
+                    <!--
                     <li class="w-full">
                         <button id="about-tab" onclick="toggleTab('about', this)" type="button"
                             class="inline-block w-full p-4 bg-customGray hover:bg-customGray focus:outline-none dark:bg-div_color dark:hover:border-gray-700">Premade
                             Meal</button>
                     </li>
+                    -->
                 </ul>
+
+                <!--Custom Meal-->
                 <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
                     <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="stats">
                         <!-- Content for Custom Meal -->
@@ -318,179 +324,11 @@
                             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
                         </div>
                     </div>
-                    <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-div_color" id="about">
-                        <!-- Content for Premade Meal -->
-                        <div class="flex flex-col mt-2 md:flex-row justify-between items-start md:items-center">
-                            <div class="text-white text-2xl font-semibold">
-                                <h1>Meal Plan Templates</h1>
-                            </div>
-                            <form class="max-w-lg w-full">
-                                <div class="flex flex-col md:flex-row md:items-center">
-                                    <label for="search-dropdown"
-                                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                                    <div class="flex w-full relative">
-                                        <button id="dropdown-button" type="button"
-                                            class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                                            All categories
-                                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                                            </svg>
-                                        </button>
-                                        <div id="dropdown"
-                                            class="hidden absolute mt-11 z-10 bg-white divide-y divide-gray-100 rounded-r-lg rounded-bl-lg shadow w-44 dark:bg-div_color">
-                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                                aria-labelledby="dropdown-button">
-                                                <li>
-                                                    <button type="button"
-                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
-                                                        Meal Plan</button>
-                                                </li>
-                                                <li>
-                                                    <button type="button"
-                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
-                                                        Meal Plan</button>
-                                                </li>
-                                                <li>
-                                                    <button type="button"
-                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
-                                                        Meal Plan</button>
-                                                </li>
-                                                <li>
-                                                    <button type="button"
-                                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">EKLOG
-                                                        Meal Plan</button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="relative w-full">
-                                            <input type="search" id="search-dropdown"
-                                                class="block mr-2 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-div_color dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                                                placeholder="Search workout plan" required />
-                                            <button type="submit"
-                                                class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-gray-700 rounded-r-lg border border-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-customOrange dark:bg-div_color dark:hover:bg-gray-600 dark:focus:ring-gray-500">
-                                                <svg class="w-4 h-4" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                                </svg>
-                                                <span class="sr-only">Search</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
 
-                        <!--grid-->
-                        <div
-                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-center justify-center gap-4 mt-3">
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://media.self.com/photos/5a316fd183ab3f54feacf768/4:3/w_2560%2Cc_limit/Roasted-pork.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Tabemono</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://images.immediate.co.uk/production/volatile/sites/30/2022/03/Sesame-salmon-purple-sprouting-broccoli-sweet-potato-mash-02-8062a36.jpg?quality=90&resize=556,505"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkain</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://i.pinimg.com/736x/df/cc/10/dfcc10d397fc5e40073772e6e15c62dc.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Food</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://static01.nyt.com/images/2023/04/20/multimedia/as-ginger-scallion-fish-fgqk/as-ginger-scallion-fish-fgqk-articleLarge.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Pagkaon</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                            <div
-                                class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                <a class="relative mx-3 mt-3 flex h-30 overflow-hidden rounded-xl" href="#">
-                                    <img class="object-cover w-full h-40"
-                                        src="https://media.self.com/photos/5fe36191fa75923c77cd821f/4:3/w_2560%2Cc_limit/GettyImages-1128962609.jpg"
-                                        alt="mealplan image" />
-                                </a>
-                                <div class="mt-4 px-5 pb-5">
-                                    <a href="#">
-                                        <h5 class="text-xl tracking-tight text-slate-900">Bento</h5>
-                                    </a>
-                                    <div class="mt-2 mb-5 flex items-center justify-center">
-                                        <p>Meal Plan</p>
-                                    </div>
-                                    <a href="#"
-                                        class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                                        View template
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <!-- Modal Container -->
                 </div>
+                
                 <!-- Enhanced Modal Container -->
                 <div id="TemplateModal"
                     class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden">
