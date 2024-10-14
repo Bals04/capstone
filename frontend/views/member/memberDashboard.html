@@ -239,20 +239,22 @@
                                 xmlns="http://www.w3.org/2000/svg">
                                 <!-- Background Circle (Gauge) -->
                                 <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-[#343639]"
-                                    stroke-width="1.5" stroke-dasharray="75 100" stroke-linecap="round"></circle>
+                                    stroke-width="1.5" stroke-dasharray="100 100" stroke-linecap="round"></circle>
 
                                 <!-- Gauge Progress -->
-                                <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-orange-600"
-                                    stroke-width="1.5" stroke-dasharray="37.5 100" stroke-linecap="round"></circle>
+                                <circle id="gauge-progress" cx="18" cy="18" r="16" fill="none"
+                                    class="stroke-current text-orange-600" stroke-width="1.5" stroke-dasharray="0 100"
+                                    stroke-linecap="round"></circle>
                             </svg>
 
                             <!-- Value Text -->
                             <div
                                 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                                <span class="text-2xl font-bold text-white">50%</span>
+                                <span id="gauge-value" class="text-2xl font-bold text-white">0%</span>
                             </div>
                         </div>
                         <!-- End Gauge Component -->
+
                     </div>
 
                     <!-- Daily Tasks -->
@@ -269,7 +271,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <span class="text-sm font-normal md:block">Date now</span>
+                                        <span id="current-date" class="text-sm font-normal md:block"></span>
                                     </div>
                                 </div>
                             </div>
@@ -282,7 +284,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#373D41] md:rounded-tr-lg md:rounded-br-lg shadow-custom flex flex-col overflow-y-auto"
+                <div class="h-[500px] md:h-[550px] overflow-hidden md:overflow-hidden overflow-y-auto md:overflow-y-auto scrollbar-thin md:scrollbar-thin scrollbar-track-[#373D41] md:scrollbar-track-[#373D41] scrollbar-thumb-slate-900 md:scrollbar-thumb-slate-900"
                     id="workout-container">
                     <div class="mt-5 ml-2 p-2 text-xl font-medium">
                         <h1>Today's workout</h1>
@@ -482,6 +484,8 @@
         let Price;
         let Proposal_id;
         let planId;
+        const currentDate = new Date();
+
 
         // Fetch and assign member information when the page loads
         fetchMemberInfo();
@@ -511,6 +515,15 @@
                     console.error('Error fetching member info:', error);
                 });
         }
+
+
+        // Format the date (e.g., "October 15, 2024")
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = currentDate.toLocaleDateString('en-US', options);
+        // Set the content of the span to the formatted date
+        document.getElementById('current-date').innerText = formattedDate;
+
+
         function fetchMemberPlanInfo() {
             axios.get('http://localhost:3000/getPlan', {
                 params: {
@@ -713,14 +726,14 @@
             }
         };
         const createWorkoutCard = async (exercise) => {
-         //   const exerciseDetails = await fetchExerciseDetails(exercise.exercise_id); // Fetch exercise details
-         //   if (!exerciseDetails) {
-         //       return `<div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">Failed to load exercise details</div>`;
-         //   }
+            //   const exerciseDetails = await fetchExerciseDetails(exercise.exercise_id); // Fetch exercise details
+            //   if (!exerciseDetails) {
+            //       return `<div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">Failed to load exercise details</div>`;
+            //   }
 
-         // Ensure target and secondaryMuscles have default values
-         //  const { gifUrl, target = 'N/A', secondaryMuscles = [] } = exerciseDetails; // Use default values
-         //  const secondaryMusclesText = secondaryMuscles.length > 0 ? secondaryMuscles.join(', ') : 'None'; // Join secondary muscles into a string
+            // Ensure target and secondaryMuscles have default values
+            //  const { gifUrl, target = 'N/A', secondaryMuscles = [] } = exerciseDetails; // Use default values
+            //  const secondaryMusclesText = secondaryMuscles.length > 0 ? secondaryMuscles.join(', ') : 'None'; // Join secondary muscles into a string
 
             return `
                 <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">
@@ -838,6 +851,36 @@
             tasksContainer.innerHTML += taskCard; // Add each task card to the container
         });
     };
+
+    // Fetch workout status and update the gauge
+    async function updateGauge() {
+        try {
+            const response = await fetch('http://localhost:3000/WorkoutOftheDay?plan_id=9');
+            const data = await response.json();
+
+            // Assuming the data structure you've provided
+            const workouts = data[0]; // Access the first item in the returned array
+            const totalWorkouts = workouts.length;
+            const completedWorkouts = workouts.filter(workout => workout.status === "completed").length; // Count completed workouts
+            // Calculate percentage
+            const percentage = totalWorkouts > 0 ? (completedWorkouts / totalWorkouts) * 100 : 0;
+
+            // Update gauge
+            const gaugeProgress = document.getElementById('gauge-progress');
+            const gaugeValue = document.getElementById('gauge-value');
+
+            // Update SVG stroke-dasharray and inner text
+            gaugeProgress.style.strokeDasharray = `${percentage} 100`;
+            gaugeValue.innerText = `${Math.round(percentage)}%`;
+
+        } catch (error) {
+            console.error('Error fetching workout data:', error);
+        }
+    }
+
+    // Call the update function on page load
+    document.addEventListener('DOMContentLoaded', updateGauge);
+
 
 
 </script>
