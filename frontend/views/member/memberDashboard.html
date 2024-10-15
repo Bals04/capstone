@@ -230,7 +230,7 @@
                         <div class="flex flex-col text-left justify-center">
                             <h2 class="text-md font-semibold">Today's Plan</h2>
                             <h3 class="text-[10px] font-light mt-1">Let's be productive!</h3>
-                            <h3 class="text-[10px] font-light mt-1"><span>5/10</span> completed</h3>
+                            <h3 class="text-[10px] font-light mt-1" id="WorkoutsFinished"></h3>
                         </div>
 
                         <!-- Gauge Component -->
@@ -700,7 +700,7 @@
         }
         const apiKey = 'b215bcf167msh2177b646f9dc93ap1acd4fjsn5ebfbecff2a3'; // Replace with your exerciseDB API key
 
-        const fetchExerciseDetails = async (exerciseId) => {
+        const fetchExerciseGifUrl = async (exerciseId) => {
             try {
                 const response = await axios.get(`https://exercisedb.p.rapidapi.com/exercises/exercise/${exerciseId}`, {
                     headers: {
@@ -708,7 +708,7 @@
                         'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
                     }
                 });
-                return response.data; // Ensure this path matches the response structure
+                return response.data.gifUrl; // Ensure this path matches the response structure
             } catch (error) {
                 console.error('Error fetching exercise details:', error);
                 return null; // Return null if there was an error
@@ -725,36 +725,71 @@
                 return [];
             }
         };
-        const createWorkoutCard = async (exercise) => {
-            //   const exerciseDetails = await fetchExerciseDetails(exercise.exercise_id); // Fetch exercise details
-            //   if (!exerciseDetails) {
-            //       return `<div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">Failed to load exercise details</div>`;
-            //   }
 
-            // Ensure target and secondaryMuscles have default values
-            //  const { gifUrl, target = 'N/A', secondaryMuscles = [] } = exerciseDetails; // Use default values
-            //  const secondaryMusclesText = secondaryMuscles.length > 0 ? secondaryMuscles.join(', ') : 'None'; // Join secondary muscles into a string
+        // Modal HTML structure (initially without dynamic content)
+        const createWorkoutCard = async (exercise) => {
+            // Modal HTML structure
+            const modalHTML = `
+        <div id="gifModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-white rounded-lg shadow-lg p-5">
+                <span id="closeModal" class="cursor-pointer text-red-500 font-bold float-right">X</span>
+                <img id="modalGifImage" src="" alt="Exercise GIF" class="w-full h-auto object-cover rounded-lg">
+            </div>
+        </div>
+    `;
+
+            // Insert modal into the body if it doesn't exist
+            if (!document.getElementById('gifModal')) {
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+            }
 
             return `
-                <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">
-                    <img src="https://cdn.shopify.com/s/files/1/1497/9682/files/1.What_Are_Diamond_Push-Ups_How_to_Do_It.jpg?v=1673013889"
+                <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center max-w-sm mx-auto">
+                    <img src="https://assets.clevelandclinic.org/transform/26568096-7fcc-4713-898d-ca1ed6c84895/exerciseHowOften-944015592-770x533-1_jpg"
                         alt="Push-up" class="rounded-t-lg w-full h-auto object-cover border-t border-[#464646]">
-                    <div class="flex flex-col text-left justify-center py-2 text-[13px] ml-3">
-                        <h2>${exercise.exercise_name}</h2>
-                        <div class="flex flex-row gap-1">
-                            <div>
-                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Target: ${exercise.target_muscle_group} <span>
-                            </div>
-                        </div>
-                        <div class="flex flex-row gap-1">
-                            <div>
-                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Secondary Muscles: ${exercise.secondaryMuscles} </span>
-                            </div>
-                        </div>
+                    <div class="flex flex-col text-left justify-center py-4 px-4">
+                        <h2 class="text-white text-xl font-semibold mb-2">${exercise.exercise_name}</h2>
+                        <p class="text-slate-400 text-sm">Target: ${exercise.target_muscle_group}</p>
+                        <p class="text-slate-400 text-sm mb-4">Secondary Muscles: ${exercise.secondaryMuscles}</p>
+                        <button id="showGif" data-exercise-id="${exercise.exercise_id}" class="bg-50 hover:bg-orange-500 text-white font-semibold py-2 px-6 rounded-lg mx-auto w-full transition duration-300 ease-in-out">View Exercise GIF</button>
                     </div>
                 </div>
             `;
         };
+
+        // Event listeners for modal functionality
+        document.addEventListener('click', async (e) => {
+            if (e.target && e.target.id === 'showGif') {
+                const exerciseId = e.target.getAttribute('data-exercise-id');
+                console.log("Fetching GIF for exercise ID:", exerciseId);
+
+                // Fetch the GIF URL from RapidAPI
+                const gifUrl = await fetchExerciseGifUrl(exerciseId);
+
+                if (gifUrl) {
+                    // Update the image in the modal with the fetched GIF URL
+                    document.getElementById('modalGifImage').src = gifUrl;
+                    document.getElementById('gifModal').classList.remove('hidden');
+                } else {
+                    console.error("Failed to load GIF.");
+                }
+            }
+
+            if (e.target && e.target.id === 'closeModal') {
+                document.getElementById('gifModal').classList.add('hidden');
+            }
+        });
+
+        // Event listeners for modal functionality
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'showGif') {
+                document.getElementById('gifModal').classList.remove('hidden');
+            }
+            if (e.target && e.target.id === 'closeModal') {
+                document.getElementById('gifModal').classList.add('hidden');
+            }
+        });
+
 
         const populateWorkoutCards = async () => {
             const workoutData = await fetchWorkoutData(planId);
@@ -806,7 +841,7 @@
                     <div>${statusIcon}</div>
                     <div>
                         <p class="font-medium">${exercise_name}</p>
-                        <p class="text-sm text-slate-400">Reps: ${repetitions}, Sets: ${sets}</p>
+                        <p class="text-sm text-slate-400">Reps: ${repetitions},<br> Sets: ${sets}</p>
                     </div>
                 </div>
                 <button class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600" onclick="markAsDone('${exercise.status_id}')">
@@ -863,6 +898,7 @@
             const totalWorkouts = workouts.length;
             const completedWorkouts = workouts.filter(workout => workout.status === "completed").length; // Count completed workouts
             // Calculate percentage
+            document.getElementById("WorkoutsFinished").textContent = `${completedWorkouts}/${totalWorkouts} completed`
             const percentage = totalWorkouts > 0 ? (completedWorkouts / totalWorkouts) * 100 : 0;
 
             // Update gauge
