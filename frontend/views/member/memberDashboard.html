@@ -250,7 +250,7 @@
                             <!-- Value Text -->
                             <div
                                 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                                <span id="gauge-value" class="text-2xl font-bold text-white">0%</span>
+                                <span id="gauge-value" class="text-1xl font-bold text-white">0%</span>
                             </div>
                         </div>
                         <!-- End Gauge Component -->
@@ -743,12 +743,12 @@
                         <h2>${exercise.exercise_name}</h2>
                         <div class="flex flex-row gap-1">
                             <div>
-                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Target: target data <span>
+                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Target: ${exercise.target_muscle_group} <span>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
                             <div>
-                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Secondary Muscles: secondary muscle data</span>
+                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Secondary Muscles: ${exercise.secondaryMuscles} </span>
                             </div>
                         </div>
                     </div>

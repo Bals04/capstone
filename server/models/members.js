@@ -51,6 +51,8 @@ const getWorkoutoftheDay = async (plan_id) => {
                 wte.exercise_name,
                 wte.repetitions,
                 wte.sets,
+            	wte.target_muscle_group,
+            	wte.secondaryMuscles,
                 wte.week_no,
                 wte.day_no,
                 mes.status,
@@ -65,7 +67,7 @@ const getWorkoutoftheDay = async (plan_id) => {
             JOIN 
                 CTE_CURRENT_DAY c ON c.template_id = wte.template_id	
             WHERE 
-                mes.plan_id = ?
+                mes.plan_id = 9
             AND 
                 c.Day_number = wte.day_no
             AND
