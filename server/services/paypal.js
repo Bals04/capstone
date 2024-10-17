@@ -167,3 +167,71 @@ exports.getSubscriptionDetails = async (subscriptionID) => {
     }
 };
 
+exports.createPlan = async (productID, planName, price, intervalUnit, intervalCount) => {
+    const accessToken = await generateAccessToken();
+
+    const response = await axios({
+        url: process.env.PAYPAL_BASE_URL + '/v1/billing/plans',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        },
+        data: {
+            product_id: "PROD-4VR73311L4870944G",  // Use the manually created product ID
+            name: planName,
+            description: `Subscription plan for ${planName}`,
+            status: 'ACTIVE',
+            billing_cycles: [{
+                frequency: {
+                    interval_unit: intervalUnit,  // Example: 'MONTH', 'YEAR'
+                    interval_count: intervalCount  // Example: 1 for Monthly, 12 for Yearly
+                },
+                tenure_type: 'REGULAR',
+                sequence: 1,
+                total_cycles: 0,  // Infinite billing cycles
+                pricing_scheme: {
+                    fixed_price: {
+                        value: price,
+                        currency_code: 'PHP'
+                    }
+                }
+            }],
+            payment_preferences: {
+                auto_bill_outstanding: true,
+                setup_fee: {
+                    value: '0',
+                    currency_code: 'PHP'
+                },
+                setup_fee_failure_action: 'CONTINUE',
+                payment_failure_threshold: 3
+            },
+            taxes: {
+                percentage: '0',  // Add tax percentage if necessary
+                inclusive: false
+            }
+        }
+    });
+
+    return response.data.id;  // This is the plan ID to use when creating subscriptions
+};
+
+// Function to get all plans for a product ID
+exports.getAllPlansForProduct = async (productID) => {
+    const accessToken = await generateAccessToken(); // Fetch access token for PayPal API
+
+    const response = await axios({
+        url: `${process.env.PAYPAL_BASE_URL}/v1/billing/plans?product_id=${productID}`,
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+
+    return response.data.plans;  // Return the list of plans for this product
+};
+
+
+
+

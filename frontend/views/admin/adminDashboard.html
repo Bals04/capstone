@@ -133,7 +133,7 @@
             </div>
 
             <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
-                <!--Home-->
+                <!-- Home -->
                 <li>
                     <a href="adminDashboard.html" class="btn active flex items-center justify-center text-2xl">
                         <i class="bx bx-home-alt-2" aria-hidden="true" style="color:#ffffff"></i>
@@ -141,15 +141,15 @@
                     <span class="tooltip-home absolute text-lg">Home</span>
                 </li>
 
-                <!--Pending Gym Registration-->
+                <!-- Pending Gym Registration -->
                 <li class="mt-6">
                     <a href="Pending.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-time' style="color:white"></i> <!-- Changed to a clock icon -->
+                        <i class='bx bx-time' style="color:white"></i>
                     </a>
                     <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
 
-                <!--Registered Gym-->
+                <!-- Registered Gym -->
                 <li class="mt-6">
                     <a href="Registered.html" class="btn flex items-center justify-center text-2xl">
                         <i class='bx bx-list-check' style="color:white"></i>
@@ -175,20 +175,20 @@
                 </span>
             </h1>
             <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5 items-center">
-                <!--profile-->
+                <!-- Profile -->
                 <div class="flex items-center justify-center mr-24 mt-0">
                     <button>
                         <img class="w-10 h-10 rounded-full object-cover border border-gray-400"
                             src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
                     </button>
                 </div>
-                <!--notif-->
+                <!-- Notification -->
                 <div class="mr-4">
                     <button>
                         <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
                     </button>
                 </div>
-                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
+                <!-- Dark/Light mode -->
                 <div class="mr-4">
                     <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
                         <input type="checkbox" class="mode">
@@ -210,7 +210,7 @@
                 <div class="mt-20 flex gap-5">
                     <a href="Registered.html"
                         class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300 flex items-center gap-3">
-                        <i class="fas fa-check-circle text-3xl"></i> <!-- Registered Icon -->
+                        <i class="fas fa-check-circle text-3xl"></i>
                         <div>
                             <span class="text-lg">Verified Gym(s)</span><br>
                             <span class="font-bold ml-3">1</span>
@@ -218,7 +218,7 @@
                     </a>
                     <a href="Pending.html"
                         class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:bg-50 hover:shadow-lg rounded-lg text-left duration-300 flex items-center gap-3">
-                        <i class="fas fa-hourglass-half text-3xl"></i> <!-- Pending Icon -->
+                        <i class="fas fa-hourglass-half text-3xl"></i>
                         <div>
                             <span class="text-lg">Pending Gym Registration(s)</span><br>
                             <span class="font-bold ml-3">1</span>
@@ -228,7 +228,7 @@
             </div>
 
             <div class="dashboard-Content text-sm text-white mr-10">
-                <div class="wrapper w-[320px] bg-div_color shadow-lg  border-border_color border-2">
+                <div class="wrapper w-[320px] bg-div_color shadow-lg border-border_color border-2">
                     <header class="">
                         <p class="current-date"></p>
                         <div class="icons">
@@ -256,6 +256,7 @@
             </div>
         </div>
     </div>
+
     <div class="container w-full p-4 pl-[120px] shadow-lg">
         <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
         <div class="bg-div_color p-6 shadow-xl w-full border-border_color border-2 rounded-lg">
@@ -275,6 +276,37 @@
             </table>
         </div>
     </div>
+
+    <div class="container w-full p-4 pl-[120px] shadow-lg">
+        <!-- Use flexbox for alignment -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-white text-2xl font-bold mt-5">Subscription Plans</h2>
+
+            <button id="openModalButton"
+                class="bg-50 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Create Subscription Plan
+            </button>
+        </div>
+
+        <div class="bg-div_color p-6 shadow-xl w-full border-border_color border-2 rounded-lg">
+            <table class="min-w-full text-white shadow-md overflow-hidden">
+                <thead>
+                    <tr class="bg-50">
+                        <th class="py-3 px-4 border-border_color text-left">Plan ID</th>
+                        <th class="py-3 px-4 border-border_color text-left">Plan Name</th>
+                        <th class="py-3 px-4 border-border_color text-left">Status</th>
+                        <th class="py-3 px-4 border-border_color text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody id="plansContainer">
+                    <!-- Plans will be dynamically injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
     <div class="container p-4 pl-[120px] shadow-lg ">
         <h2 class="text-white text-2xl font-bold mb-4 mt-10">Monthly Revenue</h2>
         <div class="bg-div_color p-6 w-full rounded-lg shadow-xl border-border_color border-2">
@@ -282,10 +314,62 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 max-w-lg w-full">
+            <h1 class="text-2xl font-bold text-gray-700 mb-4 text-center">Create PayPal Subscription Plan</h1>
 
+            <form id="createPlanForm" class="space-y-6">
+                <div>
+                    <label for="planName" class="block text-gray-700 font-bold mb-2">Plan Name:</label>
+                    <input type="text" id="planName" name="planName" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
 
+                <div>
+                    <label for="price" class="block text-gray-700 font-bold mb-2">Price:</label>
+                    <input type="number" id="price" name="price" step="1000" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
 
+                <div>
+                    <label for="intervalUnit" class="block text-gray-700 font-bold mb-2">Interval Unit:</label>
+                    <select id="intervalUnit" name="intervalUnit"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="MONTH">Month</option>
+                        <option value="YEAR">Year</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="intervalCount" class="block text-gray-700 font-bold mb-2">Interval Count:</label>
+                    <input type="number" id="intervalCount" name="intervalCount" min="1" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+
+                <div>
+                    <label for="productID" class="block text-gray-700 font-bold mb-2 hidden">Product ID:</label>
+                    <input type="text" id="productID" name="productID" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline hidden">
+                </div>
+
+                <div class="flex items-center justify-center">
+                    <button type="submit"
+                        class="bg-50 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Create Plan
+                    </button>
+                </div>
+            </form>
+
+            <p id="message" class="text-center mt-4 text-gray-700"></p>
+
+            <button id="closeModalButton" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                &times;
+            </button>
+        </div>
+    </div>
 </body>
+
 
 </html>
 <script src="../../scripts/admin.js"></script>
@@ -384,6 +468,7 @@
             .then(response => {
                 // Populate the table with data from the response
                 populateTable(response.data);
+                populatePlans();
             })
             .catch(error => {
                 console.error('There was an error fetching the gym data!', error);
@@ -493,6 +578,80 @@
         .catch(error => {
             console.error("Error fetching sales data: ", error);
         });
+
+
+    async function populatePlans() {
+        const productID = 'PROD-4VR73311L4870944G';  // Your product ID here
+        try {
+            // Make a GET request to the backend to get all plans
+            const response = await axios.get(`http://localhost:3000/admin/get-plans?productID=${productID}`);
+            const plans = response.data;
+            // Display the plans in the table
+            const plansContainer = document.getElementById('plansContainer');
+            plans.forEach(plan => {
+                const planRow = document.createElement('tr');
+                planRow.classList.add('border-b', 'bg-gray-800', 'hover:bg-gray-600');
+
+                planRow.innerHTML = `
+                        <td class="py-2 border-b border-border_color px-4">${plan.id}</td>
+                        <td class="py-2 border-b border-border_color px-4">${plan.name}</td>
+                        <td class="py-2 border-b border-border_color px-4 ">${plan.status}</td>
+                        <td class="py-2 border-b border-border_color px-4">${plan.description}</td>
+                    `;
+                plansContainer.appendChild(planRow);
+            });
+        } catch (error) {
+            console.error('Error fetching plans:', error);
+        }
+
+    }
+
+    // Modal functionality
+    const modal = document.getElementById("modal");
+    const openModalButton = document.getElementById("openModalButton");
+    const closeModalButton = document.getElementById("closeModalButton");
+
+    openModalButton.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+        document.getElementById("productID").value = "PROD-4VR73311L4870944G";
+    });
+
+    closeModalButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+    });
+
+    // Handle form submission
+    document.getElementById("createPlanForm").addEventListener("submit", async function (event) {
+        event.preventDefault();  // Prevent the form from submitting the traditional way
+
+        const planName = document.getElementById("planName").value;
+        const price = document.getElementById("price").value;
+        const intervalUnit = document.getElementById("intervalUnit").value;
+        const intervalCount = document.getElementById("intervalCount").value;
+        const productID = document.getElementById("productID").value;
+
+
+        try {
+            // Send POST request to backend /create-plan endpoint
+            const response = await axios.post('http://localhost:3000/admin/create-plan', {
+                planName,
+                price,
+                intervalUnit,
+                intervalCount,
+                productID
+            });
+
+            // Display success message
+            document.getElementById("message").innerText = `Plan created successfully! Plan ID: ${response.data.planID}`;
+            setTimeout(() => {
+                window.location.href = 'adminDashboard.html';
+              }, 2500);
+        } catch (error) {
+            // Handle errors
+            console.error('Error creating plan:', error);
+            document.getElementById("message").innerText = 'Error creating plan. Please try again.';
+        }
+    });
 
 
 
