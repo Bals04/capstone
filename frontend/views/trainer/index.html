@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,63 +178,58 @@
 
     <div class="flex justify-around gap-10 text-white w-auto h-auto m-4">
       <div class="w-full h-full shadow-lg">
-        <div class="dark:bg-div_color text-sm h-64 overflow-y-auto rounded-t-lg">
+        <div
+          class="dark:bg-div_color text-sm h-64 overflow-y-auto scrollbar-thin scrollbar-track-div_color scrollbar-thumb-50 rounded-t-lg">
           <h1 class="px-10 py-5 font-bold text-lg">
             Student Progress
           </h1>
           <div class="mt-5 flex-col">
-            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer"
+              onclick="studentProgress()">
               <div class="w-full">
                 <h2 id="student-name">
                   Eric Ramones Jr.
                 </h2>
               </div>
-              <div class="w-full">
-                <div class="w-auto bg-50 bg-opacity-50 rounded-full h-6 text-center">
-                  <div class="bg-50 rounded-full h-6" style="width: 50%">
-                    <span class="text-sm font-medium">50%</span>
-                  </div>
-                </div>
+              <div class='w-full  bg-customOrange bg-opacity-50 rounded-3xl h-5 '>
+                <div class='bg-customOrange h-5 rounded-3xl text-xs text-white text-center' role='progressbar'
+                  aria-valuenow='50' aria-valuemin='0' aria-valuemax='100' style='width: 50%'>50%</div>
               </div>
             </div>
-  
-            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer"
+              onclick="studentProgress()">
               <div class="w-full">
                 <h2 id="student-name">
                   Robert Jems
                 </h2>
               </div>
-              <div class="w-full">
-                <div class="w-auto bg-50 bg-opacity-50 rounded-full h-6 text-center">
-                  <div class="bg-50 rounded-full h-6" style="width: 50%">
-                    <span class="text-sm font-medium">50%</span>
-                  </div>
-                </div>
+              <div class='w-full  bg-customOrange bg-opacity-50 rounded-3xl h-5 '>
+                <div class='bg-customOrange h-5 rounded-3xl text-xs text-white text-center' role='progressbar'
+                  aria-valuenow='50' aria-valuemin='0' aria-valuemax='100' style='width: 50%'>50%</div>
               </div>
             </div>
-  
-            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer"
+              onclick="studentProgress()">
               <div class="w-full">
                 <h2 id="student-name">
                   Heinztai Horakol
                 </h2>
               </div>
-              <div class="w-full">
-                <div class="w-auto bg-50 bg-opacity-50 rounded-full h-6 text-center">
-                  <div class="bg-50 rounded-full h-6" style="width: 50%">
-                    <span class="text-sm font-medium">50%</span>
-                  </div>
-                </div>
+              <div class='w-full  bg-customOrange bg-opacity-50 rounded-3xl h-5 '>
+                <div class='bg-customOrange h-5 rounded-3xl text-xs text-white text-center' role='progressbar'
+                  aria-valuenow='80' aria-valuemin='0' aria-valuemax='100' style='width: 80%'>80%</div>
               </div>
 
             </div>
           </div>
         </div>
-        
+
         <div class="w-full dark:bg-div_color rounded-b-lg">
           <h1 class="text-center p-3">
             <span id="student-name-show">
-              
+
             </span>
           </h1>
 
@@ -241,14 +237,8 @@
             <ul class="flex text-center" id="default-tab" role="tablist">
               <!-- Workout Tab -->
               <li class="w-full" role="presentation">
-                <button
-                  class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300"
-                  id="workout-tab"
-                  data-tabs-target="#workout"
-                  type="button"
-                  role="tab"
-                  aria-controls="workout"
-                  aria-selected="true">
+                <button class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300" id="workout-tab"
+                  data-tabs-target="#workout" type="button" role="tab" aria-controls="workout" aria-selected="true">
                   Workout
                 </button>
               </li>
@@ -256,48 +246,117 @@
               <li class="w-full" role="presentation">
                 <button
                   class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                  id="meal-tab"
-                  data-tabs-target="#meal"
-                  type="button"
-                  role="tab"
-                  aria-controls="meal"
-                  aria-selected="false"
-                >
+                  id="meal-tab" data-tabs-target="#meal" type="button" role="tab" aria-controls="meal"
+                  aria-selected="false">
                   Meal
                 </button>
               </li>
             </ul>
           </div>
-          
+
           <div id="default-tab-content">
             <!-- Workout Tab Content -->
-            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color h-64 overflow-y-auto" id="workout" role="tabpanel" aria-labelledby="workout-tab">
-              <span>
+            <div
+              class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color h-64 overflow-y-auto scrollbar-thin scrollbar-track-div_color scrollbar-thumb-50"
+              id="workout" role="tabpanel" aria-labelledby="workout-tab">
+              <span class="mb-6">
                 <div>mm/dd/yyyy</div>
                 <!-- <div id="date-display" class="mb-3 text-md font-medium text-divcbg-div_color dark:text-white"></div> -->
               </span>
-              <div class="font-thin flex-col">
-                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+              <div class="inline-flex items-center space-x-2">
+                <div class="flex flex-col gap-2">
+                  <div class="flex flex-row gap-2">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                  </div>
+                  <div class="flex flex-row gap-2">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                  </div>
+                  <div class="flex flex-row gap-2">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                  </div>
+                  <div class="flex flex-row gap-2">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                  </div>
+                  <div class="flex flex-row gap-2">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                  </div>
+                  <div class="flex flex-row gap-2">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                  </div>
+                </div>
               </div>
             </div>
-          
+
             <!-- Meal Tab Content -->
-            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color" id="meal" role="tabpanel" aria-labelledby="meal-tab">
+            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color" id="meal" role="tabpanel"
+              aria-labelledby="meal-tab">
               <span>
                 <div>mm/dd/yyyy</div>
               </span>
-              <div class="font-thin flex-col">
-                <div class="border-b-[1px] mb-2 py-2">Chicharon</div>
-                <div class="border-b-[1px] mb-2 py-2">Yipyap</div>
-                <div class="border-b-[1px] mb-2 py-2">Chippy</div>
-                <div class="border-b-[1px] mb-2 py-2">Sting</div>
-                <div class="border-b-[1px] mb-2 py-2">Cobra</div>
-                <div class="border-b-[1px] mb-2 py-2">Tubig canal</div>
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-row gap-2">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                </div>
+                <div class="flex flex-row gap-2">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                </div>
+                <div class="flex flex-row gap-2">
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
+                </div>
               </div>
             </div>
           </div>
@@ -313,37 +372,37 @@
             <div class="px-10 pt-5 text-lg">mm/dd/yyyy</div>
           </span>
           <div class="font-thin flex-col px-10 py-5 text-lg">
-            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+            <div class="flex justify-around items-center border-b-[1px] border-b-customGray mb-2 py-2 text-sm">
               <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
               <div class="font-semibold">Eric Ramuniz</div>
               <div>completed Jakol workout</div>
             </div>
-            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+            <div class="flex justify-around items-center border-b-[1px] border-b-customGray mb-2 py-2 text-sm">
               <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
               <div class="font-semibold">Eric Ramuniz</div>
               <div>completed Jakol workout</div>
             </div>
-            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+            <div class="flex justify-around items-center border-b-[1px] border-b-customGray mb-2 py-2 text-sm">
               <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
               <div class="font-semibold">Eric Ramuniz</div>
               <div>completed Jakol workout</div>
             </div>
-            <div class="flex justify-around items-center border-b-[1px] mb-2 py-2 text-sm">
+            <div class="flex justify-around items-center border-b-[1px] border-b-customGray mb-2 py-2 text-sm">
               <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
               <div class="font-semibold">Eric Ramuniz</div>
               <div>completed Jakol workout</div>
             </div>
           </div>
         </div>
+      </div>
     </div>
-  </div>
 
-  <div class="container p-4 shadow-lg">
-    <h2 class="text-white text-2xl font-bold mb-4 mt-10">Overview</h2>
-    <div class="bg-div_color p-6 rounded-lg shadow-xl w-full border-gray-500 border">
-      <canvas id="myChart" class="bg-div_color"></canvas>
+    <div class="container p-4 shadow-lg">
+      <h2 class="text-white text-2xl font-bold mb-4 mt-10">Overview</h2>
+      <div class="bg-div_color p-6 rounded-lg shadow-xl w-full border-gray-500 border">
+        <canvas id="myChart" class="bg-div_color"></canvas>
+      </div>
     </div>
-  </div>
 
 
 
@@ -380,7 +439,7 @@
     if (path == 1) {
       setCookie('trainer_id', trainerid, 1); // Expires in 1 day
       window.location.href = 'trainerWorkoutPlan.html';
-    }else{
+    } else {
       setCookie('trainer_id', trainerid, 1); // Expires in 1 day
       window.location.href = 'trainerMealPlan.html';
     }
@@ -427,12 +486,12 @@
   });
 
 
-function studentProgress(){
-  var get_name = document.getElementById("student-name")
-  var show_name = document.getElementById("student-name-show")
+  function studentProgress() {
+    var get_name = document.getElementById("student-name")
+    var show_name = document.getElementById("student-name-show")
 
-  show_name.innerText = get_name.innerText + " progress"
-}
+    show_name.innerText = get_name.innerText + " progress"
+  }
 
 </script>
 
