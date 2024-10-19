@@ -662,6 +662,12 @@ video {
 .z-0 {
   z-index: 0;
 }
+.order-2 {
+  order: 2;
+}
+.order-1 {
+  order: 1;
+}
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
@@ -676,6 +682,9 @@ video {
 }
 .m-4 {
   margin: 1rem;
+}
+.m-10 {
+  margin: 2.5rem;
 }
 .mx-1 {
   margin-left: 0.25rem;
@@ -716,6 +725,10 @@ video {
 .my-auto {
   margin-top: auto;
   margin-bottom: auto;
+}
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 .-mb-\[10\.10px\] {
   margin-bottom: -10.10px;
@@ -906,6 +919,12 @@ video {
 .mt-32 {
   margin-top: 8rem;
 }
+.ml-4 {
+  margin-left: 1rem;
+}
+.mt-9 {
+  margin-top: 2.25rem;
+}
 .block {
   display: block;
 }
@@ -1040,6 +1059,9 @@ video {
 }
 .h-\[95px\] {
   height: 95px;
+}
+.h-36 {
+  height: 9rem;
 }
 .max-h-80 {
   max-height: 20rem;
@@ -1320,6 +1342,15 @@ video {
 .justify-around {
   justify-content: space-around;
 }
+.justify-evenly {
+  justify-content: space-evenly;
+}
+.justify-stretch {
+  justify-content: stretch;
+}
+.justify-items-stretch {
+  justify-items: stretch;
+}
 .gap-0 {
   gap: 0px;
 }
@@ -1456,6 +1487,12 @@ video {
 .overflow-y-auto {
   overflow-y: auto;
 }
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
 .overflow-y-scroll {
   overflow-y: scroll;
 }
@@ -1544,6 +1581,9 @@ video {
 }
 .rounded-tl-lg {
   border-top-left-radius: 0.5rem;
+}
+.rounded-tr-lg {
+  border-top-right-radius: 0.5rem;
 }
 .border {
   border-width: 1px;
@@ -2208,6 +2248,15 @@ video {
   font-size: 3rem;
   line-height: 1;
 }
+.text-\[20px\] {
+  font-size: 20px;
+}
+.text-\[23px\] {
+  font-size: 23px;
+}
+.text-\[19px\] {
+  font-size: 19px;
+}
 .font-bold {
   font-weight: 700;
 }
@@ -2368,6 +2417,10 @@ video {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity));
+}
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 .underline {
   text-decoration-line: underline;
@@ -3109,6 +3162,11 @@ header .icons span:last-child {
   background-color: rgb(67 56 202 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-orange-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 115 22 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-opacity-90:hover {
   --tw-bg-opacity: 0.9;
 }
@@ -3463,13 +3521,35 @@ header .icons span:last-child {
     left: 5rem;
   }
 
+  .md\:order-2 {
+    order: 2;
+  }
+
+  .md\:order-1 {
+    order: 1;
+  }
+
   .md\:m-7 {
     margin: 1.75rem;
+  }
+
+  .md\:m-4 {
+    margin: 1rem;
   }
 
   .md\:my-6 {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+  }
+
+  .md\:mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .md\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .md\:me-24 {
@@ -3540,6 +3620,10 @@ header .icons span:last-child {
     width: 100%;
   }
 
+  .md\:max-w-screen-lg {
+    max-width: 1024px;
+  }
+
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3600,6 +3684,10 @@ header .icons span:last-child {
     margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
+  .md\:overflow-auto {
+    overflow: auto;
+  }
+
   .md\:overflow-hidden {
     overflow: hidden;
   }
@@ -3608,8 +3696,20 @@ header .icons span:last-child {
     overflow-y: auto;
   }
 
+  .md\:overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .md\:overflow-x-scroll {
+    overflow-x: scroll;
+  }
+
   .md\:p-8 {
     padding: 2rem;
+  }
+
+  .md\:p-4 {
+    padding: 1rem;
   }
 
   .md\:px-4 {
@@ -3697,8 +3797,20 @@ header .icons span:last-child {
     height: 8px;
   }
 
+  .md\:scrollbar-none {
+    scrollbar-width: none;
+  }
+
+  .md\:scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   .md\:scrollbar-track-\[\#373D41\] {
     --scrollbar-track: #373D41 !important;
+  }
+
+  .md\:scrollbar-track-transparent {
+    --scrollbar-track: transparent !important;
   }
 
   .md\:scrollbar-thumb-slate-900 {
@@ -3735,6 +3847,11 @@ header .icons span:last-child {
   .lg\:my-6 {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+  }
+
+  .lg\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .lg\:mb-0 {
@@ -3989,6 +4106,11 @@ header .icons span:last-child {
   .xl\:my-10 {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
+  }
+
+  .xl\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .xl\:gap-0 {
