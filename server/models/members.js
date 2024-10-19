@@ -22,7 +22,7 @@ const getProposals = async (member_id, proposal_id) => {
     );
     return rows.length > 0 ? [rows] : null;
 };
-const getWorkoutoftheDay = async (plan_id) => {
+const getWorkoutoftheDay = async (member_id, plan_id) => {
     const [rows] = await pool.query(
        `WITH CTE_CURRENT_DAY AS (
         SELECT 
@@ -40,6 +40,7 @@ const getWorkoutoftheDay = async (plan_id) => {
             MOD(DATEDIFF(CURRENT_DATE, m.date_started), 7) + 1 AS Day_number
         FROM 
             member_workout_plan m
+    	WHERE m.member_id = ?
         ),
         CTE_WORKOUT AS (
             SELECT 
@@ -51,11 +52,15 @@ const getWorkoutoftheDay = async (plan_id) => {
                 wte.exercise_name,
                 wte.repetitions,
                 wte.sets,
+            	wte.target_muscle_group,
+            	wte.secondaryMuscles,
                 wte.week_no,
                 wte.day_no,
                 mes.status,
                 me.date_started,
-                mes.updated_at
+                mes.updated_at,
+            	c.Week_Number,
+            	c.Day_number
             FROM 
                 member_workout_plan_status mes
             JOIN 
@@ -73,7 +78,7 @@ const getWorkoutoftheDay = async (plan_id) => {
         )
         SELECT * FROM CTE_WORKOUT;
         `,
-        [plan_id]
+        [member_id, plan_id]
     );
     return rows.length > 0 ? [rows] : null;
 };

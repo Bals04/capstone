@@ -230,7 +230,7 @@
                         <div class="flex flex-col text-left justify-center">
                             <h2 class="text-md font-semibold">Today's Plan</h2>
                             <h3 class="text-[10px] font-light mt-1">Let's be productive!</h3>
-                            <h3 class="text-[10px] font-light mt-1"><span>5/10</span> completed</h3>
+                            <h3 class="text-[10px] font-light mt-1" id="WorkoutsFinished"></h3>
                         </div>
 
                         <!-- Gauge Component -->
@@ -250,7 +250,7 @@
                             <!-- Value Text -->
                             <div
                                 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                                <span id="gauge-value" class="text-2xl font-bold text-white">0%</span>
+                                <span id="gauge-value" class="text-1xl font-bold text-white">0%</span>
                             </div>
                         </div>
                         <!-- End Gauge Component -->
@@ -489,6 +489,7 @@
 
         // Fetch and assign member information when the page loads
         fetchMemberInfo();
+
         function fetchMemberInfo() {
             axios.get('http://localhost:3000/getMemberInfo', {
                 params: {
@@ -509,7 +510,7 @@
                     // Optionally, update the DOM with the fetched data
                     document.querySelector('.nameChange').textContent = `${firstname} ${lastname}`;
                     console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${member_id}`);
-                    fetchMemberPlanInfo();
+                    fetchMemberPlanInfo(member_id);
                 })
                 .catch(error => {
                     console.error('Error fetching member info:', error);
@@ -524,7 +525,7 @@
         document.getElementById('current-date').innerText = formattedDate;
 
 
-        function fetchMemberPlanInfo() {
+        function fetchMemberPlanInfo(member_id) {
             axios.get('http://localhost:3000/getPlan', {
                 params: {
                     member_id: member_id
@@ -537,6 +538,7 @@
                     planId = memberData;
                     populateWorkoutCards();
                     populateTaskList(planId);
+                    updateGauge(planId);
                 })
                 .catch(error => {
                     console.error('Error fetching member info:', error);
@@ -700,7 +702,7 @@
         }
         const apiKey = 'b215bcf167msh2177b646f9dc93ap1acd4fjsn5ebfbecff2a3'; // Replace with your exerciseDB API key
 
-        const fetchExerciseDetails = async (exerciseId) => {
+        const fetchExerciseGifUrl = async (exerciseId) => {
             try {
                 const response = await axios.get(`https://exercisedb.p.rapidapi.com/exercises/exercise/${exerciseId}`, {
                     headers: {
@@ -708,7 +710,7 @@
                         'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
                     }
                 });
-                return response.data; // Ensure this path matches the response structure
+                return response.data.gifUrl; // Ensure this path matches the response structure
             } catch (error) {
                 console.error('Error fetching exercise details:', error);
                 return null; // Return null if there was an error
@@ -718,43 +720,78 @@
 
         const fetchWorkoutData = async (planId) => {
             try {
-                const response = await axios.get(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}`);
+                const response = await axios.get(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}&member_id=${member_id}`);
                 return response.data[0]; // Adjust if needed, based on your response structure
             } catch (error) {
                 console.error('Error fetching workout data:', error);
                 return [];
             }
         };
-        const createWorkoutCard = async (exercise) => {
-            //   const exerciseDetails = await fetchExerciseDetails(exercise.exercise_id); // Fetch exercise details
-            //   if (!exerciseDetails) {
-            //       return `<div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">Failed to load exercise details</div>`;
-            //   }
 
-            // Ensure target and secondaryMuscles have default values
-            //  const { gifUrl, target = 'N/A', secondaryMuscles = [] } = exerciseDetails; // Use default values
-            //  const secondaryMusclesText = secondaryMuscles.length > 0 ? secondaryMuscles.join(', ') : 'None'; // Join secondary muscles into a string
+        // Modal HTML structure (initially without dynamic content)
+        const createWorkoutCard = async (exercise) => {
+            // Modal HTML structure
+            const modalHTML = `
+        <div id="gifModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-white rounded-lg shadow-lg p-5">
+                <span id="closeModal" class="cursor-pointer text-red-500 font-bold float-right">X</span>
+                <img id="modalGifImage" src="" alt="Exercise GIF" class="w-full h-auto object-cover rounded-lg">
+            </div>
+        </div>
+        `;
+
+            // Insert modal into the body if it doesn't exist
+            if (!document.getElementById('gifModal')) {
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+            }
 
             return `
-                <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center">
-                    <img src="https://cdn.shopify.com/s/files/1/1497/9682/files/1.What_Are_Diamond_Push-Ups_How_to_Do_It.jpg?v=1673013889"
+                <div class="bg-[#373D41] rounded-lg shadow-inner-custom text-center max-w-sm mx-auto">
+                    <img src="https://assets.clevelandclinic.org/transform/26568096-7fcc-4713-898d-ca1ed6c84895/exerciseHowOften-944015592-770x533-1_jpg"
                         alt="Push-up" class="rounded-t-lg w-full h-auto object-cover border-t border-[#464646]">
-                    <div class="flex flex-col text-left justify-center py-2 text-[13px] ml-3">
-                        <h2>${exercise.exercise_name}</h2>
-                        <div class="flex flex-row gap-1">
-                            <div>
-                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Target: target data <span>
-                            </div>
-                        </div>
-                        <div class="flex flex-row gap-1">
-                            <div>
-                                <span class="text-[8px] md:text-[11px] font-light text-slate-400">Secondary Muscles: secondary muscle data</span>
-                            </div>
-                        </div>
+                    <div class="flex flex-col text-left justify-center py-4 px-4">
+                        <h2 class="text-white text-xl font-semibold mb-2">${exercise.exercise_name}</h2>
+                        <p class="text-slate-400 text-sm">Target: ${exercise.target_muscle_group}</p>
+                        <p class="text-slate-400 text-sm mb-4">Secondary Muscles: ${exercise.secondaryMuscles}</p>
+                        <button id="showGif" data-exercise-id="${exercise.exercise_id}" class="bg-50 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg mx-auto w-full transition duration-300 ease-in-out">View Exercise GIF</button>
                     </div>
                 </div>
             `;
         };
+
+        // Event listeners for modal functionality
+        document.addEventListener('click', async (e) => {
+            if (e.target && e.target.id === 'showGif') {
+                const exerciseId = e.target.getAttribute('data-exercise-id');
+                console.log("Fetching GIF for exercise ID:", exerciseId);
+
+                // Fetch the GIF URL from RapidAPI
+                const gifUrl = await fetchExerciseGifUrl(exerciseId);
+
+                if (gifUrl) {
+                    // Update the image in the modal with the fetched GIF URL
+                    document.getElementById('modalGifImage').src = gifUrl;
+                    document.getElementById('gifModal').classList.remove('hidden');
+                } else {
+                    console.error("Failed to load GIF.");
+                }
+            }
+
+            if (e.target && e.target.id === 'closeModal') {
+                document.getElementById('gifModal').classList.add('hidden');
+            }
+        });
+
+        // Event listeners for modal functionality
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'showGif') {
+                document.getElementById('gifModal').classList.remove('hidden');
+            }
+            if (e.target && e.target.id === 'closeModal') {
+                document.getElementById('gifModal').classList.add('hidden');
+            }
+        });
+
 
         const populateWorkoutCards = async () => {
             const workoutData = await fetchWorkoutData(planId);
@@ -767,58 +804,96 @@
                 workoutsSection.innerHTML += workoutCard;
             }
         };
+        // Function to fetch workout of the day data
+        const fetchWorkoutOfTheDay = async (planId) => {
+            try {
+                const response = await fetch(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}&member_id=${member_id}`);
+                const data = await response.json();
+                return data[0]; // Assuming you only need the first array of exercises
+            } catch (error) {
+                console.error("Error fetching workout data:", error);
+                return [];
+            }
+        };
+        // Function to populate the task cards dynamically
+        const populateTaskList = async (planId) => {
+            const tasksContainer = document.getElementById('tasks');
+            tasksContainer.innerHTML = ''; // Clear the existing tasks
+
+            const workoutData = await fetchWorkoutOfTheDay(planId);
+
+            workoutData.forEach(exercise => {
+                const taskCard = createTaskCard(exercise);
+                tasksContainer.innerHTML += taskCard; // Add each task card to the container
+            });
+        };
+        // Function to create task card dynamically
+        const createTaskCard = (exercise) => {
+            const { exercise_name, repetitions, sets, status } = exercise;
+
+            // Set icon based on status
+            const statusIcon = status === "completed" ? `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6 text-green-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            ` : `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6 text-slate-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" />
+                </svg>
+            `;
+
+            // Create task HTML
+            return `
+                <div class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-4 border-l-transparent">
+                    <div class="inline-flex items-center space-x-2">
+                        <div>${statusIcon}</div>
+                        <div>
+                            <p class="font-medium">${exercise_name}</p>
+                            <p class="text-sm text-slate-400">Reps: ${repetitions},<br> Sets: ${sets}</p>
+                        </div>
+                    </div>
+                    <button class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600" onclick="markAsDone('${exercise.status_id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+        };
+        // Fetch workout status and update the gauge
+        async function updateGauge(planId) {
+            try {
+                const response = await fetch(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}&member_id=${member_id}`);
+                const data = await response.json();
+                // Assuming the data structure you've provided
+                const workouts = data[0]; // Access the first item in the returned array
+                const totalWorkouts = workouts.length;
+                const completedWorkouts = workouts.filter(workout => workout.status === "completed").length; // Count completed workouts
+                console.log(workouts)
+                console.log(`${completedWorkouts}/${totalWorkouts} completed`)
+                // Calculate percentage
+                document.getElementById("WorkoutsFinished").textContent = `${completedWorkouts}/${totalWorkouts} completed`
+                const percentage = totalWorkouts > 0 ? (completedWorkouts / totalWorkouts) * 100 : 0;
+
+                // Update gauge
+                const gaugeProgress = document.getElementById('gauge-progress');
+                const gaugeValue = document.getElementById('gauge-value');
+
+                // Update SVG stroke-dasharray and inner text
+                gaugeProgress.style.strokeDasharray = `${percentage} 100`;
+                gaugeValue.innerText = `${Math.round(percentage)}%`;
+
+            } catch (error) {
+                console.error('Error fetching workout data:', error);
+            }
+        }
 
     });
 
-    // Function to fetch workout of the day data
-    const fetchWorkoutOfTheDay = async (planId) => {
-        try {
-            const response = await fetch(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}`);
-            const data = await response.json();
-            return data[0]; // Assuming you only need the first array of exercises
-        } catch (error) {
-            console.error("Error fetching workout data:", error);
-            return [];
-        }
-    };
-
-    // Function to create task card dynamically
-    const createTaskCard = (exercise) => {
-        const { exercise_name, repetitions, sets, status } = exercise;
-
-        // Set icon based on status
-        const statusIcon = status === "completed" ? `
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="w-6 h-6 text-green-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        ` : `
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="w-6 h-6 text-slate-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" />
-            </svg>
-        `;
-
-        // Create task HTML
-        return `
-            <div class="flex justify-between items-center border-b border-[#343639] py-3 px-2 border-l-4 border-l-transparent">
-                <div class="inline-flex items-center space-x-2">
-                    <div>${statusIcon}</div>
-                    <div>
-                        <p class="font-medium">${exercise_name}</p>
-                        <p class="text-sm text-slate-400">Reps: ${repetitions}, Sets: ${sets}</p>
-                    </div>
-                </div>
-                <button class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600" onclick="markAsDone('${exercise.status_id}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </button>
-            </div>
-        `;
-    };
-
     const markAsDone = async (status_id) => {
+        alert("hallooo")
         // Here you would typically make an API call to update the status on the server
         try {
             const response = await axios.put(`http://localhost:3000/updateExerciseStatus`, {
@@ -838,48 +913,6 @@
         }
     };
 
-
-    // Function to populate the task cards dynamically
-    const populateTaskList = async (planId) => {
-        const tasksContainer = document.getElementById('tasks');
-        tasksContainer.innerHTML = ''; // Clear the existing tasks
-
-        const workoutData = await fetchWorkoutOfTheDay(planId);
-
-        workoutData.forEach(exercise => {
-            const taskCard = createTaskCard(exercise);
-            tasksContainer.innerHTML += taskCard; // Add each task card to the container
-        });
-    };
-
-    // Fetch workout status and update the gauge
-    async function updateGauge() {
-        try {
-            const response = await fetch('http://localhost:3000/WorkoutOftheDay?plan_id=9');
-            const data = await response.json();
-
-            // Assuming the data structure you've provided
-            const workouts = data[0]; // Access the first item in the returned array
-            const totalWorkouts = workouts.length;
-            const completedWorkouts = workouts.filter(workout => workout.status === "completed").length; // Count completed workouts
-            // Calculate percentage
-            const percentage = totalWorkouts > 0 ? (completedWorkouts / totalWorkouts) * 100 : 0;
-
-            // Update gauge
-            const gaugeProgress = document.getElementById('gauge-progress');
-            const gaugeValue = document.getElementById('gauge-value');
-
-            // Update SVG stroke-dasharray and inner text
-            gaugeProgress.style.strokeDasharray = `${percentage} 100`;
-            gaugeValue.innerText = `${Math.round(percentage)}%`;
-
-        } catch (error) {
-            console.error('Error fetching workout data:', error);
-        }
-    }
-
-    // Call the update function on page load
-    document.addEventListener('DOMContentLoaded', updateGauge);
 
 
 

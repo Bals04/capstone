@@ -229,9 +229,9 @@ module.exports = {
     },
 
     insertWorkoutTemplateExercise: async (req, res) => {
-        const { template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no } = req.body;
+        const { template_id, exercise_id, exercise_name, reps, sets, muscle_group, secondaryMuscle, week_no, day_no } = req.body;
         try {
-            await insertWorkoutTemplateExercise(template_id, exercise_id, exercise_name, reps, sets, muscle_group, week_no, day_no);
+            await insertWorkoutTemplateExercise(template_id, exercise_id, exercise_name, reps, sets, muscle_group, secondaryMuscle, week_no, day_no);
             res.status(200).send("Workout template exercises added successfully");
 
         } catch (error) {

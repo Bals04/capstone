@@ -14,8 +14,8 @@ module.exports = {
     },    
     GetTodaysWorkout: async (req, res) => {
         try {
-            const { plan_id } = req.query;
-            const data = await getWorkoutoftheDay(plan_id);
+            const { member_id, plan_id } = req.query;
+            const data = await getWorkoutoftheDay(member_id, plan_id);
             res.json(data);
         } catch (error) {
             console.error("Error fetching users:", error);

@@ -401,7 +401,7 @@
 <script>
 
 
-  const apiKey = 'adbf0b97a4msh32b6bb808d26203p1222cdjsn335d1b5dab93'; // Replace with your exerciseDB API key
+  const apiKey = 'b215bcf167msh2177b646f9dc93ap1acd4fjsn5ebfbecff2a3'; // Replace with your exerciseDB API key
   let selectedExercises = [];
   let templateId = 0;
   let exerciseId = 0;
@@ -454,15 +454,19 @@
 
   function displayExercises(exercises) {
     const exerciseOptions = document.getElementById('exerciseOptions');
+    //let secondaryMusclesText;
     exerciseOptions.innerHTML = '';
     exercises.forEach(exercise => {
+      console.log(exercise.secondaryMuscles)
+      let secondaryMusclesText = exercise.secondaryMuscles.length > 0 ? exercise.secondaryMuscles.join(', ') : 'None';
+      console.log(secondaryMusclesText)
       const exerciseCard = `
           <div class="exercise-card">
             <img src="${exercise.gifUrl}" alt="${exercise.name}">
             <div class="exercise-details">
               <h3>${exercise.name}</h3>
               <p>Target: ${exercise.target}</p>
-              <button class="bg-blue-500 text-white p-2 mt-2 rounded filter-button" onclick="addExercise('${exercise.id}','${exercise.name}', '${exercise.target}', '${exercise.gifUrl}', '${exercise.bodyPart}')">
+              <button class="bg-blue-500 text-white p-2 mt-2 rounded filter-button" onclick="addExercise('${exercise.id}','${exercise.name}', '${exercise.target}', '${exercise.gifUrl}', '${exercise.target}', '${secondaryMusclesText}')">
                 Add Exercise
               </button>
             </div>
@@ -472,14 +476,15 @@
     });
   }
 
-  function addExercise(id, name, target, gifUrl, part) {
+  function addExercise(id, name, target, gifUrl, target, secondaryMuscle) {
     console.log(id)
     const week = document.getElementById('week').value;
     const day = document.getElementById('day').value;
     const reps = document.getElementById('reps').value;
     const sets = document.getElementById('sets').value;
     exerciseId = id;
-    bodyPart = part
+    bodyPart = target
+    secondary = secondaryMuscle
 
     document.getElementById('exerciseName').value = name
     // Close the modal
@@ -526,7 +531,8 @@
       exercise_name: name,
       reps: reps,
       sets: sets,
-      muscle_group: "waist",
+      muscle_group: bodyPart,
+      secondaryMuscle: secondary,
       week_no: week,
       day_no: day
     })
