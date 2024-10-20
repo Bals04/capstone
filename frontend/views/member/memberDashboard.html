@@ -474,16 +474,17 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const uid = userId;
+        let member_id = 0
         let firstname = null;
         let lastname = null;
         let weight = null;
         let bodytype = null;
-        let member_id = 0
         let Duration;
         let plan_type;
         let Price;
         let Proposal_id;
         let planId;
+        let trainer_id;
         const currentDate = new Date();
 
 
@@ -506,7 +507,6 @@
                     bodytype = memberData.bodytype;
                     member_id = memberData.member_id
 
-
                     // Optionally, update the DOM with the fetched data
                     document.querySelector('.nameChange').textContent = `${firstname} ${lastname}`;
                     console.log(`Member: ${firstname} ${lastname}, Weight: ${weight}, Bodytype: ${bodytype}, ID: ${member_id}`);
@@ -526,6 +526,7 @@
 
 
         function fetchMemberPlanInfo(member_id) {
+            console.log("here")
             axios.get('http://localhost:3000/getPlan', {
                 params: {
                     member_id: member_id
@@ -533,11 +534,15 @@
             })
                 .then(response => {
                     const memberData = response.data[0].plan_id; // Assuming the response data contains the member info
+
+                    trainer_id = response.data[0].trainer_id;
+                    console.log("trainer id:")
+                    console.log(trainer_id)
                     console.log("plan id:")
                     console.log(memberData)
                     planId = memberData;
-                    populateWorkoutCards();
-                    populateTaskList(planId);
+                    populateWorkoutCards(member_id);
+                    populateTaskList(planId, member_id);
                     updateGauge(planId);
                 })
                 .catch(error => {
@@ -793,7 +798,7 @@
         });
 
 
-        const populateWorkoutCards = async () => {
+        const populateWorkoutCards = async (member_id) => {
             const workoutData = await fetchWorkoutData(planId);
             console.log(workoutData)
             const workoutsSection = document.getElementById('workouts-section');
@@ -816,22 +821,24 @@
             }
         };
         // Function to populate the task cards dynamically
-        const populateTaskList = async (planId) => {
+        const populateTaskList = async (planId, member_id) => {
             const tasksContainer = document.getElementById('tasks');
             tasksContainer.innerHTML = ''; // Clear the existing tasks
 
             const workoutData = await fetchWorkoutOfTheDay(planId);
 
             workoutData.forEach(exercise => {
-                const taskCard = createTaskCard(exercise);
+                const taskCard = createTaskCard(exercise, member_id);
                 tasksContainer.innerHTML += taskCard; // Add each task card to the container
             });
         };
         // Function to create task card dynamically
-        const createTaskCard = (exercise) => {
+        const createTaskCard = (exercise, member_id) => {
             const { exercise_name, repetitions, sets, status } = exercise;
-
             // Set icon based on status
+            console.log(member_id)
+            console.log(trainer_id)
+
             const statusIcon = status === "completed" ? `
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     class="w-6 h-6 text-green-500">
@@ -854,7 +861,7 @@
                             <p class="text-sm text-slate-400">Reps: ${repetitions},<br> Sets: ${sets}</p>
                         </div>
                     </div>
-                    <button class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600" onclick="markAsDone('${exercise.status_id}')">
+                    <button class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600" onclick="markAsDone('${exercise.status_id}', '${exercise_name}', '${member_id}', '${firstname}', '${trainer_id}')">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -892,9 +899,12 @@
 
     });
 
-    const markAsDone = async (status_id) => {
-        alert("hallooo")
+    const markAsDone = async (status_id, workout, member_id, member_name, trainer_id) => {
         // Here you would typically make an API call to update the status on the server
+        console.log(workout)
+        console.log(member_id)
+        console.log(member_name)
+        console.log(trainer_id)
         try {
             const response = await axios.put(`http://localhost:3000/updateExerciseStatus`, {
                 status_id: status_id,
@@ -904,6 +914,26 @@
             if (response.status === 200) {
                 // Update the UI accordingly, e.g., re-fetch data or update the status locally
                 console.log('Exercise marked as completed');
+                insertActivity(workout, member_id, member_name, trainer_id);
+            } else {
+                console.error('Failed to mark exercise as completed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const insertActivity = async (workout, member_id, member_name, trainer_id) => {
+        // Here you would typically make an API call to update the status on the server
+        try {
+            const response = await axios.post(`http://localhost:3000/insertActivity`, {
+                member_id: member_id,
+                trainer_id: trainer_id,
+                message: `completed the ${workout} workout`
+            });
+
+            if (response.status === 200) {
+                // Update the UI accordingly, e.g., re-fetch data or update the status locally
+                console.log('Activity successfully inserted');
                 window.location.href = 'memberDashboard.html'
             } else {
                 console.error('Failed to mark exercise as completed');

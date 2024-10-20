@@ -10,7 +10,7 @@ const getNotifications = async (member_id) => {
 };
 const getPlan = async (member_id) => {
     const [rows] = await pool.query(
-        'SELECT plan_id FROM member_workout_plan WHERE member_id = ?',
+        'SELECT plan_id, trainer_id FROM member_workout_plan WHERE member_id = ?',
         [member_id]
     );
     return rows.length > 0 ? rows : null;
@@ -91,6 +91,14 @@ const insertContract = async (proposal_id, weeks, status) => {
     );
     return response.insertId;  // This will return the auto-incremented ID
 };
+const insertActivity = async (member_id, trainer_id, message) => {
+    const [response] = await pool.query(
+        `INSERT INTO student_activity (member_id, trainer_id, message) 
+         VALUES (?,?,?);`,
+        [member_id, trainer_id, message]
+    );
+    return response.insertId;  // This will return the auto-incremented ID
+};
 
 const updateExerciseStatus = async (status, status_id) => {
     const [rows] = await pool.query(
@@ -102,6 +110,7 @@ const updateExerciseStatus = async (status, status_id) => {
 
 
 module.exports = {
+    insertActivity,
     updateExerciseStatus,
     getPlan,
     getWorkoutoftheDay,

@@ -638,6 +638,12 @@ video {
 .z-50 {
   z-index: 50;
 }
+.order-1 {
+  order: 1;
+}
+.order-2 {
+  order: 2;
+}
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
@@ -676,6 +682,10 @@ video {
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 .my-6 {
   margin-top: 1.5rem;
@@ -854,6 +864,9 @@ video {
 }
 .mt-8 {
   margin-top: 2rem;
+}
+.mt-9 {
+  margin-top: 2.25rem;
 }
 .mt-\[1\.2rem\] {
   margin-top: 1.2rem;
@@ -1387,6 +1400,9 @@ video {
 .overflow-y-auto {
   overflow-y: auto;
 }
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
 .overflow-y-scroll {
   overflow-y: scroll;
 }
@@ -1475,6 +1491,9 @@ video {
 }
 .rounded-tl-lg {
   border-top-left-radius: 0.5rem;
+}
+.rounded-tr-lg {
+  border-top-right-radius: 0.5rem;
 }
 .border {
   border-width: 1px;
@@ -2066,6 +2085,9 @@ video {
 }
 .text-\[18px\] {
   font-size: 18px;
+}
+.text-\[20px\] {
+  font-size: 20px;
 }
 .text-base {
   font-size: 1rem;
@@ -3255,8 +3277,26 @@ header .icons span:last-child {
 
 @media (min-width: 768px) {
 
+  .md\:order-1 {
+    order: 1;
+  }
+
+  .md\:order-2 {
+    order: 2;
+  }
+
   .md\:m-7 {
     margin: 1.75rem;
+  }
+
+  .md\:mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .md\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .md\:my-6 {
@@ -3457,6 +3497,14 @@ header .icons span:last-child {
     height: 8px;
   }
 
+  .md\:scrollbar-none {
+    scrollbar-width: none;
+  }
+
+  .md\:scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   .md\:scrollbar-track-\[\#373D41\] {
     --scrollbar-track: #373D41 !important;
   }
@@ -3482,6 +3530,11 @@ header .icons span:last-child {
 
   .lg\:col-span-7 {
     grid-column: span 7 / span 7;
+  }
+
+  .lg\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .lg\:my-6 {
@@ -3642,6 +3695,11 @@ header .icons span:last-child {
   .xl\:my-10 {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
+  }
+
+  .xl\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .xl\:gap-0 {
