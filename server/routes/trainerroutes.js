@@ -15,6 +15,8 @@ router.get("/getTemplates", trainerController.getTemplates);
 router.get("/getTemplateId", trainerController.getTemplateId); 
 router.get("/getByQuery", trainerController.inputFilter); 
 router.get("/getTrainerStudents", trainerController.getStudents); 
+router.get("/getProgressOftheDay", trainerController.getProgressOftheDay); 
+router.get("/getStudentActivity", trainerController.getStudentActivity); 
 router.post("/createGymTrainer",validation(trainerSchema), trainerController.createGymTrainer); 
 router.post("/createWorkoutTemplate",validation(templateSchema), trainerController.insertWorkoutTemplate); 
 router.post("/createMealTemplate", trainerController.insertMealTemplate); 

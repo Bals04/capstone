@@ -141,6 +141,15 @@ const getStudents = async (trainer_id) => {
     );
     return rows.length > 0 ? rows : null;
 };
+const getStudentActivity = async (trainer_id) => {
+    const [rows] = await pool.query(
+       `SELECT s.member_id, s.trainer_id, (SELECT CONCAT(firstname, ' ' ,lastname)
+        FROM members WHERE s.member_id = member_id) AS name,
+        s.message, s.date FROM student_activity s WHERE trainer_id = ?`,
+        [trainer_id]
+    );
+    return rows.length > 0 ? rows : null;
+};
 const assignWorkoutPlan = async (trainer_id, member_id, template_id, status) => {
     const [rows] = await pool.query(
         'INSERT INTO member_workout_plan (trainer_id, member_id, template_id, status) VALUES(?,?,?,?)',
@@ -160,9 +169,67 @@ const insertStudentWorkouts = async (plan_id, template_id) => {
     // Return only the insertId
     return rows.insertId;
 };
+const getProgressOftheDay = async (trainer_id) => {
+    const [rows] = await pool.query(
+       `WITH CTE_CURRENT_DAY AS (
+        SELECT 
+            m.member_id,
+            template_id,
+            m.date_started,
+            CASE 
+                WHEN DATEDIFF(CURRENT_DATE, m.date_started) + 1 >= 1 AND DATEDIFF(CURRENT_DATE, m.date_started) < 7 THEN 1
+                WHEN DATEDIFF(CURRENT_DATE, m.date_started) + 1 >= 7 AND DATEDIFF(CURRENT_DATE, m.date_started) < 14 THEN 2
+                WHEN DATEDIFF(CURRENT_DATE, m.date_started) + 1 >= 14 AND DATEDIFF(CURRENT_DATE, m.date_started) < 21 THEN 3
+                WHEN DATEDIFF(CURRENT_DATE, m.date_started) + 1 >= 21 AND DATEDIFF(CURRENT_DATE, m.date_started) < 28 THEN 4
+                ELSE 0
+            END AS Week_Number,
+            -- Reset Day_number to always be between 1 and 7
+            MOD(DATEDIFF(CURRENT_DATE, m.date_started), 7) + 1 AS Day_number
+        FROM 
+            member_workout_plan m
+        WHERE m.trainer_id = 6
+    ),
+    CTE_WORKOUT AS (
+        SELECT 
+            me.member_id,
+            (SELECT CONCAT(lastname, ', ', firstname) FROM members WHERE member_id = me.member_id) AS member_name,
+            mes.status,
+            wte.week_no,
+            wte.day_no,
+            c.Week_Number,
+            c.Day_number
+        FROM 
+            member_workout_plan_status mes
+        JOIN 
+            template_exercises wte ON mes.template_exercise_id = wte.template_exercise_id
+        JOIN 
+            member_workout_plan me ON me.plan_id = mes.plan_id
+        JOIN 
+            CTE_CURRENT_DAY c ON c.template_id = wte.template_id
+        WHERE 
+            c.Day_number = wte.day_no
+        AND
+            c.Week_Number = wte.week_no
+    )
+    SELECT 
+        member_name,
+        COUNT(*) AS total_workouts,
+        SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS finished_workouts
+    FROM 
+        CTE_WORKOUT
+    GROUP BY 
+        member_name;
+
+        `,
+        [trainer_id]
+    );
+    return rows.length > 0 ? [rows] : null;
+};
 
 
 module.exports = {
+    getStudentActivity,
+    getProgressOftheDay,
     insertStudentWorkouts,
     assignWorkoutPlan,
     getStudents,

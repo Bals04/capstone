@@ -5,7 +5,7 @@ const { getMembers, getExercises,
 const { getAllTrainers, getGymTrainers, insertGymTrainers, insertWorkoutTemplates,
     insertWorkoutTemplateExercise, getGymTrainersById, updateWorkoutTemplateExercise,
     removeTemplateExercise, inputFilter, insertMealTemplates, insertMealTemplatesItems,
-    insertMealTemplatesSteps, insertProposal, insertNotification,getStudents,assignWorkoutPlan,insertStudentWorkouts } = require('../models/trainers');
+    insertMealTemplatesSteps, insertProposal, insertNotification,getStudents,assignWorkoutPlan,insertStudentWorkouts, getProgressOftheDay, getStudentActivity } = require('../models/trainers');
 
 module.exports = {
 
@@ -27,6 +27,26 @@ module.exports = {
             res.json(data);
         } catch (error) {
             console.error("Error fetching trainer students:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getProgressOftheDay: async (req, res) => {
+        try {
+            const { trainer_id } = req.query;
+            const data = await getProgressOftheDay(trainer_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching today's progress:", error.message);
+            res.status(500).send("Internal Server Error");
+        }
+    },
+    getStudentActivity: async (req, res) => {
+        try {
+            const { trainer_id } = req.query;
+            const data = await getStudentActivity(trainer_id);
+            res.json(data);
+        } catch (error) {
+            console.error("Error fetching today's progress:", error.message);
             res.status(500).send("Internal Server Error");
         }
     },
