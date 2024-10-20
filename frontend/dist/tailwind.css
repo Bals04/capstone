@@ -1166,6 +1166,9 @@ video {
 .w-6{
   width: 1.5rem;
 }
+.w-60{
+  width: 15rem;
+}
 .w-64{
   width: 16rem;
 }
@@ -3653,6 +3656,10 @@ header .icons span:last-child {
     display: block;
   }
 
+  .md\:flex{
+    display: flex;
+  }
+
   .md\:grid{
     display: grid;
   }
@@ -3663,6 +3670,10 @@ header .icons span:last-child {
 
   .md\:h-12{
     height: 3rem;
+  }
+
+  .md\:h-auto{
+    height: auto;
   }
 
   .md\:w-1\/2{
@@ -3681,6 +3692,10 @@ header .icons span:last-child {
     width: 50rem;
   }
 
+  .md\:w-auto{
+    width: auto;
+  }
+
   .md\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3695,6 +3710,10 @@ header .icons span:last-child {
 
   .md\:flex-row{
     flex-direction: row;
+  }
+
+  .md\:flex-col{
+    flex-direction: column;
   }
 
   .md\:items-center{
