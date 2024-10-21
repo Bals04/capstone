@@ -233,8 +233,8 @@ function populateGymsList(userCoords) { //? THIS FUNCTION POPULATES THE 3 NEARES
         var content = ` 
         <img src="${nearbyGym.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
         <div class="flex flex-col">
-            <div class="al-gym-name text-lg font-bold">${nearbyGym.name}</div>
-            <div class="flex items-center text-sm">
+            <div class="al-gym-name text-sm font-bold">${nearbyGym.name}</div>
+            <div class="flex items-center text-[12px]">
                 <i class="fas fa-location-arrow mr-1"></i>${nearbyGym.distance} Km away
             </div>
             <div class="rating flex items-center text-sm mt-1.5">
@@ -384,10 +384,10 @@ function showNearby(distances) {
         style="background-image: url('http://localhost:3000/uploads/${gym.img}'); background-size: cover; background-position: center;">
     </div>
     <div class="p2 mt-2">
-        <h3 class="text-lg font-semibold"> ${gym.name}</h3>
+        <h3 class="text-[12px] font-semibold"> ${gym.name}</h3>
     </div>
-    <div class="flex items-center text-sm mb-1">
-        <div class="rating flex items-center text-sm mt-1.5">
+    <div class="flex items-center text-[10px] mb-1">
+        <div class="rating flex items-center text-[10px] mt-1.5">
             <strong>Ratings:</strong>&nbsp<span id="rating-value">${gym.average}</span>
             <div class="rating-stars flex ml-2" data-rating="${gym.average}">
                 <i class="rating-star fas fa-star text-gray-400"></i>
@@ -400,17 +400,17 @@ function showNearby(distances) {
     </div>
     <div class="p2 flex flex-col mb-1">
         <div class="flex flex-col mb-1 mt-1">
-            <span id="nearby_distance" class="text-sm flex items-center" style="font-weight: 300;">
+            <span id="nearby_distance" class="text-[10px] flex items-center" style="font-weight: 300;">
                 <i class="fas fa-location-arrow mr-1 mt-1"></i>
                 ${gym.distance} km away
             </span>
             <div class="flex flex-col mb-1 mt-1">
-                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
-                <span class="text-sm"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
+                <span class="text-[10px]"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.dailyRates}/Session</span>
+                <span class="text-[10px]"><i class="fas fa-money-bill-alt mr-1 mt-1"></i>&nbsp;₱${gym.monthlyRates}/Monthly</span>
             </div>
         </div>
     </div>
-    <div class="flex flex-row gap-2 text-center justify-center mx-auto my-auto text-white text-sm">
+    <div class="flex flex-row gap-2 text-center justify-center mx-auto my-auto text-white text-[10px]">
         <div>
             <button class="rounded-full bg-customGrayBtn hover:bg-customGray py-2 px-3 shadow-lg">
                 <i class="fas fa-arrows-alt"></i>
@@ -427,17 +427,17 @@ function showNearby(distances) {
             </button>
         </div>
     </div>
-    <div class="text-sm mb-1 mt-6 ">  
+    <div class="text-[10px] mb-1 mt-6 ">  
         <i class="fas fa-map-marker-alt"></i>&nbsp; ${gym.address}
     </div>
-    <div class="text-sm mb-1">
+    <div class="text-[10px] mb-1">
         <i class="fas fa-phone-alt"></i>&nbsp; ${gym.contact}
     </div>
     <div class="flex items-center justify-between my-auto mx-auto p-2">
-        <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGray text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-gray-800 shadow-lg">
+        <button id="openStreetView" data-src="${gym.street_view}" class="bg-customGray text-white px-3 py-1 rounded-md text-[10px] ml-2 flex items-center hover:bg-gray-800 shadow-lg">
             <i class="fas fa-eye mr-2"></i> Street view
         </button>
-        <button id="viewGymButton" data-src="${gym.id}" class="bg-customGray text-white px-3 py-1 rounded-md text-sm ml-2 flex items-center hover:bg-gray-800 shadow-lg">
+        <button id="viewGymButton" data-src="${gym.id}" class="bg-customGray text-white px-3 py-1 rounded-md text-[10px] ml-2 flex items-center hover:bg-gray-800 shadow-lg">
             View Gym
         </button>
     </div>
@@ -614,24 +614,24 @@ function populateAllGymsList() {
             "border",
             "border-customGray",
             "rounded-lg",
-            "bg-customGrayBtn",
+            "bg-customGray",
             "transition",
             "duration-300",
             "ease-in-out",
             "flex",
             "flex-row",
             "items-center",
-            "hover:bg-customGray1",
+            "hover:bg-customGrayBtn",
             "text-white"
         );
         var content = ` 
         <img src="http://localhost:3000/uploads/${g.img}" alt="Gym Image" class="w-24 h-24 object-cover rounded-lg mr-4">
         <div class="flex flex-col">
-            <div class="al-gym-name text-lg font-bold">${g.name}</div>
-            <div class="text-sm mb-1">  
+            <div class="al-gym-name text-[12px] font-bold">${g.name}</div>
+            <div class="text-[10px] mb-1">  
                 <i class="fas fa-map-marker-alt"></i>&nbsp; ${g.address}
             </div>
-            <div class="rating flex items-center text-sm mt-1.5">
+            <div class="rating flex items-center text-[10px] mt-1.5">
                 <strong>Ratings:</strong>&nbsp${g.avg}
                 <div class="rating-stars flex ml-2" data-rating="${g.avg}">
                     <i class="rating-star fas fa-star text-gray-400"></i>

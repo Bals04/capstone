@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="../../dist/tailwind.css">
 
   <!--FONTS-->
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
 
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -31,94 +33,269 @@
       border-top-right-radius: 8px;
       border-bottom-left-radius: 8px;
       border-bottom-right-radius: 8px;
+      z-index: 1;
     }
   </style>
 </head>
-  
-<body class="font-[Poppins] items-center justify-center min-h-screen m-0 bg-customBodyColor scrollbar scrollbar-thumb-customGray">
-  <!--iinsert lng dnhia tung navbar ni charls, itry copypaste if mabungkag awww mano.x-->
 
-  <div class="flex items-center justify-center text-white mt-8 mb-8">
-    <h1 class="text-4xl font-bold">Discover <span class="auto-type text-customOrange"></span></h1>
-  </div>
+<body class="items-center justify-center min-h-screen font-[Poppins] bg-customGray text-white">
 
-  <div class="w-full items-center bg-customBodyColor p-5 shadow-md">
-    <div class="flex gap-2">
-      <button id="gyms" class="toggle-btn bg-customGray1 hover:bg-customGray text-white py-2 px-4 rounded rounded-bl-none rounded-br-none"
-        onclick="showSection('gymsCity','gyms')">
-        <i class="fas fa-city mr-1"></i> Gyms around the city
-      </button>
-      <button id="nearby" class="toggle-btn bg-customGray1 hover:bg-customGray text-white py-2 px-4 rounded rounded-bl-none rounded-br-none"
-        onclick="showSection('nearbyGyms','nearby')">
-        <i class="fas fa-dumbbell mr-1"></i> Nearby gyms
-      </button>
-      <button id="areas" class="toggle-btn bg-customGray1 hover:bg-customGray text-white py-2 px-4 rounded rounded-bl-none rounded-br-none"
-        onclick="showSection('recreationalAreas','areas')">
-        <i class="fas fa-running mr-1"></i> Recreational areas
-      </button>
-      <button id="trackLocation" class="toggle-btn bg-customGray1 hover:bg-customGray text-white py-2 px-4 rounded rounded-bl-none rounded-br-none">
-        <i class="fas fa-crosshairs mr-1"></i> Live location
-      </button>      
-      
-    </div>
-
-    <div class="container grid grid-cols-1 md:grid-cols-3 gap-4 w-full h-full">
-      <!-- Map section -->
-      <div id="map" class="relative col-span-2 h-[600px] bg-customGrayBtn">
-        
-        <!-- Overlay div PARA SA STREET VIEW -->
-        <div id="overlay"
-          class="absolute bottom-0 right-0 w-[40rem] h-[20rem] sm:h-[20rem] p-4 bg-customBodyColor rounded-tl-lg text-white hidden"
-          style="z-index: 9999;">
-          <button id="closeView" class="close-button" aria-label="Close">
-            <i class="fas fa-times"></i> <!-- Font Awesome close icon -->
+  <!--Header-->
+  <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+            aria-controls="logo-sidebar" type="button"
+            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+              </path>
+            </svg>
           </button>
-          <div class="street-card mb-2 p-2 bg-gray-200 rounded-lg"></div>
+          <a href="#" class="flex ms-2 md:me-24">
+            <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+            <span
+              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:bg-gradient-to-br from-white to-customOrange bg-clip-text text-transparent">FLEXPERIENCE</span>
+          </a>
         </div>
+        <div class="flex items-center">
+          <div class="flex items-center ms-3">
+            <div class="relative mr-6 mt-1">
+              <button id="notificationButton">
+                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+              </button>
 
-        <!-- Overlay div PARA SA INFO CARD -->
-        <div id="overlay2"
-          class="absolute bottom-0 right-0 w-72 lg:w-72 lg:h-[24rem] sm:w-full sm:h-[18rem] sm:rounded-tr-2xl p-2 bg-customGrayBtn scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor overflow-auto text-white rounded-tl-2xl hidden"
-          style="z-index: 9999;">
-        </div>
-
-
-      </div>
-
-      <div class="flex flex-col gap-4">
-        <!-- Nearby Gyms section -->
-        <div id="nearbyGyms" class="section bg-customGrayBtn w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
-          <!-- Location input section -->
-          <div class="mb-5 space-y-4">
-            <input type="text" id="address" class="bg-white text-gray-800 w-full px-4 py-2 rounded-lg" placeholder="Starting point">
-            <input type="text" id="destination" class="bg-white text-gray-800 w-full px-4 py-2 rounded-lg" placeholder="Destination">
-            <button id="locateBtn" class="bg-customGray hover:bg-customGray1 text-white w-full py-2 px-4 rounded-lg" onclick="">Get Directions</button>
+              <!-- Notification Dropdown -->
+              <div id="notificationDropdown"
+                class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+                <div class="py-2 px-4 bg-gray-300 border-b border-gray-200 text-gray-700 font-bold">
+                  Notifications
+                </div>
+                <div id="notificationList" class="max-h-80 overflow-y-auto">
+                  <!-- Notification Items will be dynamically populated here -->
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="button" id="userDropdownToggle"
+                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false"
+                data-dropdown-toggle="dropdown-user">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+              </button>
+            </div>
+            <div
+              class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+              id="dropdown-user">
+              <div class="px-4 py-3" role="none">
+                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                  Heinz Padilla
+                </p>
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                  heinzpadilla2024@flexperience.com
+                </p>
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Profile</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="memberDashboard.html" onclick="removeCookie('accessToken');"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">Sign out</a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <h2 class="text-2xl mb-5 text-white">Nearby gyms</h2>
-          <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
-        </div>
-
-        <!-- Gyms Around the City section -->
-        <div id="gymsCity" class="section bg-customBodyColor w-full max-h-[600px] overflow-y-auto p-4 rounded-lg scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
-          <h2 class="text-2xl mb-5 text-white">Gyms Around the City</h2>
-          <ul class="list-none p-0 m-0" id="all-gyms"></ul>
-        </div>
-
-        <!-- Recreational Areas section -->
-        <div id="recreationalAreas"
-          class="section bg-customBodyColor w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
-          <h2 class="text-2xl mb-5 text-white">Recreational areas</h2>
-          <ul class="list-none p-0 m-0" id="all-park"></ul>
         </div>
       </div>
     </div>
+  </nav>
+
+  <!--Sidebar-->
+  <aside id="logo-sidebar"
+    class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+    Sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+      <ul class="space-y-2 font-medium">
+        <li>
+          <a href="../member/memberDashboard.html"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="home-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="locate-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Maps</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="barbell-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Workout Plan</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="egg-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Meal Plan</span>
+          </a>
+        </li>
+        <li>
+          <a href="trainerlist.html"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="people-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Trainers</span>
+          </a>
+        </li>
+        <li>
+          <a href="chats.html"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="chatbubbles-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Chat</span>
+          </a>
+        </li>
+        <li>
+          <a href="#"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+            onclick="setActive(this)">
+            <ion-icon name="settings-outline"
+              class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+              aria-hidden="true"></ion-icon>
+            <span class="mt-1 ms-3">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="sm:ml-64">
+    <div class="m-2 p-2 mt-20">
+      <div class="w-full items-center shadow-md z-30">
+        <div class="flex gap-2">
+          <button id="gyms"
+            class="toggle-btn bg-customGray1 hover:bg-customGray text-white text-[10px] py-2 px-2 rounded rounded-bl-none rounded-br-none"
+            onclick="showSection('gymsCity','gyms')">
+            <i class="fas fa-city mr-1"></i> Gyms around the city
+          </button>
+          <button id="nearby"
+            class="toggle-btn bg-customGray1 hover:bg-customGray text-white text-[10px] py-2 px-2 rounded rounded-bl-none rounded-br-none"
+            onclick="showSection('nearbyGyms','nearby')">
+            <i class="fas fa-dumbbell mr-1"></i> Nearby gyms
+          </button>
+          <button id="areas"
+            class="toggle-btn bg-customGray1 hover:bg-customGray text-white text-[10px] py-2 px-2 rounded rounded-bl-none rounded-br-none"
+            onclick="showSection('recreationalAreas','areas')">
+            <i class="fas fa-running mr-1"></i> Recreational areas
+          </button>
+          <button id="trackLocation"
+            class="toggle-btn bg-customGray1 hover:bg-customGray text-white text-[10px] py-2 px-2 rounded rounded-bl-none rounded-br-none">
+            <i class="fas fa-crosshairs mr-1"></i> Live location
+          </button>
+        </div>
+
+        <div class="container grid grid-cols-1 md:grid-cols-3 gap-4 w-full h-full">
+          <!-- Map section -->
+          <div id="map" class="relative col-span-2 h-[600px] bg-customGrayBtn">
+
+            <!-- Overlay div PARA SA STREET VIEW -->
+            <div id="overlay"
+              class="absolute bottom-0 right-0 w-[40rem] h-[20rem] sm:h-[20rem] p-4 bg-customBodyColor rounded-tl-lg text-white hidden"
+              style="z-index: 9999;">
+              <button id="closeView" class="close-button" aria-label="Close">
+                <i class="fas fa-times"></i> <!-- Font Awesome close icon -->
+              </button>
+              <div class="street-card mb-2 p-2 bg-gray-200 rounded-lg"></div>
+            </div>
+
+            <!-- Overlay div PARA SA INFO CARD -->
+            <div id="overlay2"
+              class="absolute bottom-0 right-0 w-72 lg:w-72 lg:h-[24rem] sm:w-full sm:h-[18rem] sm:rounded-tr-2xl p-2 bg-customGrayBtn scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor overflow-auto text-white rounded-tl-2xl hidden"
+              style="z-index: 9999;">
+            </div>
 
 
-    <button id="showLoc"
-      class="bg-customGray hover:bg-customGray1 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300 hidden">
-      Hiding Directions
-    </button>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <!-- Nearby Gyms section -->
+            <div id="nearbyGyms"
+              class="section bg-div_color w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
+              <!-- Location input section -->
+              <div class="mb-5 space-y-4">
+                <input type="text" id="address" class="bg-white text-gray-800 w-full px-4 py-2 rounded-lg"
+                  placeholder="Starting point">
+                <input type="text" id="destination" class="bg-white text-gray-800 w-full px-4 py-2 rounded-lg"
+                  placeholder="Destination">
+                <button id="locateBtn" class="bg-customGray hover:bg-customGray1 text-white w-full py-2 px-4 rounded-lg"
+                  onclick="">Get Directions</button>
+              </div>
+              <h2 class="text-lg mb-5 text-white">Nearby gyms</h2>
+              <ul class="list-none p-0 m-0" id="nearestGymsList"></ul>
+            </div>
+
+            <!-- Gyms Around the City section -->
+            <div id="gymsCity"
+              class="section bg-div_color w-full max-h-[600px] overflow-y-auto p-4 rounded-lg scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
+              <h2 class="text-lg mb-5 text-white">Gyms Around the City</h2>
+              <ul class="list-none p-0 m-0" id="all-gyms"></ul>
+            </div>
+
+            <!-- Recreational Areas section -->
+            <div id="recreationalAreas"
+              class="section bg-div_color w-full max-h-[600px] overflow-y-auto p-4 rounded-lg hidden scrollbar scrollbar-thumb-customGray scrollbar-track-customBodyColor">
+              <h2 class="text-2xl mb-5 text-white">Recreational areas</h2>
+              <ul class="list-none p-0 m-0" id="all-park"></ul>
+            </div>
+          </div>
+        </div>
+
+
+        <button id="showLoc"
+          class="bg-customGray hover:bg-customGray1 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300 hidden">
+          Hiding Directions
+        </button>
+      </div>
+    </div>
   </div>
+
+  <!--<div class="flex items-center justify-center text-white mt-8 mb-8">
+    <h1 class="text-4xl font-bold">Discover <span class="auto-type text-customOrange"></span></h1>
+  </div> -->
 </body>
 <script src="/frontend/scripts/map.js"></script>
 

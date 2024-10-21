@@ -647,6 +647,9 @@ video {
 .z-50 {
   z-index: 50;
 }
+.z-30 {
+  z-index: 30;
+}
 .order-1 {
   order: 1;
 }
@@ -667,6 +670,9 @@ video {
 }
 .m-4 {
   margin: 1rem;
+}
+.m-2 {
+  margin: 0.5rem;
 }
 .mx-1 {
   margin-left: 0.25rem;
@@ -1290,6 +1296,9 @@ video {
 }
 .justify-around {
   justify-content: space-around;
+}
+.justify-evenly {
+  justify-content: space-evenly;
 }
 .justify-items-center {
   justify-items: center;
@@ -3046,6 +3055,11 @@ header .icons span:last-child {
 .hover\:bg-white:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-customGrayBtn:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(35 33 33 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-opacity-90:hover {
