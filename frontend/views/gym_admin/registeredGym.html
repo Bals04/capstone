@@ -11,6 +11,11 @@
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
@@ -36,62 +41,148 @@
     }
 </style>
 
-<body class="min-h-screen bg-[#343639] font-customFont ">
-    <div id="content_container" class="">
-
-        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
-            <div class="flex items-center justify-center">
-                <a href="#" class="list-none">
-                    <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
-                </a>
+<body class="min-h-screen bg-[#343639] font-[Poppins]">
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-div_color rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="index.html" onclick="removeCookie('accessToken');"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </nav>
 
-            <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
-                <!--Home-->
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium">
                 <li>
-                    <a href="gymAdminDashboard.html" class="btn active flex items-center justify-center text-2xl">
-                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color:#ffffff"></i>
+                    <a href="../gym_admin/gymAdminDashboard.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
                     </a>
-                    <span class="tooltip-home absolute text-lg">Home</span>
                 </li>
-
                 <!--Pending Gym Registration-->
-                <li class="mt-6">
-                    <a href="pendingGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-time' style="color:white"></i> <!-- Changed to a clock icon -->
+                <li>
+                    <a href="../gym_admin/pendingGym.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="timer-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Pendings</span>
                     </a>
-                    <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
-
                 <!--Approved Gym-->
-                <li class="mt-6">
-                    <a href="registeredGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-check-double' style="color: white;"></i>
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2  bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="checkmark-circle-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Approved</span>
                     </a>
-                    <span class="tooltip-workout absolute text-lg">Approved Gym</span>
                 </li>
-
                 <!-- Verified Gym -->
-                <li class="mt-6">
-                    <a href="registeredTrainer.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bxs-badge-check' style="color: white;"></i>
+                <li>
+                    <a href="../gym_admin/registeredTrainer.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="shield-checkmark-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Verified</span>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Verified Gym</span>
                 </li>
-
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
             </ul>
         </div>
+    </aside>
 
-        <div class="title_div">
-            <h1
-                class="text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
-                <span class="page_title font-normal text-lg">
-                    Approved gyms
-                </span>
-            </h1>
-        </div>
-
-        <div class="bg-[#323538] border border-50 shadow-black shadow-md rounded-lg p-6 ml-32 mr-10">
+    <div class="sm:ml-64">
+        <div class="m-4 p-6 mt-20 bg-div_color border border-border_color shadow-black shadow-md rounded-md">
             <p class="text-sm text-white mb-4 p-3 border-l-4 border-orange-600 bg-gray-600 rounded-md">
                 NOTE: Your gym has been approved! Please proceed to the payment phase to complete your registration and
                 fully
@@ -102,17 +193,19 @@
             </div>
         </div>
 
+
+        <div id="view_permit" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white hidden">
+            <div class="flex">
+                <h1 class="invisible w-auto">---------------------------------------------------------------</h1>
+                <button onclick="close_Img()" class="text-right text-4xl hover:text-gray-400">
+                    x
+                </button>
+            </div>
+            <img id="permit_image" src="" class="w-96" alt="permit_image">
+        </div>
     </div>
 
-    <div id="view_permit" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white hidden">
-        <div class="flex">
-            <h1 class="invisible w-auto">---------------------------------------------------------------</h1>
-            <button onclick="close_Img()" class="text-right text-4xl hover:text-gray-400">
-                x
-            </button>
-        </div>
-        <img id="permit_image" src="" class="w-96" alt="permit_image">
-    </div>
+    <script src="../../scripts/trainer.js">//para sa sidebar og header responsive</script>
     <script src="/frontend/scripts/auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
