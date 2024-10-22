@@ -1154,6 +1154,9 @@ video {
 .w-44{
   width: 11rem;
 }
+.w-48{
+  width: 12rem;
+}
 .w-5{
   width: 1.25rem;
 }
@@ -3656,10 +3659,6 @@ header .icons span:last-child {
     display: block;
   }
 
-  .md\:flex{
-    display: flex;
-  }
-
   .md\:grid{
     display: grid;
   }
@@ -3670,10 +3669,6 @@ header .icons span:last-child {
 
   .md\:h-12{
     height: 3rem;
-  }
-
-  .md\:h-auto{
-    height: auto;
   }
 
   .md\:w-1\/2{
@@ -3690,10 +3685,6 @@ header .icons span:last-child {
 
   .md\:w-\[50rem\]{
     width: 50rem;
-  }
-
-  .md\:w-auto{
-    width: auto;
   }
 
   .md\:grid-cols-2{
