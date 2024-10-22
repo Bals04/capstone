@@ -10,6 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -190,17 +192,16 @@
 
         <div class="w-full dark:bg-div_color rounded-b-lg">
           <h1 class="text-center p-3">
-            <span id="student-name-show">
+            <span id="student">
 
             </span>
           </h1>
-
           <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex text-center" id="default-tab" role="tablist">
               <!-- Workout Tab -->
               <li class="w-full" role="presentation">
                 <button class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300" id="workout-tab"
-                  data-tabs-target="#workout" type="button" role="tab" aria-controls="workout" aria-selected="true">
+                  onclick="tabChange('workout')">
                   Workout
                 </button>
               </li>
@@ -208,118 +209,22 @@
               <li class="w-full" role="presentation">
                 <button
                   class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                  id="meal-tab" data-tabs-target="#meal" type="button" role="tab" aria-controls="meal"
-                  aria-selected="false">
+                  id="meal-tab" onclick="tabChange('meal')">
                   Meal
                 </button>
               </li>
             </ul>
           </div>
 
-          <div id="default-tab-content">
+          <div>
             <!-- Workout Tab Content -->
-            <div
-              class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color h-64 overflow-y-auto scrollbar-thin scrollbar-track-div_color scrollbar-thumb-50"
-              id="workout" role="tabpanel" aria-labelledby="workout-tab">
-              <span class="mb-6">
-                <div>mm/dd/yyyy</div>
-                <!-- <div id="date-display" class="mb-3 text-md font-medium text-divcbg-div_color dark:text-white"></div> -->
-              </span>
-              <div class="inline-flex items-center space-x-2">
-                <div class="flex flex-col gap-2">
-                  <div class="flex flex-row gap-2">
-                    <div>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-slate-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                  </div>
-                  <div class="flex flex-row gap-2">
-                    <div>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-slate-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                  </div>
-                  <div class="flex flex-row gap-2">
-                    <div>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-slate-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                  </div>
-                  <div class="flex flex-row gap-2">
-                    <div>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-slate-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                  </div>
-                  <div class="flex flex-row gap-2">
-                    <div>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-slate-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                  </div>
-                  <div class="flex flex-row gap-2">
-                    <div>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-slate-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                  </div>
-                </div>
-              </div>
+            <div class=" p-4 rounded-lg bg-gray-50 dark:bg-div_color overflow-y-auto" id="workout">
+
             </div>
 
             <!-- Meal Tab Content -->
-            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color" id="meal" role="tabpanel"
-              aria-labelledby="meal-tab">
-              <span>
-                <div>mm/dd/yyyy</div>
-              </span>
-              <div class="flex flex-col gap-2">
-                <div class="flex flex-row gap-2">
-                  <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                      stroke="currentColor" class="w-6 h-6 text-slate-500">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </div>
-                  <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                </div>
-                <div class="flex flex-row gap-2">
-                  <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                      stroke="currentColor" class="w-6 h-6 text-slate-500">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </div>
-                  <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                </div>
-                <div class="flex flex-row gap-2">
-                  <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                      stroke="currentColor" class="w-6 h-6 text-slate-500">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </div>
-                  <div class="text-slate-500 line-through">OPAWOPAWOPAW</div>
-                </div>
-              </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color overflow-y-auto" id="meal">
+
             </div>
           </div>
         </div>
@@ -436,13 +341,6 @@
   });
 
 
-  function studentProgress() {
-    var get_name = document.getElementById("student-name")
-    var show_name = document.getElementById("student-name-show")
-
-    show_name.innerText = get_name.innerText + " progress"
-  }
-
   // Function to fetch data and populate the progress
   // Function to fetch data and populate the progress
   async function fetchStudentProgress() {
@@ -451,7 +349,7 @@
       const students = response.data;
       console.log("----------------");
       console.log(students);
-
+      console.log(students)
       // Container for the progress bars
       const progressContainer = document.getElementById('progress-container');
       progressContainer.innerHTML = '';  // Clear any existing content
@@ -464,9 +362,9 @@
 
         const studentDiv = `
         <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer"
-          onclick="studentProgress(${student.member_id})">
+          onclick="studentProgress(this, ${student.member_id})">
           <div class="w-full">
-            <h2 id="student-name">
+             <h2 class="student-name">
               ${student.member_name}
             </h2>
           </div>
@@ -533,6 +431,89 @@
       console.error('Error fetching student activity:', error);
     }
   }
+
+  // Get tab elements
+  var workoutTab = document.getElementById("workout-tab");
+  var mealTab = document.getElementById("meal-tab");
+
+  // Get tab content elements
+  var workoutTabContent = document.getElementById("workout");
+  var mealTabContent = document.getElementById("meal");
+
+  async function studentProgress(element, member_id) {
+    try {
+      const planId = 11;
+
+      // Fetch workout data from the API
+      const response = await fetch(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}&member_id=${member_id}`);
+      const workoutData = await response.json();
+
+      // Assuming the workoutData is structured as shown
+      const exercises = workoutData[0]; // Access the array of exercises
+
+      // Initialize a string to hold the dynamic content for the workout tab
+      let workoutHTML = `
+        <span>
+          <div class="text-gray-500 font-medium">${new Date().toLocaleDateString()}</div>
+        </span>
+        <div class="font-thin flex-col">
+      `;
+
+      // Loop through each exercise and build the workout list dynamically
+      exercises.forEach(exercise => {
+        const statusIcon = exercise.status === 'not started'
+          ? '<i class="fas fa-times text-red-500 mr-2"></i>'
+          : '<i class="fas fa-check text-green-500 mr-2"></i>';
+
+        workoutHTML += `
+          <div class="flex items-center border-b-[1px] mb-2 py-2">
+            ${statusIcon}
+            <span>${exercise.exercise_name}</span>
+          </div>
+        `;
+      });
+
+      // Close the div
+      workoutHTML += '</div>';
+
+      // Populate the workout tab content with the dynamic HTML
+      workoutTabContent.innerHTML = workoutHTML;
+
+      // Handle the student name and update the header
+      const studentName = element.querySelector('.student-name').innerText;
+      document.getElementById('student').innerHTML = `${studentName} progress`;
+
+      // Activate workout tab and hide meal tab
+      workoutTab.classList.add("bg-[#5F6163]");
+      workoutTabContent.classList.add("h-64");
+      workoutTabContent.classList.remove("hidden");
+      mealTabContent.classList.add("h-64", "hidden");
+      mealTab.classList.remove("bg-[#5F6163]");
+
+    } catch (error) {
+      console.error('Error fetching workout data:', error);
+    }
+  }
+
+
+
+  // Function to handle tab switching
+  function tabChange(tabType) {
+    if (tabType === 'meal') {
+      // Activate meal tab and hide workout tab
+      workoutTab.classList.remove("bg-[#5F6163]");
+      workoutTabContent.classList.add("hidden");
+      mealTabContent.classList.remove("hidden");
+      mealTab.classList.add("bg-[#5F6163]");
+    } else if (tabType === 'workout') {
+      // Activate workout tab and hide meal tab
+      mealTab.classList.remove("bg-[#5F6163]");
+      workoutTabContent.classList.remove("hidden");
+      mealTabContent.classList.add("hidden");
+      workoutTab.classList.add("bg-[#5F6163]");
+    }
+  }
+
 
   // Fetch student progress data on page load
   window.onload = fetchStudentProgress;

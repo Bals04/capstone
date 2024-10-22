@@ -143,9 +143,20 @@ const getStudents = async (trainer_id) => {
 };
 const getStudentActivity = async (trainer_id) => {
     const [rows] = await pool.query(
-       `SELECT s.member_id, s.trainer_id, (SELECT CONCAT(firstname, ' ' ,lastname)
-        FROM members WHERE s.member_id = member_id) AS name,
-        s.message, s.date FROM student_activity s WHERE trainer_id = ?`,
+       `SELECT 
+            s.member_id, 
+            s.trainer_id, 
+            (SELECT CONCAT(firstname, ' ', lastname) 
+            FROM members 
+            WHERE s.member_id = member_id) AS name,
+            s.message, 
+            s.date 
+        FROM 
+            student_activity s 
+        WHERE 
+            trainer_id = ?
+            AND DATE(s.date) = CURDATE();
+`,
         [trainer_id]
     );
     return rows.length > 0 ? rows : null;
@@ -212,6 +223,7 @@ const getProgressOftheDay = async (trainer_id) => {
             c.Week_Number = wte.week_no
     )
     SELECT 
+        member_id,
         member_name,
         COUNT(*) AS total_workouts,
         SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS finished_workouts
