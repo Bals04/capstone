@@ -9,7 +9,11 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <link href="../../dist/tailwind.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -123,190 +127,239 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-[#343639] font-customFont ">
-    <div id="content_container" class="">
-        <div class="sidebar fixed top-0 left-0 h-full w-[85px] flex flex-col shadow-lg bg-50">
-            <div class="flex items-center justify-center">
-                <a href="#" class="list-none">
-                    <img class="w-[80px] rounded-full" src="../../views/img/Flexperience logo.png" alt="Flexperience">
-                </a>
+<body class="min-h-screen bg-[#343639] font-[Poppins]">
+
+    <!--Header-->
+    <nav class="fixed top-0 z-50 w-full shadow-md dark:bg-customGray">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" id="sidebarToggle" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-customGray dark:focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <a href="#" class="flex ms-2 md:me-24">
+                        <img src="../../img/LOGOTESTING.svg" class="h-8 me-3" alt="Flexperiece Logo" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">FLEXPERIENCE</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3">
+                        <div class="mr-6 mt-1">
+                            <button>
+                                <ion-icon name="notifications" class="notif text-white text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="userDropdownToggle"
+                                class="flex text-sm bg-div_color rounded-full focus:ring-4 focus:ring-gray-300"
+                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                            </button>
+                        </div>
+                        <div class="absolute top-[70%] right-0 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-customGray dark:divide-gray-600"
+                            id="dropdown-user">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Heinz Padilla
+                                </p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    heinzpadilla2024@flexperience.com
+                                </p>
+                            </div>
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="index.html" onclick="removeCookie('accessToken');"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </nav>
 
-            <ul class="navbar list-none mt-14 h-[80px]" id="forActive">
-                <!--Home-->
+    <!--Sidebar-->
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 mt-4 transition-transform -translate-x-full bg-customOrange sm:translate-x-0 rounded-l-lg dark:bg-customOrange aria-label="
+        Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-customOrange">
+            <ul class="space-y-2 font-medium">
                 <li>
-                    <a href="gymAdminDashboard.html" class="btn active flex items-center justify-center text-2xl">
-                        <i class="bx bx-home-alt-2" aria-hidden="true" style="color:#ffffff"></i>
+                    <a href="#"
+                        class="flex items-center p-2 bg-customGray text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="home-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Dashboard</span>
                     </a>
-                    <span class="tooltip-home absolute text-lg">Home</span>
                 </li>
-
                 <!--Pending Gym Registration-->
-                <li class="mt-6">
-                    <a href="pendingGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-time' style="color:white"></i> <!-- Changed to a clock icon -->
+                <li>
+                    <a href="../gym_admin/pendingGym.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="timer-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Pendings</span>
                     </a>
-                    <span class="tooltip-maps absolute text-lg">Pending Gym Registration</span>
                 </li>
-
                 <!--Approved Gym-->
-                <li class="mt-6">
-                    <a href="registeredGym.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bx-check-double' style="color: white;"></i>
+                <li>
+                    <a href="../gym_admin/registeredGym.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="checkmark-circle-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Approved</span>
                     </a>
-                    <span class="tooltip-workout absolute text-lg">Approved Gym</span>
                 </li>
-
                 <!-- Verified Gym -->
-                <li class="mt-6">
-                    <a href="registeredTrainer.html" class="btn flex items-center justify-center text-2xl">
-                        <i class='bx bxs-badge-check' style="color: white;"></i>
+                <li>
+                    <a href="../gym_admin/registeredTrainer.html"
+                        class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="shield-checkmark-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Verified</span>
                     </a>
-                    <span class="tooltip-trainers absolute text-lg">Verified Gym</span>
                 </li>
-
+                <li>
+                    <a href="#"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-customGray dark:hover:bg-customGray group"
+                        onclick="setActive(this)">
+                        <ion-icon name="settings-outline"
+                            class="w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-customGray dark:group-hover:text-white"
+                            aria-hidden="true"></ion-icon>
+                        <span class="mt-1 ms-3">Settings</span>
+                    </a>
+                </li>
             </ul>
         </div>
-        <div
-            class="title_div flex flex-row justify-between text-white p-[20px] shadow-[2px_3px_rgb(39,39,39)] pt-[20px] mb-[20px] text-base font-light pl-[100px] bg-gradient-to-l from-[#1e1e1e] via-[#1e1e1e] to-[#343639]">
-            <h1 class="">
-                <span class="page_title font-normal">
-                    Dashboard
-                </span>
+    </aside>
+
+    <div class="sm:ml-64">
+        <div class="m-4 p-6 border-dashed mt-20">
+            <h1 class="text-4xl font-bold text-white mb-2">Good day, <span id="user-name"></span>!
             </h1>
-            <div class="topbar bg-transparent fixed top-0 w-full h-[55px] flex flex-row-reverse gap-2 p-5 items-center">
-                <!--profile-->
-                <div class="flex items-center justify-center mr-24 mt-0">
-                    <button>
-                        <img class="w-10 h-10 rounded-full object-cover border border-gray-400"
-                            src="../../views/img/heinzprof.jpg" alt="ILISI LNG">
-                    </button>
+            <p class="dark:text-gray-300 text-gray-700">Welcome to your dashboard. Pag trabaho na boss</p>
+        </div>
+
+        <div class="flex justify-around gap-10 text-white w-auto h-auto m-4">
+            <div class="flex flex-col gap-5 md:flex md:flex-col md:gap-2">
+                <div class="flex flex-col sm:flex sm:flex-col md:flex md:flex-row gap-2">
+                    <div
+                        class="text-center md:text-left text-white text-md w-auto py-10 px-10 border-2 border-border_color shadow-md bg-div_color hover:shadow-lg rounded-lg duration-300">
+                        <div class="flex flex-col gap-2 md:flex md:flex-col md:gap-2 items-center justify-center">
+                            <div class="md:flex md:flex-row md:gap-2 flex flex-row gap-2 text-center justify-center">
+                                <span class="text-lg font-customFont">
+                                    <i class="fas fa-check-double mr-2"></i>Registered Gym(s)
+                                </span>
+                            </div>
+                            <div>
+                                <span class="font-bold ml-3">1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="text-center md:text-left text-white text-md w-auto py-10 px-10 border-2 border-border_color shadow-md bg-div_color hover:shadow-lg rounded-lg duration-300">
+                        <div class="flex flex-col gap-2 md:flex md:flex-col md:gap-2 items-center justify-center">
+                            <div class="md:flex md:flex-row md:gap-2 flex flex-row gap-2 text-center justify-center">
+                                <span class="text-lg font-customFont">
+                                    <i class="fas fa-clock mr-2"></i>Pending Gym Registration(s)
+                                </span>
+                            </div>
+                            <div>
+                                <span class="font-bold ml-3">1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="text-center md:text-left text-white text-md w-auto py-10 px-10 border-2 border-border_color shadow-md bg-div_color hover:shadow-lg rounded-lg duration-300">
+                        <span class="text-lg font-customFont">
+                            <i class="fas fa-user mr-2"></i>Registered Trainer(s)
+                        </span><br><br>
+                        <span class="font-bold ml-3">1</span>
+                    </div>
                 </div>
-                <!--notif-->
-                <div class="mr-4">
-                    <button>
-                        <ion-icon name="notifications" class="notif text-white text-2xl mt-[1.2rem]"></ion-icon>
-                    </button>
-                </div>
-                <!--darkmode/lightmode NOT FINISH HAHAHAHA TAYMPERS-->
-                <div class="mr-4">
-                    <label class="mode-label w-full h-[30px] flex items-center justify-center mt-[1rem]">
-                        <input type="checkbox" class="mode">
-                        <ion-icon name="moon" class="moon text-customGray1 text-base"></ion-icon>
-                        <ion-icon name="sunny" class="sun text-customGray1 text-base"></ion-icon>
-                        <span class="toggle w-[30px] h-[30px] bg-transparent"></span>
-                        <span class="animateBG top-0 w-full h-[100vh]"></span>
-                    </label>
+                <div class="flex justify-between gap-5">
+                    <a href="register.html"
+                        class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">
+                        <i class="fas fa-plus-circle mr-2"></i>Register Gym
+                    </a>
+                    <a href="registerTrainer.html"
+                        class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">
+                        <i class="fas fa-user-plus mr-2"></i>Register Trainer
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="flex">
-            <div class="pl-[120px] pt-[40px] text-white font-sans mr-10">
-                Good day, <br>
-                <span class="text-4xl font-bold font-customFont">Admin!</span> <br>
-                Pag trabaho na boss!
-
-                <div class="mt-20 flex flex-col gap-5">
-
-                    <div class="flex gap-5">
-                        <div
-                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">
-                                <i class="fas fa-check-double mr-2"></i>Registered Gym(s)
-                            </span><br><br>
-                            <span class="font-bold ml-3">1</span>
-                        </div>
-                        <div
-                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">
-                                <i class="fas fa-clock mr-2"></i>Pending Gym Registration(s)
-                            </span><br><br>
-                            <span class="font-bold ml-3">1</span>
-                        </div>
-                        <div
-                            class="text-white text-2xl w-auto py-10 px-10 border-2 border-border_color shadow-2xl bg-div_color hover:shadow-lg rounded-lg text-left duration-300">
-                            <span class="text-lg font-customFont">
-                                <i class="fas fa-user mr-2"></i>Registered Trainer(s)
-                            </span><br><br>
-                            <span class="font-bold ml-3">1</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between gap-5">
-                        <a href="register.html"
-                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">
-                            <i class="fas fa-plus-circle mr-2"></i>Register Gym
-                        </a>
-                        <a href="registerTrainer.html"
-                            class="text-center w-full bg-div_color border border-50 rounded-lg font-customFont py-5 shadow-lg shadow-black hover:shadow-none hover:bg-[#d47142] hover:text-2xl hover:font-bold duration-300">
-                            <i class="fas fa-user-plus mr-2"></i>Register Trainer
-                        </a>
-                    </div>
-                </div>
+        <div class="p-4 pl-[120px] shadow-md ">
+            <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
+            <div class="bg-div_color p-6 rounded-lg shadow-xl max-w-3xl border-border_color border-2">
+                <canvas id="myChart" class="bg-div_color"></canvas>
             </div>
+        </div>
 
-            <div class="dashboard-Content text-sm text-white mr-10 ">
-                <div class="wrapper w-[320px] bg-div_color shadow-lg border border-border_color">
-                    <header class="">
-                        <p class="current-date"></p>
-                        <div class="icons">
-                            <span id="prev" class="materials-symbols-rounded text-black">
-                                <i class='bx bx-chevron-left text-xl'></i>
-                            </span>
-                            <span id="next" class="materials-symbols-rounded text-black">
-                                <i class='bx bx-chevron-right text-xl'></i>
-                            </span>
-                        </div>
-                    </header>
-                    <div class="calendar">
-                        <ul class="weeks">
-                            <li>Sun</li>
-                            <li>Mon</li>
-                            <li>Tue</li>
-                            <li>Wed</li>
-                            <li>Thu</li>
-                            <li>Fri</li>
-                            <li>Sat</li>
-                        </ul>
-                        <ul class="days"></ul>
-                    </div>
+        <div id="success-toast"
+            class="fixed top-5 right-5 z-50 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
+            <div class="flex items-center">
+                <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
+                    </svg>
                 </div>
+                <div class="ml-3">
+                    <h2 class="text-lg font-semibold text-green-600">Success</h2>
+                    <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
+                </div>
+                <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
-    <div class="container p-4 pl-[120px] shadow-lg ">
-        <h2 class="text-white text-2xl font-bold mb-4 mt-10">Gym Registrations Overview</h2>
-        <div class="bg-div_color p-6 rounded-lg shadow-xl max-w-3xl border-border_color border-2">
-            <canvas id="myChart" class="bg-div_color"></canvas>
-        </div>
-    </div>
-    <div id="success-toast"
-        class="fixed top-5 right-5 z-50 bg-white border-l-4 border-green-500 text-gray-800 max-w-md w-full p-4 rounded-lg shadow-lg hidden transition-all duration-300 ease-in-out transform translate-x-full">
-        <div class="flex items-center">
-            <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12l5 5L20 7"></path>
-                </svg>
-            </div>
-            <div class="ml-3">
-                <h2 class="text-lg font-semibold text-green-600">Success</h2>
-                <p id="success-message-toast" class="text-sm text-gray-600">Your success message here</p>
-            </div>
-            <button id="close-success-toast-btn" class="ml-auto text-gray-500 hover:text-gray-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                </svg>
-            </button>
-        </div>
-    </div>
-
-
 </body>
 
 </html>
+
+<script src="../../scripts/trainer.js">//header / sidebar responsive</script>
 <script>
     window.onload = async function () {
         // Check the value of the 'status' parameter

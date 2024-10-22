@@ -362,7 +362,7 @@
 
         const studentDiv = `
         <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer"
-          onclick="studentProgress(this, ${student.member_id})">
+          onclick="studentProgress(this, ${student.member_id}, ${student.plan_id})">
           <div class="w-full">
              <h2 class="student-name">
               ${student.member_name}
@@ -403,29 +403,32 @@
     try {
       const response = await axios.get(`http://localhost:3000/getStudentActivity?trainer_id=${trainerid}`);
       const activities = response.data;
-
+      
       // Update the date at the top
       const dateNow = document.getElementById('dateNow');
       const currentDate = new Date().toISOString();
       dateNow.innerText = formatDate(currentDate);
-
+      
       // Get the activity container where activities will be displayed
       const activityContainer = document.getElementById('activity-container');
       activityContainer.innerHTML = ''; // Clear any existing content
-
+      
       // Loop through the activities and create the dynamic HTML
       activities.forEach(activity => {
         const activityDiv = `
-            <div class="flex justify-around items-center border-b-[1px] border-b-customGray mb-2 py-2 text-sm">
-              <div><img class="w-8 h-8 rounded-full" src="../../img/heinzprof.jpg" alt="user photo"></div>
-              <div class="font-semibold">${activity.name}</div>
-              <div>${activity.message}</div>
+            <div class="flex justify-between items-center p-4 bg-gray-700 shadow-md rounded-lg hover:bg-gray-600 transition ease-in-out duration-150 mb-4">
+              <div class="flex items-center space-x-4">
+                <img class="w-10 h-10 rounded-full" src="../../img/heinzprof.jpg" alt="user photo">
+                <div class="font-semibold text-white text-base">${activity.name}</div>
+              </div>
+              <div class="text-gray-300">${activity.message}</div>
             </div>
           `;
-
+      
         // Append each activity to the container
         activityContainer.innerHTML += activityDiv;
       });
+      
 
     } catch (error) {
       console.error('Error fetching student activity:', error);
@@ -440,38 +443,40 @@
   var workoutTabContent = document.getElementById("workout");
   var mealTabContent = document.getElementById("meal");
 
-  async function studentProgress(element, member_id) {
+  async function studentProgress(element, member_id, plan_id) {
     try {
-      const planId = 11;
 
       // Fetch workout data from the API
-      const response = await fetch(`http://localhost:3000/WorkoutOftheDay?plan_id=${planId}&member_id=${member_id}`);
+      const response = await fetch(`http://localhost:3000/WorkoutOftheDay?plan_id=${plan_id}&member_id=${member_id}`);
       const workoutData = await response.json();
 
-      // Assuming the workoutData is structured as shown
       const exercises = workoutData[0]; // Access the array of exercises
 
       // Initialize a string to hold the dynamic content for the workout tab
       let workoutHTML = `
         <span>
-          <div class="text-gray-500 font-medium">${new Date().toLocaleDateString()}</div>
-        </span>
-        <div class="font-thin flex-col">
+          <div class="text-white font-semibold text-lg">${new Date().toLocaleDateString()}</div>
+        </span><br>
+        <div class="space-y-4"> <!-- Spacing between tasks -->
       `;
 
       // Loop through each exercise and build the workout list dynamically
       exercises.forEach(exercise => {
         const statusIcon = exercise.status === 'not started'
-          ? '<i class="fas fa-times text-red-500 mr-2"></i>'
-          : '<i class="fas fa-check text-green-500 mr-2"></i>';
+          ? '<i class="fas fa-times-circle text-red-500 text-xl"></i>'
+          : '<i class="fas fa-check-circle text-green-500 text-xl"></i>';
 
         workoutHTML += `
-          <div class="flex items-center border-b-[1px] mb-2 py-2">
-            ${statusIcon}
-            <span>${exercise.exercise_name}</span>
+          <div class="flex items-center p-4 bg-gray-700 shadow-md rounded-lg hover:bg-gray-600 transition ease-in-out duration-150">
+            <div class="flex items-center space-x-4">
+              ${statusIcon}
+              <span class="text-white text-base font-medium">${exercise.exercise_name}</span>
+            </div>
           </div>
         `;
       });
+
+      workoutHTML += `</div>`; // Close the main container
 
       // Close the div
       workoutHTML += '</div>';

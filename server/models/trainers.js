@@ -201,7 +201,8 @@ const getProgressOftheDay = async (trainer_id) => {
         WHERE m.trainer_id = 6
     ),
     CTE_WORKOUT AS (
-        SELECT 
+        SELECT
+            mes.plan_id, 
             me.member_id,
             (SELECT CONCAT(lastname, ', ', firstname) FROM members WHERE member_id = me.member_id) AS member_name,
             mes.status,
@@ -222,7 +223,8 @@ const getProgressOftheDay = async (trainer_id) => {
         AND
             c.Week_Number = wte.week_no
     )
-    SELECT 
+    SELECT
+        plan_id,
         member_id,
         member_name,
         COUNT(*) AS total_workouts,
