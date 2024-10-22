@@ -181,9 +181,10 @@
             Student Progress
           </h1>
           <div class="mt-5 flex-col">
-            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer"
+            onclick="studentProgress(this)">
               <div class="w-full">
-                <h2 id="student-name">
+                <h2 class="student-name">
                   Eric Ramones Jr.
                 </h2>
               </div>
@@ -196,9 +197,10 @@
               </div>
             </div>
   
-            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" 
+            onclick="studentProgress(this)">
               <div class="w-full">
-                <h2 id="student-name">
+                <h2 class="student-name">
                   Robert Jems
                 </h2>
               </div>
@@ -211,9 +213,10 @@
               </div>
             </div>
   
-            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" onclick="studentProgress()">
+            <div class="flex py-5 mx-10 px-5 hover:border dark:border-gray-500 hover:shadow-md cursor-pointer" 
+            onclick="studentProgress(this)">
               <div class="w-full">
-                <h2 id="student-name">
+                <h2 class="student-name">
                   Heinztai Horakol
                 </h2>
               </div>
@@ -231,7 +234,7 @@
         
         <div class="w-full dark:bg-div_color border border-gray-500 rounded-b-lg">
           <h1 class="text-center p-3">
-            <span id="student-name-show">
+            <span id="student">
               
             </span>
           </h1>
@@ -243,11 +246,7 @@
                 <button
                   class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300"
                   id="workout-tab"
-                  data-tabs-target="#workout"
-                  type="button"
-                  role="tab"
-                  aria-controls="workout"
-                  aria-selected="true">
+                  onclick="tabChange('workout')">
                   Workout
                 </button>
               </li>
@@ -256,48 +255,22 @@
                 <button
                   class="tab-button inline-block p-4 w-full text-gray-600 dark:text-gray-300 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                   id="meal-tab"
-                  data-tabs-target="#meal"
-                  type="button"
-                  role="tab"
-                  aria-controls="meal"
-                  aria-selected="false"
-                >
+                  onclick="tabChange('meal')">
                   Meal
                 </button>
               </li>
             </ul>
           </div>
           
-          <div id="default-tab-content">
+          <div>
             <!-- Workout Tab Content -->
-            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color h-64 overflow-y-auto" id="workout" role="tabpanel" aria-labelledby="workout-tab">
-              <span>
-                <div>mm/dd/yyyy</div>
-                <!-- <div id="date-display" class="mb-3 text-md font-medium text-divcbg-div_color dark:text-white"></div> -->
-              </span>
-              <div class="font-thin flex-col">
-                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Push-up</div>
-                <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
-              </div>
+            <div class=" p-4 rounded-lg bg-gray-50 dark:bg-div_color overflow-y-auto" id="workout">
+              
             </div>
           
             <!-- Meal Tab Content -->
-            <div class="tab-content hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color" id="meal" role="tabpanel" aria-labelledby="meal-tab">
-              <span>
-                <div>mm/dd/yyyy</div>
-              </span>
-              <div class="font-thin flex-col">
-                <div class="border-b-[1px] mb-2 py-2">Chicharon</div>
-                <div class="border-b-[1px] mb-2 py-2">Yipyap</div>
-                <div class="border-b-[1px] mb-2 py-2">Chippy</div>
-                <div class="border-b-[1px] mb-2 py-2">Sting</div>
-                <div class="border-b-[1px] mb-2 py-2">Cobra</div>
-                <div class="border-b-[1px] mb-2 py-2">Tubig canal</div>
-              </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-div_color overflow-y-auto" id="meal">
+              
             </div>
           </div>
         </div>
@@ -364,7 +337,7 @@
         }
       })
         .then(response => {
-          const trainerData = response.data[0];
+          var trainerData = response.data[0];
           trainerid = trainerData.trainer_id;
           console.log(response.data[0])
           console.log(trainerid)
@@ -387,7 +360,7 @@
   function setCookie(name, value, days) {
     let expires = "";
     if (days) {
-      const date = new Date();
+      var date = new Date();
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Days to milliseconds
       expires = "; expires=" + date.toUTCString();
     }
@@ -400,37 +373,84 @@
   }
 
 
-  // Get all tab buttons
-  const tabs = document.querySelectorAll('.tab-button');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function () {
-      const target = document.querySelector(this.getAttribute('data-tabs-target'));
-
-      // Deactivate all tabs and hide all content
-      tabs.forEach(t => {
-        t.classList.remove(
-          'bg-[#5F6163]'
-        );
-      });
-
-      tabContents.forEach(content => content.classList.add('hidden'));
-
-      // Activate the clicked tab, change background to white, and show the corresponding content
-      this.classList.add(
-        'bg-[#5F6163]'
-      );
-      target.classList.remove('hidden');
-    });
-  });
 
 
-function studentProgress(){
-  var get_name = document.getElementById("student-name")
-  var show_name = document.getElementById("student-name-show")
 
-  show_name.innerText = get_name.innerText + " progress"
+
+
+
+
+
+  // Get tab elements
+  var workoutTab = document.getElementById("workout-tab");
+  var mealTab = document.getElementById("meal-tab");
+
+  // Get tab content elements
+  var workoutTabContent = document.getElementById("workout");
+  var mealTabContent = document.getElementById("meal");
+
+function studentProgress(element) {
+
+  // Workout tab content
+  workoutTabContent.innerHTML = `
+    <span>
+      <div>mm/dd/yyyy</div>
+    </span>
+    <div class="font-thin flex-col">
+      <div class="border-b-[1px] mb-2 py-2">Push-up</div>
+      <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+      <div class="border-b-[1px] mb-2 py-2">Push-up</div>
+      <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+      <div class="border-b-[1px] mb-2 py-2">Push-up</div>
+      <div class="border-b-[1px] mb-2 py-2">Pull-up</div>
+    </div>
+  `;
+
+  // Meal tab content
+  mealTabContent.innerHTML = `
+    <span>
+      <div>mm/dd/yyyy</div>
+    </span>
+    <div class="font-thin flex-col">
+      <div class="border-b-[1px] mb-2 py-2">Chicharon</div>
+      <div class="border-b-[1px] mb-2 py-2">Yipyap</div>
+      <div class="border-b-[1px] mb-2 py-2">Chippy</div>
+      <div class="border-b-[1px] mb-2 py-2">Sting</div>
+      <div class="border-b-[1px] mb-2 py-2">Cobra</div>
+      <div class="border-b-[1px] mb-2 py-2">Tubig canal</div>
+    </div>
+  `;
+
+  // Activate workout tab and hide meal tab
+  workoutTab.classList.add("bg-[#5F6163]");
+  workoutTabContent.classList.add("h-64");
+  workoutTabContent.classList.remove("hidden");
+  mealTabContent.classList.add("h-64", "hidden");
+  mealTab.classList.remove("bg-[#5F6163]");
+
+  var studentName = element.querySelector('.student-name').innerText;
+  document.getElementById('student').innerHTML = `${studentName} progress`;
+  
+  
+
+  showName.innerText = `${getName.innerText} progress`;
+}
+
+// Function to handle tab switching
+function tabChange(tabType) {
+  if (tabType === 'meal') {
+    // Activate meal tab and hide workout tab
+    workoutTab.classList.remove("bg-[#5F6163]");
+    workoutTabContent.classList.add("hidden");
+    mealTabContent.classList.remove("hidden");
+    mealTab.classList.add("bg-[#5F6163]");
+  } else if (tabType === 'workout') {
+    // Activate workout tab and hide meal tab
+    mealTab.classList.remove("bg-[#5F6163]");
+    workoutTabContent.classList.remove("hidden");
+    mealTabContent.classList.add("hidden");
+    workoutTab.classList.add("bg-[#5F6163]");
+  }
 }
 
 </script>
