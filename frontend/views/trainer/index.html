@@ -403,16 +403,24 @@
     try {
       const response = await axios.get(`http://localhost:3000/getStudentActivity?trainer_id=${trainerid}`);
       const activities = response.data;
+
       
-      // Update the date at the top
       const dateNow = document.getElementById('dateNow');
       const currentDate = new Date().toISOString();
       dateNow.innerText = formatDate(currentDate);
+
       
-      // Get the activity container where activities will be displayed
       const activityContainer = document.getElementById('activity-container');
-      activityContainer.innerHTML = ''; // Clear any existing content
-      
+      activityContainer.innerHTML = '';
+
+      if (!activities || activities.length === 0) {
+        activityContainer.innerHTML = `
+        <div class="p-4 bg-gray-700 text-white rounded-lg text-center">
+          No activities yet for this day.
+        </div>
+      `;
+        return;
+      }
       // Loop through the activities and create the dynamic HTML
       activities.forEach(activity => {
         const activityDiv = `
@@ -424,11 +432,11 @@
               <div class="text-gray-300">${activity.message}</div>
             </div>
           `;
-      
+
         // Append each activity to the container
         activityContainer.innerHTML += activityDiv;
       });
-      
+
 
     } catch (error) {
       console.error('Error fetching student activity:', error);

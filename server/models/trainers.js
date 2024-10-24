@@ -185,8 +185,9 @@ const getProgressOftheDay = async (trainer_id) => {
        `WITH CTE_CURRENT_DAY AS (
         SELECT 
             m.member_id,
-            template_id,
+            m.template_id,
             m.date_started,
+            DATEDIFF(CURRENT_DATE, m.date_started) AS days_since_start,
             CASE 
                 WHEN DATEDIFF(CURRENT_DATE, m.date_started) + 1 >= 1 AND DATEDIFF(CURRENT_DATE, m.date_started) < 7 THEN 1
                 WHEN DATEDIFF(CURRENT_DATE, m.date_started) + 1 >= 7 AND DATEDIFF(CURRENT_DATE, m.date_started) < 14 THEN 2
@@ -198,31 +199,33 @@ const getProgressOftheDay = async (trainer_id) => {
             MOD(DATEDIFF(CURRENT_DATE, m.date_started), 7) + 1 AS Day_number
         FROM 
             member_workout_plan m
-        WHERE m.trainer_id = 6
-    ),
+        WHERE 
+            m.trainer_id = 6),
     CTE_WORKOUT AS (
-        SELECT
-            mes.plan_id, 
-            me.member_id,
-            (SELECT CONCAT(lastname, ', ', firstname) FROM members WHERE member_id = me.member_id) AS member_name,
-            mes.status,
-            wte.week_no,
-            wte.day_no,
-            c.Week_Number,
-            c.Day_number
-        FROM 
-            member_workout_plan_status mes
+            SELECT
+                mes.plan_id, 
+                me.member_id,
+                (SELECT CONCAT(lastname, ', ', firstname) FROM members WHERE member_id = me.member_id) AS member_name,
+                wte.exercise_name,
+                mes.status,
+                wte.week_no,
+                wte.day_no,
+                c.Week_Number,
+                c.Day_number
+            FROM 
+                member_workout_plan_status mes
         JOIN 
             template_exercises wte ON mes.template_exercise_id = wte.template_exercise_id
         JOIN 
             member_workout_plan me ON me.plan_id = mes.plan_id
+        -- Make sure you join on both the template_id and the member_id
         JOIN 
-            CTE_CURRENT_DAY c ON c.template_id = wte.template_id
+            CTE_CURRENT_DAY c ON c.template_id = wte.template_id 
+                            AND c.member_id = me.member_id  -- Ensure exercises are fetched for the correct member
         WHERE 
-            c.Day_number = wte.day_no
-        AND
-            c.Week_Number = wte.week_no
-    )
+            wte.week_no = c.Week_Number
+        AND 
+            wte.day_no = c.Day_number)
     SELECT
         plan_id,
         member_id,
@@ -233,7 +236,6 @@ const getProgressOftheDay = async (trainer_id) => {
         CTE_WORKOUT
     GROUP BY 
         member_name;
-
         `,
         [trainer_id]
     );

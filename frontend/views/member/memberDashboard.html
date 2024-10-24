@@ -942,7 +942,10 @@
             console.error('Error:', error);
         }
     };
-
+    function removeCookie(name) {
+        console.log("clicked")
+        document.cookie = name + '=; Max-Age=0; path=/';
+    }
 
 
 
